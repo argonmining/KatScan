@@ -1,34 +1,30 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+import Layout from './components/Layout/Layout'
+import Overview from './pages/Overview'
+import TokenList from './pages/TokenList'
+import TokenDetails from './pages/TokenDetails'
+import HolderAnalytics from './pages/HolderAnalytics'
+import TransactionAnalytics from './pages/TransactionAnalytics'
+import CrossTokenAnalysis from './pages/CrossTokenAnalysis'
+import HistoricalData from './pages/HistoricalData'
+import MarketData from './pages/MarketData'
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <Router>
+      <Layout>
+        <Routes>
+          <Route path="/" element={<Overview />} />
+          <Route path="/tokens" element={<TokenList />} />
+          <Route path="/token/:tokenId" element={<TokenDetails />} />
+          <Route path="/holder-analytics" element={<HolderAnalytics />} />
+          <Route path="/transaction-analytics" element={<TransactionAnalytics />} />
+          <Route path="/cross-token-analysis" element={<CrossTokenAnalysis />} />
+          <Route path="/historical-data" element={<HistoricalData />} />
+          <Route path="/market-data" element={<MarketData />} />
+        </Routes>
+      </Layout>
+    </Router>
   )
 }
 
