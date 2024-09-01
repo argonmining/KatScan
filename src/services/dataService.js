@@ -1,3 +1,7 @@
+import axios from 'axios';
+
+const BASE_URL = 'https://api.kasplex.org/v1';
+
 // Simulating an API call to fetch token details
 export const getTokenDetails = async (tokenId) => {
   return new Promise((resolve) => {
@@ -35,4 +39,20 @@ export const getTokenDetails = async (tokenId) => {
       });
     }, 1000); // Simulates network delay
   });
+};
+
+// New function to fetch KRC-20 token list
+export const getKRC20TokenList = async (page = 1, limit = 20, sortField = '', sortDirection = 'asc') => {
+  try {
+    const response = await axios.get(`${BASE_URL}/krc20/tokenlist`, {
+      params: { page, limit, sortField, sortDirection }
+    });
+    return {
+      result: response.data.result,
+      total: response.data.total // Make sure your API returns the total number of tokens
+    };
+  } catch (error) {
+    console.error('Error fetching KRC20 token list:', error);
+    throw error;
+  }
 };

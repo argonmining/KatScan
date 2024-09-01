@@ -1,17 +1,33 @@
 .token-overview {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
     padding: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-  }
-  
-  .token-overview h2 {
+}
+
+.table-container {
+    flex-grow: 1;
+    overflow-y: auto;
     margin-bottom: 20px;
-    font-size: 24px;
-    color: #333;
-  }
-  
-  .token-overview .table {
+}
+
+.table {
     margin-bottom: 0;
-  }
-  
+}
+
+.pagination {
+    margin-top: auto;
+}
+
+.sortable-header {
+  cursor: pointer;
+  user-select: none;
+}
+
+.sortable-header:hover {
+  background-color: #f8f9fa;
+}
+
+.sort-indicator {
+  margin-left: 5px;
+}
