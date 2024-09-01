@@ -1,281 +1,365 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import { Card, Tabs, Tab, Table } from 'react-bootstrap';
-import { Line, Pie, Bar } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, ArcElement, BarElement, Title, Tooltip, Legend } from 'chart.js';
-import { getTokenDetails } from '../services/dataService';
+import { Card, Tabs, Tab, Table, Alert, Row, Col } from 'react-bootstrap';
+import { Line, Bar, Pie } from 'react-chartjs-2';
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, BarElement, ArcElement, Title, Tooltip, Legend } from 'chart.js';
+import { getTokenDetails, getTokenOperations } from '../services/dataService';
 import '../styles/TokenDetail.css';
 
-// Register chart.js components
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, ArcElement, BarElement, Title, Tooltip, Legend);
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, ArcElement, Title, Tooltip, Legend);
 
 const TokenDetail = () => {
   const { tokenId } = useParams();
   const [tokenData, setTokenData] = useState(null);
-  const [filterText, setFilterText] = useState('');
-  const [sortConfig, setSortConfig] = useState({ key: 'holdings', direction: 'descending' });
-  const [transactionFilterText, setTransactionFilterText] = useState('');
-  const [transactionSortConfig, setTransactionSortConfig] = useState({ key: 'date', direction: 'descending' });
+  const [operations, setOperations] = useState([]);
+  const [operationsCursor, setOperationsCursor] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [error, setError] = useState(null);
+  const [operationsError, setOperationsError] = useState(null);
+  const observer = useRef();
+
+  // New state for additional data
+  const [priceHistory, setPriceHistory] = useState([]);
+  const [transferVolume, setTransferVolume] = useState([]);
+  const [holderDistribution, setHolderDistribution] = useState([]);
+  const [mintActivity, setMintActivity] = useState([]);
+
+  const fetchOperations = useCallback(async () => {
+    if (loadingMore || !operationsCursor) return;
+    try {
+      setLoadingMore(true);
+      setOperationsError(null);
+      const data = await getTokenOperations(tokenId, 50, operationsCursor);
+      setOperations(prevOps => [...prevOps, ...data.result]);
+      setOperationsCursor(data.next);
+    } catch (err) {
+      console.error('Failed to fetch operations:', err);
+      setOperationsError('Failed to load more operations. Please try again.');
+    } finally {
+      setLoadingMore(false);
+    }
+  }, [tokenId, operationsCursor, loadingMore]);
+
+  const lastOperationElementRef = useCallback(node => {
+    if (loadingMore) return;
+    if (observer.current) observer.current.disconnect();
+    observer.current = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting && operationsCursor) {
+        fetchOperations();
+      }
+    });
+    if (node) observer.current.observe(node);
+  }, [loadingMore, operationsCursor, fetchOperations]);
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getTokenDetails(tokenId);
-      setTokenData(data);
+      try {
+        setLoading(true);
+        setError(null);
+        const data = await getTokenDetails(tokenId);
+        setTokenData(data);
+        const opsData = await getTokenOperations(tokenId, 50);
+        setOperations(opsData.result);
+        setOperationsCursor(opsData.next);
+
+        // Mock data for new visualizations (replace with actual API calls when available)
+        setPriceHistory(generateMockPriceHistory());
+        setTransferVolume(generateMockTransferVolume());
+        setHolderDistribution(generateMockHolderDistribution());
+        setMintActivity(generateMockMintActivity());
+      } catch (err) {
+        setError('Failed to fetch token details');
+      } finally {
+        setLoading(false);
+      }
     };
+
     fetchData();
   }, [tokenId]);
 
-  if (!tokenData) {
-    return <p>Loading...</p>;
-  }
-
-  const priceHistoryData = tokenData.priceHistory || { labels: [], data: [] };
-  const holderDistributionData = tokenData.holderDistribution || { labels: [], data: [] };
-  const crossTokenHoldersData = tokenData.crossTokenHolders || { labels: [], data: [] };
-  const holderChangesOverTimeData = tokenData.holderChangesOverTime || { labels: [], datasets: [] };
-
-  const chartData = {
-    labels: priceHistoryData.labels,
-    datasets: [
-      {
-        label: `${tokenData.name} Price History`,
-        data: priceHistoryData.data,
-        borderColor: 'rgba(75, 192, 192, 1)',
-        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-      },
-    ],
-  };
-
-  const holderDistributionChartData = {
-    labels: holderDistributionData.labels,
-    datasets: [
-      {
-        label: 'Holder Distribution',
-        data: holderDistributionData.data,
-        backgroundColor: [
-          'rgba(255, 99, 132, 0.2)',
-          'rgba(54, 162, 235, 0.2)',
-          'rgba(75, 192, 192, 0.2)',
-        ],
-        borderColor: [
-          'rgba(255, 99, 132, 1)',
-          'rgba(54, 162, 235, 1)',
-          'rgba(75, 192, 192, 1)',
-        ],
-        borderWidth: 1,
-      },
-    ],
-  };
-
-  const crossTokenHoldersChartData = {
-    labels: crossTokenHoldersData.labels,
-    datasets: [
-      {
-        label: 'Number of Holders',
-        data: crossTokenHoldersData.data,
-        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-        borderColor: 'rgba(75, 192, 192, 1)',
-        borderWidth: 1,
-      },
-    ],
-  };
-
-  const holderSegmentationData = {
-    labels: ['Lions (Large Holders)', 'Tigers (Medium Holders)', 'Kittens (Small Holders)'],
-    datasets: [
-      {
-        label: 'Holder Segmentation',
-        data: [60, 25, 15],
-        backgroundColor: [
-          'rgba(255, 206, 86, 0.2)',
-          'rgba(75, 192, 192, 0.2)',
-          'rgba(153, 102, 255, 0.2)',
-        ],
-        borderColor: [
-          'rgba(255, 206, 86, 1)',
-          'rgba(75, 192, 192, 1)',
-          'rgba(153, 102, 255, 1)',
-        ],
-        borderWidth: 1,
-      },
-    ],
-  };
-
-  const holderChangesOverTimeChartData = {
-    labels: holderChangesOverTimeData.labels,
-    datasets: holderChangesOverTimeData.datasets.map((dataset, index) => ({
-      label: `Holder ${index + 1}`,
-      data: dataset.data,
-      borderColor: dataset.color,
-      fill: false,
-    })),
-  };
-
-  // Filtering and Sorting Logic for Top Holders
-  const filteredHolders = tokenData.topHolders
-    .filter((holder) => holder.address.includes(filterText))
-    .sort((a, b) => {
-      if (a[sortConfig.key] < b[sortConfig.key]) {
-        return sortConfig.direction === 'ascending' ? -1 : 1;
-      }
-      if (a[sortConfig.key] > b[sortConfig.key]) {
-        return sortConfig.direction === 'ascending' ? 1 : -1;
-      }
-      return 0;
+  // Helper functions to generate mock data
+  const generateMockPriceHistory = () => {
+    const dates = Array.from({length: 30}, (_, i) => {
+      const d = new Date();
+      d.setDate(d.getDate() - (29 - i));
+      return d.toISOString().split('T')[0];
     });
-
-  const requestSort = (key) => {
-    let direction = 'ascending';
-    if (sortConfig.key === key && sortConfig.direction === 'ascending') {
-      direction = 'descending';
-    }
-    setSortConfig({ key, direction });
+    const prices = Array.from({length: 30}, () => Math.random() * 10 + 5);
+    return dates.map((date, index) => ({ date, price: prices[index] }));
   };
 
-  // Filtering and Sorting Logic for Recent Transactions
-  const filteredTransactions = tokenData.transactions
-    .filter((transaction) => transaction.id.toString().includes(transactionFilterText))
-    .sort((a, b) => {
-      if (a[transactionSortConfig.key] < b[transactionSortConfig.key]) {
-        return transactionSortConfig.direction === 'ascending' ? -1 : 1;
-      }
-      if (a[transactionSortConfig.key] > b[transactionSortConfig.key]) {
-        return transactionSortConfig.direction === 'ascending' ? 1 : -1;
-      }
-      return 0;
+  const generateMockTransferVolume = () => {
+    const dates = Array.from({length: 30}, (_, i) => {
+      const d = new Date();
+      d.setDate(d.getDate() - (29 - i));
+      return d.toISOString().split('T')[0];
     });
-
-  const requestTransactionSort = (key) => {
-    let direction = 'ascending';
-    if (transactionSortConfig.key === key && transactionSortConfig.direction === 'ascending') {
-      direction = 'descending';
-    }
-    setTransactionSortConfig({ key, direction });
+    const volumes = Array.from({length: 30}, () => Math.floor(Math.random() * 1000000));
+    return dates.map((date, index) => ({ date, volume: volumes[index] }));
   };
+
+  const generateMockHolderDistribution = () => {
+    return [
+      { range: '0-100', count: Math.floor(Math.random() * 1000) },
+      { range: '101-1000', count: Math.floor(Math.random() * 500) },
+      { range: '1001-10000', count: Math.floor(Math.random() * 100) },
+      { range: '10001+', count: Math.floor(Math.random() * 10) },
+    ];
+  };
+
+  const generateMockMintActivity = () => {
+    const dates = Array.from({length: 30}, (_, i) => {
+      const d = new Date();
+      d.setDate(d.getDate() - (29 - i));
+      return d.toISOString().split('T')[0];
+    });
+    const mints = Array.from({length: 30}, () => Math.floor(Math.random() * 100));
+    return dates.map((date, index) => ({ date, mints: mints[index] }));
+  };
+
+  const parseRawNumber = (rawNumber, decimals) => {
+    return Number(rawNumber) / Math.pow(10, decimals);
+  };
+
+  const formatNumber = (rawNumber, decimals) => {
+    const parsedNumber = parseRawNumber(rawNumber, decimals);
+    return new Intl.NumberFormat('en-US', {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: decimals,
+    }).format(parsedNumber);
+  };
+
+  const formatDateTime = (timestamp) => {
+    return new Date(parseInt(timestamp)).toLocaleString();
+  };
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <Alert variant="danger">{error}</Alert>;
+  if (!tokenData) return <Alert variant="warning">No data available</Alert>;
 
   return (
     <div className="token-detail">
-      <h2>{tokenData.name}</h2>
-      <p>Total Supply: {tokenData.supply}</p>
-      <p>Number of Holders: {tokenData.holders}</p>
+      <div className="token-header">
+        <h1>{tokenData.tick} Token Details</h1>
+        <span className="creation-date">Deployed on {formatDateTime(tokenData.mtsAdd)}</span>
+      </div>
+      <Card className="token-info-card">
+        <Card.Body>
+          <div className="token-info-grid">
+            <div className="token-info-item">
+              <span className="token-info-label">Max Supply</span>
+              <span className="token-info-value">{formatNumber(tokenData.max, tokenData.dec)}</span>
+            </div>
+            <div className="token-info-item">
+              <span className="token-info-label">Total Minted</span>
+              <span className="token-info-value">{formatNumber(tokenData.minted, tokenData.dec)}</span>
+            </div>
+            <div className="token-info-item">
+              <span className="token-info-label">Limit per Mint</span>
+              <span className="token-info-value">{formatNumber(tokenData.lim, tokenData.dec)}</span>
+            </div>
+            <div className="token-info-item">
+              <span className="token-info-label">Total Mints</span>
+              <span className="token-info-value">{formatNumber(tokenData.mintTotal, 0)}</span>
+            </div>
+            <div className="token-info-item">
+              <span className="token-info-label">Total Holders</span>
+              <span className="token-info-value">{formatNumber(tokenData.holderTotal, 0)}</span>
+            </div>
+            <div className="token-info-item">
+              <span className="token-info-label">Total Transfers</span>
+              <span className="token-info-value">{formatNumber(tokenData.transferTotal, 0)}</span>
+            </div>
+          </div>
+        </Card.Body>
+      </Card>
 
-      <Tabs defaultActiveKey="priceHistory" id="uncontrolled-tab-example" className="mb-3">
+      <Tabs defaultActiveKey="topHolders" className="mb-3">
+        <Tab eventKey="topHolders" title="Top Holders">
+          <div className="table-container">
+            <Table striped bordered hover>
+              <thead>
+                <tr>
+                  <th>Rank</th>
+                  <th>Address</th>
+                  <th>Amount</th>
+                  <th>% of Total Supply</th>
+                </tr>
+              </thead>
+              <tbody>
+                {tokenData.holder.map((holder, index) => (
+                  <tr key={index}>
+                    <td>{index + 1}</td>
+                    <td>{holder.address}</td>
+                    <td>{formatNumber(holder.amount, tokenData.dec)}</td>
+                    <td>
+                      {((parseRawNumber(holder.amount, tokenData.dec) / parseRawNumber(tokenData.max, tokenData.dec)) * 100).toFixed(2)}%
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          </div>
+          <p className="mt-3 text-muted">
+            Note: Only top holders are displayed. The total number of holders is {formatNumber(tokenData.holderTotal, 0)}.
+          </p>
+        </Tab>
+        <Tab eventKey="recentOperations" title="Recent Operations">
+          <div className="table-container">
+            <Table striped bordered hover>
+              <thead>
+                <tr>
+                  <th>Operation</th>
+                  <th>From</th>
+                  <th>To</th>
+                  <th>Amount</th>
+                  <th>Timestamp</th>
+                </tr>
+              </thead>
+              <tbody>
+                {operations.map((op, index) => (
+                  <tr key={index} ref={index === operations.length - 1 ? lastOperationElementRef : null}>
+                    <td>{op.op}</td>
+                    <td>{op.from}</td>
+                    <td>{op.to}</td>
+                    <td>{formatNumber(op.amt, tokenData.dec)}</td>
+                    <td>{formatDateTime(op.mtsAdd)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          </div>
+          {loadingMore && <div>Loading more operations...</div>}
+          {operationsError && <Alert variant="danger">{operationsError}</Alert>}
+          {!operationsCursor && !loadingMore && <div>No more operations to load.</div>}
+        </Tab>
+
         <Tab eventKey="priceHistory" title="Price History">
-          <Card className="chart-card">
-            <Card.Body>
-              <Card.Title>Price History</Card.Title>
-              <Line data={chartData} />
-              <Card.Text>
-                This chart shows the historical price trends of {tokenData.name}, helping users track market movements over time.
-              </Card.Text>
-            </Card.Body>
-          </Card>
+          <div className="chart-container">
+            <Line
+              data={{
+                labels: priceHistory.map(item => item.date),
+                datasets: [{
+                  label: 'Price (USD)',
+                  data: priceHistory.map(item => item.price),
+                  borderColor: 'rgb(75, 192, 192)',
+                  tension: 0.1
+                }]
+              }}
+              options={{
+                responsive: true,
+                plugins: {
+                  legend: {
+                    position: 'top',
+                  },
+                  title: {
+                    display: true,
+                    text: 'Token Price History'
+                  }
+                }
+              }}
+            />
+          </div>
+        </Tab>
+
+        <Tab eventKey="transferVolume" title="Transfer Volume">
+          <div className="chart-container">
+            <Bar
+              data={{
+                labels: transferVolume.map(item => item.date),
+                datasets: [{
+                  label: 'Transfer Volume',
+                  data: transferVolume.map(item => item.volume),
+                  backgroundColor: 'rgba(53, 162, 235, 0.5)',
+                }]
+              }}
+              options={{
+                responsive: true,
+                plugins: {
+                  legend: {
+                    position: 'top',
+                  },
+                  title: {
+                    display: true,
+                    text: 'Daily Transfer Volume'
+                  }
+                }
+              }}
+            />
+          </div>
         </Tab>
 
         <Tab eventKey="holderDistribution" title="Holder Distribution">
-          <Card className="chart-card">
-            <Card.Body>
-              <Card.Title>Holder Distribution</Card.Title>
-              <Pie data={holderDistributionChartData} />
-              <Card.Text>
-                This chart visualizes how {tokenData.name} is distributed among different holders, indicating the concentration of token ownership.
-              </Card.Text>
-            </Card.Body>
-          </Card>
+          <div className="chart-container">
+            <Pie
+              data={{
+                labels: holderDistribution.map(item => item.range),
+                datasets: [{
+                  label: 'Number of Holders',
+                  data: holderDistribution.map(item => item.count),
+                  backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                  ],
+                  borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                  ],
+                  borderWidth: 1,
+                }]
+              }}
+              options={{
+                responsive: true,
+                plugins: {
+                  legend: {
+                    position: 'top',
+                  },
+                  title: {
+                    display: true,
+                    text: 'Holder Distribution'
+                  }
+                }
+              }}
+            />
+          </div>
         </Tab>
 
-        <Tab eventKey="crossTokenHolders" title="Cross-Token Holders">
-          <Card className="chart-card">
-            <Card.Body>
-              <Card.Title>Cross-Token Holders</Card.Title>
-              <Bar data={crossTokenHoldersChartData} />
-              <Card.Text>
-                Explore the overlap of {tokenData.name} holders with other tokens, providing insights into their investment diversification.
-              </Card.Text>
-            </Card.Body>
-          </Card>
-        </Tab>
-
-        <Tab eventKey="holderSegmentation" title="Holder Segmentation">
-          <Card className="chart-card">
-            <Card.Body>
-              <Card.Title>Holder Segmentation</Card.Title>
-              <Pie data={holderSegmentationData} />
-              <Card.Text>
-                This chart categorizes holders into 'Lions,' 'Tigers,' and 'Kittens' based on the size of their holdings, showing the distribution among different holder types.
-              </Card.Text>
-            </Card.Body>
-          </Card>
-        </Tab>
-
-        <Tab eventKey="holderChangesOverTime" title="Holder Changes Over Time">
-          <Card className="chart-card">
-            <Card.Body>
-              <Card.Title>Holder Changes Over Time</Card.Title>
-              <Line data={holderChangesOverTimeChartData} />
-              <Card.Text>
-                Monitor how the holdings of major {tokenData.name} holders have changed over time, providing insights into buying and selling behaviors.
-              </Card.Text>
-            </Card.Body>
-          </Card>
-        </Tab>
-
-        <Tab eventKey="holders" title="Top Holders">
-          <input
-            type="text"
-            placeholder="Filter by address"
-            value={filterText}
-            onChange={(e) => setFilterText(e.target.value)}
-            style={{ marginBottom: '10px' }}
-          />
-          <Table striped bordered hover>
-            <thead>
-              <tr>
-                <th onClick={() => requestSort('rank')}>Rank</th>
-                <th onClick={() => requestSort('address')}>Holder Address</th>
-                <th onClick={() => requestSort('holdings')}>Holdings</th>
-                <th onClick={() => requestSort('percentage')}>Percentage of Total Supply</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredHolders.map((holder, index) => (
-                <tr key={index}>
-                  <td>{index + 1}</td>
-                  <td>{holder.address}</td>
-                  <td>{holder.holdings}</td>
-                  <td>{((holder.holdings / tokenData.supply) * 100).toFixed(2)}%</td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-        </Tab>
-
-        <Tab eventKey="transactions" title="Recent Transactions">
-          <input
-            type="text"
-            placeholder="Filter by transaction ID"
-            value={transactionFilterText}
-            onChange={(e) => setTransactionFilterText(e.target.value)}
-            style={{ marginBottom: '10px' }}
-          />
-          <Table striped bordered hover>
-            <thead>
-              <tr>
-                <th onClick={() => requestTransactionSort('id')}>Transaction ID</th>
-                <th onClick={() => requestTransactionSort('amount')}>Amount</th>
-                <th onClick={() => requestTransactionSort('date')}>Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredTransactions.map((transaction) => (
-                <tr key={transaction.id}>
-                  <td>{transaction.id}</td>
-                  <td>{transaction.amount}</td>
-                  <td>{transaction.date}</td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
+        <Tab eventKey="mintActivity" title="Mint Activity">
+          <div className="chart-container">
+            <Line
+              data={{
+                labels: mintActivity.map(item => item.date),
+                datasets: [{
+                  label: 'Daily Mints',
+                  data: mintActivity.map(item => item.mints),
+                  borderColor: 'rgb(40, 167, 69)', // Green color
+                  backgroundColor: 'rgba(40, 167, 69, 0.5)',
+                }]
+              }}
+              options={{
+                responsive: true,
+                plugins: {
+                  legend: {
+                    position: 'top',
+                  },
+                  title: {
+                    display: true,
+                    text: 'Daily Mint Activity'
+                  }
+                },
+                scales: {
+                  y: {
+                    beginAtZero: true
+                  }
+                }
+              }}
+            />
+          </div>
         </Tab>
       </Tabs>
     </div>

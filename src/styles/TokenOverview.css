@@ -1,53 +1,155 @@
+@import './globals.css';
+
 .token-overview {
+    padding: 20px;
+    height: 100vh;
     display: flex;
     flex-direction: column;
-    height: calc(100vh - 100px); /* Adjust this value based on your layout */
-    padding: 20px;
+}
+
+.token-overview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.token-overview-header h2 {
+    font-family: var(--header-font);
+    color: var(--secondary-primary-color);
+    margin: 0;
+    white-space: nowrap;
+    margin-right: 20px; /* Add some space between title and search bar */
+}
+
+.search-form {
+    flex-grow: 1;
+    margin-left: 20px; /* Add some space between title and search bar */
+}
+
+.search-form .input-group {
+    width: 100%;
+}
+
+.search-form .form-control {
+    height: 50px; /* Increase height for better visibility */
+    font-size: 1.1rem; /* Slightly larger font */
+}
+
+.search-form .input-group-text {
+    font-size: 1.1rem; /* Match font size with input */
 }
 
 .table-wrapper {
-    flex-grow: 1;
-    overflow: hidden;
-    border-radius: 8px;
+    flex: 1;
+    overflow: auto;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
 }
 
-.table-scroll {
-    overflow-y: auto;
-    max-height: calc(100vh - 200px); /* Adjust this value based on your layout */
+.table-wrapper::-webkit-scrollbar {
+    width: 0;  /* Remove scrollbar space */
+    background: transparent;  /* Optional: just make scrollbar invisible */
 }
 
-.table {
-    margin-bottom: 0;
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
 }
 
-.table thead {
+thead {
     position: sticky;
     top: 0;
     z-index: 1;
 }
 
-.table thead th {
+th {
+    background-color: var(--primary-color);
+    color: white;
+    font-family: var(--sub-header-font);
+    font-weight: 500;
+    text-transform: uppercase;
+    padding: 15px 10px;
+    text-align: left;
+    border-bottom: 2px solid var(--secondary-color);
+}
+
+td {
+    font-family: var(--body-font);
+    padding: 12px 10px;
+    vertical-align: middle;
+}
+
+tr:nth-child(even) {
     background-color: #f8f9fa;
-    box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.1);
 }
 
-.table th, .table td {
-    white-space: nowrap;
-}
-
-.table th {
-    cursor: pointer;
-}
-
-.table th:hover {
+tr:hover {
     background-color: #e9ecef;
+    transition: background-color 0.3s ease;
 }
 
-.minting-progress {
-    height: 10px;
+.progress {
+    height: 8px;
+    background-color: var(--tertiary-primary-color);
+    border-radius: 4px;
+    overflow: hidden;
 }
 
-.minting-progress .progress-bar {
-    background-color: #a0a0a0;
+.progress .progress-bar {
+    background-image: linear-gradient(to right, var(--tertiary-primary-color), var(--primary-color));
+    border-radius: 4px;
+    transition: width 0.6s ease;
+}
+
+.badge {
+    font-family: var(--body-font);
+    padding: 0.5em 0.75em;
+    font-size: 0.75em;
+    font-weight: 500;
+    text-transform: uppercase;
+    display: inline-block;
+    min-width: 80px;
+    text-align: center;
+}
+
+.badge.badge-fair-mint {
+    background-color: #28a745 !important;
+    color: white !important;
+}
+
+.badge.badge-pre-mint {
+    background-color: #ffc107 !important;
+    color: #212529 !important;
+}
+
+a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+a:hover {
+    color: var(--secondary-color);
+}
+
+.text-muted {
+    color: #6c757d !important;
+    font-size: 0.85em;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.token-ticker {
+    font-weight: bold;
+    color: var(--secondary-primary-color);
 }

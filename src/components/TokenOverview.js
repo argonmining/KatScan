@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Table, ProgressBar, Badge, Form, InputGroup } from 'react-bootstrap';
+import { FaSearch } from 'react-icons/fa';
 import { getKRC20TokenList } from '../services/dataService';
 import '../styles/TokenOverview.css';
 
@@ -93,14 +94,19 @@ const TokenOverview = () => {
   };
 
   const formatState = (state) => {
-    return state === 'finished' ? 'Fully Minted' : 'Minting';
+    return state === 'finished' ? 'Complete' : 'Minting';
   };
 
-  const formatDate = (timestamp) => {
-    return new Date(parseInt(timestamp)).toLocaleDateString('en-US', {
+  const formatDateTime = (timestamp) => {
+    return new Date(parseInt(timestamp)).toLocaleString('en-US', {
       year: 'numeric',
       month: 'short',
-      day: 'numeric'
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: true,
+      timeZoneName: 'short'
     });
   };
 
@@ -110,16 +116,26 @@ const TokenOverview = () => {
     return `(${formattedPercentage}%)`;
   };
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+  const getBadgeClass = (preMint) => {
+    return preMint === '0' ? 'badge badge-fair-mint' : 'badge badge-pre-mint';
+  };
+
+  const formatPreMinted = (preMinted, max, decimals) => {
+    const value = calculateValue(preMinted, decimals);
+    if (value === 0) return "None";
+    return `${formatNumber(value)} ${formatPercentage(value, calculateValue(max, decimals))}`;
+  };
+
+  if (loading) return <div className="token-overview loading">Loading...</div>;
+  if (error) return <div className="token-overview error">Error: {error}</div>;
 
   return (
     <div className="token-overview">
-      <div className="d-flex justify-content-between align-items-center mb-4">
+      <div className="token-overview-header">
         <h2>All KRC-20 Tokens</h2>
-        <Form.Group style={{ width: '300px' }}>
+        <Form.Group className="search-form">
           <InputGroup>
-            <InputGroup.Text>🔍</InputGroup.Text>
+            <InputGroup.Text><FaSearch /></InputGroup.Text>
             <Form.Control
               type="text"
               placeholder="Search by ticker..."
@@ -130,60 +146,63 @@ const TokenOverview = () => {
         </Form.Group>
       </div>
       <div className="table-wrapper">
-        <div className="table-scroll">
-          <Table striped bordered hover>
-            <thead>
-              <tr>
-                <th onClick={() => handleSort('tick')}>Ticker {sortField === 'tick' && (sortDirection === 'asc' ? '▲' : '▼')}</th>
-                <th>Launch Type</th>
-                <th onClick={() => handleSort('max')}>Max Supply {sortField === 'max' && (sortDirection === 'asc' ? '▲' : '▼')}</th>
-                <th onClick={() => handleSort('pre')}>Pre-Minted {sortField === 'pre' && (sortDirection === 'asc' ? '▲' : '▼')}</th>
-                <th onClick={() => handleSort('minted')}>Total Minted {sortField === 'minted' && (sortDirection === 'asc' ? '▲' : '▼')}</th>
-                <th>Minting Progress</th>
-                <th onClick={() => handleSort('mtsAdd')}>Deployed Date {sortField === 'mtsAdd' && (sortDirection === 'asc' ? '▲' : '▼')}</th>
-                <th>State</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredAndSortedTokens.length > 0 ? (
-                filteredAndSortedTokens.map((token) => (
-                  <tr key={token.tick}>
-                    <td><Link to={`/tokens/${token.tick}`}>{token.tick}</Link></td>
-                    <td>
-                      <Badge bg={token.pre === '0' ? 'success' : 'warning'}>
-                        {token.pre === '0' ? 'Fair Mint' : 'Pre-Mint'}
-                      </Badge>
-                    </td>
-                    <td>{formatNumber(calculateValue(token.max, token.dec))}</td>
-                    <td>
-                      {formatNumber(calculateValue(token.pre, token.dec))}
-                      {' '}
-                      <small className="text-muted">{formatPercentage(calculateValue(token.pre, token.dec), calculateValue(token.max, token.dec))}</small>
-                    </td>
-                    <td>
-                      {formatNumber(calculateValue(token.minted, token.dec))}
-                      {' '}
-                      <small className="text-muted">{formatPercentage(calculateValue(token.minted, token.dec), calculateValue(token.max, token.dec))}</small>
-                    </td>
-                    <td>
-                      <ProgressBar 
-                        now={calculatePercentage(calculateValue(token.minted, token.dec), calculateValue(token.max, token.dec))} 
-                      />
-                    </td>
-                    <td>{formatDate(token.mtsAdd)}</td>
-                    <td>{formatState(token.state)}</td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="8" className="text-center">
-                    {loading ? 'Loading...' : 'No tokens to display'}
+        <Table>
+          <thead>
+            <tr>
+              <th onClick={() => handleSort('tick')}>Ticker {sortField === 'tick' && (sortDirection === 'asc' ? '▲' : '▼')}</th>
+              <th className="text-center">Launch Type</th>
+              <th onClick={() => handleSort('state')}>Status {sortField === 'state' && (sortDirection === 'asc' ? '▲' : '▼')}</th>
+              <th onClick={() => handleSort('max')}>Max Supply {sortField === 'max' && (sortDirection === 'asc' ? '▲' : '▼')}</th>
+              <th onClick={() => handleSort('pre')}>Pre-Minted {sortField === 'pre' && (sortDirection === 'asc' ? '▲' : '▼')}</th>
+              <th onClick={() => handleSort('minted')}>Total Minted {sortField === 'minted' && (sortDirection === 'asc' ? '▲' : '▼')}</th>
+              <th className="text-center">Minting Progress</th>
+              <th onClick={() => handleSort('mtsAdd')} className="text-right">Deployed On {sortField === 'mtsAdd' && (sortDirection === 'asc' ? '▲' : '▼')}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredAndSortedTokens.length > 0 ? (
+              filteredAndSortedTokens.map((token) => (
+                <tr key={token.tick}>
+                  <td>
+                    <Link to={`/tokens/${token.tick}`} className="token-ticker">
+                      {token.tick}
+                    </Link>
                   </td>
+                  <td className="text-center">
+                    <span className={getBadgeClass(token.pre)}>
+                      {token.pre === '0' ? 'Fair Mint' : 'Pre-Mint'}
+                    </span>
+                  </td>
+                  <td>{formatState(token.state)}</td>
+                  <td>{formatNumber(calculateValue(token.max, token.dec))}</td>
+                  <td>
+                    {formatPreMinted(token.pre, token.max, token.dec)}
+                  </td>
+                  <td>
+                    {formatNumber(calculateValue(token.minted, token.dec))}
+                    {' '}
+                    <small className="text-muted">{formatPercentage(calculateValue(token.minted, token.dec), calculateValue(token.max, token.dec))}</small>
+                  </td>
+                  <td className="text-center">
+                    <div className="progress">
+                      <div
+                        className="progress-bar"
+                        style={{width: `${calculatePercentage(calculateValue(token.minted, token.dec), calculateValue(token.max, token.dec))}%`}}
+                      ></div>
+                    </div>
+                  </td>
+                  <td className="text-right">{formatDateTime(token.mtsAdd)}</td>
                 </tr>
-              )}
-            </tbody>
-          </Table>
-        </div>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="8" className="text-center">
+                  {loading ? 'Loading...' : 'No tokens to display'}
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </Table>
       </div>
     </div>
   );

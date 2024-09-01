@@ -1,0 +1,23 @@
+:root {
+  --primary-color: #70C7BA;
+  --secondary-primary-color: #231F20;
+  --tertiary-primary-color: #B6B6B6;
+  --secondary-color: #49EACB;
+
+  --header-font: 'Rubik', sans-serif;
+  --sub-header-font: 'Oswald', sans-serif;
+  --body-font: 'Lato', sans-serif;
+}
+
+body {
+  font-family: var(--body-font);
+  color: var(--secondary-primary-color);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--header-font);
+}
+
+.sub-header {
+  font-family: var(--sub-header-font);
+}

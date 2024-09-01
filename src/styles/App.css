@@ -1,5 +1,10 @@
-body {
+body, html, #root {
+    height: 100%;
     margin: 0;
+    padding: 0;
+}
+
+body {
     font-family: Arial, sans-serif;
     background-color: #f4f7fc;
   }
@@ -13,16 +18,18 @@ body {
   
   .App {
     display: flex;
+    height: 100%;
   }
   
   .main-content {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
   }
   
   .content {
-    padding: 20px;
+    flex: 1;
+    overflow: hidden;
     background-color: #f4f7fc;
   }
-  
