@@ -61,6 +61,10 @@ const TransactionLookup = () => {
     navigate(`/wallet/${address}`);
   };
 
+  const openExplorerForP2SH = (address) => {
+    window.open(`https://explorer.kaspa.org/addresses/${address}`, '_blank', 'noopener,noreferrer');
+  };
+
   const formatKaspa = (amount) => {
     return (parseFloat(amount) / 100000000).toFixed(8) + " KAS";
   };
@@ -220,8 +224,12 @@ const TransactionLookup = () => {
               <Row className="mb-2">
                 <Col sm={4}><strong>P2SH Address</strong></Col>
                 <Col sm={8}>
-                  <span className="clickable-address" onClick={() => handleAddressClick(transactionData.commitData.outputs[0].script_public_key_address)}>
+                  <span 
+                    className="clickable-address" 
+                    onClick={() => openExplorerForP2SH(transactionData.commitData.outputs[0].script_public_key_address)}
+                  >
                     {transactionData.commitData.outputs[0].script_public_key_address}
+                    <FaExternalLinkAlt className="ms-2" />
                   </span>
                 </Col>
               </Row>

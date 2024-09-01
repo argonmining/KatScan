@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Card, Tabs, Tab, Table, Alert, Row, Col } from 'react-bootstrap';
+import { Card, Tabs, Tab, Table, Alert } from 'react-bootstrap';
 import { Line, Bar, Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, BarElement, ArcElement, Title, Tooltip, Legend } from 'chart.js';
 import { getTokenDetails, getTokenOperations } from '../services/dataService';

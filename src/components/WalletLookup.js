@@ -1,36 +1,71 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Container, Form, InputGroup, Button, Table, Tabs, Tab, Alert, Card } from 'react-bootstrap';
-import { FaSearch, FaExternalLinkAlt } from 'react-icons/fa';
+import { Container, Form, InputGroup, Button, Table, Tabs, Tab, Alert, Card, Spinner } from 'react-bootstrap';
+import { FaSearch, FaCopy } from 'react-icons/fa';
 import axios from 'axios';
 import '../styles/WalletLookup.css';
 
+// Helper function for number formatting
+const formatNumber = (number) => {
+  return new Intl.NumberFormat('en-US', {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 5,
+  }).format(parseFloat(number.toFixed(5)));
+};
+
 const WalletLookup = () => {
   const [address, setAddress] = useState('');
-  const [balances, setBalances] = useState([]);
+  const [walletData, setWalletData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [totalValue, setTotalValue] = useState(0);
-  const [transactions, setTransactions] = useState([]);
-  const [transactionLoading, setTransactionLoading] = useState(false);
-  const [transactionError, setTransactionError] = useState(null);
-  const [transactionsCursor, setTransactionsCursor] = useState('');
-  const [hasMoreTransactions, setHasMoreTransactions] = useState(true);
-  const observer = useRef();
   const { walletAddress } = useParams();
   const navigate = useNavigate();
 
-  const fetchBalances = useCallback(async (addr) => {
+  const [transactions, setTransactions] = useState([]);
+  const [utxos, setUtxos] = useState([]);
+  const [transactionPage, setTransactionPage] = useState(0);
+  const [utxoPage, setUtxoPage] = useState(0);
+  const [hasMoreTransactions, setHasMoreTransactions] = useState(true);
+  const [hasMoreUtxos, setHasMoreUtxos] = useState(true);
+  const [loadingTransactions, setLoadingTransactions] = useState(false);
+  const [loadingUtxos, setLoadingUtxos] = useState(false);
+
+  const transactionObserver = useRef();
+  const utxoObserver = useRef();
+
+  const fetchWalletData = useCallback(async (addr) => {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.get(`https://api.kasplex.org/v1/krc20/address/${addr}/tokenlist`);
-      const balancesWithValue = response.data.result.map(token => ({
+      const [krc20Response, balanceResponse, transactionCountResponse] = await Promise.all([
+        axios.get(`https://api.kasplex.org/v1/krc20/address/${addr}/tokenlist`),
+        axios.get(`https://api.kaspa.org/addresses/${addr}/balance`),
+        axios.get(`https://api.kaspa.org/addresses/${addr}/transactions-count`)
+      ]);
+
+      const krc20Balances = krc20Response.data.result.map(token => ({
         ...token,
-        value: calculateValue(token.balance, token.dec),
+        balance: token.balance / Math.pow(10, token.dec),
       }));
-      setBalances(balancesWithValue);
-      setTotalValue(balancesWithValue.reduce((sum, token) => sum + token.value, 0));
+
+      setWalletData({
+        address: addr,
+        krc20Balances,
+        kaspaBalance: balanceResponse.data.balance,
+        transactionCount: transactionCountResponse.data.total,
+      });
+
+      // Reset pagination
+      setTransactionPage(0);
+      setUtxoPage(0);
+      setTransactions([]);
+      setUtxos([]);
+      setHasMoreTransactions(true);
+      setHasMoreUtxos(true);
+
+      // Fetch initial transactions and UTXOs
+      await fetchTransactions(addr, 0);
+      await fetchUtxos(addr, 0);
     } catch (err) {
       setError('Failed to fetch wallet data. Please try again.');
     } finally {
@@ -38,54 +73,77 @@ const WalletLookup = () => {
     }
   }, []);
 
+  const fetchTransactions = async (addr, page) => {
+    setLoadingTransactions(true);
+    try {
+      const response = await axios.get(`https://api.kaspa.org/addresses/${addr}/full-transactions?limit=20&offset=${page * 20}&resolve_previous_outpoints=light`);
+      setTransactions(prev => [...prev, ...response.data]);
+      setHasMoreTransactions(response.data.length === 20);
+      setTransactionPage(page);
+    } catch (err) {
+      console.error('Failed to fetch transactions:', err);
+    } finally {
+      setLoadingTransactions(false);
+    }
+  };
+
+  const fetchUtxos = async (addr, page) => {
+    setLoadingUtxos(true);
+    try {
+      const response = await axios.get(`https://api.kaspa.org/addresses/${addr}/utxos?limit=20&offset=${page * 20}`);
+      const newUtxos = response.data;
+      
+      setUtxos(prevUtxos => {
+        // Create a Set of unique identifiers for existing UTXOs
+        const existingUtxoSet = new Set(
+          prevUtxos.map(utxo => `${utxo.outpoint.transactionId}-${utxo.outpoint.index}`)
+        );
+
+        // Filter out duplicates from the new UTXOs
+        const uniqueNewUtxos = newUtxos.filter(
+          utxo => !existingUtxoSet.has(`${utxo.outpoint.transactionId}-${utxo.outpoint.index}`)
+        );
+
+        return [...prevUtxos, ...uniqueNewUtxos];
+      });
+
+      setHasMoreUtxos(newUtxos.length === 20);
+      setUtxoPage(page);
+    } catch (err) {
+      console.error('Failed to fetch UTXOs:', err);
+    } finally {
+      setLoadingUtxos(false);
+    }
+  };
+
+  const lastTransactionElementRef = useCallback(node => {
+    if (loadingTransactions) return;
+    if (transactionObserver.current) transactionObserver.current.disconnect();
+    transactionObserver.current = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting && hasMoreTransactions) {
+        fetchTransactions(walletData.address, transactionPage + 1);
+      }
+    });
+    if (node) transactionObserver.current.observe(node);
+  }, [loadingTransactions, hasMoreTransactions, walletData, transactionPage]);
+
+  const lastUtxoElementRef = useCallback(node => {
+    if (loadingUtxos) return;
+    if (utxoObserver.current) utxoObserver.current.disconnect();
+    utxoObserver.current = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting && hasMoreUtxos) {
+        fetchUtxos(walletData.address, utxoPage + 1);
+      }
+    });
+    if (node) utxoObserver.current.observe(node);
+  }, [loadingUtxos, hasMoreUtxos, walletData, utxoPage]);
+
   useEffect(() => {
     if (walletAddress) {
       setAddress(walletAddress);
-      fetchBalances(walletAddress);
+      fetchWalletData(walletAddress);
     }
-  }, [walletAddress, fetchBalances]);
-
-  const fetchTransactions = useCallback(async () => {
-    if (transactionLoading || !hasMoreTransactions) return;
-    try {
-      setTransactionLoading(true);
-      setTransactionError(null);
-      const response = await axios.get(`https://api.kasplex.org/v1/krc20/oplist?address=${walletAddress}${transactionsCursor ? `&cursor=${transactionsCursor}` : ''}`);
-      
-      if (response.data.result && response.data.result.length > 0) {
-        setTransactions(prevTransactions => [...prevTransactions, ...response.data.result]);
-        setTransactionsCursor(response.data.next || '');
-        setHasMoreTransactions(!!response.data.next);
-      } else {
-        setHasMoreTransactions(false);
-      }
-    } catch (err) {
-      console.error('Failed to fetch transactions:', err);
-      setTransactionError('Failed to load more transactions. Please try again.');
-    } finally {
-      setTransactionLoading(false);
-    }
-  }, [walletAddress, transactionsCursor, transactionLoading, hasMoreTransactions]);
-
-  const lastTransactionElementRef = useCallback(node => {
-    if (transactionLoading) return;
-    if (observer.current) observer.current.disconnect();
-    observer.current = new IntersectionObserver(entries => {
-      if (entries[0].isIntersecting && hasMoreTransactions) {
-        fetchTransactions();
-      }
-    });
-    if (node) observer.current.observe(node);
-  }, [transactionLoading, hasMoreTransactions, fetchTransactions]);
-
-  useEffect(() => {
-    if (walletAddress) {
-      setTransactions([]);
-      setTransactionsCursor('');
-      setHasMoreTransactions(true);
-      fetchTransactions();
-    }
-  }, [walletAddress]);
+  }, [walletAddress, fetchWalletData]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -94,128 +152,145 @@ const WalletLookup = () => {
     }
   };
 
-  const calculateValue = (balance, decimals) => {
-    return parseFloat(balance) / Math.pow(10, parseInt(decimals));
+  const handleAddressChange = (e) => {
+    setAddress(e.target.value);
   };
 
-  const formatBalance = (balance) => {
-    return parseFloat(balance).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 8 });
+  const copyToClipboard = (text) => {
+    navigator.clipboard.writeText(text);
   };
 
-  const formatDate = (timestamp) => {
-    return new Date(parseInt(timestamp)).toLocaleString();
-  };
-
-  const openExplorer = (hashRev) => {
-    window.open(`https://explorer.kaspa.org/txs/${hashRev}`, '_blank', 'noopener,noreferrer');
+  const openExplorer = (transactionId) => {
+    window.open(`https://explorer.kaspa.org/txs/${transactionId}`, '_blank', 'noopener,noreferrer');
   };
 
   return (
     <Container className="wallet-lookup">
       <h1>Wallet Lookup</h1>
-      <Form onSubmit={handleSubmit} className="mb-4">
-        <InputGroup>
+      <Form onSubmit={handleSubmit}>
+        <InputGroup className="mb-3">
           <Form.Control
             type="text"
             placeholder="Enter wallet address"
             value={address}
-            onChange={(e) => setAddress(e.target.value)}
+            onChange={handleAddressChange}
           />
-          <Button type="submit" variant="primary">
-            <FaSearch />
+          <Button variant="primary" type="submit">
+            <FaSearch /> Search
           </Button>
         </InputGroup>
       </Form>
 
-      {walletAddress ? (
-        <Tabs defaultActiveKey="overview" className="mb-3">
-          <Tab eventKey="overview" title="Overview">
+      {loading && <Spinner animation="border" />}
+      {error && <Alert variant="danger">{error}</Alert>}
+
+      {walletData && (
+        <div className="wallet-details">
+          <div className="wallet-overview">
             <Card>
               <Card.Body>
                 <Card.Title>Wallet Overview</Card.Title>
                 <Card.Text>
-                  <strong>Total Value:</strong> ${formatBalance(totalValue)}
-                </Card.Text>
-                <Card.Text>
-                  <strong>Number of Tokens:</strong> {balances.length}
+                  <strong>Address:</strong> {walletData.address}{' '}
+                  <FaCopy className="clickable" onClick={() => copyToClipboard(walletData.address)} />
+                  <br />
+                  <strong>Kaspa Balance:</strong> {formatNumber(walletData.kaspaBalance / 1e8)} KAS
+                  <br />
+                  <strong>Transaction Count:</strong> {walletData.transactionCount}
                 </Card.Text>
               </Card.Body>
             </Card>
-          </Tab>
+          </div>
 
-          <Tab eventKey="balances" title="Balances">
-            {loading ? (
-              <p>Loading balances...</p>
-            ) : error ? (
-              <Alert variant="danger">{error}</Alert>
-            ) : (
-              <Table striped bordered hover>
-                <thead>
-                  <tr>
-                    <th>Token</th>
-                    <th>Balance</th>
-                    <th>Value</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {balances.map((token) => (
-                    <tr key={token.tick}>
-                      <td>{token.tick}</td>
-                      <td>{formatBalance(calculateValue(token.balance, token.dec))}</td>
-                      <td>${formatBalance(token.value)}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </Table>
-            )}
-          </Tab>
-
-          <Tab eventKey="transactions" title="Transactions">
-            <div className="transactions-container">
-              {transactionError && <Alert variant="danger">{transactionError}</Alert>}
-              <div className="table-container">
+          <Tabs defaultActiveKey="krc20" className="mb-3">
+            <Tab eventKey="krc20" title="KRC20 Tokens">
+              <div className="table-wrapper">
                 <Table striped bordered hover>
                   <thead>
                     <tr>
-                      <th>Explorer</th>
-                      <th>Operation</th>
                       <th>Token</th>
-                      <th>Amount</th>
-                      <th>From</th>
-                      <th>To</th>
-                      <th>Date</th>
+                      <th>Balance</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {transactions.map((tx, index) => (
-                      <tr key={tx.opScore} ref={index === transactions.length - 1 ? lastTransactionElementRef : null}>
-                        <td className="text-center">
-                          <FaExternalLinkAlt 
-                            onClick={() => openExplorer(tx.hashRev)} 
-                            style={{ cursor: 'pointer' }}
-                            title="View in Kaspa Explorer"
-                          />
-                        </td>
-                        <td>{tx.op}</td>
-                        <td>{tx.tick}</td>
-                        <td>{formatBalance(calculateValue(tx.amt, 8))}</td>
-                        <td>{tx.from.substring(0, 10)}...</td>
-                        <td>{tx.to.substring(0, 10)}...</td>
-                        <td>{formatDate(tx.mtsAdd)}</td>
+                    {walletData.krc20Balances.map((token) => (
+                      <tr key={token.contract}>
+                        <td>{token.tick}</td>
+                        <td>{formatNumber(token.balance)}</td>
                       </tr>
                     ))}
                   </tbody>
                 </Table>
               </div>
-              {transactionLoading && <div className="text-center mt-3">Loading more transactions...</div>}
-              {!hasMoreTransactions && !transactionLoading && transactions.length > 0 && (
-                <div className="text-center mt-3">No more transactions to load.</div>
-              )}
-            </div>
-          </Tab>
-        </Tabs>
-      ) : (
-        <p>Enter a wallet address to view its details.</p>
+            </Tab>
+            
+            <Tab eventKey="transactions" title="Recent Transactions">
+              <div className="table-wrapper">
+                <Table striped bordered hover>
+                  <thead>
+                    <tr>
+                      <th>Transaction ID</th>
+                      <th>Amount (KAS)</th>
+                      <th>Block Time</th>
+                      <th>Block DAA Score</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {transactions.map((tx, index) => (
+                      <tr 
+                        key={tx.transaction_id} 
+                        ref={index === transactions.length - 1 ? lastTransactionElementRef : null}
+                        onClick={() => openExplorer(tx.transaction_id)}
+                        className="clickable-row"
+                      >
+                        <td>{tx.transaction_id}</td>
+                        <td>{formatNumber(tx.outputs.reduce((sum, output) => sum + parseInt(output.amount), 0) / 1e8)}</td>
+                        <td>{new Date(tx.block_time).toLocaleString()}</td>
+                        <td>{tx.daa_score}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+                {loadingTransactions && <div className="loading-message">Loading more transactions...</div>}
+              </div>
+            </Tab>
+            
+            <Tab eventKey="utxos" title="UTXOs">
+              <div className="table-wrapper">
+                <Table striped bordered hover>
+                  <thead>
+                    <tr>
+                      <th>Transaction ID</th>
+                      <th>Index</th>
+                      <th>Amount (KAS)</th>
+                      <th>Block DAA Score</th>
+                      <th>Miner Reward</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {utxos.map((utxo, index) => (
+                      <tr 
+                        key={`${utxo.outpoint.transactionId}-${utxo.outpoint.index}`} 
+                        ref={index === utxos.length - 1 ? lastUtxoElementRef : null}
+                        onClick={() => openExplorer(utxo.outpoint.transactionId)}
+                        className="clickable-row"
+                      >
+                        <td>{utxo.outpoint.transactionId}</td>
+                        <td>{utxo.outpoint.index}</td>
+                        <td>{formatNumber(parseInt(utxo.utxoEntry.amount) / 1e8)}</td>
+                        <td>{utxo.utxoEntry.blockDaaScore}</td>
+                        <td>{utxo.utxoEntry.isCoinbase ? 'Yes' : 'No'}</td>
+                        <td>Unspent</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+                {loadingUtxos && <div className="loading-message">Loading more UTXOs...</div>}
+              </div>
+            </Tab>
+          </Tabs>
+        </div>
       )}
     </Container>
   );
