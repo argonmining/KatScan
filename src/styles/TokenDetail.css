@@ -111,3 +111,14 @@ tr:hover {
 .text-muted {
     color: var(--tertiary-primary-color) !important;
 }
+
+.clickable-address {
+    color: var(--primary-color);
+    text-decoration: underline;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.clickable-address:hover {
+    color: var(--secondary-color);
+}

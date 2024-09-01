@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Card, Tabs, Tab, Table, Alert, Row, Col } from 'react-bootstrap';
 import { Line, Bar, Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, BarElement, ArcElement, Title, Tooltip, Legend } from 'chart.js';
@@ -10,6 +10,7 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarEleme
 
 const TokenDetail = () => {
   const { tokenId } = useParams();
+  const navigate = useNavigate();
   const [tokenData, setTokenData] = useState(null);
   const [operations, setOperations] = useState([]);
   const [operationsCursor, setOperationsCursor] = useState(null);
@@ -134,6 +135,10 @@ const TokenDetail = () => {
     return new Date(parseInt(timestamp)).toLocaleString();
   };
 
+  const handleAddressClick = (address) => {
+    navigate(`/wallet/${address}`);
+  };
+
   if (loading) return <div>Loading...</div>;
   if (error) return <Alert variant="danger">{error}</Alert>;
   if (!tokenData) return <Alert variant="warning">No data available</Alert>;
@@ -191,7 +196,14 @@ const TokenDetail = () => {
                 {tokenData.holder.map((holder, index) => (
                   <tr key={index}>
                     <td>{index + 1}</td>
-                    <td>{holder.address}</td>
+                    <td>
+                      <span 
+                        className="clickable-address" 
+                        onClick={() => handleAddressClick(holder.address)}
+                      >
+                        {holder.address}
+                      </span>
+                    </td>
                     <td>{formatNumber(holder.amount, tokenData.dec)}</td>
                     <td>
                       {((parseRawNumber(holder.amount, tokenData.dec) / parseRawNumber(tokenData.max, tokenData.dec)) * 100).toFixed(2)}%
@@ -221,8 +233,22 @@ const TokenDetail = () => {
                 {operations.map((op, index) => (
                   <tr key={index} ref={index === operations.length - 1 ? lastOperationElementRef : null}>
                     <td>{op.op}</td>
-                    <td>{op.from}</td>
-                    <td>{op.to}</td>
+                    <td>
+                      <span 
+                        className="clickable-address" 
+                        onClick={() => handleAddressClick(op.from)}
+                      >
+                        {op.from}
+                      </span>
+                    </td>
+                    <td>
+                      <span 
+                        className="clickable-address" 
+                        onClick={() => handleAddressClick(op.to)}
+                      >
+                        {op.to}
+                      </span>
+                    </td>
                     <td>{formatNumber(op.amt, tokenData.dec)}</td>
                     <td>{formatDateTime(op.mtsAdd)}</td>
                   </tr>

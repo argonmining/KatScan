@@ -5,6 +5,7 @@ import TokenOverview from './components/TokenOverview';
 import TokenDetail from './components/TokenDetail';
 import TokenComparison from './components/TokenComparison'; // New import
 import WalletLookup from './components/WalletLookup'; // New import
+import TransactionLookup from './components/TransactionLookup'; // New import
 import './styles/App.css';
 import './styles/globals.css';
 
@@ -28,6 +29,7 @@ function App() {
             <Route path="/about" element={<About />} />
             <Route path="/wallet" element={<WalletLookup />} />
             <Route path="/wallet/:walletAddress" element={<WalletLookup />} />
+            <Route path="/transaction-lookup/:hashRev?" element={<TransactionLookup />} />
             <Route path="*" element={<div>Page not found</div>} />
           </Routes>
         </div>
