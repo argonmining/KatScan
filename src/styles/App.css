@@ -1,0 +1,28 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f4f7fc;
+  }
+  
+  .App-header {
+    text-align: center;
+    padding: 20px;
+    background-color: #282c34;
+    color: white;
+  }
+  
+  .App {
+    display: flex;
+  }
+  
+  .main-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .content {
+    padding: 20px;
+    background-color: #f4f7fc;
+  }
+  

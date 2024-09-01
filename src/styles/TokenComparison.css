@@ -1,0 +1,14 @@
+.token-comparison {
+    padding: 20px;
+  }
+  
+  .chart-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+  }
+  
+  .card {
+    margin-bottom: 20px;
+  }
+  

@@ -1,0 +1,17 @@
+.token-overview {
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .token-overview h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+  }
+  
+  .token-overview .table {
+    margin-bottom: 0;
+  }
+  

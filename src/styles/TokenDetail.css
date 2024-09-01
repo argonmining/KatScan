@@ -1,0 +1,82 @@
+.token-detail {
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.token-detail h2 {
+    margin-bottom: 20px;
+    font-size: 28px;
+    color: #333;
+}
+
+.token-detail h3 {
+    margin-top: 30px;
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+}
+
+.token-detail .table {
+    margin-bottom: 0;
+}
+
+.token-detail {
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.token-detail h2 {
+    margin-bottom: 20px;
+    font-size: 28px;
+    color: #333;
+}
+
+.token-detail h3 {
+    margin-top: 30px;
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+}
+
+.token-detail .table {
+    margin-bottom: 30px;
+}
+
+.token-detail canvas {
+    margin-bottom: 40px;
+}
+
+.token-detail {
+    padding: 20px;
+  }
+  
+  .analytics-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+  }
+  
+  .card {
+    margin-bottom: 20px;
+  }
+  
+  .card-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+  }
+  
+  .card-text {
+    margin-bottom: 1rem;
+  }
+  
+  input {
+    margin-bottom: 20px;
+    padding: 5px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
