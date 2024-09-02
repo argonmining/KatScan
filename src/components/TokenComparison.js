@@ -1,166 +1,448 @@
-import React, { useState, useEffect } from 'react';
-import { Form, Tab, Tabs, Card, Table } from 'react-bootstrap';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { Form, Card, Row, Col, ProgressBar, Badge } from 'react-bootstrap';
 import { Bar } from 'react-chartjs-2';
-import { getTokenDetails } from '../services/dataService';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, LogarithmicScale } from 'chart.js';
+import Select from 'react-select';
+import { getKRC20TokenList, getTokenDetails } from '../services/dataService';
+import '../styles/TokenComparison.css';
+import { FaChartBar, FaUsers, FaChartPie } from 'react-icons/fa'; // Import icons
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  LogarithmicScale
+);
+
+const TOKEN_COLORS = {
+  token1: 'rgba(75, 192, 192, 0.6)',  // Teal
+  token2: 'rgba(255, 99, 132, 0.6)',  // Pink
+};
+
+const HOLDER_GROUP_COLORS = {
+  top10: 'rgba(255, 99, 132, 0.6)',   // Red
+  top50: 'rgba(255, 206, 86, 0.6)',   // Yellow
+  others: 'rgba(75, 192, 192, 0.6)',  // Green
+};
 
 const TokenComparison = () => {
-  const [selectedTokens, setSelectedTokens] = useState([]);
-  const [tokenData, setTokenData] = useState([]);
-  const [sortConfig, setSortConfig] = useState({ key: 'supply', direction: 'ascending' });
+  const [allTokens, setAllTokens] = useState([]);
+  const [selectedTokens, setSelectedTokens] = useState([null, null]);
+  const [tokenDetails, setTokenDetails] = useState([null, null]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const supplyChartRef = useRef(null);
+  const holdersChartRef = useRef(null);
+
+  const calculateValue = useCallback((value, decimals) => {
+    if (value === undefined || decimals === undefined) {
+      console.warn('calculateValue received undefined value or decimals');
+      return 0;
+    }
+    return parseFloat(value) / Math.pow(10, parseInt(decimals));
+  }, []);
+
+  const calculateHolderPercentages = useCallback((token) => {
+    if (!token.holder || !Array.isArray(token.holder) || token.holder.length === 0) {
+      console.warn(`No holder data for token: ${token.tick}`);
+      return {
+        top10HoldersPercentage: 0,
+        top50HoldersPercentage: 0,
+        totalHolders: token.holderTotal || 0,
+        hasHolderData: false
+      };
+    }
+
+    const totalSupply = calculateValue(token.minted, token.dec);
+    const sortedHolders = [...token.holder].sort((a, b) => parseInt(b.amount) - parseInt(a.amount));
+    
+    const top10Amount = sortedHolders.slice(0, 10).reduce((sum, holder) => sum + calculateValue(holder.amount, token.dec), 0);
+    const top50Amount = sortedHolders.slice(0, 50).reduce((sum, holder) => sum + calculateValue(holder.amount, token.dec), 0);
+
+    const top10Percentage = (top10Amount / totalSupply) * 100;
+    const top50Percentage = (top50Amount / totalSupply) * 100;
+
+    return {
+      top10HoldersPercentage: top10Percentage,
+      top50HoldersPercentage: top50Percentage,
+      totalHolders: token.holderTotal || sortedHolders.length,
+      hasHolderData: true
+    };
+  }, [calculateValue]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const dataPromises = selectedTokens.map((tokenId) => getTokenDetails(tokenId));
-      const data = await Promise.all(dataPromises);
-      setTokenData(data);
+    const fetchTokenList = async () => {
+      try {
+        setLoading(true);
+        const data = await getKRC20TokenList(1000);
+        if (!data || !data.result) {
+          throw new Error('Invalid data structure received from API');
+        }
+        setAllTokens(data.result);
+        setLoading(false);
+      } catch (err) {
+        console.error('Error in fetchTokenList:', err);
+        setError(`Failed to fetch token list: ${err.message}`);
+        setLoading(false);
+      }
     };
 
-    if (selectedTokens.length) {
-      fetchData();
-    }
-  }, [selectedTokens]);
+    fetchTokenList();
+  }, []);
 
-  const handleTokenSelect = (e) => {
-    const { value, checked } = e.target;
-    if (checked) {
-      setSelectedTokens((prev) => [...prev, value]);
-    } else {
-      setSelectedTokens((prev) => prev.filter((tokenId) => tokenId !== value));
-    }
+  useEffect(() => {
+    const fetchTokenDetails = async () => {
+      if (selectedTokens[0] && selectedTokens[1]) {
+        setLoading(true);
+        setError(null);
+        try {
+          const details = await Promise.all(selectedTokens.map(token => getTokenDetails(token.value)));
+          console.log('Raw token details:', details);
+          const processedDetails = details.map(token => ({
+            ...token,
+            ...calculateHolderPercentages(token)
+          }));
+          console.log('Processed token details:', processedDetails);
+          setTokenDetails(processedDetails);
+        } catch (err) {
+          console.error('Error fetching token details:', err);
+          setError(`Failed to fetch token details: ${err.message}`);
+          setTokenDetails([null, null]);
+        }
+        setLoading(false);
+      }
+    };
+
+    fetchTokenDetails();
+  }, [selectedTokens, calculateHolderPercentages]);
+
+  const handleTokenSelect = (option, index) => {
+    setSelectedTokens(prev => {
+      const newSelected = [...prev];
+      newSelected[index] = option;
+      return newSelected;
+    });
   };
 
-  const requestSort = (key) => {
-    let direction = 'ascending';
-    if (sortConfig.key === key && sortConfig.direction === 'ascending') {
-      direction = 'descending';
-    }
-    setSortConfig({ key, direction });
-  };
+  const renderComparison = () => {
+    console.log('Rendering comparison, tokenDetails:', tokenDetails);
 
-  const sortedTokenData = [...tokenData].sort((a, b) => {
-    if (a[sortConfig.key] < b[sortConfig.key]) {
-      return sortConfig.direction === 'ascending' ? -1 : 1;
+    if (!tokenDetails[0] || !tokenDetails[1]) {
+      console.log('One or both tokens are missing');
+      return <p>Please select two tokens to compare.</p>;
     }
-    if (a[sortConfig.key] > b[sortConfig.key]) {
-      return sortConfig.direction === 'ascending' ? 1 : -1;
-    }
-    return 0;
-  });
 
-  const generateBarChartData = (metric) => {
-    return {
-      labels: sortedTokenData.map((token) => token.name),
+    const [token1, token2] = tokenDetails;
+    console.log('Token 1:', token1);
+    console.log('Token 2:', token2);
+
+    const calculateValue = (value, decimals) => {
+      if (value === undefined || decimals === undefined) return 0;
+      return parseFloat(value) / Math.pow(10, parseInt(decimals));
+    };
+
+    const formatNumber = (num) => {
+      if (num === undefined || isNaN(num)) {
+        console.warn('formatNumber received invalid number:', num);
+        return 'N/A';
+      }
+      return num.toLocaleString();
+    };
+
+    const formatLargeNumber = (num) => {
+      if (num >= 1e12) {
+        return (num / 1e12).toFixed(3) + ' T';
+      } else if (num >= 1e9) {
+        return (num / 1e9).toFixed(3) + ' B';
+      } else if (num >= 1e6) {
+        return (num / 1e6).toFixed(3) + ' M';
+      } else if (num >= 1e3) {
+        return (num / 1e3).toFixed(3) + ' K';
+      } else {
+        return num.toLocaleString();
+      }
+    };
+
+    const supplyData = {
+      labels: ['Max Supply', 'Minted', 'Pre-Minted'],
       datasets: [
         {
-          label: metric,
-          data: sortedTokenData.map((token) => token[metric] || 0), // Add fallback for undefined values
-          backgroundColor: 'rgba(75, 192, 192, 0.2)',
-          borderColor: 'rgba(75, 192, 192, 1)',
-          borderWidth: 1,
+          label: token1.tick,
+          data: [
+            calculateValue(token1.max, token1.dec),
+            calculateValue(token1.minted, token1.dec),
+            calculateValue(token1.pre, token1.dec)
+          ],
+          backgroundColor: TOKEN_COLORS.token1,
+        },
+        {
+          label: token2.tick,
+          data: [
+            calculateValue(token2.max, token2.dec),
+            calculateValue(token2.minted, token2.dec),
+            calculateValue(token2.pre, token2.dec)
+          ],
+          backgroundColor: TOKEN_COLORS.token2,
         },
       ],
     };
+
+    const supplyOptions = {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        y: {
+          type: 'logarithmic',
+          ticks: {
+            callback: function(value) {
+              return formatLargeNumber(value);
+            },
+            maxTicksLimit: 8
+          }
+        }
+      },
+      plugins: {
+        legend: {
+          display: true,
+          position: 'bottom',
+        },
+      },
+    };
+
+    const holdersData = {
+      labels: [token1.tick, token2.tick],
+      datasets: [
+        {
+          label: 'Top 10 Holders',
+          data: [token1.top10HoldersPercentage || 0, token2.top10HoldersPercentage || 0],
+          backgroundColor: HOLDER_GROUP_COLORS.top10,
+        },
+        {
+          label: 'Top 11-50 Holders',
+          data: [
+            (token1.top50HoldersPercentage || 0) - (token1.top10HoldersPercentage || 0),
+            (token2.top50HoldersPercentage || 0) - (token2.top10HoldersPercentage || 0)
+          ],
+          backgroundColor: HOLDER_GROUP_COLORS.top50,
+        },
+        {
+          label: 'Other Holders',
+          data: [
+            100 - (token1.top50HoldersPercentage || 0),
+            100 - (token2.top50HoldersPercentage || 0)
+          ],
+          backgroundColor: HOLDER_GROUP_COLORS.others,
+        },
+      ],
+    };
+
+    const holdersOptions = {
+      plugins: {
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              let label = context.dataset.label || '';
+              if (label) {
+                label += ': ';
+              }
+              if (context.parsed.y !== null) {
+                label += new Intl.NumberFormat('en-US', { style: 'percent', minimumFractionDigits: 2 }).format(context.parsed.y / 100);
+              }
+              return label;
+            }
+          }
+        },
+        legend: {
+          display: true,
+          position: 'bottom',
+        },
+      },
+      responsive: true,
+      scales: {
+        x: {
+          stacked: true,
+          ticks: {
+            font: {
+              weight: 'bold'
+            }
+          }
+        },
+        y: {
+          stacked: true,
+          ticks: {
+            callback: function(value) {
+              return value + '%';
+            }
+          }
+        }
+      },
+    };
+
+    const getMintProgress = (token) => {
+      const minted = calculateValue(token.minted, token.dec);
+      const max = calculateValue(token.max, token.dec);
+      return max > 0 ? (minted / max) * 100 : 0;
+    };
+
+    const getMintType = (token) => {
+      return calculateValue(token.pre, token.dec) > 0 ? "Pre-Mint" : "Fair Mint";
+    };
+
+    return (
+      <Row>
+        <Col lg={6} className="mb-4">
+          <Card>
+            <Card.Body>
+              <Card.Title><FaChartBar /> Supply Comparison</Card.Title>
+              <Bar data={supplyData} options={supplyOptions} ref={supplyChartRef} />
+            </Card.Body>
+          </Card>
+        </Col>
+        <Col lg={6} className="mb-4">
+          <Card>
+            <Card.Body>
+              <Card.Title><FaUsers /> Holder Distribution</Card.Title>
+              <Bar data={holdersData} options={holdersOptions} ref={holdersChartRef} />
+            </Card.Body>
+          </Card>
+        </Col>
+        <Col md={12} className="mb-4 minting-progress-card">
+          <Card>
+            <Card.Body>
+              <Card.Title><FaChartPie /> Minting Progress</Card.Title>
+              <div className="progress-wrapper mb-3">
+                <div className="progress-label">
+                  {token1.tick} <Badge bg={getMintType(token1) === "Fair Mint" ? "success" : "warning"}>{getMintType(token1)}</Badge>
+                </div>
+                <ProgressBar 
+                  now={getMintProgress(token1)} 
+                  label={`${getMintProgress(token1).toFixed(2)}%`} 
+                  variant="info"
+                />
+              </div>
+              <div className="progress-wrapper">
+                <div className="progress-label">
+                  {token2.tick} <Badge bg={getMintType(token2) === "Fair Mint" ? "success" : "warning"}>{getMintType(token2)}</Badge>
+                </div>
+                <ProgressBar 
+                  now={getMintProgress(token2)} 
+                  label={`${getMintProgress(token2).toFixed(2)}%`} 
+                  variant="success"
+                />
+              </div>
+            </Card.Body>
+          </Card>
+        </Col>
+        <Col md={12}>
+          <Card>
+            <Card.Body>
+              <Card.Title>Token Details</Card.Title>
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th>Metric</th>
+                    <th>{token1.tick}</th>
+                    <th>{token2.tick}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Max Supply</td>
+                    <td>{formatNumber(calculateValue(token1.max, token1.dec))}</td>
+                    <td>{formatNumber(calculateValue(token2.max, token2.dec))}</td>
+                  </tr>
+                  <tr>
+                    <td>Minted</td>
+                    <td>{formatNumber(calculateValue(token1.minted, token1.dec))}</td>
+                    <td>{formatNumber(calculateValue(token2.minted, token2.dec))}</td>
+                  </tr>
+                  <tr>
+                    <td>Pre-Minted</td>
+                    <td>{formatNumber(calculateValue(token1.pre, token1.dec))}</td>
+                    <td>{formatNumber(calculateValue(token2.pre, token2.dec))}</td>
+                  </tr>
+                  <tr>
+                    <td>Decimals</td>
+                    <td>{token1.dec || 'N/A'}</td>
+                    <td>{token2.dec || 'N/A'}</td>
+                  </tr>
+                  <tr>
+                    <td>Total Holders</td>
+                    <td>{formatNumber(token1.holderTotal)}</td>
+                    <td>{formatNumber(token2.holderTotal)}</td>
+                  </tr>
+                  <tr>
+                    <td>Top 10 Holders %</td>
+                    <td>{(token1.top10HoldersPercentage || 0).toFixed(2)}%</td>
+                    <td>{(token2.top10HoldersPercentage || 0).toFixed(2)}%</td>
+                  </tr>
+                  <tr>
+                    <td>Top 50 Holders %</td>
+                    <td>{(token1.top50HoldersPercentage || 0).toFixed(2)}%</td>
+                    <td>{(token2.top50HoldersPercentage || 0).toFixed(2)}%</td>
+                  </tr>
+                </tbody>
+              </table>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+    );
   };
+
+  useEffect(() => {
+    const supplyChart = supplyChartRef.current;
+    const holdersChart = holdersChartRef.current;
+
+    return () => {
+      if (supplyChart) {
+        supplyChart.destroy();
+      }
+      if (holdersChart) {
+        holdersChart.destroy();
+      }
+    };
+  }, []);
 
   return (
     <div className="token-comparison">
       <h2>Compare KRC20 Tokens</h2>
-      <Form>
-        <Form.Group>
-          <Form.Label>Select Tokens to Compare</Form.Label>
-          <div className="token-select">
-            {/* Example token checkboxes, replace with actual data */}
-            <Form.Check
-              type="checkbox"
-              label="Token 1"
-              value="1"
-              onChange={handleTokenSelect}
+      <Row className="mb-4">
+        <Col md={6}>
+          <Form.Group>
+            <Form.Label>Select Token 1</Form.Label>
+            <Select
+              options={allTokens.map(token => ({ value: token.tick, label: token.tick }))}
+              onChange={(option) => handleTokenSelect(option, 0)}
+              isClearable
+              placeholder="Search for a token..."
             />
-            <Form.Check
-              type="checkbox"
-              label="Token 2"
-              value="2"
-              onChange={handleTokenSelect}
+          </Form.Group>
+        </Col>
+        <Col md={6}>
+          <Form.Group>
+            <Form.Label>Select Token 2</Form.Label>
+            <Select
+              options={allTokens.map(token => ({ value: token.tick, label: token.tick }))}
+              onChange={(option) => handleTokenSelect(option, 1)}
+              isClearable
+              placeholder="Search for a token..."
             />
-            {/* Add more tokens as needed */}
-          </div>
-        </Form.Group>
-      </Form>
-
-      {sortedTokenData.length > 0 && (
-        <Tabs defaultActiveKey="overview" className="mb-3">
-          <Tab eventKey="overview" title="Overview">
-            <Table striped bordered hover>
-              <thead>
-                <tr>
-                  <th>Metric</th>
-                  {sortedTokenData.map((token) => (
-                    <th key={token.name}>{token.name}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Total Supply</td>
-                  {sortedTokenData.map((token) => (
-                    <td key={token.name}>{token.supply}</td>
-                  ))}
-                </tr>
-                <tr>
-                  <td>Number of Holders</td>
-                  {sortedTokenData.map((token) => (
-                    <td key={token.name}>{token.holders}</td>
-                  ))}
-                </tr>
-                <tr>
-                  <td>Transaction Volume</td>
-                  {sortedTokenData.map((token) => (
-                    <td key={token.name}>{token.transactions ? token.transactions.length : 0}</td> // Add check for transactions
-                  ))}
-                </tr>
-                <tr>
-                  <td>Recent Operations</td>
-                  {sortedTokenData.map((token) => (
-                    <td key={token.name}>{token.operations ? token.operations.length : 'N/A'}</td> // Add check for operations
-                  ))}
-                </tr>
-              </tbody>
-            </Table>
-          </Tab>
-
-          <Tab eventKey="charts" title="Charts">
-            <div className="chart-section">
-              <Card>
-                <Card.Body>
-                  <Card.Title onClick={() => requestSort('supply')}>Total Supply</Card.Title>
-                  <Bar data={generateBarChartData('supply')} />
-                </Card.Body>
-              </Card>
-
-              <Card>
-                <Card.Body>
-                  <Card.Title onClick={() => requestSort('holders')}>Number of Holders</Card.Title>
-                  <Bar data={generateBarChartData('holders')} />
-                </Card.Body>
-              </Card>
-
-              <Card>
-                <Card.Body>
-                  <Card.Title onClick={() => requestSort('transactions.length')}>Transaction Volume</Card.Title>
-                  <Bar data={generateBarChartData('transactions.length')} />
-                </Card.Body>
-              </Card>
-
-              <Card>
-                <Card.Body>
-                  <Card.Title onClick={() => requestSort('operations.length')}>Recent Operations</Card.Title>
-                  <Bar data={generateBarChartData('operations.length')} />
-                </Card.Body>
-              </Card>
-            </div>
-          </Tab>
-        </Tabs>
+          </Form.Group>
+        </Col>
+      </Row>
+      {loading && <p>Loading...</p>}
+      {error && (
+        <div className="error-message">
+          <p>{error}</p>
+          <p>Please try selecting the tokens again or contact support if the issue persists.</p>
+        </div>
       )}
+      {!loading && !error && tokenDetails[0] && tokenDetails[1] && renderComparison()}
     </div>
   );
 };

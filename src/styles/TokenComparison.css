@@ -1,5 +1,9 @@
 .token-comparison {
-    padding: 20px;
+    padding: 30px;
+    box-sizing: border-box;
+    overflow-x: hidden;
+    height: 100%;
+    overflow-y: auto;
   }
   
   .chart-section {
@@ -9,6 +13,98 @@
   }
   
   .card {
+    margin-bottom: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
+    border-radius: 8px; /* Rounded corners */
+  }
+  
+  .token-comparison h2 {
     margin-bottom: 20px;
   }
   
+  .token-comparison .card {
+    height: 100%;
+  }
+  
+  .token-comparison .card-body {
+    display: flex;
+    flex-direction: column;
+    padding: 25px; /* Add padding */
+  }
+  
+  .token-comparison .card-title {
+    margin-bottom: 25px;
+    font-size: 1.25rem; /* Consistent font size */
+    font-weight: bold; /* Consistent font weight */
+  }
+  
+  .token-comparison canvas {
+    max-height: 350px;
+  }
+
+.progress-wrapper {
+  margin-bottom: 20px;
+}
+
+.progress-label {
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.table-responsive {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+@media (max-width: 768px) {
+  .token-comparison {
+    padding: 10px;
+  }
+}
+
+.progress-label .badge {
+  margin-left: 10px;
+  font-size: 0.8em;
+}
+
+.token-comparison .row {
+  margin-right: -15px;
+  margin-left: -15px;
+}
+
+.token-comparison .col,
+.token-comparison [class*="col-"] {
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
+/* Add some space between the select inputs */
+.token-comparison .form-group {
+  margin-bottom: 20px;
+}
+
+/* Adjust the table styles */
+.table {
+  margin-bottom: 0;
+}
+
+.table th,
+.table td {
+  padding: 12px;
+  vertical-align: middle;
+}
+
+/* Add space between the minting progress card and the token details table */
+.minting-progress-card {
+  margin-bottom: 40px !important;
+}
+
+/* Ensure consistent spacing between all cards */
+.token-comparison .card {
+  margin-bottom: 40px;
+}
+
+/* Remove margin from the last card */
+.token-comparison .card:last-child {
+  margin-bottom: 0;
+}

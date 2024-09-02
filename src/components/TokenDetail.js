@@ -139,6 +139,10 @@ const TokenDetail = () => {
     navigate(`/wallet/${address}`);
   };
 
+  const handleTransactionClick = (hashRev) => {
+    navigate(`/transaction-lookup/${hashRev}`);
+  };
+
   if (loading) return <div>Loading...</div>;
   if (error) return <Alert variant="danger">{error}</Alert>;
   if (!tokenData) return <Alert variant="warning">No data available</Alert>;
@@ -223,8 +227,8 @@ const TokenDetail = () => {
               <thead>
                 <tr>
                   <th>Operation</th>
-                  <th>From</th>
-                  <th>To</th>
+                  <th>Transaction ID</th>
+                  <th>Address</th>
                   <th>Amount</th>
                   <th>Timestamp</th>
                 </tr>
@@ -236,17 +240,17 @@ const TokenDetail = () => {
                     <td>
                       <span 
                         className="clickable-address" 
-                        onClick={() => handleAddressClick(op.from)}
+                        onClick={() => handleTransactionClick(op.hashRev)}
                       >
-                        {op.from}
+                        {op.hashRev}
                       </span>
                     </td>
                     <td>
                       <span 
                         className="clickable-address" 
-                        onClick={() => handleAddressClick(op.to)}
+                        onClick={() => handleAddressClick(op.op === 'mint' ? op.to : op.from)}
                       >
-                        {op.to}
+                        {op.op === 'mint' ? op.to : op.from}
                       </span>
                     </td>
                     <td>{formatNumber(op.amt, tokenData.dec)}</td>
