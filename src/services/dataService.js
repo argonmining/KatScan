@@ -47,3 +47,27 @@ export const getTokenOperations = async (tick, limit = 50, cursor = null) => {
     throw error;
   }
 };
+
+// New function to fetch mint operations
+export const getMintOperations = async (tick, limit = 50, cursor = null) => {
+  try {
+    const params = new URLSearchParams({ tick, limit: limit.toString(), op: 'mint' });
+    if (cursor) params.append('next', cursor);
+    const response = await axios.get(`${BASE_URL}/krc20/oplist`, { params });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching mint operations:', error);
+    throw error;
+  }
+};
+
+// Add this new function to fetch detailed token information
+export const getDetailedTokenInfo = async (tick) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/krc20/token/${tick}`);
+    return response.data.result[0];
+  } catch (error) {
+    console.error('Error fetching detailed token information:', error);
+    throw error;
+  }
+};

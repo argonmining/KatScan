@@ -1,0 +1,82 @@
+.market-cap-calculator {
+  padding: 30px;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.market-cap-calculator h2 {
+  color: #007bff;
+  font-weight: bold;
+}
+
+.market-cap-calculator .form-group {
+  margin-bottom: 20px;
+}
+
+.market-cap-calculator .result-card {
+  background-color: #fff;
+  border: none;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.market-cap-calculator .result-card:hover {
+  transform: translateY(-5px);
+}
+
+.market-cap-calculator h5 {
+  color: #28a745;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.market-cap-calculator .lead {
+  font-size: 1.1rem;
+}
+
+.market-cap-calculator .price-highlight {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #28a745;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+
+.market-cap-calculator .disclaimer {
+  font-size: 0.9rem;
+  font-style: italic;
+  color: #6c757d;
+}
+
+.market-cap-calculator .hypothetical-price {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.market-cap-calculator p {
+  margin-bottom: 0.5rem;
+}
+
+.market-cap-calculator .text-primary {
+  color: #007bff;
+}
+
+.market-cap-calculator .text-success {
+  color: #28a745;
+}
+
+.market-cap-calculator .text-muted {
+  color: #6c757d;
+}
+
+@media (max-width: 768px) {
+  .market-cap-calculator {
+    padding: 15px;
+  }
+  
+  .market-cap-calculator .price-highlight {
+    font-size: 2rem;
+  }
+}

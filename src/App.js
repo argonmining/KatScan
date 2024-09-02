@@ -7,6 +7,8 @@ import TokenComparison from './components/TokenComparison';
 import WalletLookup from './components/WalletLookup';
 import TransactionLookup from './components/TransactionLookup';
 import Home from './components/Home'; // Updated import
+import MintHeatmap from './components/MintHeatmap';
+import MarketCapCalculator from './components/MarketCapCalculator';
 import './styles/App.css';
 import './styles/globals.css';
 
@@ -29,6 +31,8 @@ function App() {
             <Route path="/wallet" element={<WalletLookup />} />
             <Route path="/wallet/:walletAddress" element={<WalletLookup />} />
             <Route path="/transaction-lookup/:hashRev?" element={<TransactionLookup />} />
+            <Route path="/mint-heatmap" element={<MintHeatmap />} />
+            <Route path="/marketcap-calc" element={<MarketCapCalculator />} />
             <Route path="*" element={<div>Page not found</div>} />
           </Routes>
         </div>

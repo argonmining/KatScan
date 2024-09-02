@@ -1,0 +1,28 @@
+.mint-heatmap {
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  min-height: calc(100vh - 40px);
+  margin: 20px auto;
+  max-width: 1400px;
+}
+
+.mint-heatmap h1 {
+  margin-bottom: 20px;
+  color: #333;
+  font-weight: bold;
+}
+
+.mint-heatmap .spinner-border {
+  display: block;
+  margin: 20px auto;
+}
+
+.heatmap-container {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  margin-top: 20px;
+}
