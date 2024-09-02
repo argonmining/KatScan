@@ -104,7 +104,8 @@ tr:hover {
 }
 
 .chart-container {
-    height: 400px;
+    width: 100%;
+    height: 400px; /* Adjust the height as needed */
     margin-top: 20px;
 }
 

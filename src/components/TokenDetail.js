@@ -197,7 +197,7 @@ const TokenDetail = () => {
                 </tr>
               </thead>
               <tbody>
-                {tokenData.holder.map((holder, index) => (
+                {tokenData.holder && tokenData.holder.map((holder, index) => (
                   <tr key={index}>
                     <td>{index + 1}</td>
                     <td>
@@ -234,7 +234,7 @@ const TokenDetail = () => {
                 </tr>
               </thead>
               <tbody>
-                {operations.map((op, index) => (
+                {operations && operations.map((op, index) => (
                   <tr key={index} ref={index === operations.length - 1 ? lastOperationElementRef : null}>
                     <td>{op.op}</td>
                     <td>
