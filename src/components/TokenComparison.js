@@ -366,11 +366,6 @@ const TokenComparison = () => {
                     <td>{formatNumber(calculateValue(token2.pre, token2.dec))}</td>
                   </tr>
                   <tr>
-                    <td>Decimals</td>
-                    <td>{token1.dec || 'N/A'}</td>
-                    <td>{token2.dec || 'N/A'}</td>
-                  </tr>
-                  <tr>
                     <td>Total Holders</td>
                     <td>{formatNumber(token1.holderTotal)}</td>
                     <td>{formatNumber(token2.holderTotal)}</td>

@@ -34,7 +34,7 @@ const Sidebar = () => {
               <FaSearch /> {!collapsed && <span>Transaction Lookup</span>}
             </NavLink>
             <NavLink to="/wallet" className="nav-link" activeClassName="active">
-              <FaWallet /> {!collapsed && <span>Wallet Lookup</span>}
+              <FaWallet /> {!collapsed && <span>Address Lookup</span>}
             </NavLink>
           </NavSection>
 
@@ -66,7 +66,12 @@ const Sidebar = () => {
           </NavSection>
         </Nav>
         <div className="sidebar-footer">
-          {!collapsed && <p>&copy; 2023 KatScan</p>}
+          {!collapsed && (
+            <p>
+              Made with ❤️ by the<br />
+              Nacho the 𐤊at Community
+            </p>
+          )}
           <button className="collapse-btn" onClick={toggleSidebar}>
             {collapsed ? <FaChevronRight /> : <FaChevronLeft />}
           </button>
