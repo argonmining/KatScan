@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Card } from 'react-bootstrap';
-import { FaExchangeAlt, FaWallet, FaCoins } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
+import { FaExchangeAlt, FaWallet, FaCoins, FaSearch, FaChartBar, FaCalculator } from 'react-icons/fa';
 import '../styles/Home.css';
 
 const Home = () => {
@@ -13,6 +14,7 @@ const Home = () => {
   const [recentTokens, setRecentTokens] = useState([]);
 
   useEffect(() => {
+    // Fetch network stats
     fetch('https://api.kasplex.org/v1/info')
       .then(response => response.json())
       .then(data => {
@@ -20,123 +22,100 @@ const Home = () => {
         setNetworkStats({
           opTotal: new Intl.NumberFormat('en-US').format(opTotal),
           tokenTotal: new Intl.NumberFormat('en-US').format(tokenTotal),
-          feeTotal: new Intl.NumberFormat('en-US').format((feeTotal / 1e8).toFixed(0)), // Format feeTotal
+          feeTotal: new Intl.NumberFormat('en-US').format((feeTotal / 1e8).toFixed(0)),
         });
       })
       .catch(error => console.error('Error fetching network stats:', error));
-  }, []);
 
-  useEffect(() => {
+    // Fetch recent tokens
     fetch('https://api.kasplex.org/v1/krc20/tokenlist')
       .then(response => response.json())
       .then(data => {
         const sortedTokens = data.result.sort((a, b) => b.mtsAdd - a.mtsAdd);
-        setRecentTokens(sortedTokens.slice(0, 5)); // Display the 5 most recent tokens
+        setRecentTokens(sortedTokens.slice(0, 6));
       })
       .catch(error => console.error('Error fetching recent tokens:', error));
   }, []);
 
+  const FeatureCard = ({ title, icon, link }) => (
+    <Col xs={4} className="mb-2">
+      <Card className="feature-card h-100" as={Link} to={link}>
+        <Card.Body className="d-flex flex-column align-items-center justify-content-center p-2">
+          {icon}
+          <Card.Title className="mt-1 text-center small">{title}</Card.Title>
+        </Card.Body>
+      </Card>
+    </Col>
+  );
+
+  const StatCard = ({ title, value, icon }) => (
+    <Col xs={4} className="mb-2">
+      <Card className="stat-card h-100">
+        <Card.Body className="d-flex flex-column align-items-center justify-content-center p-2">
+          {icon}
+          <h3 className="mt-1 mb-0">{value}</h3>
+          <Card.Text className="text-center small">{title}</Card.Text>
+        </Card.Body>
+      </Card>
+    </Col>
+  );
+
   return (
-    <Container className="home">
-      <Row className="header-section">
+    <Container fluid className="home-container d-flex flex-column vh-100">
+      <Row className="header-section py-2">
         <Col>
-          <h1>KatScan</h1>
-          <p>Explore, Analyze, and Compare KRC-20 Token Data</p>
+          <h1 className="text-center mb-0">KatScan</h1>
+          <p className="text-center small mb-0">Explore, Analyze, and Compare KRC-20 Token Data</p>
         </Col>
       </Row>
 
-      <Row className="features-section">
+      <Row className="mb-3">
         <Col>
-          <h2>Key Features</h2>
-          <Row>
-            <Col md={4}>
-              <Card className="feature-card">
-                <Card.Body>
-                  <Card.Title>Transaction Lookup</Card.Title>
-                  <Card.Text>Search and analyze KRC-20 transactions.</Card.Text>
-                </Card.Body>
-              </Card>
-            </Col>
-            <Col md={4}>
-              <Card className="feature-card">
-                <Card.Body>
-                  <Card.Title>Address Lookup</Card.Title>
-                  <Card.Text>Get detailed information about any wallet.</Card.Text>
-                </Card.Body>
-              </Card>
-            </Col>
-            <Col md={4}>
-              <Card className="feature-card">
-                <Card.Body>
-                  <Card.Title>Token Comparison</Card.Title>
-                  <Card.Text>Compare different KRC-20 tokens side by side.</Card.Text>
-                </Card.Body>
-              </Card>
-            </Col>
+          <h5 className="section-title mb-2">Key Features</h5>
+          <Row className="mb-2">
+            <FeatureCard title="Transaction Lookup" icon={<FaSearch className="feature-icon" />} link="/transaction-lookup" />
+            <FeatureCard title="Address Lookup" icon={<FaWallet className="feature-icon" />} link="/wallet" />
+            <FeatureCard title="Token Comparison" icon={<FaExchangeAlt className="feature-icon" />} link="/compare" />
           </Row>
-        </Col>
-      </Row>
-
-      <Row className="network-stats-section">
-        <Col>
-          <h2>Kasplex Statistics</h2>
-          <Row>
-            <Col md={4}>
-              <Card className="stats-card">
-                <Card.Body>
-                  <FaExchangeAlt className="stats-icon" />
-                  <Card.Title>{networkStats.opTotal}</Card.Title>
-                  <Card.Text>Total KRC20 Transactions</Card.Text>
-                </Card.Body>
-              </Card>
-            </Col>
-            <Col md={4}>
-              <Card className="stats-card">
-                <Card.Body>
-                  <FaCoins className="stats-icon" />
-                  <Card.Title>{networkStats.tokenTotal}</Card.Title>
-                  <Card.Text>Total KRC20 Tokens Deployed</Card.Text>
-                </Card.Body>
-              </Card>
-            </Col>
-            <Col md={4}>
-              <Card className="stats-card">
-                <Card.Body>
-                  <FaWallet className="stats-icon" />
-                  <Card.Title>{networkStats.feeTotal}</Card.Title>
-                  <Card.Text>Total Fees Paid (KAS)</Card.Text>
-                </Card.Body>
-              </Card>
-            </Col>
+          <Row className="mb-3">
+            <FeatureCard title="All Tokens" icon={<FaCoins className="feature-icon" />} link="/tokens" />
+            <FeatureCard title="Mint Heatmap" icon={<FaChartBar className="feature-icon" />} link="/mint-heatmap" />
+            <FeatureCard title="MarketCap Calculator" icon={<FaCalculator className="feature-icon" />} link="/marketcap-calc" />
           </Row>
-        </Col>
-      </Row>
 
-      <Row className="recent-tokens-section">
-        <Col>
-          <h2>Recent Tokens</h2>
+          <h5 className="section-title mb-2">Kasplex Statistics</h5>
+          <Row className="mb-4">
+            <StatCard
+              title="Total KRC20 Transactions"
+              value={networkStats.opTotal}
+              icon={<FaExchangeAlt className="stat-icon" />}
+            />
+            <StatCard
+              title="Total KRC20 Tokens Deployed"
+              value={networkStats.tokenTotal}
+              icon={<FaCoins className="stat-icon" />}
+            />
+            <StatCard
+              title="Total Fees Paid (KAS)"
+              value={networkStats.feeTotal}
+              icon={<FaWallet className="stat-icon" />}
+            />
+          </Row>
+
+          <h5 className="section-title mb-2">Recent Tokens</h5>
           <Row>
             {recentTokens.map(token => (
-              <Col md={4} key={token.hashRev}>
-                <Card className="token-card">
-                  <Card.Body>
-                    <Card.Title>{token.tick}</Card.Title>
-                    <Card.Text>Max Supply: {new Intl.NumberFormat('en-US').format(token.max / Math.pow(10, token.dec))}</Card.Text>
-                    <Card.Text>Minted: {new Intl.NumberFormat('en-US').format(token.minted / Math.pow(10, token.dec))}</Card.Text>
-                    <Card.Text>Deployed on: {new Date(parseInt(token.mtsAdd)).toLocaleString()}</Card.Text>
+              <Col xs={4} key={token.hashRev} className="mb-2">
+                <Card className="token-card h-100" as={Link} to={`/tokens/${token.tick}`}>
+                  <Card.Body className="p-2">
+                    <Card.Title className="small mb-1">{token.tick}</Card.Title>
+                    <Card.Text className="small mb-0">Max: {new Intl.NumberFormat('en-US', { notation: 'compact' }).format(token.max / Math.pow(10, token.dec))}</Card.Text>
+                    <Card.Text className="small mb-0">Minted: {new Intl.NumberFormat('en-US', { notation: 'compact' }).format(token.minted / Math.pow(10, token.dec))}</Card.Text>
                   </Card.Body>
                 </Card>
               </Col>
             ))}
           </Row>
-        </Col>
-      </Row>
-
-      <Row className="analytics-section">
-        <Col>
-          <h2>Analytics</h2>
-          {/* Placeholder for analytics charts */}
-          <p>Analytics charts will go here.</p>
         </Col>
       </Row>
     </Container>
