@@ -1,38 +1,73 @@
 .market-cap-calculator {
-  padding: 30px;
+  padding: 30px 15px;
   background-color: #f8f9fa;
-  border-radius: 10px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  min-height: 100vh;
+}
+
+.market-cap-calculator .main-card {
+  background-color: #fff;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  padding: 30px;
 }
 
 .market-cap-calculator h2 {
   color: #007bff;
   font-weight: bold;
+  margin-bottom: 30px;
 }
 
 .market-cap-calculator .form-group {
-  margin-bottom: 20px;
+  margin-bottom: 25px;
 }
 
-.market-cap-calculator .result-card {
+.market-cap-calculator .calculation-result {
+  margin-top: 40px;
+}
+
+.market-cap-calculator .token-card {
   background-color: #fff;
   border: none;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
   transition: all 0.3s ease;
 }
 
-.market-cap-calculator .result-card:hover {
+.market-cap-calculator .token-card:hover {
   transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.market-cap-calculator .krc20-card {
+  border-top: 4px solid #007bff;
+}
+
+.market-cap-calculator .coingecko-card {
+  border-top: 4px solid #28a745;
 }
 
 .market-cap-calculator h5 {
-  color: #28a745;
   font-weight: bold;
-  margin-bottom: 1rem;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e9ecef;
 }
 
-.market-cap-calculator .lead {
-  font-size: 1.1rem;
+.market-cap-calculator .list-unstyled li {
+  padding: 10px 0;
+  border-bottom: 1px solid #f8f9fa;
+}
+
+.market-cap-calculator .list-unstyled li:last-child {
+  border-bottom: none;
+}
+
+.market-cap-calculator .hypothetical-price-card {
+  background-color: #f8f9fa;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
 }
 
 .market-cap-calculator .price-highlight {
@@ -48,27 +83,31 @@
   color: #6c757d;
 }
 
-.market-cap-calculator .hypothetical-price {
-  background-color: #f8f9fa;
-  border-radius: 8px;
-  padding: 20px;
-  margin-top: 20px;
+.market-cap-calculator .details-button {
+  width: 100%;
+  padding: 10px;
+  font-weight: bold;
+  transition: all 0.3s ease;
 }
 
-.market-cap-calculator p {
-  margin-bottom: 0.5rem;
+.market-cap-calculator .krc20-card .details-button {
+  background-color: #007bff;
+  border-color: #007bff;
 }
 
-.market-cap-calculator .text-primary {
-  color: #007bff;
+.market-cap-calculator .krc20-card .details-button:hover {
+  background-color: #0056b3;
+  border-color: #0056b3;
 }
 
-.market-cap-calculator .text-success {
-  color: #28a745;
+.market-cap-calculator .coingecko-card .details-button {
+  background-color: #28a745;
+  border-color: #28a745;
 }
 
-.market-cap-calculator .text-muted {
-  color: #6c757d;
+.market-cap-calculator .coingecko-card .details-button:hover {
+  background-color: #218838;
+  border-color: #218838;
 }
 
 @media (max-width: 768px) {
