@@ -71,3 +71,33 @@ export const getDetailedTokenInfo = async (tick) => {
     throw error;
   }
 };
+
+// Add this new function to fetch all mint transactions
+export const getAllMintTransactions = async () => {
+  const BASE_URL = 'https://katapi.nachowyborski.xyz/api';
+  let allTransactions = [];
+  let currentPage = 1;
+  let hasNextPage = true;
+
+  while (hasNextPage) {
+    try {
+      const response = await axios.get(`${BASE_URL}/transactions`, {
+        params: {
+          op: 'mint',
+          page: currentPage
+        }
+      });
+
+      const { transactions, pagination } = response.data;
+      allTransactions = [...allTransactions, ...transactions];
+
+      hasNextPage = pagination.hasNextPage;
+      currentPage++;
+    } catch (error) {
+      console.error('Error fetching mint transactions:', error);
+      throw error;
+    }
+  }
+
+  return allTransactions;
+};

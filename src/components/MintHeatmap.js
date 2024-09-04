@@ -1,152 +1,111 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { ResponsiveContainer, Treemap, Tooltip } from 'recharts';
-import { Container, Row, Col, Form, Spinner, ProgressBar } from 'react-bootstrap';
-import { getKRC20TokenList, getMintOperations } from '../services/dataService';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Container, Row, Col, Form } from 'react-bootstrap';
+import { ResponsiveContainer, Treemap, Tooltip, Legend } from 'recharts';
+import axios from 'axios';
 import '../styles/MintHeatmap.css';
-
-const COLORS = ['#63b598', '#ce7d78', '#ea9e70', '#a48a9e', '#c6e1e8', '#648177', '#0d5ac1', '#f205e6', '#1c0365', '#14a9ad', '#4ca2f9', '#a4e43f', '#d298e2', '#6119d0', '#d2737d', '#c0a43c', '#f2510e', '#651be6', '#79806e', '#61da5e'];
-const CACHE_EXPIRATION = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
 const timeframes = [
   { value: 'day', label: 'Last 24 Hours' },
   { value: 'week', label: 'This Week' },
   { value: 'month', label: 'This Month' },
   { value: 'year', label: 'This Year' },
+  { value: 'all', label: 'All Time' },
 ];
 
 const MintHeatmap = () => {
-  const [tokens, setTokens] = useState([]);
-  const [allMintData, setAllMintData] = useState({});
   const [mintData, setMintData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [progress, setProgress] = useState(0);
-  const [progressMessage, setProgressMessage] = useState('');
-  const [timeframe, setTimeframe] = useState('week');
-
-  const fetchTokens = async () => {
-    try {
-      const data = await getKRC20TokenList(10000);
-      setTokens(data.result);
-    } catch (error) {
-      console.error('Error fetching tokens:', error);
-    }
-  };
-
-  const getCachedData = (key) => {
-    const cachedData = localStorage.getItem(key);
-    if (cachedData) {
-      const { data, timestamp } = JSON.parse(cachedData);
-      if (Date.now() - timestamp < CACHE_EXPIRATION) {
-        return data;
-      }
-    }
-    return null;
-  };
-
-  const setCachedData = (key, data) => {
-    localStorage.setItem(key, JSON.stringify({
-      data,
-      timestamp: Date.now()
-    }));
-  };
-
-  const fetchMintData = useCallback(async () => {
-    setLoading(true);
-    setProgress(0);
-    setProgressMessage('Preparing to fetch data...');
-    const mintCounts = {};
-
-    for (let i = 0; i < tokens.length; i++) {
-      const token = tokens[i];
-      setProgressMessage(`Fetching data for ${token.tick} (${i + 1}/${tokens.length})`);
-      
-      let cachedTokenData = getCachedData(`mintData_${token.tick}`);
-      let lastMintTimestamp = cachedTokenData ? Math.max(...cachedTokenData.map(op => op.timestamp)) : 0;
-
-      try {
-        let allOperations = cachedTokenData || [];
-        let cursor = null;
-        let operationsFetched = 0;
-        do {
-          const operations = await getMintOperations(token.tick, 50, cursor);
-          if (operations && operations.result && Array.isArray(operations.result)) {
-            const newOperations = operations.result.filter(op => parseInt(op.mtsAdd) > lastMintTimestamp);
-            allOperations = [...allOperations, ...newOperations.map(op => ({
-              timestamp: parseInt(op.mtsAdd),
-              op: op.op
-            }))];
-            cursor = operations.next;
-            operationsFetched += newOperations.length;
-            setProgressMessage(`Fetched ${operationsFetched} new operations for ${token.tick}`);
-            
-            if (newOperations.length === 0) break; // No more new operations
-          } else {
-            break;
-          }
-        } while (cursor && allOperations.length < 10000);
-
-        mintCounts[token.tick] = allOperations;
-        setCachedData(`mintData_${token.tick}`, allOperations);
-      } catch (error) {
-        console.error(`Error fetching mint data for ${token.tick}:`, error);
-      }
-      setProgress(Math.round(((i + 1) / tokens.length) * 100));
-    }
-
-    setAllMintData(mintCounts);
-    setLoading(false);
-    setProgressMessage('');
-  }, [tokens]);
+  const [error, setError] = useState(null);
+  const [timeframe, setTimeframe] = useState('');
+  const [totalMints, setTotalMints] = useState(0);
 
   const getStartDate = (timeframe) => {
     const now = new Date();
     switch (timeframe) {
-      case 'day':
-        return new Date(now.setHours(0, 0, 0, 0));
-      case 'week':
-        return new Date(now.setDate(now.getDate() - 7));
-      case 'month':
-        return new Date(now.setMonth(now.getMonth() - 1));
-      case 'year':
-        return new Date(now.setFullYear(now.getFullYear() - 1));
-      default:
-        return new Date(now.setDate(now.getDate() - 7));
+      case 'day': return new Date(now.setHours(0, 0, 0, 0));
+      case 'week': return new Date(now.setDate(now.getDate() - 7));
+      case 'month': return new Date(now.setMonth(now.getMonth() - 1));
+      case 'year': return new Date(now.setFullYear(now.getFullYear() - 1));
+      case 'all': return new Date('2024-01-01T00:00:00Z');
+      default: return new Date(now.setDate(now.getDate() - 7));
     }
   };
 
-  const filteredMintData = useMemo(() => {
+  const fetchMintData = useCallback(async () => {
+    if (!timeframe) return;
+    setLoading(true);
+    setError(null);
     const startDate = getStartDate(timeframe);
-    const filteredCounts = Object.entries(allMintData).reduce((acc, [tick, operations]) => {
-      const filteredOps = operations.filter(op => 
-        op.op === 'mint' && new Date(op.timestamp) >= startDate
-      );
-      acc[tick] = filteredOps.length;
-      return acc;
-    }, {});
+    const endDate = new Date();
 
-    return Object.entries(filteredCounts)
-      .sort(([, a], [, b]) => b - a)
-      .slice(0, 50)
-      .map(([name, value]) => ({ name, value }));
-  }, [allMintData, timeframe]);
+    try {
+      const response = await axios.get('https://katapi.nachowyborski.xyz/api/mint-totals', {
+        params: { startDate: startDate.toISOString(), endDate: endDate.toISOString() }
+      });
+      if (Array.isArray(response.data) && response.data.length > 0) {
+        const processedData = response.data
+          .sort((a, b) => b.count - a.count)
+          .slice(0, 100)
+          .map((item) => ({
+            name: item.tick,
+            size: Math.log(item.count + 1),
+            actualSize: item.count,
+          }));
+        setMintData([{ 
+          name: 'tokens', 
+          children: processedData
+        }]);
+        setTotalMints(response.data.reduce((sum, item) => sum + item.count, 0));
+      } else {
+        setMintData([{ 
+          name: 'tokens', 
+          children: [{ name: 'No data', size: 1, actualSize: 0 }] 
+        }]);
+        setTotalMints(0);
+      }
+    } catch (error) {
+      console.error('Error fetching mint data:', error);
+      setError('Failed to fetch mint data. Please try again later.');
+      setMintData([{ 
+        name: 'tokens', 
+        children: [{ name: 'Error', size: 1, actualSize: 0 }] 
+      }]);
+      setTotalMints(0);
+    }
+    setLoading(false);
+  }, [timeframe]);
 
   useEffect(() => {
-    fetchTokens();
-  }, []);
-
-  useEffect(() => {
-    if (tokens.length > 0) {
+    if (timeframe) {
       fetchMintData();
     }
-  }, [tokens, fetchMintData]);
+  }, [timeframe, fetchMintData]);
 
-  useEffect(() => {
-    setMintData(filteredMintData);
-  }, [filteredMintData]);
+  const CustomTooltip = ({ active, payload }) => {
+    if (active && payload && payload.length) {
+      const data = payload[0].payload;
+      const percentage = ((data.actualSize / totalMints) * 100).toFixed(2);
+      return (
+        <div className="custom-tooltip">
+          <p><strong>{data.name}</strong></p>
+          <p>Mints: {data.actualSize.toLocaleString()}</p>
+          <p>Percentage: {percentage}%</p>
+        </div>
+      );
+    }
+    return null;
+  };
 
-  const CustomizedContent = ({ x, y, width, height, name, value, index }) => {
+  const CustomTreemapContent = ({ root, depth, x, y, width, height, index, name }) => {
     const fontSize = Math.min(width / 6, height / 4, 16);
-    const shortName = name ? (name.length > 10 ? `${name.slice(0, 9)}...` : name) : '';
+    const shortName = name && name.length > 6 ? `${name.slice(0, 5)}...` : name;
+  
+    let fillColor = 'hsl(0, 0%, 50%)';
+    if (root && root.children && root.children.length > 0) {
+      const colorIndex = Math.min(Math.max(index, 0), root.children.length - 1);
+      fillColor = `hsl(${(1 - colorIndex / root.children.length) * 120}, 70%, 50%)`;
+    }
+
     return (
       <g>
         <rect
@@ -155,97 +114,96 @@ const MintHeatmap = () => {
           width={width}
           height={height}
           style={{
-            fill: COLORS[index % COLORS.length],
+            fill: fillColor,
             stroke: '#fff',
             strokeWidth: 2,
             strokeOpacity: 1,
+            rx: 4,
+            ry: 4,
           }}
         />
-        {width > 50 && height > 50 && (
-          <>
-            <text
-              x={x + width / 2}
-              y={y + height / 2 - fontSize / 2}
-              textAnchor="middle"
-              fill="#ffffff"
-              fontSize={fontSize}
-              fontWeight="bold"
-              style={{ paintOrder: 'stroke', stroke: 'rgba(0,0,0,0.5)', strokeWidth: 2 }}
-            >
-              {shortName}
-            </text>
-            {value !== undefined && (
-              <text
-                x={x + width / 2}
-                y={y + height / 2 + fontSize / 2}
-                textAnchor="middle"
-                fill="#ffffff"
-                fontSize={fontSize * 0.8}
-                style={{ paintOrder: 'stroke', stroke: 'rgba(0,0,0,0.5)', strokeWidth: 2 }}
-              >
-                {value.toLocaleString()}
-              </text>
-            )}
-          </>
+        {width > 30 && height > 30 && shortName && (
+          <text
+            x={x + width / 2}
+            y={y + height / 2}
+            textAnchor="middle"
+            fill="#fff"
+            fontSize={fontSize}
+          >
+            {shortName}
+          </text>
         )}
       </g>
     );
   };
 
-  const CustomTooltip = ({ active, payload }) => {
-    if (active && payload && payload.length) {
-      const data = payload[0].payload;
-      return (
-        <div style={{ backgroundColor: '#fff', padding: '10px', border: '1px solid #ccc', borderRadius: '5px' }}>
-          <p style={{ margin: 0 }}><strong>{data.name}</strong></p>
-          <p style={{ margin: 0 }}>Mints: {data.value.toLocaleString()}</p>
-        </div>
-      );
-    }
-    return null;
-  };
+  const CustomLegend = () => (
+    <div className="custom-legend">
+      <div className="legend-item">
+        <span className="legend-color" style={{ backgroundColor: 'hsl(120, 70%, 50%)' }}></span>
+        <span>High mint activity</span>
+      </div>
+      <div className="legend-item">
+        <span className="legend-color" style={{ backgroundColor: 'hsl(60, 70%, 50%)' }}></span>
+        <span>Medium mint activity</span>
+      </div>
+      <div className="legend-item">
+        <span className="legend-color" style={{ backgroundColor: 'hsl(0, 70%, 50%)' }}></span>
+        <span>Low mint activity</span>
+      </div>
+    </div>
+  );
 
   return (
-    <Container className="mint-heatmap">
-      <h1 className="mb-4">Token Mint Heatmap</h1>
-      <Row className="mb-4">
+    <Container fluid className="mint-heatmap">
+      <h1 className="mb-3">Token Mint Heatmap</h1>
+      <Row className="mb-3">
         <Col md={4}>
-          <Form.Select
-            value={timeframe}
-            onChange={(e) => setTimeframe(e.target.value)}
-            disabled={loading}
-          >
-            {timeframes.map((tf) => (
-              <option key={tf.value} value={tf.value}>{tf.label}</option>
-            ))}
-          </Form.Select>
+          <Form.Group>
+            <Form.Label>Timeframe</Form.Label>
+            <Form.Control
+              as="select"
+              value={timeframe}
+              onChange={(e) => setTimeframe(e.target.value)}
+            >
+              <option value="">Select a timeframe</option>
+              {timeframes.map((tf) => (
+                <option key={tf.value} value={tf.value}>
+                  {tf.label}
+                </option>
+              ))}
+            </Form.Control>
+          </Form.Group>
+        </Col>
+        <Col md={8}>
+          {totalMints > 0 && (
+            <p className="total-mints">Total Mints: {totalMints.toLocaleString()}</p>
+          )}
         </Col>
       </Row>
-      {loading ? (
-        <div>
-          <p>{progressMessage}</p>
-          <ProgressBar now={progress} label={`${progress}%`} className="mb-3" />
-          <Spinner animation="border" role="status">
-            <span className="visually-hidden">Loading...</span>
-          </Spinner>
-        </div>
-      ) : mintData.length > 0 ? (
-        <div className="heatmap-container" style={{ height: 'calc(100vh - 200px)', width: '100%' }}>
-          <ResponsiveContainer>
+      {!timeframe && <p>Please select a timeframe to view the mint heatmap.</p>}
+      {error && <p className="text-danger">{error}</p>}
+      {loading && <p>Loading...</p>}
+      {timeframe && mintData.length > 0 && (
+        <div className="chart-container">
+          <ResponsiveContainer width="100%" height="100%">
             <Treemap
               data={mintData}
-              dataKey="value"
+              dataKey="size"
+              ratio={4 / 3}
               stroke="#fff"
-              fill="#8884d8"
-              content={<CustomizedContent />}
-              animationDuration={0}
+              content={<CustomTreemapContent />}
+              animationDuration={500}
+              animationEasing="ease-in-out"
             >
               <Tooltip content={<CustomTooltip />} />
+              <Legend content={<CustomLegend />} />
             </Treemap>
           </ResponsiveContainer>
         </div>
-      ) : (
-        <p>No mint data available for the selected timeframe. Try adjusting the timeframe or check if there are any minting operations.</p>
+      )}
+      {timeframe && mintData.length === 0 && (
+        <p>No mint data available for the selected timeframe.</p>
       )}
     </Container>
   );

@@ -1,11 +1,8 @@
 .mint-heatmap {
   padding: 20px;
   background-color: #f8f9fa;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  min-height: calc(100vh - 40px);
-  margin: 20px auto;
-  max-width: 1400px;
+  height: calc(100vh - 60px);
+  overflow: hidden;
 }
 
 .mint-heatmap h1 {
@@ -14,15 +11,93 @@
   font-weight: bold;
 }
 
-.mint-heatmap .spinner-border {
-  display: block;
-  margin: 20px auto;
+.mint-heatmap .form-group {
+  margin-bottom: 20px;
 }
 
-.heatmap-container {
+.chart-container {
+  height: calc(100% - 150px);
   background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   overflow: hidden;
+}
+
+.custom-tooltip {
+  background-color: rgba(255, 255, 255, 0.9);
+  border: 1px solid #ccc;
+  padding: 8px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.recharts-scatter-symbol {
+  transition: all 0.3s ease;
+}
+
+.recharts-scatter-symbol:hover {
+  transform: scale(1.2);
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+
+body {
+  font-family: 'Roboto', sans-serif;
+}
+
+.mint-heatmap h1 {
+  font-weight: 700;
+  color: #333;
+}
+
+.chart-container {
+  border-radius: 12px;
+}
+
+.custom-tooltip {
+  background-color: rgba(255, 255, 255, 0.95);
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 6px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.custom-tooltip p {
+  margin: 0;
+  padding: 3px 0;
+}
+
+.custom-legend {
+  display: flex;
+  justify-content: center;
   margin-top: 20px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  margin: 0 10px;
+}
+
+.legend-color {
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+  border-radius: 3px;
+}
+
+.total-mints {
+  font-size: 1.2em;
+  font-weight: 700;
+  color: #333;
+  text-align: right;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.recharts-wrapper {
+  animation: fadeIn 0.5s ease-in-out;
 }
