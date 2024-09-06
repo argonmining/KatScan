@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { FaExchangeAlt, FaWallet, FaCoins, FaSearch, FaChartBar, FaCalculator } from 'react-icons/fa';
 import '../styles/Home.css';
 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://api.kasplex.org/v1';
+
 const Home = () => {
   const [networkStats, setNetworkStats] = useState({
     opTotal: 0,
@@ -15,7 +17,7 @@ const Home = () => {
 
   useEffect(() => {
     // Fetch network stats
-    fetch('https://api.kasplex.org/v1/info')
+    fetch(`${API_BASE_URL}/info`)
       .then(response => response.json())
       .then(data => {
         const { opTotal, tokenTotal, feeTotal } = data.result;
@@ -28,7 +30,7 @@ const Home = () => {
       .catch(error => console.error('Error fetching network stats:', error));
 
     // Fetch recent tokens
-    fetch('https://api.kasplex.org/v1/krc20/tokenlist')
+    fetch(`${API_BASE_URL}/krc20/tokenlist`)
       .then(response => response.json())
       .then(data => {
         const sortedTokens = data.result.sort((a, b) => b.mtsAdd - a.mtsAdd);

@@ -3,6 +3,7 @@ import { Container, Row, Col, Form } from 'react-bootstrap';
 import { ResponsiveContainer, Treemap, Tooltip, Legend } from 'recharts';
 import axios from 'axios';
 import '../styles/MintHeatmap.css';
+import PropTypes from 'prop-types';
 
 const timeframes = [
   { value: 'day', label: 'Last 24 Hours' },
@@ -42,20 +43,23 @@ const MintHeatmap = () => {
       const response = await axios.get('https://katapi.nachowyborski.xyz/api/mint-totals', {
         params: { startDate: startDate.toISOString(), endDate: endDate.toISOString() }
       });
-      if (Array.isArray(response.data) && response.data.length > 0) {
+      if (!response.data || !Array.isArray(response.data)) {
+        throw new Error('Invalid response format');
+      }
+      if (response.data.length > 0) {
         const processedData = response.data
-          .sort((a, b) => b.count - a.count)
+          .sort((a, b) => b.mintTotal - a.mintTotal)
           .slice(0, 100)
           .map((item) => ({
             name: item.tick,
-            size: Math.log(item.count + 1),
-            actualSize: item.count,
+            size: Math.log(item.mintTotal + 1),
+            actualSize: item.mintTotal,
           }));
         setMintData([{ 
           name: 'tokens', 
           children: processedData
         }]);
-        setTotalMints(response.data.reduce((sum, item) => sum + item.count, 0));
+        setTotalMints(response.data.reduce((sum, item) => sum + item.mintTotal, 0));
       } else {
         setMintData([{ 
           name: 'tokens', 
@@ -153,6 +157,22 @@ const MintHeatmap = () => {
       </div>
     </div>
   );
+
+  CustomTooltip.propTypes = {
+    active: PropTypes.bool,
+    payload: PropTypes.array
+  };
+
+  CustomTreemapContent.propTypes = {
+    root: PropTypes.object,
+    depth: PropTypes.number,
+    x: PropTypes.number,
+    y: PropTypes.number,
+    width: PropTypes.number,
+    height: PropTypes.number,
+    index: PropTypes.number,
+    name: PropTypes.string
+  };
 
   return (
     <Container fluid className="mint-heatmap">
