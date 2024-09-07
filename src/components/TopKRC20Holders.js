@@ -31,6 +31,9 @@ const TopKRC20Holders = () => {
           totalHoldings: holder.balances.reduce((sum, balance) => sum + parseFloat(balance.balance) / Math.pow(10, 8), 0)
         }));
 
+        // Sort by uniqueTokens, highest to lowest
+        formattedHolders.sort((a, b) => b.uniqueTokens - a.uniqueTokens);
+
         setTopHolders(formattedHolders);
         setLoading(false);
       } catch (err) {
