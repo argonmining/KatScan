@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Nav } from 'react-bootstrap';
 import { NavLink, Link } from 'react-router-dom';
-import { FaSearch, FaWallet, FaCoins, FaExchangeAlt, FaFireAlt, FaChartLine, FaUsers, FaUserFriends, FaChartPie, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { FaSearch, FaWallet, FaCoins, FaExchangeAlt, FaFireAlt, FaChartLine, FaUsers, FaChartPie, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import logo from '../assets/logo.png';
 import '../styles/Sidebar.css';
 
@@ -56,9 +56,6 @@ const Sidebar = () => {
           <NavSection title="Info by Holder">
             <NavLink to="/top-holders" className="nav-link" activeClassName="active">
               <FaUsers /> {!collapsed && <span>Top KRC-20 Holders</span>}
-            </NavLink>
-            <NavLink to="/cross-token-holders" className="nav-link" activeClassName="active">
-              <FaUserFriends /> {!collapsed && <span>Cross Token Holders</span>}
             </NavLink>
             <NavLink to="/holder-distribution" className="nav-link" activeClassName="active">
               <FaChartPie /> {!collapsed && <span>Holder Distribution</span>}
