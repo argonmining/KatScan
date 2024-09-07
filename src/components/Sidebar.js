@@ -31,10 +31,10 @@ const Sidebar = () => {
         <Nav className="flex-column">
           <NavSection title="KRC-20 Explorer">
             <NavLink to="/transaction-lookup" className="nav-link" activeClassName="active">
-              <FaSearch /> {!collapsed && <span>Transaction Lookup</span>}
+              <FaSearch /> {!collapsed && <span>Search Transactions</span>}
             </NavLink>
             <NavLink to="/wallet" className="nav-link" activeClassName="active">
-              <FaWallet /> {!collapsed && <span>Address Lookup</span>}
+              <FaWallet /> {!collapsed && <span>Search Addresses</span>}
             </NavLink>
           </NavSection>
 
