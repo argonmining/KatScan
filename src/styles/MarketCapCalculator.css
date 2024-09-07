@@ -110,6 +110,10 @@
   border-color: #218838;
 }
 
+.col-lg-8, .col-md-10 {
+  width: 95% !important;
+}
+
 @media (max-width: 95%) {
   .market-cap-calculator {
     padding: 15px;
