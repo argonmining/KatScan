@@ -1,9 +1,9 @@
 .top-krc20-holders-wrapper {
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 60px); /* Adjust 60px based on your header height */
+  height: 100vh !important; /* Full viewport height */
   padding: 20px;
-  overflow: hidden;
+  overflow: hidden !important;
 }
 
 .top-krc20-holders-wrapper h1 {
@@ -14,7 +14,7 @@
 
 .table-responsive {
   flex: 1;
-  overflow-y: auto;
+  overflow-y: auto !important;
 }
 
 .table {

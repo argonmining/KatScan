@@ -9,7 +9,9 @@
   --body-font: 'Lato', sans-serif;
 }
 
-body {
+html, body {
+  height: 100% !important;
+  margin: 0;
   font-family: var(--body-font);
   color: var(--secondary-primary-color);
 }
