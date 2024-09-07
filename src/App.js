@@ -11,6 +11,7 @@ import MintHeatmap from './components/MintHeatmap';
 import MarketCapCalculator from './components/MarketCapCalculator';
 import './styles/App.css';
 import './styles/globals.css';
+import TopKRC20Holders from './components/TopKRC20Holders';
 
 const Analytics = () => <h2>Analytics Page</h2>;
 const About = () => <h2>About Page</h2>;
@@ -33,6 +34,7 @@ function App() {
             <Route path="/transaction-lookup/:hashRev?" element={<TransactionLookup />} />
             <Route path="/mint-heatmap" element={<MintHeatmap />} />
             <Route path="/marketcap-calc" element={<MarketCapCalculator />} />
+            <Route path="/top-holders" element={<TopKRC20Holders />} />
             <Route path="*" element={<div>Page not found</div>} />
           </Routes>
         </div>

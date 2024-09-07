@@ -1,0 +1,61 @@
+.top-krc20-holders-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 60px); /* Adjust 60px based on your header height */
+  padding: 20px;
+  overflow: hidden;
+}
+
+.top-krc20-holders-wrapper h1 {
+  font-family: var(--header-font);
+  color: var(--secondary-primary-color);
+  margin-bottom: 20px;
+}
+
+.table-responsive {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.table {
+  margin-bottom: 0;
+  font-family: var(--body-font);
+}
+
+.table th {
+  position: sticky;
+  top: 0;
+  background-color: var(--primary-color);
+  color: white;
+  font-family: var(--sub-header-font);
+  z-index: 1;
+}
+
+.table td {
+  vertical-align: middle;
+}
+
+.btn-link {
+  padding: 0;
+  color: var(--secondary-color);
+}
+
+.btn-link:hover {
+  text-decoration: none;
+  color: var(--primary-color);
+}
+
+.table-sm {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.wallet-link {
+  color: var(--secondary-color);
+  text-decoration: none;
+}
+
+.wallet-link:hover {
+  text-decoration: underline;
+  color: var(--primary-color);
+}
