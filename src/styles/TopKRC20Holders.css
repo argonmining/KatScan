@@ -12,8 +12,8 @@
   margin-bottom: 20px;
 }
 
-.table-responsive {
-  height: calc(100vh - 100px) !important;
+.holders-table-responsive {
+  height: 100vh !important;
   flex: 1;
   overflow-y: auto !important;
 }
