@@ -28,7 +28,6 @@ const TopKRC20Holders = () => {
             decimals: 8
           })),
           uniqueTokens: holder.balances.length,
-          totalHoldings: holder.balances.reduce((sum, balance) => sum + parseFloat(balance.balance) / Math.pow(10, 8), 0)
         }));
 
         // Sort by uniqueTokens, highest to lowest
@@ -67,7 +66,6 @@ const TopKRC20Holders = () => {
             <tr>
               <th>Rank</th>
               <th>Address</th>
-              <th>Total Holdings</th>
               <th>Unique Tokens</th>
               <th>Actions</th>
             </tr>
@@ -82,7 +80,6 @@ const TopKRC20Holders = () => {
                       {holder.address}
                     </Link>
                   </td>
-                  <td>{holder.totalHoldings.toLocaleString(undefined, { maximumFractionDigits: 2 })}</td>
                   <td>{holder.uniqueTokens}</td>
                   <td>
                     <Button
@@ -96,7 +93,7 @@ const TopKRC20Holders = () => {
                 </tr>
                 {expandedRows[holder.address] && (
                   <tr>
-                    <td colSpan="5">
+                    <td colSpan="4">
                       <Table size="sm">
                         <thead>
                           <tr>
