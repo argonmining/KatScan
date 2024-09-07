@@ -13,6 +13,7 @@
 }
 
 .table-responsive {
+  height: calc(100vh - 100px) !important;
   flex: 1;
   overflow-y: auto !important;
 }
