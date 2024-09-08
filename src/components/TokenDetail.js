@@ -359,7 +359,28 @@ const TokenDetail = () => {
                 responsive: true,
                 plugins: {
                   legend: {
-                    position: 'top',
+                    position: 'right', // Position the legend to the right of the chart
+                    labels: {
+                      boxWidth: 20,
+                      padding: 15,
+                      generateLabels: (chart) => {
+                        const data = chart.data;
+                        if (data.labels.length && data.datasets.length) {
+                          return data.labels.map((label, i) => {
+                            const value = data.datasets[0].data[i];
+                            return {
+                              text: `${label}: ${value.toFixed(2)}%`,
+                              fillStyle: data.datasets[0].backgroundColor[i],
+                              strokeStyle: data.datasets[0].borderColor[i],
+                              lineWidth: data.datasets[0].borderWidth,
+                              hidden: isNaN(data.datasets[0].data[i]) || data.datasets[0].data[i] === null,
+                              index: i
+                            };
+                          });
+                        }
+                        return [];
+                      }
+                    },
                   },
                   title: {
                     display: true,

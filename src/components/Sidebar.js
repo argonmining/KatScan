@@ -47,6 +47,9 @@ const Sidebar = () => {
             <NavLink to="/wallet" className="nav-link" activeClassName="active">
               <FaWallet /> {!collapsed && <span>Search Addresses</span>}
             </NavLink>
+            <NavLink to="/top-holders" className="nav-link" activeClassName="active">
+              <FaUsers /> {!collapsed && <span>Top Holders</span>}
+            </NavLink>
           </NavSection>
 
           <NavSection title="KRC-20 Tokens">
@@ -61,12 +64,6 @@ const Sidebar = () => {
             </NavLink>
             <NavLink to="/marketcap-calc" className="nav-link" activeClassName="active">
               <FaChartLine /> {!collapsed && <span>MarketCap Calc</span>}
-            </NavLink>
-          </NavSection>
-
-          <NavSection title="Info by Holder">
-            <NavLink to="/top-holders" className="nav-link" activeClassName="active">
-              <FaUsers /> {!collapsed && <span>Top KRC-20 Holders</span>}
             </NavLink>
           </NavSection>
         </Nav>
