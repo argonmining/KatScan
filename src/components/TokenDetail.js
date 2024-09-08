@@ -65,7 +65,7 @@ const TokenDetail = () => {
 
   const fillMissingDates = (data) => {
     const filledData = [];
-    const startDate = new Date(data[0].date);
+    const startDate = new Date(data[data.length - 1].date);
     const endDate = new Date();
     const dateMap = new Map(data.map(item => [item.date, item.count]));
 
