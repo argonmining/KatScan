@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { FaExchangeAlt, FaWallet, FaCoins, FaSearch, FaChartBar, FaCalculator } from 'react-icons/fa';
+import { FaExchangeAlt, FaWallet, FaCoins, FaSearch, FaChartBar, FaCalculator, FaUsers } from 'react-icons/fa';
 import '../styles/Home.css';
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://api.kasplex.org/v1';
@@ -80,7 +80,7 @@ const Home = () => {
             <FeatureCard title="Token Comparison" icon={<FaExchangeAlt className="feature-icon" />} link="/compare" />
           </Row>
           <Row className="mb-3">
-            <FeatureCard title="All Tokens" icon={<FaCoins className="feature-icon" />} link="/tokens" />
+            <FeatureCard title="Top Holders" icon={<FaUsers className="feature-icon" />} link="/top-holders" />
             <FeatureCard title="Mint Heatmap" icon={<FaChartBar className="feature-icon" />} link="/mint-heatmap" />
             <FeatureCard title="MarketCap Calculator" icon={<FaCalculator className="feature-icon" />} link="/marketcap-calc" />
           </Row>
