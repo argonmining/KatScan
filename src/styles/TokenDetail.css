@@ -75,8 +75,29 @@
 }
 
 .table-container {
-    margin-top: 20px;
     overflow-x: auto;
+}
+
+.table-container .table {
+    margin-bottom: 0;
+    font-family: var(--body-font);
+}
+
+.table-container .table th,
+.table-container .table td {
+    white-space: nowrap; /* Ensure content stays on one line */
+    padding: 8px; /* Adjust padding to make rows more compact */
+    font-size: 14px; /* Adjust font size to make rows more compact */
+}
+
+.table-container .table th {
+    background-color: var(--primary-color);
+    color: white;
+    font-family: var(--sub-header-font);
+}
+
+.table-container .table td {
+    vertical-align: middle;
 }
 
 table {
@@ -114,12 +135,11 @@ tr:hover {
 }
 
 .clickable-address {
-    color: var(--primary-color);
-    text-decoration: underline;
+    color: var(--secondary-color);
     cursor: pointer;
-    transition: color 0.3s ease;
 }
 
 .clickable-address:hover {
-    color: var(--secondary-color);
+    text-decoration: underline;
+    color: var(--primary-color);
 }

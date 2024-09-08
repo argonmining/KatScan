@@ -226,7 +226,7 @@ const TokenDetail = () => {
             <Table striped bordered hover>
               <thead>
                 <tr>
-                  <th>Operation</th>
+                  <th>Type</th>
                   <th>Transaction ID</th>
                   <th>Address</th>
                   <th>Amount</th>
