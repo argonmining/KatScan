@@ -96,10 +96,19 @@ const TokenDetail = () => {
       groups[groupIndex].total += parseRawNumber(holder.amount, decimals);
     });
 
-    return groups.map(group => ({
-      label: group.label,
-      percentage: (group.total / parseRawNumber(maxSupply, decimals)) * 100,
-    }));
+    const top50Total = groups.reduce((sum, group) => sum + group.total, 0);
+    const otherHoldersTotal = parseRawNumber(maxSupply, decimals) - top50Total;
+
+    return [
+      ...groups.map(group => ({
+        label: group.label,
+        percentage: (group.total / parseRawNumber(maxSupply, decimals)) * 100,
+      })),
+      {
+        label: 'Other Holders',
+        percentage: (otherHoldersTotal / parseRawNumber(maxSupply, decimals)) * 100,
+      }
+    ];
   }, []);
 
   useEffect(() => {
@@ -333,6 +342,7 @@ const TokenDetail = () => {
                     'rgba(255, 206, 86, 0.2)',
                     'rgba(75, 192, 192, 0.2)',
                     'rgba(153, 102, 255, 0.2)',
+                    'rgba(201, 203, 207, 0.2)', // Color for Other Holders
                   ],
                   borderColor: [
                     'rgba(255, 99, 132, 1)',
@@ -340,6 +350,7 @@ const TokenDetail = () => {
                     'rgba(255, 206, 86, 1)',
                     'rgba(75, 192, 192, 1)',
                     'rgba(153, 102, 255, 1)',
+                    'rgba(201, 203, 207, 1)', // Border color for Other Holders
                   ],
                   borderWidth: 1,
                 }]
