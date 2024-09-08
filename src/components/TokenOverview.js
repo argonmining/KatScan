@@ -162,36 +162,32 @@ const TokenOverview = () => {
           <tbody>
             {filteredAndSortedTokens.length > 0 ? (
               filteredAndSortedTokens.map((token) => (
-                <tr key={token.tick}>
-                  <td>
-                    <Link to={`/tokens/${token.tick}`} className="token-ticker">
-                      {token.tick}
+                <tr key={token.tick} className="clickable-row">
+                  <td colSpan="8">
+                    <Link to={`/tokens/${token.tick}`} className="d-block">
+                      <div className="d-flex justify-content-between">
+                        <span>{token.tick}</span>
+                        <span className={getBadgeClass(token.pre)}>
+                          {token.pre === '0' ? 'Fair Mint' : 'Pre-Mint'}
+                        </span>
+                        <span>{formatState(token.state)}</span>
+                        <span>{formatNumber(calculateValue(token.max, token.dec))}</span>
+                        <span>{formatPreMinted(token.pre, token.max, token.dec)}</span>
+                        <span>
+                          {formatNumber(calculateValue(token.minted, token.dec))}
+                          {' '}
+                          <small className="text-muted">{formatPercentage(calculateValue(token.minted, token.dec), calculateValue(token.max, token.dec))}</small>
+                        </span>
+                        <div className="progress">
+                          <div
+                            className="progress-bar"
+                            style={{width: `${calculatePercentage(calculateValue(token.minted, token.dec), calculateValue(token.max, token.dec))}%`}}
+                          ></div>
+                        </div>
+                        <span className="text-right">{formatDateTime(token.mtsAdd)}</span>
+                      </div>
                     </Link>
                   </td>
-                  <td className="text-center">
-                    <span className={getBadgeClass(token.pre)}>
-                      {token.pre === '0' ? 'Fair Mint' : 'Pre-Mint'}
-                    </span>
-                  </td>
-                  <td>{formatState(token.state)}</td>
-                  <td>{formatNumber(calculateValue(token.max, token.dec))}</td>
-                  <td>
-                    {formatPreMinted(token.pre, token.max, token.dec)}
-                  </td>
-                  <td>
-                    {formatNumber(calculateValue(token.minted, token.dec))}
-                    {' '}
-                    <small className="text-muted">{formatPercentage(calculateValue(token.minted, token.dec), calculateValue(token.max, token.dec))}</small>
-                  </td>
-                  <td className="text-center">
-                    <div className="progress">
-                      <div
-                        className="progress-bar"
-                        style={{width: `${calculatePercentage(calculateValue(token.minted, token.dec), calculateValue(token.max, token.dec))}%`}}
-                      ></div>
-                    </div>
-                  </td>
-                  <td className="text-right">{formatDateTime(token.mtsAdd)}</td>
                 </tr>
               ))
             ) : (

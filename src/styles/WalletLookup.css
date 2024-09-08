@@ -17,7 +17,7 @@
 }
 
 .wallet-overview {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .tab-content {
@@ -59,7 +59,7 @@
 }
 
 .wallet-lookup .table-wrapper {
-    height: calc(100vh - 350px); /* Adjust this value as needed */
+    height: calc(100vh - 440px); /* Adjust this value as needed */
     overflow-y: auto;
 }
 
