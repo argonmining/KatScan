@@ -56,6 +56,11 @@
     border-color: var(--primary-color);
 }
 
+.wallet-lookup .btn-primary:hover {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
 .wallet-lookup .card {
     margin-bottom: 20px;
 }
