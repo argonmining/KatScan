@@ -23,6 +23,7 @@ const TokenDetail = () => {
   const [transferVolume, setTransferVolume] = useState([]);
   const [holderDistribution, setHolderDistribution] = useState([]);
   const [mintActivity, setMintActivity] = useState([]);
+  const [activeTab, setActiveTab] = useState('topHolders');
 
   const fetchOperations = useCallback(async () => {
     if (loadingMore || !operationsCursor) return;
@@ -68,6 +69,11 @@ const TokenDetail = () => {
     const endDate = new Date();
     const dateMap = new Map(data.map(item => [item.date, item.count]));
 
+    // Add a date one day before the oldest record with a count of 0
+    const preStartDate = new Date(startDate);
+    preStartDate.setDate(preStartDate.getDate() - 1);
+    filledData.push({ date: preStartDate.toISOString().split('T')[0], count: 0 });
+
     for (let d = startDate; d <= endDate; d.setDate(d.getDate() + 1)) {
       const dateStr = d.toISOString().split('T')[0];
       filledData.push({ date: dateStr, count: dateMap.get(dateStr) || 0 });
@@ -89,8 +95,6 @@ const TokenDetail = () => {
 
         setTransferVolume(generateMockTransferVolume());
         setHolderDistribution(generateMockHolderDistribution());
-        const mintActivityData = await fetchMintActivity(data.tick.toUpperCase());
-        setMintActivity(mintActivityData);
       } catch (err) {
         setError('Failed to fetch token details');
       } finally {
@@ -99,9 +103,19 @@ const TokenDetail = () => {
     };
 
     fetchData();
-  }, [tokenId, fetchMintActivity]);
+  }, [tokenId]);
 
-  // Helper functions to generate mock data
+  useEffect(() => {
+    const fetchMintActivityData = async () => {
+      if (activeTab === 'mintActivity' && mintActivity.length === 0) {
+        const mintActivityData = await fetchMintActivity(tokenData.tick.toUpperCase());
+        setMintActivity(mintActivityData);
+      }
+    };
+
+    fetchMintActivityData();
+  }, [activeTab, mintActivity.length, tokenData, fetchMintActivity]);
+
   const generateMockTransferVolume = () => {
     const dates = Array.from({length: 30}, (_, i) => {
       const d = new Date();
@@ -186,7 +200,7 @@ const TokenDetail = () => {
         </Card.Body>
       </Card>
 
-      <Tabs defaultActiveKey="topHolders" className="mb-3">
+      <Tabs defaultActiveKey="topHolders" className="mb-3" onSelect={(k) => setActiveTab(k)}>
         <Tab eventKey="topHolders" title="Top Holders">
           <div className="detail-table-container">
             <Table striped bordered hover>
