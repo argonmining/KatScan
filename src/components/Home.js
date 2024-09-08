@@ -104,7 +104,7 @@ const Home = () => {
             />
           </Row>
 
-          <h5 className="section-title mb-2">Recent Tokens</h5>
+          <h5 className="section-title mb-2">Recently Deployed Tokens</h5>
           <Row>
             {recentTokens.map(token => (
               <Col xs={4} key={token.hashRev} className="mb-2">
