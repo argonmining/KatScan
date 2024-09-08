@@ -13,7 +13,7 @@
 }
 
 .holders-table-responsive {
-  height: 100vh !important;
+  height: 98vh !important;
   flex: 1;
   overflow-y: auto !important;
 }
@@ -57,6 +57,30 @@
 }
 
 .wallet-link:hover {
+  text-decoration: underline;
+  color: var(--primary-color);
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.table-container .table {
+  margin-bottom: 0;
+  font-family: var(--body-font);
+}
+
+.table-container .table th,
+.table-container .table td {
+  vertical-align: middle;
+}
+
+.clickable-address {
+  color: var(--secondary-color);
+  cursor: pointer;
+}
+
+.clickable-address:hover {
   text-decoration: underline;
   color: var(--primary-color);
 }

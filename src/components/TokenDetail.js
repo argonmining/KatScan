@@ -115,7 +115,7 @@ const TokenDetail = () => {
       d.setDate(d.getDate() - (29 - i));
       return d.toISOString().split('T')[0];
     });
-    const mints = Array.from({length: 30}, () => Math.floor(Math.random() * 100));
+    const mints = Array.from({length: 30}, () => Math.floor(Math.random() * 1000));
     return dates.map((date, index) => ({ date, mints: mints[index] }));
   };
 
@@ -209,7 +209,7 @@ const TokenDetail = () => {
                         {holder.address}
                       </span>
                     </td>
-                    <td>{formatNumber(holder.amount, tokenData.dec)}</td>
+                    <td>{formatNumber(parseRawNumber(holder.amount, tokenData.dec), tokenData.dec)}</td>
                     <td>
                       {((parseRawNumber(holder.amount, tokenData.dec) / parseRawNumber(tokenData.max, tokenData.dec)) * 100).toFixed(2)}%
                     </td>
