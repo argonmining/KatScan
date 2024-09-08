@@ -132,7 +132,8 @@ const TokenDetail = () => {
   };
 
   const formatDateTime = (timestamp) => {
-    return new Date(parseInt(timestamp)).toLocaleString();
+    const date = new Date(parseInt(timestamp));
+    return date.toLocaleString('en-US', { timeZoneName: 'short' });
   };
 
   const handleAddressClick = (address) => {
