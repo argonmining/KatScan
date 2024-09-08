@@ -65,13 +65,13 @@
   overflow-x: auto;
 }
 
-.table-container .table {
+.holders-table-responsive .table {
   margin-bottom: 0;
   font-family: var(--body-font);
 }
 
-.table-container .table th,
-.table-container .table td {
+.holders-table-responsive .table th,
+.holders-table-responsive .table td {
   vertical-align: middle;
 }
 
