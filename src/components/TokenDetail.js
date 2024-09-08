@@ -158,15 +158,15 @@ const TokenDetail = () => {
           <div className="token-info-grid">
             <div className="token-info-item">
               <span className="token-info-label">Max Supply</span>
-              <span className="token-info-value">{formatNumber(tokenData.max, tokenData.dec)}</span>
+              <span className="token-info-value">{formatNumber(parseRawNumber(tokenData.max, tokenData.dec), tokenData.dec)}</span>
             </div>
             <div className="token-info-item">
               <span className="token-info-label">Total Minted</span>
-              <span className="token-info-value">{formatNumber(tokenData.minted, tokenData.dec)}</span>
+              <span className="token-info-value">{formatNumber(parseRawNumber(tokenData.minted, tokenData.dec), tokenData.dec)}</span>
             </div>
             <div className="token-info-item">
               <span className="token-info-label">Limit per Mint</span>
-              <span className="token-info-value">{formatNumber(tokenData.lim, tokenData.dec)}</span>
+              <span className="token-info-value">{formatNumber(parseRawNumber(tokenData.lim, tokenData.dec), tokenData.dec)}</span>
             </div>
             <div className="token-info-item">
               <span className="token-info-label">Total Mints</span>
