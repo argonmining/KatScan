@@ -232,7 +232,6 @@ const WalletLookup = () => {
                       <th>Transaction ID</th>
                       <th>Amount (KAS)</th>
                       <th>Block Time</th>
-                      <th>Block DAA Score</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -246,7 +245,6 @@ const WalletLookup = () => {
                         <td>{tx.transaction_id}</td>
                         <td>{formatNumber(tx.outputs.reduce((sum, output) => sum + parseInt(output.amount), 0) / 1e8)}</td>
                         <td>{new Date(tx.block_time).toLocaleString()}</td>
-                        <td>{tx.daa_score}</td>
                       </tr>
                     ))}
                   </tbody>
