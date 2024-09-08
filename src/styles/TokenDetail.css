@@ -28,7 +28,7 @@
 }
 
 .token-info-card {
-    margin-bottom: 20px;
+    margin-bottom: 20px !important;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
 }
@@ -78,7 +78,7 @@
 
 .detail-table-container {
     overflow-y: auto; /* Make the table scrollable */
-    max-height: calc(100vh - 200px); /* Adjust the height as needed */
+    max-height: calc(100vh - 380px); /* Adjust the height to fit within the viewport */
 }
 
 .detail-table-container .table {
