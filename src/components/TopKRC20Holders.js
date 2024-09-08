@@ -24,8 +24,8 @@ const TopKRC20Holders = () => {
           address: holder.address,
           tokens: holder.balances.map(balance => ({
             tick: balance.tick,
-            amount: parseFloat(balance.balance) / Math.pow(10, balance.dec), // Use correct decimals for each token
-            decimals: balance.dec
+            amount: parseFloat(balance.balance) / Math.pow(10, 8), // Assume 8 decimals for each token
+            decimals: 8 // Assume 8 decimals for each token
           })),
           uniqueTokens: holder.balances.length,
         }));
@@ -60,7 +60,7 @@ const TopKRC20Holders = () => {
   return (
     <div className="top-krc20-holders-wrapper">
       <h1>Top KRC20 Token Holders</h1>
-      <div className="holders-table-responsive">
+      <div className="table-container">
         <Table striped bordered hover>
           <thead>
             <tr>

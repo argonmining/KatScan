@@ -12,12 +12,6 @@
   margin-bottom: 20px;
 }
 
-.holders-table-responsive {
-  height: 98vh !important;
-  flex: 1;
-  overflow-y: auto !important;
-}
-
 .table {
   margin-bottom: 0;
   font-family: var(--body-font);
@@ -62,16 +56,19 @@
 }
 
 .table-container {
+  height: 98vh !important;
+  flex: 1;
+  overflow-y: auto !important;
   overflow-x: auto;
 }
 
-.holders-table-responsive .table {
+.table-container .table {
   margin-bottom: 0;
   font-family: var(--body-font);
 }
 
-.holders-table-responsive .table th,
-.holders-table-responsive .table td {
+.table-container .table th,
+.table-container .table td {
   vertical-align: middle;
 }
 
