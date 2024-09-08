@@ -253,7 +253,7 @@ const TokenDetail = () => {
                         {op.op === 'mint' ? op.to : op.from}
                       </span>
                     </td>
-                    <td>{formatNumber(op.amt, tokenData.dec)}</td>
+                    <td>{formatNumber(parseRawNumber(op.amt, tokenData.dec), tokenData.dec)}</td>
                     <td>{formatDateTime(op.mtsAdd)}</td>
                   </tr>
                 ))}
