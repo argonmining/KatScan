@@ -82,6 +82,26 @@ const TokenDetail = () => {
     return filledData;
   };
 
+  const processHolderDistribution = useCallback((holders, maxSupply, decimals) => {
+    const groups = [
+      { label: 'Top 1-10 Holders', total: 0 },
+      { label: 'Top 11-20 Holders', total: 0 },
+      { label: 'Top 21-30 Holders', total: 0 },
+      { label: 'Top 31-40 Holders', total: 0 },
+      { label: 'Top 41-50 Holders', total: 0 },
+    ];
+
+    holders.slice(0, 50).forEach((holder, index) => {
+      const groupIndex = Math.floor(index / 10);
+      groups[groupIndex].total += parseRawNumber(holder.amount, decimals);
+    });
+
+    return groups.map(group => ({
+      label: group.label,
+      percentage: (group.total / parseRawNumber(maxSupply, decimals)) * 100,
+    }));
+  }, []);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -94,7 +114,7 @@ const TokenDetail = () => {
         setOperationsCursor(opsData.next);
 
         setTransferVolume(generateMockTransferVolume());
-        setHolderDistribution(generateMockHolderDistribution());
+        setHolderDistribution(processHolderDistribution(data.holder, data.max, data.dec));
       } catch (err) {
         setError('Failed to fetch token details');
       } finally {
@@ -103,7 +123,7 @@ const TokenDetail = () => {
     };
 
     fetchData();
-  }, [tokenId]);
+  }, [tokenId, processHolderDistribution]);
 
   useEffect(() => {
     const fetchMintActivityData = async () => {
@@ -124,15 +144,6 @@ const TokenDetail = () => {
     });
     const volumes = Array.from({length: 30}, () => Math.floor(Math.random() * 1000000));
     return dates.map((date, index) => ({ date, volume: volumes[index] }));
-  };
-
-  const generateMockHolderDistribution = () => {
-    return [
-      { range: '0-100', count: Math.floor(Math.random() * 1000) },
-      { range: '101-1000', count: Math.floor(Math.random() * 500) },
-      { range: '1001-10000', count: Math.floor(Math.random() * 100) },
-      { range: '10001+', count: Math.floor(Math.random() * 10) },
-    ];
   };
 
   const parseRawNumber = (rawNumber, decimals) => {
@@ -312,21 +323,23 @@ const TokenDetail = () => {
           <div className="chart-container">
             <Pie
               data={{
-                labels: holderDistribution.map(item => item.range),
+                labels: holderDistribution.map(item => item.label),
                 datasets: [{
-                  label: 'Number of Holders',
-                  data: holderDistribution.map(item => item.count),
+                  label: 'Percentage of Max Supply',
+                  data: holderDistribution.map(item => item.percentage),
                   backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
                     'rgba(54, 162, 235, 0.2)',
                     'rgba(255, 206, 86, 0.2)',
                     'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
                   ],
                   borderColor: [
                     'rgba(255, 99, 132, 1)',
                     'rgba(54, 162, 235, 1)',
                     'rgba(255, 206, 86, 1)',
                     'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
                   ],
                   borderWidth: 1,
                 }]
