@@ -52,6 +52,8 @@
 
 .wallet-lookup .btn-primary {
     height: 50px;
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
 }
 
 .wallet-lookup .card {
