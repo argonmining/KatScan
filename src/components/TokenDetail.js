@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Card, Tabs, Tab, Table, Alert } from 'react-bootstrap';
-import { Line, Bar, Pie } from 'react-chartjs-2';
+import { Line, Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, BarElement, ArcElement, Title, Tooltip, Legend } from 'chart.js';
 import { getTokenDetails, getTokenOperations } from '../services/dataService';
 import '../styles/TokenDetail.css';
@@ -20,7 +20,6 @@ const TokenDetail = () => {
   const [error, setError] = useState(null);
   const [operationsError, setOperationsError] = useState(null);
   const observer = useRef();
-  const [transferVolume, setTransferVolume] = useState([]);
   const [holderDistribution, setHolderDistribution] = useState([]);
   const [mintActivity, setMintActivity] = useState([]);
   const [activeTab, setActiveTab] = useState('topHolders');
@@ -122,7 +121,6 @@ const TokenDetail = () => {
         setOperations(opsData.result);
         setOperationsCursor(opsData.next);
 
-        setTransferVolume(generateMockTransferVolume());
         setHolderDistribution(processHolderDistribution(data.holder, data.max, data.dec));
       } catch (err) {
         setError('Failed to fetch token details');
@@ -144,16 +142,6 @@ const TokenDetail = () => {
 
     fetchMintActivityData();
   }, [activeTab, mintActivity.length, tokenData, fetchMintActivity]);
-
-  const generateMockTransferVolume = () => {
-    const dates = Array.from({length: 30}, (_, i) => {
-      const d = new Date();
-      d.setDate(d.getDate() - (29 - i));
-      return d.toISOString().split('T')[0];
-    });
-    const volumes = Array.from({length: 30}, () => Math.floor(Math.random() * 1000000));
-    return dates.map((date, index) => ({ date, volume: volumes[index] }));
-  };
 
   const parseRawNumber = (rawNumber, decimals) => {
     return Number(rawNumber) / Math.pow(10, decimals);
@@ -299,33 +287,6 @@ const TokenDetail = () => {
           {loadingMore && <div>Loading more operations...</div>}
           {operationsError && <Alert variant="danger">{operationsError}</Alert>}
           {!operationsCursor && !loadingMore && <div>No more operations to load.</div>}
-        </Tab>
-
-        <Tab eventKey="transferVolume" title="Transfer Volume">
-          <div className="chart-container">
-            <Bar
-              data={{
-                labels: transferVolume.map(item => item.date),
-                datasets: [{
-                  label: 'Transfer Volume',
-                  data: transferVolume.map(item => item.volume),
-                  backgroundColor: 'rgba(53, 162, 235, 0.5)',
-                }]
-              }}
-              options={{
-                responsive: true,
-                plugins: {
-                  legend: {
-                    position: 'top',
-                  },
-                  title: {
-                    display: true,
-                    text: 'Daily Transfer Volume'
-                  }
-                }
-              }}
-            />
-          </div>
         </Tab>
 
         <Tab eventKey="holderDistribution" title="Holder Distribution">
