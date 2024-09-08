@@ -5,6 +5,7 @@ import { Line, Bar, Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, BarElement, ArcElement, Title, Tooltip, Legend } from 'chart.js';
 import { getTokenDetails, getTokenOperations } from '../services/dataService';
 import '../styles/TokenDetail.css';
+import axios from 'axios';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, ArcElement, Title, Tooltip, Legend);
 
@@ -19,9 +20,6 @@ const TokenDetail = () => {
   const [error, setError] = useState(null);
   const [operationsError, setOperationsError] = useState(null);
   const observer = useRef();
-
-  // New state for additional data
-  const [priceHistory, setPriceHistory] = useState([]);
   const [transferVolume, setTransferVolume] = useState([]);
   const [holderDistribution, setHolderDistribution] = useState([]);
   const [mintActivity, setMintActivity] = useState([]);
@@ -53,6 +51,31 @@ const TokenDetail = () => {
     if (node) observer.current.observe(node);
   }, [loadingMore, operationsCursor, fetchOperations]);
 
+  const fetchMintActivity = useCallback(async (tick) => {
+    try {
+      const response = await axios.get(`https://katapi.nachowyborski.xyz/api/mintsovertime?tick=${tick}`);
+      const data = response.data;
+      return fillMissingDates(data);
+    } catch (error) {
+      console.error('Failed to fetch mint activity data:', error);
+      return [];
+    }
+  }, []);
+
+  const fillMissingDates = (data) => {
+    const filledData = [];
+    const startDate = new Date(data[0].date);
+    const endDate = new Date();
+    const dateMap = new Map(data.map(item => [item.date, item.count]));
+
+    for (let d = startDate; d <= endDate; d.setDate(d.getDate() + 1)) {
+      const dateStr = d.toISOString().split('T')[0];
+      filledData.push({ date: dateStr, count: dateMap.get(dateStr) || 0 });
+    }
+
+    return filledData;
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -64,11 +87,10 @@ const TokenDetail = () => {
         setOperations(opsData.result);
         setOperationsCursor(opsData.next);
 
-        // Mock data for new visualizations (replace with actual API calls when available)
-        setPriceHistory(generateMockPriceHistory());
         setTransferVolume(generateMockTransferVolume());
         setHolderDistribution(generateMockHolderDistribution());
-        setMintActivity(generateMockMintActivity());
+        const mintActivityData = await fetchMintActivity(data.tick.toUpperCase());
+        setMintActivity(mintActivityData);
       } catch (err) {
         setError('Failed to fetch token details');
       } finally {
@@ -77,19 +99,9 @@ const TokenDetail = () => {
     };
 
     fetchData();
-  }, [tokenId]);
+  }, [tokenId, fetchMintActivity]);
 
   // Helper functions to generate mock data
-  const generateMockPriceHistory = () => {
-    const dates = Array.from({length: 30}, (_, i) => {
-      const d = new Date();
-      d.setDate(d.getDate() - (29 - i));
-      return d.toISOString().split('T')[0];
-    });
-    const prices = Array.from({length: 30}, () => Math.random() * 10 + 5);
-    return dates.map((date, index) => ({ date, price: prices[index] }));
-  };
-
   const generateMockTransferVolume = () => {
     const dates = Array.from({length: 30}, (_, i) => {
       const d = new Date();
@@ -107,16 +119,6 @@ const TokenDetail = () => {
       { range: '1001-10000', count: Math.floor(Math.random() * 100) },
       { range: '10001+', count: Math.floor(Math.random() * 10) },
     ];
-  };
-
-  const generateMockMintActivity = () => {
-    const dates = Array.from({length: 30}, (_, i) => {
-      const d = new Date();
-      d.setDate(d.getDate() - (29 - i));
-      return d.toISOString().split('T')[0];
-    });
-    const mints = Array.from({length: 30}, () => Math.floor(Math.random() * 1000));
-    return dates.map((date, index) => ({ date, mints: mints[index] }));
   };
 
   const parseRawNumber = (rawNumber, decimals) => {
@@ -265,34 +267,6 @@ const TokenDetail = () => {
           {!operationsCursor && !loadingMore && <div>No more operations to load.</div>}
         </Tab>
 
-        <Tab eventKey="priceHistory" title="Price History">
-          <div className="chart-container">
-            <Line
-              data={{
-                labels: priceHistory.map(item => item.date),
-                datasets: [{
-                  label: 'Price (USD)',
-                  data: priceHistory.map(item => item.price),
-                  borderColor: 'rgb(75, 192, 192)',
-                  tension: 0.1
-                }]
-              }}
-              options={{
-                responsive: true,
-                plugins: {
-                  legend: {
-                    position: 'top',
-                  },
-                  title: {
-                    display: true,
-                    text: 'Token Price History'
-                  }
-                }
-              }}
-            />
-          </div>
-        </Tab>
-
         <Tab eventKey="transferVolume" title="Transfer Volume">
           <div className="chart-container">
             <Bar
@@ -366,7 +340,7 @@ const TokenDetail = () => {
                 labels: mintActivity.map(item => item.date),
                 datasets: [{
                   label: 'Daily Mints',
-                  data: mintActivity.map(item => item.mints),
+                  data: mintActivity.map(item => item.count),
                   borderColor: 'rgb(40, 167, 69)', // Green color
                   backgroundColor: 'rgba(40, 167, 69, 0.5)',
                 }]
