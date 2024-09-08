@@ -187,7 +187,7 @@ const TokenDetail = () => {
 
       <Tabs defaultActiveKey="topHolders" className="mb-3">
         <Tab eventKey="topHolders" title="Top Holders">
-          <div className="table-container">
+          <div className="detail-table-container">
             <Table striped bordered hover>
               <thead>
                 <tr>
@@ -223,7 +223,7 @@ const TokenDetail = () => {
           </p>
         </Tab>
         <Tab eventKey="recentOperations" title="Recent Operations">
-          <div className="table-container">
+          <div className="detail-table-container">
             <Table striped bordered hover>
               <thead>
                 <tr>
