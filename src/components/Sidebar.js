@@ -3,6 +3,7 @@ import { Nav } from 'react-bootstrap';
 import { NavLink, Link } from 'react-router-dom';
 import { FaSearch, FaWallet, FaCoins, FaExchangeAlt, FaFireAlt, FaChartLine, FaUsers, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import logo from '../assets/logo.png';
+import qrCode from '../assets/qr.png'; // Add this import
 import '../styles/Sidebar.css';
 import { Modal, Button } from 'react-bootstrap'; // Add this import
 
@@ -90,8 +91,8 @@ const Sidebar = () => {
           <Modal.Title>Donate</Modal.Title>
         </Modal.Header>
         <Modal.Body className="text-center">
-          <img src="../assets/qr.png" alt="Donate QR Code" className="qr-code-image" />
           <p className="mt-3">Send only Kaspa network assets to this address</p>
+          <img src={qrCode} alt="Donate QR Code" className="qr-code-image" />
           <p className="address-text">kaspa:qrtsw8lkquppuurmy9zrjdgpgdthfall90ve06yw88vc9dzmr26wqvz3vlqt9</p>
           <Button variant="outline-secondary" onClick={() => navigator.clipboard.writeText('kaspa:qrtsw8lkquppuurmy9zrjdgpgdthfall90ve06yw88vc9dzmr26wqvz3vlqt9')}>
             Copy address
