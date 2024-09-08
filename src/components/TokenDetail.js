@@ -82,6 +82,15 @@ const TokenDetail = () => {
   };
 
   const processHolderDistribution = useCallback((holders, maxSupply, decimals) => {
+    if (!holders || holders.length === 0) {
+      return [
+        {
+          label: 'Other Holders',
+          percentage: 100,
+        }
+      ];
+    }
+
     const groups = [
       { label: 'Top 1-10 Holders', total: 0 },
       { label: 'Top 11-20 Holders', total: 0 },
@@ -116,6 +125,9 @@ const TokenDetail = () => {
         setLoading(true);
         setError(null);
         const data = await getTokenDetails(tokenId);
+        if (!data) {
+          throw new Error('No data returned from API');
+        }
         setTokenData(data);
         const opsData = await getTokenOperations(tokenId, 50);
         setOperations(opsData.result);
@@ -123,6 +135,7 @@ const TokenDetail = () => {
 
         setHolderDistribution(processHolderDistribution(data.holder, data.max, data.dec));
       } catch (err) {
+        console.error('Failed to fetch token details:', err);
         setError('Failed to fetch token details');
       } finally {
         setLoading(false);
