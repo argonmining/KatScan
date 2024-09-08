@@ -60,7 +60,7 @@ const TopKRC20Holders = () => {
   return (
     <div className="top-krc20-holders-wrapper">
       <h1>Top KRC20 Token Holders</h1>
-      <div className="table-container">
+      <div className="holders-table-responsive">
         <Table striped bordered hover>
           <thead>
             <tr>
