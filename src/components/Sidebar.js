@@ -1,15 +1,25 @@
 import React, { useState } from 'react';
 import { Nav } from 'react-bootstrap';
 import { NavLink, Link } from 'react-router-dom';
-import { FaSearch, FaWallet, FaCoins, FaExchangeAlt, FaFireAlt, FaChartLine, FaUsers, FaChartPie, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { FaSearch, FaWallet, FaCoins, FaExchangeAlt, FaFireAlt, FaChartLine, FaUsers, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import logo from '../assets/logo.png';
 import '../styles/Sidebar.css';
+import { Modal, Button } from 'react-bootstrap'; // Add this import
 
 const Sidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
+  const [showDonateModal, setShowDonateModal] = useState(false); // Add this state
 
   const toggleSidebar = () => {
     setCollapsed(!collapsed);
+  };
+
+  const handleDonateClick = () => {
+    setShowDonateModal(true);
+  };
+
+  const handleCloseDonateModal = () => {
+    setShowDonateModal(false);
   };
 
   const NavSection = ({ title, children }) => (
@@ -57,9 +67,6 @@ const Sidebar = () => {
             <NavLink to="/top-holders" className="nav-link" activeClassName="active">
               <FaUsers /> {!collapsed && <span>Top KRC-20 Holders</span>}
             </NavLink>
-            <NavLink to="/holder-distribution" className="nav-link" activeClassName="active">
-              <FaChartPie /> {!collapsed && <span>Holder Distribution</span>}
-            </NavLink>
           </NavSection>
         </Nav>
         <div className="sidebar-footer">
@@ -69,11 +76,28 @@ const Sidebar = () => {
               Nacho the 𐤊at Community
             </p>
           )}
+          <Button variant="link" onClick={handleDonateClick} className="donate-button">
+            Donate
+          </Button>
           <button className="collapse-btn" onClick={toggleSidebar}>
             {collapsed ? <FaChevronRight /> : <FaChevronLeft />}
           </button>
         </div>
       </div>
+
+      <Modal show={showDonateModal} onHide={handleCloseDonateModal} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Donate</Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="text-center">
+          <img src="../assets/qr.png" alt="Donate QR Code" className="qr-code-image" />
+          <p className="mt-3">Send only Kaspa network assets to this address</p>
+          <p className="address-text">kaspa:qrtsw8lkquppuurmy9zrjdgpgdthfall90ve06yw88vc9dzmr26wqvz3vlqt9</p>
+          <Button variant="outline-secondary" onClick={() => navigator.clipboard.writeText('kaspa:qrtsw8lkquppuurmy9zrjdgpgdthfall90ve06yw88vc9dzmr26wqvz3vlqt9')}>
+            Copy address
+          </Button>
+        </Modal.Body>
+      </Modal>
     </div>
   );
 };

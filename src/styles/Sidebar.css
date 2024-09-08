@@ -153,3 +153,23 @@
     margin-bottom: 10px;
 }
 
+.qr-code-image {
+    width: 200px;
+    height: 200px;
+}
+
+.address-text {
+    font-family: monospace;
+    word-break: break-all;
+}
+
+.donate-button {
+    color: var(--primary-color);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.donate-button:hover {
+    text-decoration: underline;
+}
+
