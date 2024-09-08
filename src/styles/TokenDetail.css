@@ -2,7 +2,7 @@
 
 .token-detail {
     padding: 20px;
-    height: 98vh;
+    height: 100vh; /* Set the height to 100vh to prevent page scrolling */
     overflow: hidden; /* Prevent page scrolling */
     display: flex;
     flex-direction: column;

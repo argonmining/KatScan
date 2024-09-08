@@ -124,11 +124,10 @@ const TokenDetail = () => {
   };
 
   const formatNumber = (rawNumber, decimals) => {
-    const parsedNumber = parseRawNumber(rawNumber, decimals);
     return new Intl.NumberFormat('en-US', {
       minimumFractionDigits: 0,
       maximumFractionDigits: decimals,
-    }).format(parsedNumber);
+    }).format(rawNumber);
   };
 
   const formatDateTime = (timestamp) => {
