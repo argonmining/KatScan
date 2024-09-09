@@ -89,13 +89,13 @@
 .stat-card .stat-icon {
   font-size: 2.5rem;
   margin-right: 1rem;
-  color: #007bff;
+  color: var(--primary-color);
 }
 
 .stat-card h3 {
   font-size: 2rem;
   font-weight: 700;
-  color: #007bff;
+  color: var(--primary-color);
 }
 
 .stat-card .card-text {
@@ -135,6 +135,7 @@ a.feature-card:focus, a.token-card:focus {
 @media (max-width: 768px) {
   .home-container {
     padding: 1rem 0.5rem;
+    overflow: auto;
   }
 
   .header-section h1 {
