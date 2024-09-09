@@ -176,7 +176,6 @@
 
 .donate-button:hover {
     color: var(--primary-color) !important;
-    background-color: var(--sidebar-hover-bg);
     text-decoration: none;
 }
 
