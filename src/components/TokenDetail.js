@@ -370,6 +370,7 @@ const TokenDetail = () => {
                     }
                   },
                   y: {
+                    type: 'logarithmic',
                     beginAtZero: true,
                     title: {
                       display: true,
