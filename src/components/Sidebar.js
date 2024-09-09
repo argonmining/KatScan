@@ -67,7 +67,7 @@ const Sidebar = () => {
             </NavLink>
           </NavSection>
         </Nav>
-        <NavLink to="#" className="nav-link donate-button" onClick={handleDonateClick}>
+        <NavLink to="#" className="donate-link donate-button" onClick={handleDonateClick}>
           <FaHeart /> {!collapsed && <span>Donate</span>}
         </NavLink>
         <div className="sidebar-footer">

@@ -82,12 +82,6 @@
     text-decoration: none;
 }
 
-.nav-link.active.donate-button {
-    color: var(--primary-color) !important;
-    font-weight: bold;
-    background-color: #e9ecef;
-}
-
 .nav-link.active {
     color: var(--primary-color) !important;
     font-weight: bold;
@@ -194,3 +188,33 @@
     margin-right: 0;
 }
 
+.donate-link {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    color: var(--secondary-primary-color) !important;
+    transition: all 0.3s ease;
+    border-left: 3px solid transparent;
+}
+
+.donate-link:hover {
+    color: var(--primary-color) !important;
+    background-color: var(--sidebar-hover-bg);
+    text-decoration: none;
+}
+
+.donate-link.active {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    color: var(--secondary-primary-color) !important;
+    transition: all 0.3s ease;
+    border-left: 3px solid transparent;
+    font-weight: bold;
+}
+
+.donate-link svg {
+    margin-right: 0.75rem;
+    font-size: 1.2rem;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+}
