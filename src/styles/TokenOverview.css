@@ -67,8 +67,8 @@ thead {
 }
 
 th {
-    background-color: var(--primary-color);
-    color: white;
+    background-color: var(--primary-color) !important;
+    color: white !important;
     font-family: var(--sub-header-font);
     font-weight: 500;
     text-transform: uppercase;
