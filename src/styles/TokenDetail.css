@@ -139,7 +139,7 @@ tr:hover {
 }
 
 .clickable-address {
-    color: var(--primary-color);
+    color: #181818;
     cursor: pointer;
 }
 
