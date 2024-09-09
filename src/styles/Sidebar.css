@@ -83,7 +83,7 @@
 }
 
 .nav-link.active {
-    color: var(--secondary-color) !important;
+    color: var(--primary-color) !important;
     font-weight: bold;
     background-color: var(--sidebar-hover-bg);
 }
