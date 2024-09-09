@@ -82,6 +82,12 @@
     text-decoration: none;
 }
 
+.nav-link.active.donate-button {
+    color: var(--primary-color) !important;
+    font-weight: bold;
+    background-color: #e9ecef;
+}
+
 .nav-link.active {
     color: var(--primary-color) !important;
     font-weight: bold;

@@ -66,11 +66,10 @@ const Sidebar = () => {
               <FaChartLine /> {!collapsed && <span>MarketCap Calc</span>}
             </NavLink>
           </NavSection>
-
-          <NavLink to="#" className="nav-link donate-button" onClick={handleDonateClick}>
-            <FaHeart /> {!collapsed && <span>Donate</span>}
-          </NavLink>
         </Nav>
+        <NavLink to="#" className="nav-link donate-button" onClick={handleDonateClick}>
+          <FaHeart /> {!collapsed && <span>Donate</span>}
+        </NavLink>
         <div className="sidebar-footer">
           {!collapsed && (
             <p>
