@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Card, Tabs, Tab, Table, Alert } from 'react-bootstrap';
-import { Line, Pie } from 'react-chartjs-2';
+import { Line, Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, BarElement, ArcElement, Title, Tooltip, Legend } from 'chart.js';
 import { getTokenDetails, getTokenOperations } from '../services/dataService';
 import '../styles/TokenDetail.css';
@@ -304,7 +304,7 @@ const TokenDetail = () => {
 
         <Tab eventKey="holderDistribution" title="Holder Distribution">
           <div className="chart-container">
-            <Pie
+            <Bar
               data={{
                 labels: holderDistribution.map(item => item.label),
                 datasets: [{
@@ -359,6 +359,22 @@ const TokenDetail = () => {
                   title: {
                     display: true,
                     text: 'Holder Distribution'
+                  }
+                },
+                scales: {
+                  x: {
+                    beginAtZero: true,
+                    title: {
+                      display: true,
+                      text: 'Holders'
+                    }
+                  },
+                  y: {
+                    beginAtZero: true,
+                    title: {
+                      display: true,
+                      text: 'Percentage of Max Supply'
+                    }
                   }
                 }
               }}
