@@ -1,4 +1,4 @@
-# KatScan: KRC-20 Explorer & Analysis Webapp for Kaspa Ecosystem
+# KatScan: KRC-20 Explorer & Insights Webapp for Kaspa Ecosystem
 
 KatScan is a comprehensive KRC-20 token explorer and analysis tool for the Kaspa blockchain ecosystem. This web application allows users to view, track, and analyze KRC-20 tokens and transactions in the Kaspa network, providing valuable insights into token markets, holders, and token comparisons. The project was developed by volunteers from the Nacho the Kat community and is part of the open-source initiative to enhance Kaspa's ecosystem.
 
