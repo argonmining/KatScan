@@ -167,9 +167,20 @@
     color: var(--primary-color);
     text-decoration: none;
     cursor: pointer;
+    padding: 0.5rem 1rem; /* Add padding for better spacing */
+    font-size: 1rem; /* Adjust font size */
+    display: inline-block; /* Ensure it doesn't stretch */
+    margin-top: 10px; /* Add some space above the button */
 }
 
 .donate-button:hover {
     text-decoration: underline;
+    color: var(--secondary-color); /* Change color on hover */
+}
+
+.sidebar.collapsed .donate-button {
+    text-align: center; /* Center align when collapsed */
+    padding: 0.5rem; /* Adjust padding for collapsed state */
+    font-size: 0.9rem; /* Adjust font size for collapsed state */
 }
 
