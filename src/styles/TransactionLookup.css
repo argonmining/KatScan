@@ -69,14 +69,14 @@
 }
 
 .clickable-address {
-  color: var(--primary-color);
+  color: var(--secondary-primary-color);
   text-decoration: underline;
   cursor: pointer;
   transition: color 0.3s ease;
 }
 
 .clickable-address:hover {
-  color: var(--secondary-color);
+  color: var(--primary-color);
 }
 
 .clickable {

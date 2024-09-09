@@ -80,7 +80,7 @@
 }
 
 .clickable-address {
-  color: var(--secondary-color);
+  color: var(--secondary-primary-color);
   cursor: pointer;
 }
 
