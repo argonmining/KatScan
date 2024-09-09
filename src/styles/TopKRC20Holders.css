@@ -33,7 +33,7 @@
 
 .table td {
   vertical-align: middle;
-  padding: 8px; /* Adjust padding for better spacing */
+  padding: 2px; /* Adjust padding for better spacing */
   font-size: 14px; /* Adjust font size */
   font-family: var(--body-font); 
   white-space: nowrap;
