@@ -33,8 +33,10 @@
 
 .table td {
   vertical-align: middle;
-  padding: 8px 8px; /* Adjust padding for better spacing */
-  font-size: 0.9rem; /* Adjust font size */
+  padding: 8px; /* Adjust padding for better spacing */
+  font-size: 14px; /* Adjust font size */
+  font-family: var(--body-font); 
+  white-space: nowrap;
 }
 
 .btn-link {
@@ -74,7 +76,14 @@
   font-family: var(--body-font);
 }
 
-.table-container .table th,
+.table-container .table th {
+  position: sticky;
+  background-color: var(--primary-color);
+  color: white;
+  font-family: var(--sub-header-font);
+  vertical-align: middle;
+}
+
 .table-container .table td {
   vertical-align: middle;
 }
