@@ -204,7 +204,7 @@ body {
 
 .feature-icon, .stat-icon {
   font-size: 1.8rem;
-  color: #007bff;
+  color: var(--primary-color);
   margin-bottom: 0.5rem;
 }
 
@@ -218,7 +218,7 @@ body {
 .stat-card h3 {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #007bff;
+  color: var(--primary-color);
   margin-bottom: 0.3rem;
 }
 
