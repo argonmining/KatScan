@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Nav } from 'react-bootstrap';
 import { NavLink, Link } from 'react-router-dom';
-import { FaSearch, FaWallet, FaCoins, FaExchangeAlt, FaFireAlt, FaChartLine, FaUsers, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { FaSearch, FaWallet, FaCoins, FaExchangeAlt, FaFireAlt, FaChartLine, FaUsers, FaChevronLeft, FaChevronRight, FaHeart } from 'react-icons/fa';
 import logo from '../assets/logo.png';
 import qrCode from '../assets/qr.png'; // Add this import
 import '../styles/Sidebar.css';
@@ -66,6 +66,10 @@ const Sidebar = () => {
               <FaChartLine /> {!collapsed && <span>MarketCap Calc</span>}
             </NavLink>
           </NavSection>
+
+          <NavLink to="#" className="nav-link donate-button" onClick={handleDonateClick}>
+            <FaHeart /> {!collapsed && <span>Donate</span>}
+          </NavLink>
         </Nav>
         <div className="sidebar-footer">
           {!collapsed && (
@@ -74,9 +78,6 @@ const Sidebar = () => {
               Nacho the 𐤊at Community
             </p>
           )}
-          <Button variant="link" onClick={handleDonateClick} className="donate-button">
-            Donate
-          </Button>
           <button className="collapse-btn" onClick={toggleSidebar}>
             {collapsed ? <FaChevronRight /> : <FaChevronLeft />}
           </button>

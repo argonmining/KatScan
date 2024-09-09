@@ -164,23 +164,27 @@
 }
 
 .donate-button {
-    color: var(--primary-color);
+    color: var(--secondary-primary-color) !important;
     text-decoration: none;
     cursor: pointer;
-    padding: 0.5rem 1rem; /* Add padding for better spacing */
-    font-size: 1rem; /* Adjust font size */
-    display: inline-block; /* Ensure it doesn't stretch */
-    margin-top: 10px; /* Add some space above the button */
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease;
+    border-left: 3px solid transparent;
 }
 
 .donate-button:hover {
-    text-decoration: underline;
-    color: var(--secondary-color); /* Change color on hover */
+    color: var(--primary-color) !important;
+    background-color: var(--sidebar-hover-bg);
+    text-decoration: none;
 }
 
 .sidebar.collapsed .donate-button {
-    text-align: center; /* Center align when collapsed */
-    padding: 0.5rem; /* Adjust padding for collapsed state */
-    font-size: 0.9rem; /* Adjust font size for collapsed state */
+    justify-content: center;
+}
+
+.sidebar.collapsed .donate-button svg {
+    margin-right: 0;
 }
 
