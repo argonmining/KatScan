@@ -168,7 +168,7 @@ const MarketCapCalculator = () => {
                       cacheOptions
                       loadOptions={handleCryptoSearch}
                       onChange={setSelectedCrypto}
-                      placeholder="Search for a cryptocurrency"
+                      placeholder="Start typing a cryptocurrency on CoinGecko"
                     />
                   </Form.Group>
                 </Col>
