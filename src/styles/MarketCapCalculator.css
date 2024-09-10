@@ -40,7 +40,7 @@
 }
 
 .market-cap-calculator .krc20-card {
-  border-top: 4px solid #007bff;
+  border-top: 4px solid var(--primary-color);
 }
 
 .market-cap-calculator .coingecko-card {
