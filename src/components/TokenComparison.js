@@ -412,7 +412,7 @@ const TokenComparison = () => {
           <Form.Group>
             <Form.Label>Select Token 1</Form.Label>
             <Select
-              options={allTokens.map(token => ({ value: token.tick, label: token.tick }))}
+              options={allTokens.map(token => ({ value: token.tick, label: censorTicker(token.tick) }))}
               onChange={(option) => handleTokenSelect(option, 0)}
               isClearable
               placeholder="Search for a token..."
@@ -423,7 +423,7 @@ const TokenComparison = () => {
           <Form.Group>
             <Form.Label>Select Token 2</Form.Label>
             <Select
-              options={allTokens.map(token => ({ value: token.tick, label: token.tick }))}
+              options={allTokens.map(token => ({ value: token.tick, label: censorTicker(token.tick) }))}
               onChange={(option) => handleTokenSelect(option, 1)}
               isClearable
               placeholder="Search for a token..."

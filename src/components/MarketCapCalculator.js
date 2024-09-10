@@ -29,7 +29,7 @@ const MarketCapCalculator = () => {
       const data = await getKRC20TokenList();
       const formattedList = data.result.map(token => ({
         value: token.tick,
-        label: token.tick,
+        label: censorTicker(token.tick),
         ...token
       }));
       setKrc20List(formattedList);
