@@ -13,7 +13,7 @@
 }
 
 .market-cap-calculator h2 {
-  color: #007bff;
+  color: var(--primary-color);
   font-weight: bold;
   margin-bottom: 30px;
 }
