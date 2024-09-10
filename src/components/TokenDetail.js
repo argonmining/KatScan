@@ -6,6 +6,7 @@ import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement
 import { getTokenDetails, getTokenOperations } from '../services/dataService';
 import '../styles/TokenDetail.css';
 import axios from 'axios';
+import { censorTicker } from '../utils/censorTicker';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, ArcElement, Title, Tooltip, Legend);
 
@@ -187,7 +188,7 @@ const TokenDetail = () => {
   return (
     <div className="token-detail">
       <div className="token-header">
-        <h1>{tokenData.tick} Token Details</h1>
+        <h1>{censorTicker(tokenData.tick)} Token Details</h1>
         <span className="creation-date">Deployed on {formatDateTime(tokenData.mtsAdd)}</span>
       </div>
       <Card className="token-info-card">

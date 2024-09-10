@@ -4,6 +4,7 @@ import { Table, ProgressBar, Badge, Form, InputGroup } from 'react-bootstrap'; /
 import { FaSearch } from 'react-icons/fa';
 import { getKRC20TokenList } from '../services/dataService';
 import '../styles/TokenOverview.css';
+import { censorTicker } from '../utils/censorTicker';
 
 const ITEMS_PER_PAGE = 50;
 
@@ -165,7 +166,7 @@ const TokenOverview = () => {
                 <tr key={token.tick}>
                   <td>
                     <Link to={`/tokens/${token.tick}`} className="token-ticker">
-                      {token.tick}
+                      {censorTicker(token.tick)}
                     </Link>
                   </td>
                   <td className="text-center">

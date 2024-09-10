@@ -7,6 +7,7 @@ import { faInfoCircle, faExchangeAlt, faDollarSign, faChartLine, faCoins, faUser
 import { getKRC20TokenList, getDetailedTokenInfo } from '../services/dataService';
 import { searchCryptos, getCryptoData } from '../services/coingeckoService';
 import '../styles/MarketCapCalculator.css';
+import { censorTicker } from '../utils/censorTicker';
 
 const MarketCapCalculator = () => {
   const [krc20List, setKrc20List] = useState([]);
@@ -192,7 +193,7 @@ const MarketCapCalculator = () => {
                     <Col md={6} className="mb-4">
                       <Card className="h-100 token-card krc20-card">
                         <Card.Body>
-                          <h5 className="text-center">{calculationResult.krc20Token.tick} (KRC20 Token)</h5>
+                          <h5 className="text-center">{censorTicker(calculationResult.krc20Token.tick)} (KRC20 Token)</h5>
                           <ul className="list-unstyled">
                             <li className="d-flex justify-content-between align-items-center mb-2">
                               <span><FontAwesomeIcon icon={faCoins} className="me-2 text-primary" /> Max Supply:</span>
@@ -214,7 +215,7 @@ const MarketCapCalculator = () => {
                               className="details-button"
                             >
                               <FontAwesomeIcon icon={faExternalLinkAlt} className="me-2" />
-                              {calculationResult.krc20Token.tick} Details
+                              {censorTicker(calculationResult.krc20Token.tick)} Details
                             </Button>
                           </div>
                         </Card.Body>
@@ -254,9 +255,9 @@ const MarketCapCalculator = () => {
                   </Row>
                   <Card className="mt-4 hypothetical-price-card">
                     <Card.Body className="text-center">
-                      <h5>Hypothetical {calculationResult.krc20Token.tick} Price</h5>
+                      <h5>Hypothetical {censorTicker(calculationResult.krc20Token.tick)} Price</h5>
                       <p className="lead mb-3">
-                        If {calculationResult.krc20Token.tick} had {calculationResult.crypto.symbol.toUpperCase()}'s market cap:
+                        If {censorTicker(calculationResult.krc20Token.tick)} had {calculationResult.crypto.symbol.toUpperCase()}'s market cap:
                       </p>
                       <h3 className="text-success price-highlight mb-3">
                         <FontAwesomeIcon icon={faDollarSign} className="me-2" />

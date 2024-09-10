@@ -6,6 +6,7 @@ import Select from 'react-select';
 import { getKRC20TokenList, getTokenDetails } from '../services/dataService';
 import '../styles/TokenComparison.css';
 import { FaChartBar, FaUsers, FaChartPie } from 'react-icons/fa'; // Import icons
+import { censorTicker } from '../utils/censorTicker';
 
 ChartJS.register(
   CategoryScale,
@@ -171,7 +172,7 @@ const TokenComparison = () => {
       labels: ['Max Supply', 'Minted', 'Pre-Minted'],
       datasets: [
         {
-          label: token1.tick,
+          label: censorTicker(token1.tick),
           data: [
             calculateValue(token1.max, token1.dec),
             calculateValue(token1.minted, token1.dec),
@@ -180,7 +181,7 @@ const TokenComparison = () => {
           backgroundColor: TOKEN_COLORS.token1,
         },
         {
-          label: token2.tick,
+          label: censorTicker(token2.tick),
           data: [
             calculateValue(token2.max, token2.dec),
             calculateValue(token2.minted, token2.dec),
@@ -214,7 +215,7 @@ const TokenComparison = () => {
     };
 
     const holdersData = {
-      labels: [token1.tick, token2.tick],
+      labels: [censorTicker(token1.tick), censorTicker(token2.tick)],
       datasets: [
         {
           label: 'Top 10 Holders',
@@ -316,7 +317,7 @@ const TokenComparison = () => {
               <Card.Title><FaChartPie /> Minting Progress</Card.Title>
               <div className="progress-wrapper mb-3">
                 <div className="progress-label">
-                  {token1.tick} <Badge bg={getMintType(token1) === "Fair Mint" ? "success" : "warning"}>{getMintType(token1)}</Badge>
+                  {censorTicker(token1.tick)} <Badge bg={getMintType(token1) === "Fair Mint" ? "success" : "warning"}>{getMintType(token1)}</Badge>
                 </div>
                 <ProgressBar 
                   now={getMintProgress(token1)} 
@@ -326,7 +327,7 @@ const TokenComparison = () => {
               </div>
               <div className="progress-wrapper">
                 <div className="progress-label">
-                  {token2.tick} <Badge bg={getMintType(token2) === "Fair Mint" ? "success" : "warning"}>{getMintType(token2)}</Badge>
+                  {censorTicker(token2.tick)} <Badge bg={getMintType(token2) === "Fair Mint" ? "success" : "warning"}>{getMintType(token2)}</Badge>
                 </div>
                 <ProgressBar 
                   now={getMintProgress(token2)} 
@@ -345,8 +346,8 @@ const TokenComparison = () => {
                 <thead>
                   <tr>
                     <th>Metric</th>
-                    <th>{token1.tick}</th>
-                    <th>{token2.tick}</th>
+                    <th>{censorTicker(token1.tick)}</th>
+                    <th>{censorTicker(token2.tick)}</th>
                   </tr>
                 </thead>
                 <tbody>

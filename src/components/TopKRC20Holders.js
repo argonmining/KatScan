@@ -4,6 +4,7 @@ import { Table, Spinner, Alert, Button } from 'react-bootstrap';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import '../styles/TopKRC20Holders.css';
+import { censorTicker } from '../utils/censorTicker';
 
 const API_BASE_URL = 'https://katapi.nachowyborski.xyz/api/topHolders';
 
@@ -104,7 +105,7 @@ const TopKRC20Holders = () => {
                         <tbody>
                           {holder.tokens.map(token => (
                             <tr key={token.tick}>
-                              <td>{token.tick}</td>
+                              <td>{censorTicker(token.tick)}</td>
                               <td>{token.amount.toLocaleString(undefined, { maximumFractionDigits: token.decimals })}</td>
                             </tr>
                           ))}
