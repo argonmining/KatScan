@@ -1,17 +1,19 @@
-// src/components/Sidebar.js
 import React, { useState } from 'react';
 import { Nav, Navbar, Container } from 'react-bootstrap';
 import { NavLink, Link } from 'react-router-dom';
-import { FaSearch, FaWallet, FaCoins, FaBars, FaChevronLeft, FaChevronRight, FaHeart } from 'react-icons/fa';
+import {
+  FaSearch, FaWallet, FaCoins, FaExchangeAlt, FaFireAlt, FaChartLine, FaUsers, 
+  FaChevronLeft, FaChevronRight, FaHeart, FaBars
+} from 'react-icons/fa';
 import logo from '../assets/logo.png';
-import qrCode from '../assets/qr.png';
+import qrCode from '../assets/qr.png'; // Add this import
 import '../styles/Sidebar.css';
-import { Modal, Button } from 'react-bootstrap'; 
+import { Modal, Button } from 'react-bootstrap'; // Add this import
 
 const Sidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
-  const [showDonateModal, setShowDonateModal] = useState(false);
-  const [expanded, setExpanded] = useState(false); // Added for mobile
+  const [showDonateModal, setShowDonateModal] = useState(false); // Add this state
+  const [expanded, setExpanded] = useState(false); // State for mobile hamburger menu
 
   const toggleSidebar = () => {
     setCollapsed(!collapsed);
@@ -24,6 +26,13 @@ const Sidebar = () => {
   const handleCloseDonateModal = () => {
     setShowDonateModal(false);
   };
+
+  const NavSection = ({ title, children }) => (
+    <div className="nav-section">
+      {!collapsed && <h6 className="nav-section-title sub-header">{title}</h6>}
+      {children}
+    </div>
+  );
 
   return (
     <>
@@ -42,18 +51,32 @@ const Sidebar = () => {
           </Navbar.Toggle>
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
-              <Nav.Link as={NavLink} to="/transaction-lookup" onClick={() => setExpanded(false)}>
+              {/* KRC-20 Explorer Section */}
+              <NavLink to="/transaction-lookup" className="nav-link" onClick={() => setExpanded(false)}>
                 <FaSearch /> Search Transactions
-              </Nav.Link>
-              <Nav.Link as={NavLink} to="/wallet" onClick={() => setExpanded(false)}>
+              </NavLink>
+              <NavLink to="/wallet" className="nav-link" onClick={() => setExpanded(false)}>
                 <FaWallet /> Search Addresses
-              </Nav.Link>
-              <Nav.Link as={NavLink} to="/tokens" onClick={() => setExpanded(false)}>
+              </NavLink>
+              <NavLink to="/top-holders" className="nav-link" onClick={() => setExpanded(false)}>
+                <FaUsers /> Top Holders
+              </NavLink>
+              {/* KRC-20 Tokens Section */}
+              <NavLink to="/tokens" className="nav-link" onClick={() => setExpanded(false)}>
                 <FaCoins /> All Tokens
-              </Nav.Link>
-              <Nav.Link as={NavLink} to="#" onClick={handleDonateClick}>
+              </NavLink>
+              <NavLink to="/compare" className="nav-link" onClick={() => setExpanded(false)}>
+                <FaExchangeAlt /> Side by Side
+              </NavLink>
+              <NavLink to="/mint-heatmap" className="nav-link" onClick={() => setExpanded(false)}>
+                <FaFireAlt /> Mint Heatmap
+              </NavLink>
+              <NavLink to="/marketcap-calc" className="nav-link" onClick={() => setExpanded(false)}>
+                <FaChartLine /> MarketCap Calc
+              </NavLink>
+              <NavLink to="#" className="nav-link" onClick={handleDonateClick}>
                 <FaHeart /> Donate
-              </Nav.Link>
+              </NavLink>
             </Nav>
           </Navbar.Collapse>
         </Container>
@@ -69,15 +92,33 @@ const Sidebar = () => {
             </Link>
           </div>
           <Nav className="flex-column">
-            <NavLink to="/transaction-lookup" className="nav-link">
-              <FaSearch /> {!collapsed && <span>Search Transactions</span>}
-            </NavLink>
-            <NavLink to="/wallet" className="nav-link">
-              <FaWallet /> {!collapsed && <span>Search Addresses</span>}
-            </NavLink>
-            <NavLink to="/tokens" className="nav-link">
-              <FaCoins /> {!collapsed && <span>All Tokens</span>}
-            </NavLink>
+            {/* KRC-20 Explorer Section */}
+            <NavSection title="KRC-20 Explorer">
+              <NavLink to="/transaction-lookup" className="nav-link">
+                <FaSearch /> {!collapsed && <span>Search Transactions</span>}
+              </NavLink>
+              <NavLink to="/wallet" className="nav-link">
+                <FaWallet /> {!collapsed && <span>Search Addresses</span>}
+              </NavLink>
+              <NavLink to="/top-holders" className="nav-link">
+                <FaUsers /> {!collapsed && <span>Top Holders</span>}
+              </NavLink>
+            </NavSection>
+            {/* KRC-20 Tokens Section */}
+            <NavSection title="KRC-20 Tokens">
+              <NavLink to="/tokens" className="nav-link">
+                <FaCoins /> {!collapsed && <span>All Tokens</span>}
+              </NavLink>
+              <NavLink to="/compare" className="nav-link">
+                <FaExchangeAlt /> {!collapsed && <span>Side by Side</span>}
+              </NavLink>
+              <NavLink to="/mint-heatmap" className="nav-link">
+                <FaFireAlt /> {!collapsed && <span>Mint Heatmap</span>}
+              </NavLink>
+              <NavLink to="/marketcap-calc" className="nav-link">
+                <FaChartLine /> {!collapsed && <span>MarketCap Calc</span>}
+              </NavLink>
+            </NavSection>
           </Nav>
           <NavLink to="#" className="donate-link" onClick={handleDonateClick}>
             <FaHeart /> {!collapsed && <span>Donate</span>}
@@ -86,7 +127,7 @@ const Sidebar = () => {
             {!collapsed && (
               <p>
                 Made with ❤️ by the<br />
-                Nacho the Kat Community
+                Nacho the 𐤊at Community
               </p>
             )}
             <button className="collapse-btn" onClick={toggleSidebar}>

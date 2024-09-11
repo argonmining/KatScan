@@ -5,234 +5,232 @@
     --sidebar-hover-bg: #e9ecef;  /* Slightly darker gray for hover background */
 }
 
-.sidebar {
-    background-color: var(--sidebar-bg);
-    color: var(--secondary-primary-color);
-    transition: all 0.3s ease;
-    overflow-x: hidden;
-    z-index: 1000;
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-    border-right: 1px solid #e0e0e0;
-}
+/* Show the sidebar only on screens larger than 992px */
+@media (min-width: 992px) {
+    .sidebar {
+        background-color: var(--sidebar-bg);
+        color: var(--secondary-primary-color);
+        transition: all 0.3s ease;
+        overflow-x: hidden;
+        z-index: 1000;
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        border-right: 1px solid #e0e0e0;
+    }
 
-.sidebar.collapsed {
-    width: 60px;
-}
+    .sidebar.collapsed {
+        width: 60px;
+    }
 
-.sidebar-content {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-}
+    .sidebar-content {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
 
-.sidebar-header {
-    padding: 1rem;
-    text-align: center;
-    border-bottom: 1px solid #e0e0e0;
-}
+    .sidebar-header {
+        padding: 1rem;
+        text-align: center;
+        border-bottom: 1px solid #e0e0e0;
+    }
 
-/* Add this new rule for spacing above the first section */
-.sidebar-content > .flex-column > .nav-section:first-child {
-    margin-top: 1.5rem;
-}
+    .sidebar-content > .flex-column > .nav-section:first-child {
+        margin-top: 1.5rem;
+    }
 
-.logo-link {
-    text-decoration: none;
-    color: inherit;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+    .logo-link {
+        text-decoration: none;
+        color: inherit;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 
-.logo-image {
-    width: 40px;
-    height: 40px;
-    margin-right: 0.5rem;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
-}
+    .logo-image {
+        width: 40px;
+        height: 40px;
+        margin-right: 0.5rem;
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+    }
 
-.site-title {
-    font-family: var(--header-font);
-    font-size: 1.5rem;
-    margin: 0;
-    color: var(--secondary-primary-color);
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05);
-}
+    .site-title {
+        font-family: var(--header-font);
+        font-size: 1.5rem;
+        margin: 0;
+        color: var(--secondary-primary-color);
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05);
+    }
 
-.sidebar.collapsed .logo-link {
-    justify-content: center;
-}
+    .sidebar.collapsed .logo-link {
+        justify-content: center;
+    }
 
-.sidebar.collapsed .logo-image {
-    margin-right: 0;
-}
+    .sidebar.collapsed .logo-image {
+        margin-right: 0;
+    }
 
-.nav-link {
-    display: flex;
-    align-items: center;
-    padding: 0.75rem 1rem;
-    color: var(--secondary-primary-color) !important;
-    transition: all 0.3s ease;
-    border-left: 3px solid transparent;
-}
+    .nav-link {
+        display: flex;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        color: var(--secondary-primary-color) !important;
+        transition: all 0.3s ease;
+        border-left: 3px solid transparent;
+    }
 
-.nav-link:hover {
-    color: var(--primary-color) !important;
-    background-color: var(--sidebar-hover-bg);
-    text-decoration: none;
-}
+    .nav-link:hover {
+        color: var(--primary-color) !important;
+        background-color: var(--sidebar-hover-bg);
+        text-decoration: none;
+    }
 
-.nav-link.active {
-    color: var(--primary-color) !important;
-    font-weight: bold;
-    background-color: var(--sidebar-hover-bg);
-}
+    .nav-link.active {
+        color: var(--primary-color) !important;
+        font-weight: bold;
+        background-color: var(--sidebar-hover-bg);
+    }
 
-.nav-link svg {
-    margin-right: 0.75rem;
-    font-size: 1.2rem;
-    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
-}
+    .nav-link svg {
+        margin-right: 0.75rem;
+        font-size: 1.2rem;
+        filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+    }
 
-.sidebar.collapsed .nav-link {
-    justify-content: center;
-}
+    .sidebar.collapsed .nav-link {
+        justify-content: center;
+    }
 
-.sidebar.collapsed .nav-link svg {
-    margin-right: 0;
-}
+    .sidebar.collapsed .nav-link svg {
+        margin-right: 0;
+    }
 
-.sidebar-footer {
-    margin-top: auto;
-    padding: 1rem;
-    text-align: center;
-    border-top: 1px solid #e0e0e0;
-    color: var(--secondary-primary-color);
-    font-size: 0.9rem;
-}
+    .sidebar-footer {
+        margin-top: auto;
+        padding: 1rem;
+        text-align: center;
+        border-top: 1px solid #e0e0e0;
+        color: var(--secondary-primary-color);
+        font-size: 0.9rem;
+    }
 
-.collapse-btn {
-    background-color: var(--primary-color);
-    border: none;
-    font-size: 1.2rem;
-    cursor: pointer;
-    padding: 0.5rem;
-    color: white;
-    transition: background-color 0.3s ease;
-}
+    .collapse-btn {
+        background-color: var(--primary-color);
+        border: none;
+        font-size: 1.2rem;
+        cursor: pointer;
+        padding: 0.5rem;
+        color: white;
+        transition: background-color 0.3s ease;
+    }
 
-.collapse-btn:hover {
-    background-color: var(--secondary-color);
-}
+    .collapse-btn:hover {
+        background-color: var(--secondary-color);
+    }
 
-.sidebar.collapsed .sidebar-footer {
-    padding: 0.5rem;
-}
+    .sidebar.collapsed .sidebar-footer {
+        padding: 0.5rem;
+    }
 
-.nav-section {
-    margin-bottom: 1rem;
-}
+    .nav-section {
+        margin-bottom: 1rem;
+    }
 
-.nav-section-title {
-    font-family: var(--sub-header-font);
-    color: var(--secondary-primary-color);
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    margin-bottom: 0.5rem;
-    padding-left: 1rem;
-    opacity: 0.7;
-}
+    .nav-section-title {
+        font-family: var(--sub-header-font);
+        color: var(--secondary-primary-color);
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        margin-bottom: 0.5rem;
+        padding-left: 1rem;
+        opacity: 0.7;
+    }
 
-.sidebar.collapsed .nav-section-title {
-    display: none;
-}
+    .sidebar.collapsed .nav-section-title {
+        display: none;
+    }
 
-.sidebar-footer p {
-    text-align: center;
-    line-height: 1.2;
-    margin-bottom: 10px;
-}
+    .sidebar-footer p {
+        text-align: center;
+        line-height: 1.2;
+        margin-bottom: 10px;
+    }
 
-.qr-code-image {
-    width: 200px;
-    height: 200px;
-}
+    .qr-code-image {
+        width: 200px;
+        height: 200px;
+    }
 
-.address-text {
-    font-family: monospace;
-    word-break: break-all;
-}
+    .address-text {
+        font-family: monospace;
+        word-break: break-all;
+    }
 
-.donate-button {
-    color: var(--secondary-primary-color) !important;
-    text-decoration: none;
-    cursor: pointer;
-    padding: 0.75rem 1rem;
-    display: flex;
-    align-items: center;
-    transition: all 0.3s ease;
-    border-left: 3px solid transparent;
-}
+    .donate-button {
+        color: var(--secondary-primary-color) !important;
+        text-decoration: none;
+        cursor: pointer;
+        padding: 0.75rem 1rem;
+        display: flex;
+        align-items: center;
+        transition: all 0.3s ease;
+        border-left: 3px solid transparent;
+    }
 
-.donate-button:hover {
-    color: var(--primary-color) !important;
-    text-decoration: none;
-}
+    .donate-button:hover {
+        color: var(--primary-color) !important;
+        text-decoration: none;
+    }
 
-.sidebar.collapsed .donate-button {
-    justify-content: center;
-}
+    .sidebar.collapsed .donate-button {
+        justify-content: center;
+    }
 
-.sidebar.collapsed .donate-button svg {
-    margin-right: 0;
-}
+    .sidebar.collapsed .donate-button svg {
+        margin-right: 0;
+    }
 
-.donate-link {
-    display: flex;
-    align-items: center;
-    padding: 0.75rem 1rem;
-    color: var(--secondary-primary-color) !important;
-    transition: all 0.3s ease;
-    border-left: 3px solid transparent;
-}
+    .donate-link {
+        display: flex;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        color: var(--secondary-primary-color) !important;
+        transition: all 0.3s ease;
+        border-left: 3px solid transparent;
+    }
 
-.donate-link:hover {
-    color: var(--primary-color) !important;
-    background-color: var(--sidebar-hover-bg);
-    text-decoration: none;
-}
+    .donate-link:hover {
+        color: var(--primary-color) !important;
+        background-color: var(--sidebar-hover-bg);
+        text-decoration: none;
+    }
 
-.donate-link.active {
-    display: flex;
-    align-items: center;
-    padding: 0.75rem 1rem;
-    color: var(--secondary-primary-color) !important;
-    transition: all 0.3s ease;
-    border-left: 3px solid transparent;
-}
+    .donate-link.active {
+        display: flex;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        color: var(--secondary-primary-color) !important;
+        transition: all 0.3s ease;
+        border-left: 3px solid transparent;
+    }
 
-.donate-link svg {
-    margin-right: 0.75rem;
-    font-size: 1.2rem;
-    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+    .donate-link svg {
+        margin-right: 0.75rem;
+        font-size: 1.2rem;
+        filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+    }
+
+    .navbar {
+        display: none; /* Ensure navbar is hidden on desktop */
+    }
 }
 
 /* Hide the sidebar on screens smaller than 992px (bootstrap lg) */
 @media (max-width: 991px) {
     .sidebar {
-      display: none !important;  /* This ensures the sidebar is completely hidden */
+        display: none !important;  /* This ensures the sidebar is completely hidden */
     }
-  }
-  
-  /* Show the sidebar only on screens larger than 992px */
-  @media (min-width: 992px) {
-    .sidebar {
-      display: flex;  /* Keep the sidebar displayed on larger screens */
-    }
-  
+
+    /* Navbar (hamburger menu) should show here */
     .navbar {
-      display: none;  /* Hide the navbar (hamburger menu) on larger screens */
+        display: block;  /* Ensure the navbar (hamburger menu) is visible */
     }
-  }
-  
-  
+}
