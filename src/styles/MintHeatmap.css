@@ -1,4 +1,3 @@
-/* General layout */
 .mint-heatmap {
   padding: 20px;
   background-color: #f8f9fa;
@@ -6,43 +5,61 @@
   overflow: hidden;
 }
 
-/* Typography */
 .mint-heatmap h1 {
   margin-bottom: 20px;
   color: #333;
-  font-weight: 700;
+  font-weight: bold;
 }
 
-.total-mints {
-  font-size: 1.2em;
-  font-weight: 700;
-  color: #333;
-  text-align: right;
-}
-
-/* Form elements */
 .mint-heatmap .form-group {
   margin-bottom: 20px;
 }
 
-/* Chart container */
 .chart-container {
-  height: 60vh;
-  min-height: 300px;
+  height: calc(100% - 150px);
   background-color: #fff;
-  border-radius: 12px;
+  border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   overflow: hidden;
 }
 
-/* Tooltip styles */
+.custom-tooltip {
+  background-color: rgba(255, 255, 255, 0.9);
+  border: 1px solid #ccc;
+  padding: 8px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.recharts-scatter-symbol {
+  transition: all 0.3s ease;
+}
+
+.recharts-scatter-symbol:hover {
+  transform: scale(1.2);
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+
+body {
+  font-family: 'Roboto', sans-serif;
+}
+
+.mint-heatmap h1 {
+  font-weight: 700;
+  color: #333;
+}
+
+.chart-container {
+  border-radius: 12px;
+}
+
 .custom-tooltip {
   background-color: rgba(255, 255, 255, 0.95);
   border: 1px solid #ddd;
   padding: 10px;
   border-radius: 6px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  font-size: 12px;
 }
 
 .custom-tooltip p {
@@ -50,7 +67,6 @@
   padding: 3px 0;
 }
 
-/* Legend styles */
 .custom-legend {
   display: flex;
   justify-content: center;
@@ -70,9 +86,11 @@
   border-radius: 3px;
 }
 
-/* Animation */
-.recharts-wrapper {
-  animation: fadeIn 0.5s ease-in-out;
+.total-mints {
+  font-size: 1.2em;
+  font-weight: 700;
+  color: #333;
+  text-align: right;
 }
 
 @keyframes fadeIn {
@@ -80,23 +98,6 @@
   to { opacity: 1; }
 }
 
-/* Responsive styles */
-@media (max-width: 768px) {
-  .mint-heatmap {
-    padding: 10px;
-  }
-
-  .chart-container {
-    height: 50vh;
-    min-height: 250px;
-  }
-
-  .custom-legend {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .legend-item {
-    margin: 5px 0;
-  }
+.recharts-wrapper {
+  animation: fadeIn 0.5s ease-in-out;
 }
