@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { FaExchangeAlt, FaWallet, FaCoins, FaSearch, FaChartBar, FaCalculator, FaUsers } from 'react-icons/fa';
+import { FaExchangeAlt, FaWallet, FaCoins, FaChartBar, FaCalculator, FaUsers } from 'react-icons/fa';
 import '../styles/Home.css';
-import { useMediaQuery } from 'react-responsive';
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://api.kasplex.org/v1';
 
 const Home = () => {
-  const isMobile = useMediaQuery({ maxWidth: 768 });
-
   const [networkStats, setNetworkStats] = useState({
     opTotal: 0,
     tokenTotal: 0,
@@ -75,68 +72,53 @@ const Home = () => {
       </Row>
 
       <Row className="mb-3">
+        <Col>
           <h5 className="section-title mb-2">Key Features</h5>
-          {isMobile ? (
-            <>
-              <Row className="mb-2">
-                <FeatureCard title="All Tokens" icon={<FaCoins className="feature-icon" />} link="/tokens" />
-                <FeatureCard title="Address Lookup" icon={<FaWallet className="feature-icon" />} link="/wallet" />
-                <FeatureCard title="Token Comparison" icon={<FaExchangeAlt className="feature-icon" />} link="/compare" />
-              </Row>
-              <Row className="mb-3">
-                <FeatureCard title="Top Holders" icon={<FaUsers className="feature-icon" />} link="/top-holders" />
-                <FeatureCard title="Mint Heatmap" icon={<FaChartBar className="feature-icon" />} link="/mint-heatmap" />
-                <FeatureCard title="MarketCap Calculator" icon={<FaCalculator className="feature-icon" />} link="/marketcap-calc" />
-              </Row>
-            </>
-          ) : (
-            <>
-              <Row className="mb-2">
-                <FeatureCard title="Transaction Lookup" icon={<FaSearch className="feature-icon" />} link="/transaction-lookup" />
-                <FeatureCard title="Address Lookup" icon={<FaWallet className="feature-icon" />} link="/wallet" />
-                <FeatureCard title="Token Comparison" icon={<FaExchangeAlt className="feature-icon" />} link="/compare" />
-              </Row>
-              <Row className="mb-3">
-                <FeatureCard title="Top Holders" icon={<FaUsers className="feature-icon" />} link="/top-holders" />
-                <FeatureCard title="Mint Heatmap" icon={<FaChartBar className="feature-icon" />} link="/mint-heatmap" />
-                <FeatureCard title="MarketCap Calculator" icon={<FaCalculator className="feature-icon" />} link="/marketcap-calc" />
-              </Row>
-            </>
-          )}
-      </Row>
+          <Row className="mb-2">
+            <FeatureCard title="All Tokens" icon={<FaCoins className="feature-icon" />} link="/tokens" />
+            <FeatureCard title="Address Lookup" icon={<FaWallet className="feature-icon" />} link="/wallet" />
+            <FeatureCard title="Token Comparison" icon={<FaExchangeAlt className="feature-icon" />} link="/compare" />
+          </Row>
+          <Row className="mb-3">
+            <FeatureCard title="Top Holders" icon={<FaUsers className="feature-icon" />} link="/top-holders" />
+            <FeatureCard title="Mint Heatmap" icon={<FaChartBar className="feature-icon" />} link="/mint-heatmap" />
+            <FeatureCard title="MarketCap Calculator" icon={<FaCalculator className="feature-icon" />} link="/marketcap-calc" />
+          </Row>
 
-      <h5 className="section-title mb-2">Kasplex Statistics</h5>
-      <Row className="mb-4">
-        <StatCard
-          title="Total KRC20 Transactions"
-          value={networkStats.opTotal}
-          icon={<FaExchangeAlt className="stat-icon" />}
-        />
-        <StatCard
-          title="Total KRC20 Tokens Deployed"
-          value={networkStats.tokenTotal}
-          icon={<FaCoins className="stat-icon" />}
-        />
-        <StatCard
-          title="Total Fees Paid (KAS)"
-          value={networkStats.feeTotal}
-          icon={<FaWallet className="stat-icon" />}
-        />
-      </Row>
+          <h5 className="section-title mb-2">Kasplex Statistics</h5>
+          <Row className="mb-4">
+            <StatCard
+              title="Total KRC20 Transactions"
+              value={networkStats.opTotal}
+              icon={<FaExchangeAlt className="stat-icon" />}
+            />
+            <StatCard
+              title="Total KRC20 Tokens Deployed"
+              value={networkStats.tokenTotal}
+              icon={<FaCoins className="stat-icon" />}
+            />
+            <StatCard
+              title="Total Fees Paid (KAS)"
+              value={networkStats.feeTotal}
+              icon={<FaWallet className="stat-icon" />}
+            />
+          </Row>
 
-      <h5 className="section-title mb-2">Recently Deployed Tokens</h5>
-      <Row>
-        {recentTokens.map(token => (
-          <Col xs={4} key={token.hashRev} className="mb-2">
-            <Card className="token-card h-100" as={Link} to={`/tokens/${token.tick}`}>
-              <Card.Body className="p-2">
-                <Card.Title className="small mb-1">{token.tick}</Card.Title>
-                <Card.Text className="small mb-0">Max: {new Intl.NumberFormat('en-US', { notation: 'compact' }).format(token.max / Math.pow(10, token.dec))}</Card.Text>
-                <Card.Text className="small mb-0">Minted: {new Intl.NumberFormat('en-US', { notation: 'compact' }).format(token.minted / Math.pow(10, token.dec))}</Card.Text>
-              </Card.Body>
-            </Card>
-          </Col>
-        ))}
+          <h5 className="section-title mb-2">Recently Deployed Tokens</h5>
+          <Row>
+            {recentTokens.map(token => (
+              <Col xs={4} key={token.hashRev} className="mb-2">
+                <Card className="token-card h-100" as={Link} to={`/tokens/${token.tick}`}>
+                  <Card.Body className="p-2">
+                    <Card.Title className="small mb-1">{token.tick}</Card.Title>
+                    <Card.Text className="small mb-0">Max: {new Intl.NumberFormat('en-US', { notation: 'compact' }).format(token.max / Math.pow(10, token.dec))}</Card.Text>
+                    <Card.Text className="small mb-0">Minted: {new Intl.NumberFormat('en-US', { notation: 'compact' }).format(token.minted / Math.pow(10, token.dec))}</Card.Text>
+                  </Card.Body>
+                </Card>
+              </Col>
+            ))}
+          </Row>
+        </Col>
       </Row>
     </Container>
   );
