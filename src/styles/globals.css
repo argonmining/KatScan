@@ -132,3 +132,7 @@ input:checked+.slider:before {
   margin-right: 10px;
   font-weight: bold;
 }
+
+.nav-tabs {
+  overflow: hidden !important;
+}
