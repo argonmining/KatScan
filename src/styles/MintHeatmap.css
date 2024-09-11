@@ -16,8 +16,7 @@
 }
 
 .chart-container {
-  height: 60vh;
-  min-height: 300px;
+  height: calc(100% - 150px);
   background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -101,4 +100,12 @@ body {
 
 .recharts-wrapper {
   animation: fadeIn 0.5s ease-in-out;
+}
+
+@media (max-width: 768px) {
+  .chart-container {
+    height: fit-content !important;
+    min-height: 300px;
+    margin-bottom: 20px;
+  }
 }

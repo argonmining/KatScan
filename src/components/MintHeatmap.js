@@ -211,7 +211,7 @@ const MintHeatmap = () => {
             <Treemap
               data={mintData}
               dataKey="size"
-              aspectRatio={4 / 3}
+              ratio={4 / 3}
               stroke="#fff"
               content={<CustomTreemapContent />}
               animationDuration={500}
