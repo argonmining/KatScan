@@ -192,7 +192,6 @@ body, html {
   height: 100%;
   margin: 0;
   padding: 0;
-  overflow: auto; /* Ensure the body can scroll */
 }
 
 body {
@@ -202,8 +201,8 @@ body {
 
 .home-container {
   padding: 1rem;
-  overflow: auto; /* Ensure the container can scroll */
-  height: auto; /* Allow the container to grow with content */
+  height: calc(100vh - 60px); /* Adjust the 60px based on your header height */
+  overflow-y: auto;
 }
 
 .header-section h1 {
