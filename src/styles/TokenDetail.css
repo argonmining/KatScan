@@ -253,6 +253,7 @@ tr:hover {
 
 .mobile-holder-distribution {
     overflow-x: auto;
+    width: 98%;
 }
 
 .mobile-holder-distribution table {
