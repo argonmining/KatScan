@@ -134,7 +134,7 @@ const TopKRC20Holders = () => {
                 <th>Rank</th>
                 <th>Address</th>
                 <th>Unique Tokens</th>
-                <th>Actions</th>
+                <th>Expand</th>
               </tr>
             </thead>
             <tbody>
@@ -154,7 +154,8 @@ const TopKRC20Holders = () => {
                         onClick={() => toggleRowExpansion(holder.address)}
                         aria-expanded={expandedRows[holder.address]}
                       >
-                        {expandedRows[holder.address] ? <FaChevronUp /> : <FaChevronDown />}
+                        {expandedRows[holder.address] ? 'Hide Tokens' : 'Show Tokens'}
+                        {expandedRows[holder.address] ? <FaChevronUp className="ml-1" /> : <FaChevronDown className="ml-1" />}
                       </Button>
                     </td>
                   </tr>

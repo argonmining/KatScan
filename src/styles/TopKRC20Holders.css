@@ -135,3 +135,25 @@
     font-size: 0.9rem;
   }
 }
+
+.table-container {
+  overflow-x: auto;
+}
+
+.table-container .table {
+  min-width: 800px;
+}
+
+@media (min-width: 769px) {
+  .top-krc20-holders-wrapper {
+    padding: 30px;
+  }
+
+  .table-container {
+    margin-top: 20px;
+  }
+
+  .table th, .table td {
+    padding: 12px;
+  }
+}
