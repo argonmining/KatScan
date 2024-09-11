@@ -365,6 +365,14 @@ const TokenDetail = () => {
                 options={{
                   responsive: true,
                   maintainAspectRatio: false,
+                  layout: {
+                    padding: {
+                      top: 10,
+                      bottom: 10,
+                      left: 10,
+                      right: 10
+                    }
+                  },
                   plugins: {
                     legend: {
                       position: 'bottom',
