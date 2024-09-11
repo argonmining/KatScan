@@ -75,7 +75,6 @@ const Home = () => {
       </Row>
 
       <Row className="mb-3">
-        <Col>
           <h5 className="section-title mb-2">Key Features</h5>
           {isMobile ? (
             <>
@@ -104,7 +103,6 @@ const Home = () => {
               </Row>
             </>
           )}
-        </Col>
       </Row>
 
       <h5 className="section-title mb-2">Kasplex Statistics</h5>
