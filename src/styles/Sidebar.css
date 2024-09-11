@@ -233,4 +233,8 @@
     .navbar {
         display: block;  /* Ensure the navbar (hamburger menu) is visible */
     }
+
+    .main-content {
+        width: 100%;  /* Ensure the main content takes the full width */
+    }
 }
