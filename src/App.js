@@ -13,12 +13,15 @@ import './styles/App.css';
 import './styles/globals.css';
 import TopKRC20Holders from './components/TopKRC20Holders';
 import './styles/darkMode.css';
+import { useMediaQuery } from 'react-responsive';
+import { Navbar } from 'react-bootstrap';
 
 const Analytics = () => <h2>Analytics Page</h2>;
 const About = () => <h2>About Page</h2>;
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
+  const isMobile = useMediaQuery({ maxWidth: 991 });
 
   useEffect(() => {
     if (darkMode) {
@@ -35,14 +38,24 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <div className="dark-mode-toggle">
-          <span className="dark-mode-label">{darkMode ? 'Dark' : 'Light'}</span>
-          <label className="switch">
-            <input type="checkbox" checked={darkMode} onChange={toggleDarkMode} />
-            <span className="slider"></span>
-          </label>
-        </div>
-        <Sidebar />
+        {isMobile ? (
+          <Navbar bg="dark" variant="dark">
+            <Navbar.Brand href="/">Your App Name</Navbar.Brand>
+            <div className="dark-mode-toggle">
+              <span className="dark-mode-label">{darkMode ? 'Dark' : 'Light'}</span>
+              <label className="switch">
+                <input type="checkbox" checked={darkMode} onChange={toggleDarkMode} />
+                <span className="slider"></span>
+              </label>
+            </div>
+            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+            <Navbar.Collapse id="basic-navbar-nav">
+              {/* Add your mobile menu items here */}
+            </Navbar.Collapse>
+          </Navbar>
+        ) : (
+          <Sidebar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
+        )}
         <div className="main-content">
           <Routes>
             <Route path="/" element={<Home />} />

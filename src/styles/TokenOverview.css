@@ -204,3 +204,19 @@ a:hover {
 .dark-mode .token-ticker {
     color: var(--dark-text-color);
 }
+
+.dark-mode .table {
+    background-color: var(--dark-card-bg);
+}
+
+.dark-mode .table tbody tr {
+    background-color: var(--dark-card-bg);
+}
+
+.dark-mode .table tbody tr:nth-of-type(odd) {
+    background-color: var(--dark-stripe-bg);
+}
+
+.dark-mode .form-control::placeholder {
+    color: var(--dark-muted-color);
+}

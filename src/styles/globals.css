@@ -113,3 +113,18 @@ input:checked + .slider:before {
   margin-right: 10px;
   font-weight: bold;
 }
+
+.dark-mode .dropdown-menu {
+  background-color: var(--dark-card-bg);
+  border-color: var(--dark-border-color);
+}
+
+.dark-mode .dropdown-item {
+  color: var(--dark-text-color);
+}
+
+.dark-mode .dropdown-item:hover,
+.dark-mode .dropdown-item:focus {
+  background-color: var(--dark-nav-hover-bg);
+  color: var(--dark-primary-color);
+}

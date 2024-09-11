@@ -9,7 +9,7 @@ import logo from '../assets/logo.png';
 import qrCode from '../assets/qr.png';
 import '../styles/Sidebar.css';
 
-const Sidebar = () => {
+const Sidebar = ({ darkMode, toggleDarkMode }) => {
   const [collapsed, setCollapsed] = useState(false);
   const [showDonateModal, setShowDonateModal] = useState(false);
   const [expanded, setExpanded] = useState(false);
@@ -118,6 +118,13 @@ const Sidebar = () => {
           <NavLink to="#" className="donate-link" onClick={handleDonateClick}>
             <FaHeart /> {!collapsed && <span>Donate</span>}
           </NavLink>
+          <div className="dark-mode-toggle">
+            <span className="dark-mode-label">{darkMode ? 'Dark' : 'Light'}</span>
+            <label className="switch">
+              <input type="checkbox" checked={darkMode} onChange={toggleDarkMode} />
+              <span className="slider"></span>
+            </label>
+          </div>
           <div className="sidebar-footer">
             {!collapsed && (
               <p>

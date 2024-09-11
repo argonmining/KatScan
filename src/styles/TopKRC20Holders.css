@@ -169,6 +169,7 @@
 
 .dark-mode .table {
   background-color: var(--dark-card-bg);
+  color: var(--dark-text-color);
 }
 
 .dark-mode .table th {
@@ -207,4 +208,17 @@
   .dark-mode .mobile-holders-list .btn-link {
     color: var(--dark-primary-color) !important;
   }
+}
+
+.dark-mode .card {
+  background-color: var(--dark-card-bg);
+  border-color: var(--dark-border-color);
+}
+
+.dark-mode .table tbody tr {
+  background-color: var(--dark-card-bg);
+}
+
+.dark-mode .table tbody tr:nth-of-type(odd) {
+  background-color: var(--dark-stripe-bg);
 }
