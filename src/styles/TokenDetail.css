@@ -183,7 +183,13 @@ tr:hover {
     }
 
     .tab-content, .tab-pane {
-        overflow: auto !important;
+        overflow: auto;
+    }
+
+    .tab-content>.active {
+        overflow: auto;
+        display: flex;
+        flex-direction: column;
     }
 
     .nav-tabs .nav-link {
@@ -197,7 +203,15 @@ tr:hover {
     }
 
     .chart-container {
-        height: 300px; /* Adjust height for mobile */
+        height: auto !important; /* Adjust height for mobile */
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .chart-container img {
+        height: auto !important; /* Adjust height for mobile */
     }
 }
 
