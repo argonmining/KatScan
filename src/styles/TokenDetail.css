@@ -64,6 +64,7 @@
 
 .nav-tabs {
     border-bottom: 1px solid var(--tertiary-primary-color);
+    overflow: hidden;
 }
 
 .nav-tabs .nav-link {
@@ -178,6 +179,10 @@ tr:hover {
         grid-template-columns: repeat(2, 1fr);
     }
 
+    .tab-content, .tab-pane {
+        overflow: auto !important;
+    }
+
     .nav-tabs .nav-link {
         font-size: 0.9rem;
         padding: 0.5rem 0.75rem;
@@ -211,4 +216,8 @@ tr:hover {
 
 .mobile-table-cell strong {
     color: var(--primary-color);
+}
+
+.mobile-table-cell .clickable-address {
+  word-break: break-all;
 }

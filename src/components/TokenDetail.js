@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Card, Tabs, Tab, Table, Alert } from 'react-bootstrap';
-import { Line, Bar } from 'react-chartjs-2';
+import { Line, Bar, Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, BarElement, ArcElement, Title, Tooltip, Legend } from 'chart.js';
 import { getTokenDetails, getTokenOperations } from '../services/dataService';
 import '../styles/TokenDetail.css';
@@ -241,10 +241,10 @@ const TokenDetail = () => {
         <Tab eventKey="topHolders" title="Top Holders">
           <div className="detail-table-container">
             {isMobile ? (
-              <MobileTable 
-                data={tokenData.holder} 
-                type="holders" 
-                tokenData={tokenData} 
+              <MobileTable
+                data={tokenData.holder}
+                type="holders"
+                tokenData={tokenData}
                 handleAddressClick={handleAddressClick}
                 formatNumber={formatNumber}
                 parseRawNumber={parseRawNumber}
@@ -265,8 +265,8 @@ const TokenDetail = () => {
                     <tr key={index}>
                       <td>{index + 1}</td>
                       <td>
-                        <span 
-                          className="clickable-address" 
+                        <span
+                          className="clickable-address"
                           onClick={() => handleAddressClick(holder.address)}
                         >
                           {shortenString(holder.address)}
@@ -289,11 +289,11 @@ const TokenDetail = () => {
         <Tab eventKey="recentOperations" title="Recent Operations">
           <div className="detail-table-container">
             {isMobile ? (
-              <MobileTable 
-                data={operations} 
-                type="operations" 
-                tokenData={tokenData} 
-                handleAddressClick={handleAddressClick} 
+              <MobileTable
+                data={operations}
+                type="operations"
+                tokenData={tokenData}
+                handleAddressClick={handleAddressClick}
                 handleTransactionClick={handleTransactionClick}
                 formatNumber={formatNumber}
                 parseRawNumber={parseRawNumber}
@@ -316,16 +316,16 @@ const TokenDetail = () => {
                     <tr key={index} ref={index === operations.length - 1 ? lastOperationElementRef : null}>
                       <td>{op.op}</td>
                       <td>
-                        <span 
-                          className="clickable-address" 
+                        <span
+                          className="clickable-address"
                           onClick={() => handleTransactionClick(op.hashRev)}
                         >
                           {shortenString(op.hashRev)}
                         </span>
                       </td>
                       <td>
-                        <span 
-                          className="clickable-address" 
+                        <span
+                          className="clickable-address"
                           onClick={() => handleAddressClick(op.op === 'mint' ? op.to : op.from)}
                         >
                           {shortenString(op.op === 'mint' ? op.to : op.from)}
@@ -346,119 +346,171 @@ const TokenDetail = () => {
 
         <Tab eventKey="holderDistribution" title="Holder Distribution">
           <div className="chart-container">
-            <Bar
-              data={{
-                labels: holderDistribution.map(item => item.label),
-                datasets: [{
-                  label: 'Percentage of Max Supply',
-                  data: holderDistribution.map(item => item.percentage),
-                  backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(201, 203, 207, 0.2)', // Color for Other Holders
-                  ],
-                  borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(201, 203, 207, 1)', // Border color for Other Holders
-                  ],
-                  borderWidth: 1,
-                }]
-              }}
-              options={{
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                  legend: {
-                    position: isMobile ? 'bottom' : 'right', // Position the legend to the right of the chart
-                    labels: {
-                      boxWidth: isMobile ? 10 : 20,
-                      padding: isMobile ? 10 : 15,
-                      generateLabels: (chart) => {
-                        const data = chart.data;
-                        if (data.labels.length && data.datasets.length) {
-                          return data.labels.map((label, i) => {
-                            const value = data.datasets[0].data[i];
-                            return {
-                              text: `${label}: ${value.toFixed(2)}%`,
-                              fillStyle: data.datasets[0].backgroundColor[i],
-                              strokeStyle: data.datasets[0].borderColor[i],
-                              lineWidth: data.datasets[0].borderWidth,
-                              hidden: isNaN(data.datasets[0].data[i]) || data.datasets[0].data[i] === null,
-                              index: i
-                            };
-                          });
+            {isMobile ? (
+              <Pie
+                data={{
+                  labels: holderDistribution.map(item => item.label),
+                  datasets: [{
+                    data: holderDistribution.map(item => item.percentage),
+                    backgroundColor: [
+                      'rgba(255, 99, 132, 0.8)',
+                      'rgba(54, 162, 235, 0.8)',
+                      'rgba(255, 206, 86, 0.8)',
+                      'rgba(75, 192, 192, 0.8)',
+                      'rgba(153, 102, 255, 0.8)',
+                      'rgba(201, 203, 207, 0.8)',
+                    ],
+                  }]
+                }}
+                options={{
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  plugins: {
+                    legend: {
+                      position: 'bottom',
+                      labels: {
+                        boxWidth: 10,
+                        padding: 10,
+                        generateLabels: (chart) => {
+                          const data = chart.data;
+                          if (data.labels.length && data.datasets.length) {
+                            return data.labels.map((label, i) => {
+                              const value = data.datasets[0].data[i];
+                              return {
+                                text: `${label}: ${value.toFixed(2)}%`,
+                                fillStyle: data.datasets[0].backgroundColor[i],
+                                hidden: isNaN(data.datasets[0].data[i]) || data.datasets[0].data[i] === null,
+                                index: i
+                              };
+                            });
+                          }
+                          return [];
                         }
-                        return [];
+                      },
+                    },
+                    title: {
+                      display: true,
+                      text: 'Holder Distribution'
+                    }
+                  },
+                }}
+              />
+            ) : (
+              <Bar
+                data={{
+                  labels: holderDistribution.map(item => item.label),
+                  datasets: [{
+                    label: 'Percentage of Max Supply',
+                    data: holderDistribution.map(item => item.percentage),
+                    backgroundColor: [
+                      'rgba(255, 99, 132, 0.2)',
+                      'rgba(54, 162, 235, 0.2)',
+                      'rgba(255, 206, 86, 0.2)',
+                      'rgba(75, 192, 192, 0.2)',
+                      'rgba(153, 102, 255, 0.2)',
+                      'rgba(201, 203, 207, 0.2)',
+                    ],
+                    borderColor: [
+                      'rgba(255, 99, 132, 1)',
+                      'rgba(54, 162, 235, 1)',
+                      'rgba(255, 206, 86, 1)',
+                      'rgba(75, 192, 192, 1)',
+                      'rgba(153, 102, 255, 1)',
+                      'rgba(201, 203, 207, 1)',
+                    ],
+                  }]
+                }}
+                options={{
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  plugins: {
+                    legend: {
+                      position: 'right',
+                      labels: {
+                        boxWidth: 20,
+                        padding: 15,
+                        generateLabels: (chart) => {
+                          const data = chart.data;
+                          if (data.labels.length && data.datasets.length) {
+                            return data.labels.map((label, i) => {
+                              const value = data.datasets[0].data[i];
+                              return {
+                                text: `${label}: ${value.toFixed(2)}%`,
+                                fillStyle: data.datasets[0].backgroundColor[i],
+                                strokeStyle: data.datasets[0].borderColor[i],
+                                lineWidth: data.datasets[0].borderWidth,
+                                hidden: isNaN(data.datasets[0].data[i]) || data.datasets[0].data[i] === null,
+                                index: i
+                              };
+                            });
+                          }
+                          return [];
+                        }
+                      },
+                    },
+                    title: {
+                      display: true,
+                      text: 'Holder Distribution'
+                    }
+                  },
+                  scales: {
+                    x: {
+                      beginAtZero: true,
+                      title: {
+                        display: true,
+                        text: 'Holders'
                       }
                     },
-                  },
-                  title: {
-                    display: true,
-                    text: 'Holder Distribution'
-                  }
-                },
-                scales: {
-                  x: {
-                    beginAtZero: true,
-                    title: {
-                      display: true,
-                      text: 'Holders'
-                    }
-                  },
-                  y: {
-                    type: 'logarithmic',
-                    beginAtZero: true,
-                    title: {
-                      display: true,
-                      text: 'Percentage of Max Supply'
+                    y: {
+                      type: 'logarithmic',
+                      beginAtZero: true,
+                      title: {
+                        display: true,
+                        text: 'Percentage of Max Supply'
+                      }
                     }
                   }
-                }
-              }}
-            />
+                }}
+              />
+            )}
           </div>
         </Tab>
 
-        <Tab eventKey="mintActivity" title="Mint Activity">
-          <div className="chart-container">
-            <Line
-              data={{
-                labels: mintActivity.map(item => item.date),
-                datasets: [{
-                  label: 'Daily Mints',
-                  data: mintActivity.map(item => item.count),
-                  borderColor: 'rgb(40, 167, 69)', // Green color
-                  backgroundColor: 'rgba(40, 167, 69, 0.5)',
-                }]
-              }}
-              options={{
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                  legend: {
-                    position: 'top',
+        {!isMobile && (
+          <Tab eventKey="mintActivity" title="Mint Activity">
+            <div className="chart-container">
+              <Line
+                data={{
+                  labels: mintActivity.map(item => item.date),
+                  datasets: [{
+                    label: 'Daily Mints',
+                    data: mintActivity.map(item => item.count),
+                    borderColor: 'rgb(40, 167, 69)', // Green color
+                    backgroundColor: 'rgba(40, 167, 69, 0.5)',
+                  }]
+                }}
+                options={{
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  plugins: {
+                    legend: {
+                      position: 'top',
+                    },
+                    title: {
+                      display: true,
+                      text: 'Daily Mint Activity'
+                    }
                   },
-                  title: {
-                    display: true,
-                    text: 'Daily Mint Activity'
+                  scales: {
+                    y: {
+                      beginAtZero: true
+                    }
                   }
-                },
-                scales: {
-                  y: {
-                    beginAtZero: true
-                  }
-                }
-              }}
-            />
-          </div>
-        </Tab>
+                }}
+              />
+            </div>
+          </Tab>
+        )}
       </Tabs>
     </div>
   );
@@ -474,9 +526,9 @@ const MobileTable = ({ data, type, tokenData, handleAddressClick, handleTransact
               <strong>Rank:</strong> {index + 1}
             </div>
             <div className="mobile-table-cell">
-              <strong>Address:</strong> 
-              <span 
-                className="clickable-address" 
+              <strong>Address:</strong>
+              <span
+                className="clickable-address"
                 onClick={() => handleAddressClick(item.address)}
               >
                 {shortenString(item.address)}
@@ -486,7 +538,7 @@ const MobileTable = ({ data, type, tokenData, handleAddressClick, handleTransact
               <strong>Amount:</strong> {formatNumber(parseRawNumber(item.amount, tokenData.dec), tokenData.dec)}
             </div>
             <div className="mobile-table-cell">
-              <strong>% of Total Supply:</strong> 
+              <strong>% of Total Supply:</strong>
               {((parseRawNumber(item.amount, tokenData.dec) / parseRawNumber(tokenData.max, tokenData.dec)) * 100).toFixed(2)}%
             </div>
           </>
@@ -497,18 +549,18 @@ const MobileTable = ({ data, type, tokenData, handleAddressClick, handleTransact
               <strong>Type:</strong> {item.op}
             </div>
             <div className="mobile-table-cell">
-              <strong>Transaction ID:</strong> 
-              <span 
-                className="clickable-address" 
+              <strong>Transaction ID:</strong>
+              <span
+                className="clickable-address"
                 onClick={() => handleTransactionClick(item.hashRev)}
               >
                 {shortenString(item.hashRev)}
               </span>
             </div>
             <div className="mobile-table-cell">
-              <strong>Address:</strong> 
-              <span 
-                className="clickable-address" 
+              <strong>Address:</strong>
+              <span
+                className="clickable-address"
                 onClick={() => handleAddressClick(item.op === 'mint' ? item.to : item.from)}
               >
                 {shortenString(item.op === 'mint' ? item.to : item.from)}
