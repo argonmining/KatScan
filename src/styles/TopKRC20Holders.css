@@ -133,6 +133,7 @@
 
   .mobile-holders-list .btn-link {
     font-size: 0.9rem;
+    color: var(--primary-color) !important;
   }
 }
 
