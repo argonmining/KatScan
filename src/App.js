@@ -6,7 +6,7 @@ import TokenDetail from './components/TokenDetail';
 import TokenComparison from './components/TokenComparison';
 import WalletLookup from './components/WalletLookup';
 import TransactionLookup from './components/TransactionLookup';
-import Home from './components/Home'; // Updated import
+import Home from './components/Home';
 import MintHeatmap from './components/MintHeatmap';
 import MarketCapCalculator from './components/MarketCapCalculator';
 import './styles/App.css';
@@ -14,7 +14,6 @@ import './styles/globals.css';
 import TopKRC20Holders from './components/TopKRC20Holders';
 import './styles/darkMode.css';
 import { useMediaQuery } from 'react-responsive';
-import { Navbar, Nav } from 'react-bootstrap';
 
 const Analytics = () => <h2>Analytics Page</h2>;
 const About = () => <h2>About Page</h2>;
@@ -39,24 +38,9 @@ function App() {
     <Router>
       <div className="App">
         {isMobile ? (
-          <Navbar bg={darkMode ? "dark" : "light"} variant={darkMode ? "dark" : "light"} expand="lg">
-            <Navbar.Brand href="/">KatScan</Navbar.Brand>
-            <Navbar.Toggle aria-controls="basic-navbar-nav" />
-            <Navbar.Collapse id="basic-navbar-nav">
-              <Nav className="mr-auto">
-                {/* Add your mobile menu items here */}
-              </Nav>
-              <div className="dark-mode-toggle">
-                <span className="dark-mode-label">{darkMode ? 'Dark' : 'Light'}</span>
-                <label className="switch">
-                  <input type="checkbox" checked={darkMode} onChange={toggleDarkMode} />
-                  <span className="slider"></span>
-                </label>
-              </div>
-            </Navbar.Collapse>
-          </Navbar>
+          <Sidebar darkMode={darkMode} toggleDarkMode={toggleDarkMode} isMobile={true} />
         ) : (
-          <Sidebar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
+          <Sidebar darkMode={darkMode} toggleDarkMode={toggleDarkMode} isMobile={false} />
         )}
         <div className="main-content">
           <Routes>

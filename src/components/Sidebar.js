@@ -9,7 +9,7 @@ import logo from '../assets/logo.png';
 import qrCode from '../assets/qr.png';
 import '../styles/Sidebar.css';
 
-const Sidebar = ({ darkMode, toggleDarkMode }) => {
+const Sidebar = ({ darkMode, toggleDarkMode, isMobile }) => {
   const [collapsed, setCollapsed] = useState(false);
   const [showDonateModal, setShowDonateModal] = useState(false);
   const [expanded, setExpanded] = useState(false);
@@ -35,110 +35,111 @@ const Sidebar = ({ darkMode, toggleDarkMode }) => {
 
   return (
     <>
-      {/* Mobile Navbar */}
-      <Navbar expand="lg" bg="light" variant="light" expanded={expanded} className="d-lg-none">
-        <Container>
-          <Navbar.Brand as={Link} to="/">
-            <img src={logo} alt="KatScan Logo" className="logo-image" />
-            <span className="ms-2">KatScan</span>
-          </Navbar.Brand>
-          <Navbar.Toggle
-            aria-controls="basic-navbar-nav"
-            onClick={() => setExpanded(!expanded)}
-          >
-            <FaBars />
-          </Navbar.Toggle>
-          <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="me-auto">
-              <NavLink to="/transaction-lookup" className="nav-link" onClick={() => setExpanded(false)}>
-                <FaSearch /> Search Transactions
-              </NavLink>
-              <NavLink to="/wallet" className="nav-link" onClick={() => setExpanded(false)}>
-                <FaWallet /> Search Addresses
-              </NavLink>
-              <NavLink to="/top-holders" className="nav-link" onClick={() => setExpanded(false)}>
-                <FaUsers /> Top Holders
-              </NavLink>
-              <NavLink to="/tokens" className="nav-link" onClick={() => setExpanded(false)}>
-                <FaCoins /> All Tokens
-              </NavLink>
-              <NavLink to="/compare" className="nav-link" onClick={() => setExpanded(false)}>
-                <FaExchangeAlt /> Side by Side
-              </NavLink>
-              <NavLink to="/mint-heatmap" className="nav-link" onClick={() => setExpanded(false)}>
-                <FaFireAlt /> Mint Heatmap
-              </NavLink>
-              <NavLink to="/marketcap-calc" className="nav-link" onClick={() => setExpanded(false)}>
-                <FaChartLine /> MarketCap Calc
-              </NavLink>
-              <NavLink to="#" className="nav-link" onClick={handleDonateClick}>
-                <FaHeart /> Donate
-              </NavLink>
-            </Nav>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
-
-      {/* Desktop Sidebar */}
-      <div className={`sidebar ${collapsed ? 'collapsed' : ''} d-none d-lg-block`}>
-        <div className="sidebar-content">
-          <div className="sidebar-header">
-            <Link to="/" className="logo-link">
+      {isMobile ? (
+        // Mobile Navbar
+        <Navbar expand="lg" bg={darkMode ? "dark" : "light"} variant={darkMode ? "dark" : "light"} expanded={expanded} className="d-lg-none">
+          <Container>
+            <Navbar.Brand as={Link} to="/">
               <img src={logo} alt="KatScan Logo" className="logo-image" />
-              {!collapsed && <h1 className="site-title">KatScan</h1>}
-            </Link>
-          </div>
-          <Nav className="flex-column">
-            <NavSection title="KRC-20 Explorer">
-              <NavLink to="/transaction-lookup" className="nav-link">
-                <FaSearch /> {!collapsed && <span>Search Transactions</span>}
-              </NavLink>
-              <NavLink to="/wallet" className="nav-link">
-                <FaWallet /> {!collapsed && <span>Search Addresses</span>}
-              </NavLink>
-              <NavLink to="/top-holders" className="nav-link">
-                <FaUsers /> {!collapsed && <span>Top Holders</span>}
-              </NavLink>
-            </NavSection>
-            <NavSection title="KRC-20 Tokens">
-              <NavLink to="/tokens" className="nav-link">
-                <FaCoins /> {!collapsed && <span>All Tokens</span>}
-              </NavLink>
-              <NavLink to="/compare" className="nav-link">
-                <FaExchangeAlt /> {!collapsed && <span>Side by Side</span>}
-              </NavLink>
-              <NavLink to="/mint-heatmap" className="nav-link">
-                <FaFireAlt /> {!collapsed && <span>Mint Heatmap</span>}
-              </NavLink>
-              <NavLink to="/marketcap-calc" className="nav-link">
-                <FaChartLine /> {!collapsed && <span>MarketCap Calc</span>}
-              </NavLink>
-            </NavSection>
-          </Nav>
-          <NavLink to="#" className="donate-link" onClick={handleDonateClick}>
-            <FaHeart /> {!collapsed && <span>Donate</span>}
-          </NavLink>
-          <div className="dark-mode-toggle sidebar-dark-mode-toggle">
-            <span className="dark-mode-label">{darkMode ? 'Dark' : 'Light'}</span>
-            <label className="switch">
-              <input type="checkbox" checked={darkMode} onChange={toggleDarkMode} />
-              <span className="slider"></span>
-            </label>
-          </div>
-          <div className="sidebar-footer">
-            {!collapsed && (
-              <p>
-                Made with ❤️ by the<br />
-                Nacho the 𐤊at Community
-              </p>
-            )}
-            <button className="collapse-btn" onClick={toggleSidebar}>
-              {collapsed ? <FaChevronRight /> : <FaChevronLeft />}
-            </button>
+              <span className="ms-2">KatScan</span>
+            </Navbar.Brand>
+            <Navbar.Toggle
+              aria-controls="basic-navbar-nav"
+              onClick={() => setExpanded(!expanded)}
+            >
+              <FaBars />
+            </Navbar.Toggle>
+            <Navbar.Collapse id="basic-navbar-nav">
+              <Nav className="me-auto">
+                <NavLink to="/transaction-lookup" className="nav-link" onClick={() => setExpanded(false)}>
+                  <FaSearch /> Search Transactions
+                </NavLink>
+                <NavLink to="/wallet" className="nav-link" onClick={() => setExpanded(false)}>
+                  <FaWallet /> Search Addresses
+                </NavLink>
+                <NavLink to="/top-holders" className="nav-link" onClick={() => setExpanded(false)}>
+                  <FaUsers /> Top Holders
+                </NavLink>
+                <NavLink to="/tokens" className="nav-link" onClick={() => setExpanded(false)}>
+                  <FaCoins /> All Tokens
+                </NavLink>
+                <NavLink to="/compare" className="nav-link" onClick={() => setExpanded(false)}>
+                  <FaExchangeAlt /> Side by Side
+                </NavLink>
+                <NavLink to="/mint-heatmap" className="nav-link" onClick={() => setExpanded(false)}>
+                  <FaFireAlt /> Mint Heatmap
+                </NavLink>
+                <NavLink to="/marketcap-calc" className="nav-link" onClick={() => setExpanded(false)}>
+                  <FaChartLine /> MarketCap Calc
+                </NavLink>
+                <NavLink to="#" className="nav-link" onClick={handleDonateClick}>
+                  <FaHeart /> Donate
+                </NavLink>
+              </Nav>
+            </Navbar.Collapse>
+          </Container>
+        </Navbar>
+      ) : (
+        // Desktop Sidebar
+        <div className={`sidebar ${collapsed ? 'collapsed' : ''} d-none d-lg-block`}>
+          <div className="sidebar-content">
+            <div className="sidebar-header">
+              <Link to="/" className="logo-link">
+                <img src={logo} alt="KatScan Logo" className="logo-image" />
+                {!collapsed && <h1 className="site-title">KatScan</h1>}
+              </Link>
+            </div>
+            <Nav className="flex-column">
+              <NavSection title="KRC-20 Explorer">
+                <NavLink to="/transaction-lookup" className="nav-link">
+                  <FaSearch /> {!collapsed && <span>Search Transactions</span>}
+                </NavLink>
+                <NavLink to="/wallet" className="nav-link">
+                  <FaWallet /> {!collapsed && <span>Search Addresses</span>}
+                </NavLink>
+                <NavLink to="/top-holders" className="nav-link">
+                  <FaUsers /> {!collapsed && <span>Top Holders</span>}
+                </NavLink>
+              </NavSection>
+              <NavSection title="KRC-20 Tokens">
+                <NavLink to="/tokens" className="nav-link">
+                  <FaCoins /> {!collapsed && <span>All Tokens</span>}
+                </NavLink>
+                <NavLink to="/compare" className="nav-link">
+                  <FaExchangeAlt /> {!collapsed && <span>Side by Side</span>}
+                </NavLink>
+                <NavLink to="/mint-heatmap" className="nav-link">
+                  <FaFireAlt /> {!collapsed && <span>Mint Heatmap</span>}
+                </NavLink>
+                <NavLink to="/marketcap-calc" className="nav-link">
+                  <FaChartLine /> {!collapsed && <span>MarketCap Calc</span>}
+                </NavLink>
+              </NavSection>
+            </Nav>
+            <NavLink to="#" className="donate-link" onClick={handleDonateClick}>
+              <FaHeart /> {!collapsed && <span>Donate</span>}
+            </NavLink>
+            <div className="dark-mode-toggle sidebar-dark-mode-toggle">
+              <span className="dark-mode-label">{darkMode ? 'Dark' : 'Light'}</span>
+              <label className="switch">
+                <input type="checkbox" checked={darkMode} onChange={toggleDarkMode} />
+                <span className="slider"></span>
+              </label>
+            </div>
+            <div className="sidebar-footer">
+              {!collapsed && (
+                <p>
+                  Made with ❤️ by the<br />
+                  Nacho the 𐤊at Community
+                </p>
+              )}
+              <button className="collapse-btn" onClick={toggleSidebar}>
+                {collapsed ? <FaChevronRight /> : <FaChevronLeft />}
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-
+      )}
       {/* Donate Modal */}
       <Modal show={showDonateModal} onHide={handleCloseDonateModal} centered>
         <Modal.Header closeButton>

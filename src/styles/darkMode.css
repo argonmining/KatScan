@@ -99,6 +99,10 @@ body.dark-mode {
   background-color: var(--dark-card-bg);
 }
 
+.dark-mode tbody, td, tfoot, th, thead, tr {
+    background-color: var(--dark-card-bg) !important;
+}
+
 .dark-mode .table tbody tr:nth-of-type(even) {
   background-color: var(--dark-stripe-bg);
 }
@@ -116,4 +120,46 @@ body.dark-mode {
 .dark-mode .dropdown-item:focus {
   background-color: var(--dark-nav-hover-bg);
   color: var(--dark-primary-color);
+}
+
+.dark-mode .css-13cymwt-control {
+  background-color: var(--dark-gb-color);
+  color: var(--dark-text-color);
+  border-color: var(--dark-border-color);
+}
+
+.dark-mode .css-13cymwt-control:focus {
+  background-color: var(--dark-gb-color);
+  color: var(--dark-text-color);
+}
+
+.dark-mode .css-13cymwt-control:hover {
+  background-color: var(--dark-gb-color);
+  color: var(--dark-text-color);
+}
+
+.dark-mode .css-13cymwt-control:active {
+  background-color: var(--dark-gb-color);
+  color: var(--dark-text-color);
+}
+
+.dark-mode .css-t3ipsp-control {
+  background-color: var(--dark-gb-color);   
+  color: var(--dark-text-color);
+  border-color: var(--dark-border-color);
+}
+
+.dark-mode .css-t3ipsp-control:focus {
+  background-color: var(--dark-gb-color);
+  color: var(--dark-text-color);
+}
+
+.dark-mode .css-t3ipsp-control:hover {
+  background-color: var(--dark-gb-color);
+  color: var(--dark-text-color);
+}
+
+.dark-mode .css-t3ipsp-control:active {
+  background-color: var(--dark-gb-color);
+  color: var(--dark-text-color);
 }
