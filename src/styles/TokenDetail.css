@@ -410,11 +410,11 @@ body.dark-mode {
 }
 
 .dark-mode .mobile-table-row {
-  border: 1px solid #dee2e6;
+  border: 1px solid var(--dark-border-color);
   border-radius: 4px;
   margin-bottom: 10px;
   padding: 10px;
-  background-color: #fff;
+  background-color: var(--dark-card-bg);
 }
 
 .dark-mode .mobile-table-cell {
@@ -443,7 +443,7 @@ body.dark-mode {
 .dark-mode .mobile-holder-distribution td {
   padding: 8px;
   text-align: left;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--dark-border-color);
 }
 
 .dark-mode .mobile-holder-distribution th {
