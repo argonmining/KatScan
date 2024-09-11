@@ -227,7 +227,69 @@ body.dark-mode {
     background-color: var(--dark-nav-active-bg) !important;
     color: var(--dark-primary-color) !important;
   }
+
+  .dark-mode .css-26l3qy-menu,
+  .dark-mode .css-1nmdiq5-menu {
+    background-color: var(--dark-card-bg) !important;
+    border-color: var(--dark-border-color) !important;
+  }
   
-  .dark-mode .css-1pndypt-Input input {
+  .dark-mode .css-1pndypt-Input input,
+  .dark-mode .css-1dimb5e-singleValue {
+    color: var(--dark-text-color) !important;
+  }
+
+  .dark-mode .css-1n7v3ny-option,
+  .dark-mode .css-yt9ioa-option,
+  .dark-mode .css-10wo9uf-option,
+  .dark-mode .css-9gakcf-option {
+    background-color: var(--dark-card-bg) !important;
+    color: var(--dark-text-color) !important;
+  }
+
+  .dark-mode .css-1n7v3ny-option:hover,
+  .dark-mode .css-1n7v3ny-option:focus,
+  .dark-mode .css-yt9ioa-option:hover,
+  .dark-mode .css-yt9ioa-option:focus,
+  .dark-mode .css-10wo9uf-option:hover,
+  .dark-mode .css-10wo9uf-option:focus,
+  .dark-mode .css-9gakcf-option:hover,
+  .dark-mode .css-9gakcf-option:focus {
+    background-color: var(--dark-nav-hover-bg) !important;
+    color: var(--dark-primary-color) !important;
+  }
+
+  .dark-mode .css-1n7v3ny-option.css-1pahdxg-option,
+  .dark-mode .css-yt9ioa-option.css-d7l1ni-option,
+  .dark-mode .css-10wo9uf-option.css-d7l1ni-option,
+  .dark-mode .css-1n7v3ny-option.css-9gakcf-option {
+    background-color: var(--dark-nav-active-bg) !important;
+    color: var(--dark-primary-color) !important;
+  }
+
+  .dark-mode .css-26l3qy-menu .css-1n7v3ny-option:hover,
+  .dark-mode .css-26l3qy-menu .css-1n7v3ny-option:focus,
+  .dark-mode .css-26l3qy-menu .css-10wo9uf-option:hover,
+  .dark-mode .css-26l3qy-menu .css-10wo9uf-option:focus,
+  .dark-mode .css-26l3qy-menu .css-9gakcf-option:hover,
+  .dark-mode .css-26l3qy-menu .css-9gakcf-option:focus {
+    background-color: var(--dark-nav-hover-bg) !important;
+    color: var(--dark-primary-color) !important;
+  }
+
+  .dark-mode .css-26l3qy-menu .css-1n7v3ny-option.css-9gakcf-option,
+  .dark-mode .css-26l3qy-menu .css-10wo9uf-option.css-9gakcf-option {
+    background-color: var(--dark-nav-active-bg) !important;
+    color: var(--dark-primary-color) !important;
+  }
+
+  .dark-mode .css-26l3qy-menu,
+  .dark-mode .css-1nmdiq5-menu {
+    background-color: var(--dark-card-bg) !important;
+    border-color: var(--dark-border-color) !important;
+  }
+
+  .dark-mode .css-1pndypt-Input input,
+  .dark-mode .css-1dimb5e-singleValue {
     color: var(--dark-text-color) !important;
   }
