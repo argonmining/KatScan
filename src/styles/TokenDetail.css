@@ -28,16 +28,16 @@
 }
 
 .token-info-card {
-    margin-bottom: 20px !important;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 15px !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
 }
 
 .token-info-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
-    padding: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+    padding: 15px;
 }
 
 .token-info-item {
@@ -51,13 +51,13 @@
     font-family: var(--sub-header-font);
     font-weight: bold;
     color: var(--tertiary-primary-color);
-    font-size: 0.9rem;
-    margin-bottom: 5px;
+    font-size: 0.8rem;
+    margin-bottom: 2px;
 }
 
 .token-info-value {
     font-family: var(--body-font);
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: 500;
     color: var(--secondary-primary-color);
 }
@@ -151,4 +151,64 @@ tr:hover {
 .table-wrapper::-webkit-scrollbar {
     width: 0;  /* Remove scrollbar space */
     background: transparent;  /* Optional: just make scrollbar invisible */
+}
+
+@media (max-width: 768px) {
+    .token-detail {
+        padding: 10px;
+        height: auto;
+        overflow: auto;
+    }
+
+    .token-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .token-header h1 {
+        font-size: 1.5rem;
+        margin-bottom: 5px;
+    }
+
+    .creation-date {
+        font-size: 0.8rem;
+    }
+
+    .token-info-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .nav-tabs .nav-link {
+        font-size: 0.9rem;
+        padding: 0.5rem 0.75rem;
+    }
+
+    .detail-table-container {
+        max-height: none;
+        overflow-x: auto;
+    }
+
+    .chart-container {
+        height: 300px;
+    }
+}
+
+.mobile-table {
+    font-size: 0.9rem;
+}
+
+.mobile-table-row {
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #fff;
+}
+
+.mobile-table-cell {
+    margin-bottom: 5px;
+}
+
+.mobile-table-cell strong {
+    color: var(--primary-color);
 }
