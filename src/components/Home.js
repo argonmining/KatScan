@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { FaExchangeAlt, FaWallet, FaCoins, FaSearch, FaChartBar, FaCalculator, FaUsers } from 'react-icons/fa';
+import logo from '../assets/logo.png';  // Import the logo image
 import '../styles/Home.css';
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://api.kasplex.org/v1';
@@ -66,6 +67,7 @@ const Home = () => {
     <Container fluid className="home-container d-flex flex-column vh-100">
       <Row className="header-section py-2">
         <Col>
+          <img src={logo} alt="KatScan Logo" className="logo-image" />  {/* Add the logo image */}
           <h1 className="text-center mb-0">KatScan</h1>
           <p className="text-center small mb-0">Explore, Analyze, and Compare KRC-20 Token Data</p>
         </Col>

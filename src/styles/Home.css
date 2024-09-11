@@ -7,6 +7,12 @@
   margin-bottom: 40px;
 }
 
+.header-section img {
+  width: 100px;  /* Adjust the width as needed */
+  height: auto;  /* Maintain aspect ratio */
+  max-width: 100%;  /* Ensure it doesn't exceed the container width */
+}
+
 .header-section h1 {
   font-size: 3rem;
   font-weight: 700;
@@ -250,6 +256,12 @@ a.feature-card:focus, a.token-card:focus {
 
   .section-title {
     font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 991px) {
+  .header-section img {
+    width: 60px;  /* Adjust the width for smaller screens */
   }
 }
 
