@@ -122,7 +122,8 @@ body.dark-mode {
   
   .dark-mode .dropdown-item,
   .dark-mode .css-1n7v3ny-option,
-  .dark-mode .css-10wo9uf-option {
+  .dark-mode .css-10wo9uf-option,
+  .dark-mode .css-yt9ioa-option {
     color: var(--dark-text-color) !important;
     background-color: var(--dark-card-bg) !important;
   }
@@ -132,14 +133,17 @@ body.dark-mode {
   .dark-mode .css-1n7v3ny-option:hover,
   .dark-mode .css-1n7v3ny-option:focus,
   .dark-mode .css-10wo9uf-option:hover,
-  .dark-mode .css-10wo9uf-option:focus {
+  .dark-mode .css-10wo9uf-option:focus,
+  .dark-mode .css-yt9ioa-option:hover,
+  .dark-mode .css-yt9ioa-option:focus {
     background-color: var(--dark-nav-hover-bg) !important;
     color: var(--dark-primary-color) !important;
   }
   
   .dark-mode .css-13cymwt-control,
   .dark-mode .css-t3ipsp-control,
-  .dark-mode .css-1s2u09g-control {
+  .dark-mode .css-1s2u09g-control,
+  .dark-mode .css-1pahdxg-control {
     background-color: var(--dark-card-bg) !important;
     color: var(--dark-text-color) !important;
     border-color: var(--dark-border-color) !important;
@@ -160,7 +164,8 @@ body.dark-mode {
   }
   
   .dark-mode .css-1dimb5e-singleValue,
-  .dark-mode .css-qc6sy-singleValue {
+  .dark-mode .css-qc6sy-singleValue,
+  .dark-mode .css-1uccc91-singleValue {
     color: var(--dark-text-color) !important;
   }
   
@@ -177,29 +182,10 @@ body.dark-mode {
     color: var(--dark-muted-color) !important;
   }
   
-  .dark-mode .css-b8ldur-Input {
-    color: var(--dark-text-color) !important;
-  }
-  
-  /* Add any additional dark mode styles here */
-  
-  .dark-mode .css-1nmdiq5-menu,
-  .dark-mode .css-26l3qy-menu,
-  .dark-mode .css-1n7v3ny-option,
-  .dark-mode .css-yt9ioa-option,
-  .dark-mode .css-1pndypt-Input,
-  .dark-mode .css-1rhbuit-multiValue,
-  .dark-mode .css-12jo7m5,
+  .dark-mode .css-b8ldur-Input,
   .dark-mode .css-6j8wv5-Input,
-  .dark-mode .css-1uccc91-singleValue {
-    background-color: var(--dark-card-bg) !important;
+  .dark-mode .css-1pndypt-Input {
     color: var(--dark-text-color) !important;
-  }
-  
-  .dark-mode .css-1s2u09g-control,
-  .dark-mode .css-1pahdxg-control {
-    background-color: var(--dark-card-bg) !important;
-    border-color: var(--dark-border-color) !important;
   }
   
   .dark-mode .css-1rhbuit-multiValue {
@@ -209,46 +195,39 @@ body.dark-mode {
   .dark-mode .css-12jo7m5 {
     color: var(--dark-text-color) !important;
   }
-
+  
   .dark-mode .input-group-text {
     background-color: var(--dark-nav-active-text) !important;
   }
-
+  
   .dark-mode .input-group-text:hover {
     background-color: var(--dark-link-hover-color) !important;
   }
   
-  .dark-mode .css-1n7v3ny-option:hover,
-  .dark-mode .css-1n7v3ny-option:focus,
-  .dark-mode .css-yt9ioa-option:hover,
-  .dark-mode .css-yt9ioa-option:focus,
-  .dark-mode .css-10wo9uf-option:hover,
-  .dark-mode .css-10wo9uf-option:focus {
-    background-color: var(--dark-nav-hover-bg) !important;
-    color: var(--dark-primary-color) !important;
-  }
-
   .dark-mode .css-1n7v3ny-option.css-1pahdxg-option,
   .dark-mode .css-yt9ioa-option.css-d7l1ni-option,
-  .dark-mode .css-10wo9uf-option.css-d7l1ni-option {
+  .dark-mode .css-10wo9uf-option.css-d7l1ni-option,
+  .dark-mode .css-1n7v3ny-option.css-9gakcf-option {
     background-color: var(--dark-nav-active-bg) !important;
     color: var(--dark-primary-color) !important;
   }
-
+  
   .dark-mode .css-26l3qy-menu .css-1n7v3ny-option:hover,
   .dark-mode .css-26l3qy-menu .css-1n7v3ny-option:focus,
   .dark-mode .css-26l3qy-menu .css-10wo9uf-option:hover,
-  .dark-mode .css-26l3qy-menu .css-10wo9uf-option:focus {
+  .dark-mode .css-26l3qy-menu .css-10wo9uf-option:focus,
+  .dark-mode .css-26l3qy-menu .css-9gakcf-option:hover,
+  .dark-mode .css-26l3qy-menu .css-9gakcf-option:focus {
     background-color: var(--dark-nav-hover-bg) !important;
     color: var(--dark-primary-color) !important;
   }
-
+  
   .dark-mode .css-26l3qy-menu .css-1n7v3ny-option.css-9gakcf-option,
   .dark-mode .css-26l3qy-menu .css-10wo9uf-option.css-9gakcf-option {
     background-color: var(--dark-nav-active-bg) !important;
     color: var(--dark-primary-color) !important;
   }
-
+  
   .dark-mode .css-1pndypt-Input input {
     color: var(--dark-text-color) !important;
   }
