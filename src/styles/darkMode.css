@@ -114,13 +114,15 @@ body.dark-mode {
   
   /* Dropdowns and React Select */
   .dark-mode .dropdown-menu,
-  .dark-mode .css-26l3qy-menu {
+  .dark-mode .css-26l3qy-menu,
+  .dark-mode .css-1nmdiq5-menu {
     background-color: var(--dark-card-bg) !important;
-    border-color: var(--dark-border-color);
+    border-color: var(--dark-border-color) !important;
   }
   
   .dark-mode .dropdown-item,
-  .dark-mode .css-1n7v3ny-option {
+  .dark-mode .css-1n7v3ny-option,
+  .dark-mode .css-10wo9uf-option {
     color: var(--dark-text-color) !important;
     background-color: var(--dark-card-bg) !important;
   }
@@ -128,16 +130,19 @@ body.dark-mode {
   .dark-mode .dropdown-item:hover,
   .dark-mode .dropdown-item:focus,
   .dark-mode .css-1n7v3ny-option:hover,
-  .dark-mode .css-1n7v3ny-option:focus {
+  .dark-mode .css-1n7v3ny-option:focus,
+  .dark-mode .css-10wo9uf-option:hover,
+  .dark-mode .css-10wo9uf-option:focus {
     background-color: var(--dark-nav-hover-bg) !important;
     color: var(--dark-primary-color) !important;
   }
   
   .dark-mode .css-13cymwt-control,
-  .dark-mode .css-t3ipsp-control {
-    background-color: var(--dark-card-bg);
-    color: var(--dark-text-color);
-    border-color: var(--dark-border-color);
+  .dark-mode .css-t3ipsp-control,
+  .dark-mode .css-1s2u09g-control {
+    background-color: var(--dark-card-bg) !important;
+    color: var(--dark-text-color) !important;
+    border-color: var(--dark-border-color) !important;
   }
   
   .dark-mode .css-13cymwt-control:focus,
@@ -145,40 +150,62 @@ body.dark-mode {
   .dark-mode .css-13cymwt-control:active,
   .dark-mode .css-t3ipsp-control:focus,
   .dark-mode .css-t3ipsp-control:hover,
-  .dark-mode .css-t3ipsp-control:active {
-    background-color: var(--dark-card-bg);
-    color: var(--dark-text-color);
+  .dark-mode .css-t3ipsp-control:active,
+  .dark-mode .css-1s2u09g-control:focus,
+  .dark-mode .css-1s2u09g-control:hover,
+  .dark-mode .css-1s2u09g-control:active {
+    background-color: var(--dark-card-bg) !important;
+    color: var(--dark-text-color) !important;
+    border-color: var(--dark-primary-color) !important;
   }
   
-  .dark-mode .css-9gakcf-option {
-    background-color: var(--dark-nav-active-bg);
-    color: var(--dark-primary-color);
-  }
-  
-  .dark-mode .css-1pahdxg-control {
-    background-color: var(--dark-card-bg);
-    border-color: var(--dark-border-color);
-  }
-  
-  .dark-mode .css-1pahdxg-control:hover {
-    border-color: var(--dark-primary-color);
+  .dark-mode .css-1dimb5e-singleValue,
+  .dark-mode .css-qc6sy-singleValue {
+    color: var(--dark-text-color) !important;
   }
   
   .dark-mode .css-1okebmr-indicatorSeparator {
-    background-color: var(--dark-border-color);
+    background-color: var(--dark-border-color) !important;
   }
   
   .dark-mode .css-tlfecz-indicatorContainer,
   .dark-mode .css-1gtu0rj-indicatorContainer {
-    color: var(--dark-text-color);
+    color: var(--dark-text-color) !important;
   }
   
   .dark-mode .css-1wa3eu0-placeholder {
-    color: var(--dark-muted-color);
+    color: var(--dark-muted-color) !important;
   }
   
   .dark-mode .css-b8ldur-Input {
-    color: var(--dark-text-color);
+    color: var(--dark-text-color) !important;
   }
   
   /* Add any additional dark mode styles here */
+  
+  .dark-mode .css-1nmdiq5-menu,
+  .dark-mode .css-26l3qy-menu,
+  .dark-mode .css-1n7v3ny-option,
+  .dark-mode .css-yt9ioa-option,
+  .dark-mode .css-1pndypt-Input,
+  .dark-mode .css-1rhbuit-multiValue,
+  .dark-mode .css-12jo7m5,
+  .dark-mode .css-6j8wv5-Input,
+  .dark-mode .css-1uccc91-singleValue {
+    background-color: var(--dark-card-bg) !important;
+    color: var(--dark-text-color) !important;
+  }
+  
+  .dark-mode .css-1s2u09g-control,
+  .dark-mode .css-1pahdxg-control {
+    background-color: var(--dark-card-bg) !important;
+    border-color: var(--dark-border-color) !important;
+  }
+  
+  .dark-mode .css-1rhbuit-multiValue {
+    background-color: var(--dark-nav-hover-bg) !important;
+  }
+  
+  .dark-mode .css-12jo7m5 {
+    color: var(--dark-text-color) !important;
+  }

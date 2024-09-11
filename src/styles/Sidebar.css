@@ -328,3 +328,13 @@
 .mobile-dark-mode-toggle .dark-mode-label {
     margin-right: 1rem;
 }
+
+.sidebar-logo {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.navbar-brand .sidebar-logo {
+    width: 30px;
+    height: 30px;
+}
