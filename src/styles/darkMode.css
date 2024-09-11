@@ -284,3 +284,20 @@ body.dark-mode {
 .dark-mode .css-1dimb5e-singleValue {
   color: var(--dark-text-color) !important;
 }
+
+.dark-mode table,
+.dark-mode .table-wrapper,
+.dark-mode .table-container,
+.dark-mode .detail-table-container,
+.dark-mode div[class*="table"] {
+  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+}
+
+.dark-mode table::-webkit-scrollbar,
+.dark-mode .table-wrapper::-webkit-scrollbar,
+.dark-mode .table-container::-webkit-scrollbar,
+.dark-mode .detail-table-container::-webkit-scrollbar,
+.dark-mode div[class*="table"]::-webkit-scrollbar {
+  display: none;  /* WebKit */
+}
