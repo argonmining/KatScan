@@ -211,10 +211,19 @@ tr:hover {
     }
 
     .chart-container canvas {
-        height: auto !important; /* Adjust height for mobile */
-        display: flex;
+        height: 100% !important; /* Adjust height for mobile */
+        display: flex !important;
         justify-content: center;
         align-items: center;
+        width: 100%;
+    }
+
+    .chart-container img {
+        height: 100% !important; /* Adjust height for mobile */
+        display: flex !important;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
     }
 }
 
