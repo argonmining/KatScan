@@ -2,6 +2,7 @@
   padding: 30px 15px;
   background-color: #f8f9fa;
   min-height: 100vh;
+  overflow: auto;
 }
 
 .market-cap-calculator .main-card {
