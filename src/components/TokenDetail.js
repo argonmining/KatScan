@@ -205,7 +205,7 @@ const TokenDetail = () => {
       <div className="token-header">
         <h1>Token Details: {censorTicker(tokenData.tick)}</h1>
         <span className="creation-date">
-          Deployed on {new Date(tokenData.mtsCreated).toLocaleDateString()}
+          Deployed on {formatDateTime(tokenData.mtsAdd)}
         </span>
       </div>
       <Card className="token-info-card">
