@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Card, Tabs, Tab, Table, Alert } from 'react-bootstrap';
-import { Line, Bar, Pie } from 'react-chartjs-2';
+import { Line, Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, BarElement, ArcElement, Title, Tooltip, Legend } from 'chart.js';
 import { getTokenDetails, getTokenOperations } from '../services/dataService';
 import '../styles/TokenDetail.css';
@@ -347,68 +347,24 @@ const TokenDetail = () => {
         <Tab eventKey="holderDistribution" title="Holder Distribution">
           <div className="chart-container">
             {isMobile ? (
-              <Pie
-                data={{
-                  labels: holderDistribution.map(item => item.label),
-                  datasets: [{
-                    data: holderDistribution.map(item => item.percentage),
-                    backgroundColor: [
-                      'rgba(255, 99, 132, 0.8)',
-                      'rgba(54, 162, 235, 0.8)',
-                      'rgba(255, 206, 86, 0.8)',
-                      'rgba(75, 192, 192, 0.8)',
-                      'rgba(153, 102, 255, 0.8)',
-                      'rgba(201, 203, 207, 0.8)',
-                    ],
-                  }]
-                }}
-                options={{
-                  responsive: true,
-                  maintainAspectRatio: false,
-                  layout: {
-                    padding: {
-                      top: 10,
-                      bottom: 10,
-                      left: 10,
-                      right: 10
-                    }
-                  },
-                  plugins: {
-                    legend: {
-                      position: 'bottom',
-                      labels: {
-                        boxWidth: 10,
-                        padding: 10,
-                        font: {
-                          size: 10
-                        },
-                        generateLabels: (chart) => {
-                          const data = chart.data;
-                          if (data.labels.length && data.datasets.length) {
-                            return data.labels.map((label, i) => {
-                              const value = data.datasets[0].data[i];
-                              return {
-                                text: `${label}: ${value.toFixed(2)}%`,
-                                fillStyle: data.datasets[0].backgroundColor[i],
-                                hidden: isNaN(data.datasets[0].data[i]) || data.datasets[0].data[i] === null,
-                                index: i
-                              };
-                            });
-                          }
-                          return [];
-                        }
-                      },
-                    },
-                    title: {
-                      display: true,
-                      text: 'Holder Distribution',
-                      font: {
-                        size: 16
-                      }
-                    }
-                  },
-                }}
-              />
+              <div className="mobile-holder-distribution">
+                <table className="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>Holder Group</th>
+                      <th>Percentage</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {holderDistribution.map((item, index) => (
+                      <tr key={index}>
+                        <td>{item.label}</td>
+                        <td>{item.percentage.toFixed(2)}%</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             ) : (
               <Bar
                 data={{

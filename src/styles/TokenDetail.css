@@ -250,3 +250,28 @@ tr:hover {
 .mobile-table-cell .clickable-address {
   word-break: break-all;
 }
+
+.mobile-holder-distribution {
+    overflow-x: auto;
+}
+
+.mobile-holder-distribution table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.mobile-holder-distribution th,
+.mobile-holder-distribution td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.mobile-holder-distribution th {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.mobile-holder-distribution tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
