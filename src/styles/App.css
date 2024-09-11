@@ -19,7 +19,7 @@ body {
 .App {
     display: flex;
     height: 100vh;
-    flex-direction: column;
+    flex-direction: row;
 }
 
 .sidebar {
@@ -57,10 +57,14 @@ body {
     }
 
     .main-content-wrapper {
-        padding: 0;  /* Remove padding on mobile for full-width content */
+        padding: 0;
     }
 
     .main-content {
-        width: 100%;  /* Ensure the main content takes the full width */
+        width: 100%;
+    }
+
+    .sidebar {
+        width: 100%;
     }
 }
