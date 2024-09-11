@@ -294,3 +294,20 @@
 .dark-mode .dark-mode-label {
     color: var(--dark-text-color);
 }
+
+.dark-mode .sidebar-footer p {
+    color: var(--dark-text-color);
+}
+
+.dark-mode .nav-section-title {
+    color: var(--dark-muted-color);
+}
+
+.sidebar-dark-mode-toggle {
+    padding: 0.75rem 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.dark-mode .sidebar-dark-mode-toggle {
+    border-top-color: var(--dark-border-color);
+}

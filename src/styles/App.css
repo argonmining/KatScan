@@ -90,10 +90,6 @@ body {
 
 /* Dark mode toggle styles */
 .dark-mode-toggle {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 1000;
     display: flex;
     align-items: center;
 }
@@ -150,7 +146,7 @@ input:checked + .slider:before {
 
 @media (max-width: 991px) {
     .dark-mode-toggle {
-        top: 70px; /* Adjust this value based on your navbar height */
-        right: 10px;
+        margin-left: auto;
+        padding-right: 15px;
     }
 }

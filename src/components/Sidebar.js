@@ -118,7 +118,7 @@ const Sidebar = ({ darkMode, toggleDarkMode }) => {
           <NavLink to="#" className="donate-link" onClick={handleDonateClick}>
             <FaHeart /> {!collapsed && <span>Donate</span>}
           </NavLink>
-          <div className="dark-mode-toggle">
+          <div className="dark-mode-toggle sidebar-dark-mode-toggle">
             <span className="dark-mode-label">{darkMode ? 'Dark' : 'Light'}</span>
             <label className="switch">
               <input type="checkbox" checked={darkMode} onChange={toggleDarkMode} />

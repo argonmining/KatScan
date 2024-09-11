@@ -94,3 +94,26 @@ body.dark-mode {
 }
 
 /* Add more dark mode styles as needed */
+
+.dark-mode .table tbody tr {
+  background-color: var(--dark-card-bg);
+}
+
+.dark-mode .table tbody tr:nth-of-type(even) {
+  background-color: var(--dark-stripe-bg);
+}
+
+.dark-mode .dropdown-menu {
+  background-color: var(--dark-card-bg);
+  border-color: var(--dark-border-color);
+}
+
+.dark-mode .dropdown-item {
+  color: var(--dark-text-color);
+}
+
+.dark-mode .dropdown-item:hover,
+.dark-mode .dropdown-item:focus {
+  background-color: var(--dark-nav-hover-bg);
+  color: var(--dark-primary-color);
+}

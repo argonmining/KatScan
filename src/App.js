@@ -14,7 +14,7 @@ import './styles/globals.css';
 import TopKRC20Holders from './components/TopKRC20Holders';
 import './styles/darkMode.css';
 import { useMediaQuery } from 'react-responsive';
-import { Navbar } from 'react-bootstrap';
+import { Navbar, Nav } from 'react-bootstrap';
 
 const Analytics = () => <h2>Analytics Page</h2>;
 const About = () => <h2>About Page</h2>;
@@ -39,18 +39,20 @@ function App() {
     <Router>
       <div className="App">
         {isMobile ? (
-          <Navbar bg="dark" variant="dark">
-            <Navbar.Brand href="/">Your App Name</Navbar.Brand>
-            <div className="dark-mode-toggle">
-              <span className="dark-mode-label">{darkMode ? 'Dark' : 'Light'}</span>
-              <label className="switch">
-                <input type="checkbox" checked={darkMode} onChange={toggleDarkMode} />
-                <span className="slider"></span>
-              </label>
-            </div>
+          <Navbar bg={darkMode ? "dark" : "light"} variant={darkMode ? "dark" : "light"} expand="lg">
+            <Navbar.Brand href="/">KatScan</Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
-              {/* Add your mobile menu items here */}
+              <Nav className="mr-auto">
+                {/* Add your mobile menu items here */}
+              </Nav>
+              <div className="dark-mode-toggle">
+                <span className="dark-mode-label">{darkMode ? 'Dark' : 'Light'}</span>
+                <label className="switch">
+                  <input type="checkbox" checked={darkMode} onChange={toggleDarkMode} />
+                  <span className="slider"></span>
+                </label>
+              </div>
             </Navbar.Collapse>
           </Navbar>
         ) : (
