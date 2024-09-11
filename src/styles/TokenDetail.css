@@ -212,6 +212,9 @@ tr:hover {
 
     .chart-container img {
         height: auto !important; /* Adjust height for mobile */
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 }
 
