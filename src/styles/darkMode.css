@@ -112,19 +112,24 @@ body.dark-mode {
   background-color: var(--dark-stripe-bg);
 }
 
-.dark-mode .dropdown-menu {
-  background-color: var(--dark-card-bg);
+.dark-mode .dropdown-menu,
+.dark-mode .css-26l3qy-menu {
+  background-color: var(--dark-card-bg) !important;
   border-color: var(--dark-border-color);
 }
 
-.dark-mode .dropdown-item {
-  color: var(--dark-text-color);
+.dark-mode .dropdown-item,
+.dark-mode .css-1n7v3ny-option {
+  color: var(--dark-text-color) !important;
+  background-color: var(--dark-card-bg) !important;
 }
 
 .dark-mode .dropdown-item:hover,
-.dark-mode .dropdown-item:focus {
-  background-color: var(--dark-nav-hover-bg);
-  color: var(--dark-primary-color);
+.dark-mode .dropdown-item:focus,
+.dark-mode .css-1n7v3ny-option:hover,
+.dark-mode .css-1n7v3ny-option:focus {
+  background-color: var(--dark-nav-hover-bg) !important;
+  color: var(--dark-primary-color) !important;
 }
 
 .dark-mode .css-13cymwt-control {

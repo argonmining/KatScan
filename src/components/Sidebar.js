@@ -75,6 +75,13 @@ const Sidebar = ({ darkMode, toggleDarkMode, isMobile }) => {
                 <NavLink to="#" className="nav-link" onClick={handleDonateClick}>
                   <FaHeart /> Donate
                 </NavLink>
+                <div className="dark-mode-toggle mobile-dark-mode-toggle">
+                  <span className="dark-mode-label">{darkMode ? 'Dark' : 'Light'} Mode</span>
+                  <label className="switch">
+                    <input type="checkbox" checked={darkMode} onChange={toggleDarkMode} />
+                    <span className="slider"></span>
+                  </label>
+                </div>
               </Nav>
             </Navbar.Collapse>
           </Container>

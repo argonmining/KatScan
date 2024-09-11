@@ -311,3 +311,20 @@
 .dark-mode .sidebar-dark-mode-toggle {
     border-top-color: var(--dark-border-color);
 }
+
+.mobile-dark-mode-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 1rem;
+    border-top: 1px solid var(--border-color);
+    margin-top: 1rem;
+}
+
+.dark-mode .mobile-dark-mode-toggle {
+    border-top-color: var(--dark-border-color);
+}
+
+.mobile-dark-mode-toggle .dark-mode-label {
+    margin-right: 1rem;
+}
