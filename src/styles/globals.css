@@ -40,14 +40,20 @@
   --dark-collapse-btn-hover-bg: #444;
 }
 
-html, body {
+html,
+body {
   height: 100% !important;
   margin: 0;
   font-family: var(--body-font);
   color: var(--secondary-primary-color);
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--header-font);
 }
 
@@ -55,13 +61,26 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--sub-header-font);
 }
 
-.dark-mode-toggle {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 1000;
-  display: flex;
-  align-items: center;
+@media (max-width: 768px) {
+  .dark-mode-toggle {
+    position: fixed;
+    top: 2px;
+    right: 50px;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+  }
+}
+
+@media (min-width: 769px) {
+  .dark-mode-toggle {
+    position: fixed;
+    top: 15px;
+    right: 10px;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+  }
 }
 
 .switch {
@@ -101,11 +120,11 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: 50%;
 }
 
-input:checked + .slider {
+input:checked+.slider {
   background-color: var(--primary-color);
 }
 
-input:checked + .slider:before {
+input:checked+.slider:before {
   transform: translateX(26px);
 }
 
