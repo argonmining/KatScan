@@ -102,3 +102,36 @@
   width: 0;  /* Remove scrollbar space */
   background: transparent;  /* Optional: just make scrollbar invisible */
 }
+
+@media (max-width: 768px) {
+  .top-krc20-holders-wrapper {
+    padding: 10px;
+  }
+
+  .top-krc20-holders-wrapper h1 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+  }
+
+  .mobile-holders-list {
+    overflow-y: auto;
+    max-height: calc(100vh - 100px);
+  }
+
+  .mobile-holders-list .card {
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .mobile-holders-list .card-body {
+    padding: 12px;
+  }
+
+  .mobile-holders-list .table {
+    font-size: 0.9rem;
+  }
+
+  .mobile-holders-list .btn-link {
+    font-size: 0.9rem;
+  }
+}
