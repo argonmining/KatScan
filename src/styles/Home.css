@@ -274,3 +274,47 @@ a.feature-card:focus, a.token-card:focus {
   text-decoration: none;
   color: inherit;
 }
+
+.dark-mode .home {
+  background-color: var(--dark-bg-color);
+}
+
+.dark-mode .header-section h1 {
+  color: var(--dark-text-color);
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+}
+
+.dark-mode .header-section p {
+  color: var(--dark-muted-color);
+}
+
+.dark-mode .feature-card,
+.dark-mode .stats-card,
+.dark-mode .token-card {
+  background-color: var(--dark-card-bg);
+  border-color: var(--dark-border-color);
+  box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .feature-card .card-title,
+.dark-mode .stat-card .card-title,
+.dark-mode .token-card .card-title {
+  color: var(--dark-text-color);
+}
+
+.dark-mode .feature-card:hover .card-title {
+  color: var(--dark-primary-color);
+}
+
+.dark-mode .stat-card h3 {
+  color: var(--dark-primary-color);
+}
+
+.dark-mode .stat-card .card-text,
+.dark-mode .token-card .card-text {
+  color: var(--dark-muted-color);
+}
+
+.dark-mode .section-title {
+  color: var(--dark-text-color);
+}

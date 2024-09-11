@@ -117,3 +117,66 @@
   font-size: 0.9rem;
   word-break: break-all;
 }
+
+/* Existing styles remain unchanged */
+
+.dark-mode .transaction-lookup {
+  background-color: var(--dark-bg-color);
+}
+
+.dark-mode .transaction-lookup h1 {
+  color: var(--dark-primary-color);
+}
+
+.dark-mode .transaction-lookup .form-control {
+  background-color: var(--dark-card-bg);
+  color: var(--dark-text-color);
+  border-color: var(--dark-border-color);
+}
+
+.dark-mode .transaction-lookup .btn-primary {
+  background-color: var(--dark-primary-color);
+  border-color: var(--dark-primary-color);
+}
+
+.dark-mode .transaction-lookup .btn-primary:hover {
+  background-color: var(--dark-secondary-color);
+  border-color: var(--dark-secondary-color);
+}
+
+.dark-mode .transaction-lookup .card {
+  background-color: var(--dark-card-bg);
+  border-color: var(--dark-border-color);
+}
+
+.dark-mode .transaction-lookup .accordion-button:not(.collapsed) {
+  background-color: var(--dark-active-bg);
+  color: var(--dark-text-color);
+}
+
+.dark-mode .transaction-lookup .accordion-button:focus {
+  box-shadow: none;
+  border-color: var(--dark-border-color);
+}
+
+.dark-mode .transaction-lookup .accordion .accordion-item {
+  background-color: var(--dark-card-bg);
+  border-color: var(--dark-border-color);
+}
+
+.dark-mode .transaction-lookup .accordion-body {
+  color: var(--dark-text-color);
+}
+
+.dark-mode .signature-script {
+  background-color: var(--dark-card-bg);
+  color: var(--dark-text-color);
+}
+
+.dark-mode .clickable-address {
+  color: var(--dark-link-color);
+}
+
+.dark-mode .clickable-address:hover {
+  color: var(--dark-link-hover-color);
+}

@@ -108,3 +108,41 @@
 .token-comparison .card:last-child {
   margin-bottom: 0;
 }
+
+/* Dark mode styles */
+
+.dark-mode .token-comparison {
+  background-color: var(--dark-bg-color);
+}
+
+.dark-mode .card {
+  background-color: var(--dark-card-bg);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.dark-mode .token-comparison h2,
+.dark-mode .token-comparison .card-title {
+  color: var(--dark-text-color);
+}
+
+.dark-mode .token-comparison canvas {
+  filter: invert(0.9) hue-rotate(180deg);
+}
+
+.dark-mode .progress-label {
+  color: var(--dark-text-color);
+}
+
+.dark-mode .table th,
+.dark-mode .table td {
+  color: var(--dark-text-color);
+  border-color: var(--dark-border-color);
+}
+
+.dark-mode .table-striped tbody tr:nth-of-type(odd) {
+  background-color: var(--dark-stripe-bg);
+}
+
+.dark-mode .minting-progress-card {
+  background-color: var(--dark-card-bg);
+}

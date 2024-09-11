@@ -154,3 +154,53 @@ a:hover {
     font-weight: bold;
     color: var(--secondary-primary-color);
 }
+
+/* Dark mode styles */
+
+.dark-mode .token-overview {
+    background-color: var(--dark-bg-color);
+}
+
+.dark-mode .token-overview-header h2 {
+    color: var(--dark-text-color);
+}
+
+.dark-mode .search-form .form-control {
+    background-color: var(--dark-card-bg);
+    color: var(--dark-text-color);
+    border-color: var(--dark-border-color);
+}
+
+.dark-mode .table-wrapper {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.dark-mode th {
+    background-color: var(--dark-header-bg) !important;
+    color: var(--dark-text-color) !important;
+    border-bottom-color: var(--dark-border-color);
+}
+
+.dark-mode td {
+    color: var(--dark-text-color);
+}
+
+.dark-mode tr:nth-child(even) {
+    background-color: var(--dark-stripe-bg);
+}
+
+.dark-mode tr:hover {
+    background-color: var(--dark-nav-hover-bg);
+}
+
+.dark-mode .progress {
+    background-color: var(--dark-progress-bg);
+}
+
+.dark-mode .progress .progress-bar {
+    background-image: linear-gradient(to right, var(--dark-tertiary-color), var(--dark-primary-color));
+}
+
+.dark-mode .token-ticker {
+    color: var(--dark-text-color);
+}

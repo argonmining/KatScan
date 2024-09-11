@@ -158,3 +158,53 @@
     padding: 12px;
   }
 }
+
+.dark-mode .top-krc20-holders-wrapper {
+  background-color: var(--dark-bg-color);
+}
+
+.dark-mode .top-krc20-holders-wrapper h1 {
+  color: var(--dark-text-color);
+}
+
+.dark-mode .table {
+  background-color: var(--dark-card-bg);
+}
+
+.dark-mode .table th {
+  background-color: var(--dark-header-bg);
+  color: var(--dark-text-color);
+}
+
+.dark-mode .table td {
+  color: var(--dark-text-color);
+}
+
+.dark-mode .btn-link {
+  color: var(--dark-link-color);
+}
+
+.dark-mode .btn-link:hover {
+  color: var(--dark-link-hover-color);
+}
+
+.dark-mode .wallet-link,
+.dark-mode .clickable-address {
+  color: var(--dark-link-color);
+}
+
+.dark-mode .wallet-link:hover,
+.dark-mode .clickable-address:hover {
+  color: var(--dark-link-hover-color);
+}
+
+@media (max-width: 768px) {
+  .dark-mode .mobile-holders-list .card {
+    background-color: var(--dark-card-bg);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  .dark-mode .mobile-holders-list .btn-link {
+    color: var(--dark-primary-color) !important;
+  }
+}

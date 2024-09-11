@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import TokenOverview from './components/TokenOverview';
@@ -12,14 +12,36 @@ import MarketCapCalculator from './components/MarketCapCalculator';
 import './styles/App.css';
 import './styles/globals.css';
 import TopKRC20Holders from './components/TopKRC20Holders';
+import './styles/darkMode.css';
 
 const Analytics = () => <h2>Analytics Page</h2>;
 const About = () => <h2>About Page</h2>;
 
 function App() {
+  const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    if (darkMode) {
+      document.body.classList.add('dark-mode');
+    } else {
+      document.body.classList.remove('dark-mode');
+    }
+  }, [darkMode]);
+
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode);
+  };
+
   return (
     <Router>
       <div className="App">
+        <div className="dark-mode-toggle">
+          <span className="dark-mode-label">{darkMode ? 'Dark' : 'Light'}</span>
+          <label className="switch">
+            <input type="checkbox" checked={darkMode} onChange={toggleDarkMode} />
+            <span className="slider"></span>
+          </label>
+        </div>
         <Sidebar />
         <div className="main-content">
           <Routes>
