@@ -152,12 +152,6 @@ a.feature-card:focus, a.token-card:focus {
   .home-container {
     padding: 1rem 0.5rem;
     overflow: auto;
-    height: auto;
-    min-height: 100vh;
-  }
-
-  .header-section {
-    position: relative;
   }
 
   .header-section h1 {
