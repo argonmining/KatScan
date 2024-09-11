@@ -217,25 +217,22 @@
     filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
 }
 
-/* Make sidebar visible on desktop only */
-@media (min-width: 992px) { /* lg size and up */
+/* Hide the sidebar on screens smaller than 992px (bootstrap lg) */
+@media (max-width: 991px) {
     .sidebar {
-      display: block;
-    }
-  
-    .navbar {
-      display: none;
+      display: none !important;  /* This ensures the sidebar is completely hidden */
     }
   }
   
-  /* Make the navbar (hamburger menu) visible on mobile only */
-  @media (max-width: 991px) {
+  /* Show the sidebar only on screens larger than 992px */
+  @media (min-width: 992px) {
     .sidebar {
-      display: none;
+      display: flex;  /* Keep the sidebar displayed on larger screens */
     }
   
     .navbar {
-      display: block;
+      display: none;  /* Hide the navbar (hamburger menu) on larger screens */
     }
   }
+  
   
