@@ -371,6 +371,9 @@ const TokenDetail = () => {
                       labels: {
                         boxWidth: 10,
                         padding: 10,
+                        font: {
+                          size: 10
+                        },
                         generateLabels: (chart) => {
                           const data = chart.data;
                           if (data.labels.length && data.datasets.length) {
@@ -390,7 +393,10 @@ const TokenDetail = () => {
                     },
                     title: {
                       display: true,
-                      text: 'Holder Distribution'
+                      text: 'Holder Distribution',
+                      font: {
+                        size: 16
+                      }
                     }
                   },
                 }}

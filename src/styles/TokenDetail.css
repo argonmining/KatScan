@@ -133,6 +133,8 @@ tr:hover {
 .chart-container {
     flex: 1; /* Allow the chart to fill the remaining space */
     overflow: hidden; /* Prevent chart from causing page scroll */
+    width: 100%;
+    position: relative;
 }
 
 .text-muted {
@@ -194,7 +196,6 @@ tr:hover {
     }
 
     .chart-container {
-        height: 300px;
     }
 }
 
