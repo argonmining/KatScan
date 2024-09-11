@@ -203,7 +203,7 @@ tr:hover {
     }
 
     .chart-container {
-        height: auto !important; /* Adjust height for mobile */
+        height: 100% !important; /* Adjust height for mobile */
         width: 100%;
         display: flex;
         justify-content: center;
