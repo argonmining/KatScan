@@ -210,7 +210,7 @@ tr:hover {
         align-items: center;
     }
 
-    .chart-container img {
+    .chart-container canvas {
         height: auto !important; /* Adjust height for mobile */
         display: flex;
         justify-content: center;
