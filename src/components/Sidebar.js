@@ -1,15 +1,17 @@
+// src/components/Sidebar.js
 import React, { useState } from 'react';
-import { Nav } from 'react-bootstrap';
+import { Nav, Navbar, Container } from 'react-bootstrap';
 import { NavLink, Link } from 'react-router-dom';
-import { FaSearch, FaWallet, FaCoins, FaExchangeAlt, FaFireAlt, FaChartLine, FaUsers, FaChevronLeft, FaChevronRight, FaHeart } from 'react-icons/fa';
+import { FaSearch, FaWallet, FaCoins, FaBars, FaChevronLeft, FaChevronRight, FaHeart } from 'react-icons/fa';
 import logo from '../assets/logo.png';
-import qrCode from '../assets/qr.png'; // Add this import
+import qrCode from '../assets/qr.png';
 import '../styles/Sidebar.css';
-import { Modal, Button } from 'react-bootstrap'; // Add this import
+import { Modal, Button } from 'react-bootstrap'; 
 
 const Sidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
-  const [showDonateModal, setShowDonateModal] = useState(false); // Add this state
+  const [showDonateModal, setShowDonateModal] = useState(false);
+  const [expanded, setExpanded] = useState(false); // Added for mobile
 
   const toggleSidebar = () => {
     setCollapsed(!collapsed);
@@ -23,66 +25,78 @@ const Sidebar = () => {
     setShowDonateModal(false);
   };
 
-  const NavSection = ({ title, children }) => (
-    <div className="nav-section">
-      {!collapsed && <h6 className="nav-section-title sub-header">{title}</h6>}
-      {children}
-    </div>
-  );
-
   return (
-    <div className={`sidebar ${collapsed ? 'collapsed' : ''}`}>
-      <div className="sidebar-content">
-        <div className="sidebar-header">
-          <Link to="/" className="logo-link">
+    <>
+      {/* Mobile Navbar */}
+      <Navbar expand="lg" bg="light" variant="light" expanded={expanded} className="d-lg-none"> {/* Visible on mobile */}
+        <Container>
+          <Navbar.Brand as={Link} to="/">
             <img src={logo} alt="KatScan Logo" className="logo-image" />
-            {!collapsed && <h1 className="site-title">KatScan</h1>}
-          </Link>
-        </div>
-        <Nav className="flex-column">
-          <NavSection title="KRC-20 Explorer">
-            <NavLink to="/transaction-lookup" className="nav-link" activeClassName="active">
+            <span className="ms-2">KatScan</span>
+          </Navbar.Brand>
+          <Navbar.Toggle
+            aria-controls="basic-navbar-nav"
+            onClick={() => setExpanded(!expanded)} // Toggle expanded state
+          >
+            <FaBars />
+          </Navbar.Toggle>
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="me-auto">
+              <Nav.Link as={NavLink} to="/transaction-lookup" onClick={() => setExpanded(false)}>
+                <FaSearch /> Search Transactions
+              </Nav.Link>
+              <Nav.Link as={NavLink} to="/wallet" onClick={() => setExpanded(false)}>
+                <FaWallet /> Search Addresses
+              </Nav.Link>
+              <Nav.Link as={NavLink} to="/tokens" onClick={() => setExpanded(false)}>
+                <FaCoins /> All Tokens
+              </Nav.Link>
+              <Nav.Link as={NavLink} to="#" onClick={handleDonateClick}>
+                <FaHeart /> Donate
+              </Nav.Link>
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+
+      {/* Desktop Sidebar */}
+      <div className={`sidebar ${collapsed ? 'collapsed' : ''} d-none d-lg-block`}> {/* Visible on desktop */}
+        <div className="sidebar-content">
+          <div className="sidebar-header">
+            <Link to="/" className="logo-link">
+              <img src={logo} alt="KatScan Logo" className="logo-image" />
+              {!collapsed && <h1 className="site-title">KatScan</h1>}
+            </Link>
+          </div>
+          <Nav className="flex-column">
+            <NavLink to="/transaction-lookup" className="nav-link">
               <FaSearch /> {!collapsed && <span>Search Transactions</span>}
             </NavLink>
-            <NavLink to="/wallet" className="nav-link" activeClassName="active">
+            <NavLink to="/wallet" className="nav-link">
               <FaWallet /> {!collapsed && <span>Search Addresses</span>}
             </NavLink>
-            <NavLink to="/top-holders" className="nav-link" activeClassName="active">
-              <FaUsers /> {!collapsed && <span>Top Holders</span>}
-            </NavLink>
-          </NavSection>
-
-          <NavSection title="KRC-20 Tokens">
-            <NavLink to="/tokens" className="nav-link" activeClassName="active">
+            <NavLink to="/tokens" className="nav-link">
               <FaCoins /> {!collapsed && <span>All Tokens</span>}
             </NavLink>
-            <NavLink to="/compare" className="nav-link" activeClassName="active">
-              <FaExchangeAlt /> {!collapsed && <span>Side by Side</span>}
-            </NavLink>
-            <NavLink to="/mint-heatmap" className="nav-link" activeClassName="active">
-              <FaFireAlt /> {!collapsed && <span>Mint Heatmap</span>}
-            </NavLink>
-            <NavLink to="/marketcap-calc" className="nav-link" activeClassName="active">
-              <FaChartLine /> {!collapsed && <span>MarketCap Calc</span>}
-            </NavLink>
-          </NavSection>
-        </Nav>
-        <NavLink to="#" className="donate-link" onClick={handleDonateClick}>
-          <FaHeart /> {!collapsed && <span>Donate</span>}
-        </NavLink>
-        <div className="sidebar-footer">
-          {!collapsed && (
-            <p>
-              Made with ❤️ by the<br />
-              Nacho the 𐤊at Community
-            </p>
-          )}
-          <button className="collapse-btn" onClick={toggleSidebar}>
-            {collapsed ? <FaChevronRight /> : <FaChevronLeft />}
-          </button>
+          </Nav>
+          <NavLink to="#" className="donate-link" onClick={handleDonateClick}>
+            <FaHeart /> {!collapsed && <span>Donate</span>}
+          </NavLink>
+          <div className="sidebar-footer">
+            {!collapsed && (
+              <p>
+                Made with ❤️ by the<br />
+                Nacho the Kat Community
+              </p>
+            )}
+            <button className="collapse-btn" onClick={toggleSidebar}>
+              {collapsed ? <FaChevronRight /> : <FaChevronLeft />}
+            </button>
+          </div>
         </div>
       </div>
 
+      {/* Donate Modal */}
       <Modal show={showDonateModal} onHide={handleCloseDonateModal} centered>
         <Modal.Header closeButton>
           <Modal.Title>Donate</Modal.Title>
@@ -96,7 +110,7 @@ const Sidebar = () => {
           </Button>
         </Modal.Body>
       </Modal>
-    </div>
+    </>
   );
 };
 
