@@ -99,7 +99,12 @@ body.dark-mode {
   background-color: var(--dark-card-bg);
 }
 
-.dark-mode tbody, td, tfoot, th, thead, tr {
+.dark-mode tbody,
+.dark-mode td,
+.dark-mode tfoot,
+.dark-mode th,
+.dark-mode thead,
+.dark-mode tr {
     background-color: var(--dark-card-bg) !important;
 }
 
