@@ -10,7 +10,7 @@ KatScan is a comprehensive KRC-20 token explorer and analysis tool for the Kaspa
 - **Mint Heatmap**: Visualize token minting activity over time.
 
 ### Recent Changes
-At the request of the Community, KatScan has been updated to filter ticker's that are specifically named in an overtly offensive manner. All data for the tokens remain, but those ticker's will be "bleeped" with asterisks to provide a more welcoming experience for everyone. If you are a project owner that has been bleeped and would like to discuss alternative solutions please log an issue here and we will respond.
+At the request of the Community, KatScan has been updated to filter tickers that are specifically named in an overtly offensive manner. All data for the tokens remain, but those ticker's will be "bleeped" with asterisks to provide a more welcoming experience for everyone. If you are a project owner that has been bleeped and would like to discuss alternative solutions please log an issue here and we will respond.
 
 ### Built By
 KatScan is built by volunteers from the Nacho the Kat community to support the Kaspa ecosystem, leveraging modern web development technologies such as React and various API services.
