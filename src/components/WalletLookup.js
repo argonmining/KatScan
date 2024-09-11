@@ -4,6 +4,7 @@ import { Container, Form, InputGroup, Button, Table, Tabs, Tab, Alert, Card, Spi
 import { FaSearch, FaCopy } from 'react-icons/fa';
 import axios from 'axios';
 import '../styles/WalletLookup.css';
+import { censorTicker } from '../utils/censorTicker';
 
 // Helper function for number formatting
 const formatNumber = (number) => {
@@ -215,7 +216,7 @@ const WalletLookup = () => {
                   <tbody>
                     {walletData.krc20Balances.map((token) => (
                       <tr key={token.contract}>
-                        <td>{token.tick}</td>
+                        <td>{censorTicker(token.tick)}</td>
                         <td>{formatNumber(token.balance)}</td>
                       </tr>
                     ))}

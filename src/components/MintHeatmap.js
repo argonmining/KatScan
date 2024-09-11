@@ -4,6 +4,7 @@ import { ResponsiveContainer, Treemap, Tooltip, Legend } from 'recharts';
 import axios from 'axios';
 import '../styles/MintHeatmap.css';
 import PropTypes from 'prop-types';
+import { censorTicker } from '../utils/censorTicker';
 
 const timeframes = [
   { value: 'day', label: 'Last 24 Hours' },
@@ -91,7 +92,7 @@ const MintHeatmap = () => {
       const percentage = ((data.actualSize / totalMints) * 100).toFixed(2);
       return (
         <div className="custom-tooltip">
-          <p><strong>{data.name}</strong></p>
+          <p><strong>{censorTicker(data.name)}</strong></p>
           <p>Mints: {data.actualSize.toLocaleString()}</p>
           <p>Percentage: {percentage}%</p>
         </div>
