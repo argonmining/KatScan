@@ -169,6 +169,10 @@ a.feature-card:focus, a.token-card:focus {
   .stat-card h3 {
     font-size: 1.25rem; /* Adjust the font size for mobile */
   }
+
+  .nav-tabs {
+    overflow: hidden !important;
+  }
 }
 
 /* Tablet Styles */
