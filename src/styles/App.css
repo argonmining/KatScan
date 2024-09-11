@@ -7,51 +7,60 @@ body, html, #root {
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f7fc;
-  }
-  
-  .App-header {
+}
+
+.App-header {
     text-align: center;
     padding: 20px;
     background-color: #282c34;
     color: white;
-  }
-  
-  .App {
+}
+
+.App {
     display: flex;
     height: 100vh;
-  }
-  
-  .sidebar {
+    flex-direction: column;
+}
+
+.sidebar {
     flex-shrink: 0;
     width: 250px;
     transition: width 0.3s ease;
-  }
+}
 
-  .sidebar.collapsed {
+.sidebar.collapsed {
     width: 60px;
-  }
+}
 
-  .main-content-wrapper {
+.main-content-wrapper {
     flex-grow: 1;
     overflow-y: auto;
     padding: 20px;
-  }
-  
-  .main-content {
+}
+
+.main-content {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-  }
-  
-  .content {
+}
+
+.content {
     flex: 1;
     overflow: hidden;
     background-color: #f4f7fc;
-  }
+}
 
 @media (max-width: 991px) {
+    .App {
+        flex-direction: column;
+    }
+
     .main-content-wrapper {
         padding: 0;  /* Remove padding on mobile for full-width content */
+    }
+
+    .main-content {
+        width: 100%;  /* Ensure the main content takes the full width */
     }
 }

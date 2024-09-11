@@ -50,7 +50,6 @@ const Sidebar = () => {
           </Navbar.Toggle>
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
-              {/* KRC-20 Explorer Section */}
               <NavLink to="/transaction-lookup" className="nav-link" onClick={() => setExpanded(false)}>
                 <FaSearch /> Search Transactions
               </NavLink>
@@ -60,7 +59,6 @@ const Sidebar = () => {
               <NavLink to="/top-holders" className="nav-link" onClick={() => setExpanded(false)}>
                 <FaUsers /> Top Holders
               </NavLink>
-              {/* KRC-20 Tokens Section */}
               <NavLink to="/tokens" className="nav-link" onClick={() => setExpanded(false)}>
                 <FaCoins /> All Tokens
               </NavLink>
@@ -91,7 +89,6 @@ const Sidebar = () => {
             </Link>
           </div>
           <Nav className="flex-column">
-            {/* KRC-20 Explorer Section */}
             <NavSection title="KRC-20 Explorer">
               <NavLink to="/transaction-lookup" className="nav-link">
                 <FaSearch /> {!collapsed && <span>Search Transactions</span>}
@@ -103,7 +100,6 @@ const Sidebar = () => {
                 <FaUsers /> {!collapsed && <span>Top Holders</span>}
               </NavLink>
             </NavSection>
-            {/* KRC-20 Tokens Section */}
             <NavSection title="KRC-20 Tokens">
               <NavLink to="/tokens" className="nav-link">
                 <FaCoins /> {!collapsed && <span>All Tokens</span>}
