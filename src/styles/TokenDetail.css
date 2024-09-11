@@ -10,7 +10,6 @@
 
 .token-header {
     display: flex;
-    justify-content: space-between;
     align-items: baseline;
     margin-bottom: 20px;
 }
@@ -19,6 +18,7 @@
     font-family: var(--header-font);
     color: var(--secondary-primary-color);
     margin: 0;
+    margin-right: 10px;
 }
 
 .creation-date {
