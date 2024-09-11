@@ -1,19 +1,18 @@
 import React, { useState } from 'react';
-import { Nav, Navbar, Container } from 'react-bootstrap';
+import { Nav, Navbar, Container, Modal, Button } from 'react-bootstrap';
 import { NavLink, Link } from 'react-router-dom';
 import {
   FaSearch, FaWallet, FaCoins, FaExchangeAlt, FaFireAlt, FaChartLine, FaUsers, 
   FaChevronLeft, FaChevronRight, FaHeart, FaBars
 } from 'react-icons/fa';
 import logo from '../assets/logo.png';
-import qrCode from '../assets/qr.png'; // Add this import
+import qrCode from '../assets/qr.png';
 import '../styles/Sidebar.css';
-import { Modal, Button } from 'react-bootstrap'; // Add this import
 
 const Sidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
-  const [showDonateModal, setShowDonateModal] = useState(false); // Add this state
-  const [expanded, setExpanded] = useState(false); // State for mobile hamburger menu
+  const [showDonateModal, setShowDonateModal] = useState(false);
+  const [expanded, setExpanded] = useState(false);
 
   const toggleSidebar = () => {
     setCollapsed(!collapsed);
@@ -37,7 +36,7 @@ const Sidebar = () => {
   return (
     <>
       {/* Mobile Navbar */}
-      <Navbar expand="lg" bg="light" variant="light" expanded={expanded} className="d-lg-none"> {/* Visible on mobile */}
+      <Navbar expand="lg" bg="light" variant="light" expanded={expanded} className="d-lg-none">
         <Container>
           <Navbar.Brand as={Link} to="/">
             <img src={logo} alt="KatScan Logo" className="logo-image" />
@@ -45,7 +44,7 @@ const Sidebar = () => {
           </Navbar.Brand>
           <Navbar.Toggle
             aria-controls="basic-navbar-nav"
-            onClick={() => setExpanded(!expanded)} // Toggle expanded state
+            onClick={() => setExpanded(!expanded)}
           >
             <FaBars />
           </Navbar.Toggle>
@@ -83,7 +82,7 @@ const Sidebar = () => {
       </Navbar>
 
       {/* Desktop Sidebar */}
-      <div className={`sidebar ${collapsed ? 'collapsed' : ''} d-none d-lg-block`}> {/* Visible on desktop */}
+      <div className={`sidebar ${collapsed ? 'collapsed' : ''} d-none d-lg-block`}>
         <div className="sidebar-content">
           <div className="sidebar-header">
             <Link to="/" className="logo-link">
