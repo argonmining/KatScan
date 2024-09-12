@@ -40,8 +40,8 @@ const Sidebar = ({ darkMode, toggleDarkMode, isMobile }) => {
         <Navbar expand="lg" bg={darkMode ? "dark" : "light"} variant={darkMode ? "dark" : "light"} expanded={expanded} className="d-lg-none">
           <Container>
             <Navbar.Brand as={Link} to="/">
-              <img src={logo} alt="KatScan Logo" className="logo-image sidebar-logo" />
-              <span className="ms-2">KatScan</span>
+              <img src={logo} alt="KatScan Logo" className="logo-image" />
+              <span>KatScan</span>
             </Navbar.Brand>
             <Navbar.Toggle
               aria-controls="basic-navbar-nav"

@@ -238,9 +238,20 @@
         width: 100%;  /* Ensure the main content takes the full width */
     }
 
-    .logo-image {
-        width: 30px;  /* Adjust the width for smaller screens */
-        height: 30px; /* Adjust the height for smaller screens */
+    .navbar .logo-image {
+        width: 30px;
+        height: 30px;
+        margin-right: 10px;
+    }
+
+    .navbar .navbar-brand {
+        display: flex;
+        align-items: center;
+    }
+
+    .navbar .navbar-brand span {
+        font-size: 1.2rem;
+        color: var(--secondary-primary-color);
     }
 }
 
