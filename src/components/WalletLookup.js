@@ -14,6 +14,11 @@ const formatNumber = (number) => {
   }).format(parseFloat(number.toFixed(5)));
 };
 
+const shortenString = (str, startLength = 5, endLength = 5) => {
+  if (str.length <= startLength + endLength) return str;
+  return `${str.slice(0, startLength)}...${str.slice(-endLength)}`;
+};
+
 const WalletLookup = () => {
   const [address, setAddress] = useState('');
   const [walletData, setWalletData] = useState(null);
@@ -33,6 +38,17 @@ const WalletLookup = () => {
 
   const transactionObserver = useRef();
   const utxoObserver = useRef();
+
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const fetchWalletData = useCallback(async (addr) => {
     setLoading(true);
@@ -165,6 +181,59 @@ const WalletLookup = () => {
     window.open(`https://explorer.kaspa.org/txs/${transactionId}`, '_blank', 'noopener,noreferrer');
   };
 
+  const MobileTransactionTable = ({ transactions, openExplorer, formatNumber, shortenString }) => (
+    <div className="mobile-table">
+      {transactions.map((tx, index) => (
+        <Card key={tx.transaction_id} className="mb-3">
+          <Card.Body>
+            <div className="mobile-table-row" onClick={() => openExplorer(tx.transaction_id)}>
+              <div className="mobile-table-cell">
+                <strong>Transaction ID:</strong> {shortenString(tx.transaction_id)}
+              </div>
+              <div className="mobile-table-cell">
+                <strong>Amount (KAS):</strong> {formatNumber(tx.outputs.reduce((sum, output) => sum + parseInt(output.amount), 0) / 1e8)}
+              </div>
+              <div className="mobile-table-cell">
+                <strong>Block Time:</strong> {new Date(tx.block_time).toLocaleString()}
+              </div>
+            </div>
+          </Card.Body>
+        </Card>
+      ))}
+    </div>
+  );
+
+  const MobileUTXOTable = ({ utxos, openExplorer, formatNumber, shortenString }) => (
+    <div className="mobile-table">
+      {utxos.map((utxo, index) => (
+        <Card key={`${utxo.outpoint.transactionId}-${utxo.outpoint.index}`} className="mb-3">
+          <Card.Body>
+            <div className="mobile-table-row" onClick={() => openExplorer(utxo.outpoint.transactionId)}>
+              <div className="mobile-table-cell">
+                <strong>Transaction ID:</strong> {shortenString(utxo.outpoint.transactionId)}
+              </div>
+              <div className="mobile-table-cell">
+                <strong>Index:</strong> {utxo.outpoint.index}
+              </div>
+              <div className="mobile-table-cell">
+                <strong>Amount (KAS):</strong> {formatNumber(parseInt(utxo.utxoEntry.amount) / 1e8)}
+              </div>
+              <div className="mobile-table-cell">
+                <strong>Block DAA Score:</strong> {utxo.utxoEntry.blockDaaScore}
+              </div>
+              <div className="mobile-table-cell">
+                <strong>Miner Reward:</strong> {utxo.utxoEntry.isCoinbase ? 'Yes' : 'No'}
+              </div>
+              <div className="mobile-table-cell">
+                <strong>Status:</strong> Unspent
+              </div>
+            </div>
+          </Card.Body>
+        </Card>
+      ))}
+    </div>
+  );
+
   return (
     <Container className="wallet-lookup">
       <h1>Wallet Lookup</h1>
@@ -227,64 +296,82 @@ const WalletLookup = () => {
             
             <Tab eventKey="transactions" title="Recent Transactions">
               <div className="table-wrapper">
-                <Table striped bordered hover>
-                  <thead>
-                    <tr>
-                      <th>Transaction ID</th>
-                      <th>Amount (KAS)</th>
-                      <th>Block Time</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {transactions.map((tx, index) => (
-                      <tr 
-                        key={tx.transaction_id} 
-                        ref={index === transactions.length - 1 ? lastTransactionElementRef : null}
-                        onClick={() => openExplorer(tx.transaction_id)}
-                        className="clickable-row"
-                      >
-                        <td>{tx.transaction_id}</td>
-                        <td>{formatNumber(tx.outputs.reduce((sum, output) => sum + parseInt(output.amount), 0) / 1e8)}</td>
-                        <td>{new Date(tx.block_time).toLocaleString()}</td>
+                {isMobile ? (
+                  <MobileTransactionTable
+                    transactions={transactions}
+                    openExplorer={openExplorer}
+                    formatNumber={formatNumber}
+                    shortenString={shortenString}
+                  />
+                ) : (
+                  <Table striped bordered hover>
+                    <thead>
+                      <tr>
+                        <th>Transaction ID</th>
+                        <th>Amount (KAS)</th>
+                        <th>Block Time</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </Table>
+                    </thead>
+                    <tbody>
+                      {transactions.map((tx, index) => (
+                        <tr 
+                          key={tx.transaction_id} 
+                          ref={index === transactions.length - 1 ? lastTransactionElementRef : null}
+                          onClick={() => openExplorer(tx.transaction_id)}
+                          className="clickable-row"
+                        >
+                          <td>{tx.transaction_id}</td>
+                          <td>{formatNumber(tx.outputs.reduce((sum, output) => sum + parseInt(output.amount), 0) / 1e8)}</td>
+                          <td>{new Date(tx.block_time).toLocaleString()}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </Table>
+                )}
                 {loadingTransactions && <div className="loading-message">Loading more transactions...</div>}
               </div>
             </Tab>
             
             <Tab eventKey="utxos" title="UTXOs">
               <div className="table-wrapper">
-                <Table striped bordered hover>
-                  <thead>
-                    <tr>
-                      <th>Transaction ID</th>
-                      <th>Index</th>
-                      <th>Amount (KAS)</th>
-                      <th>Block DAA Score</th>
-                      <th>Miner Reward</th>
-                      <th>Status</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {utxos.map((utxo, index) => (
-                      <tr 
-                        key={`${utxo.outpoint.transactionId}-${utxo.outpoint.index}`} 
-                        ref={index === utxos.length - 1 ? lastUtxoElementRef : null}
-                        onClick={() => openExplorer(utxo.outpoint.transactionId)}
-                        className="clickable-row"
-                      >
-                        <td>{utxo.outpoint.transactionId}</td>
-                        <td>{utxo.outpoint.index}</td>
-                        <td>{formatNumber(parseInt(utxo.utxoEntry.amount) / 1e8)}</td>
-                        <td>{utxo.utxoEntry.blockDaaScore}</td>
-                        <td>{utxo.utxoEntry.isCoinbase ? 'Yes' : 'No'}</td>
-                        <td>Unspent</td>
+                {isMobile ? (
+                  <MobileUTXOTable
+                    utxos={utxos}
+                    openExplorer={openExplorer}
+                    formatNumber={formatNumber}
+                    shortenString={shortenString}
+                  />
+                ) : (
+                  <Table striped bordered hover>
+                    <thead>
+                      <tr>
+                        <th>Transaction ID</th>
+                        <th>Index</th>
+                        <th>Amount (KAS)</th>
+                        <th>Block DAA Score</th>
+                        <th>Miner Reward</th>
+                        <th>Status</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </Table>
+                    </thead>
+                    <tbody>
+                      {utxos.map((utxo, index) => (
+                        <tr 
+                          key={`${utxo.outpoint.transactionId}-${utxo.outpoint.index}`} 
+                          ref={index === utxos.length - 1 ? lastUtxoElementRef : null}
+                          onClick={() => openExplorer(utxo.outpoint.transactionId)}
+                          className="clickable-row"
+                        >
+                          <td>{utxo.outpoint.transactionId}</td>
+                          <td>{utxo.outpoint.index}</td>
+                          <td>{formatNumber(parseInt(utxo.utxoEntry.amount) / 1e8)}</td>
+                          <td>{utxo.utxoEntry.blockDaaScore}</td>
+                          <td>{utxo.utxoEntry.isCoinbase ? 'Yes' : 'No'}</td>
+                          <td>Unspent</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </Table>
+                )}
                 {loadingUtxos && <div className="loading-message">Loading more UTXOs...</div>}
               </div>
             </Tab>

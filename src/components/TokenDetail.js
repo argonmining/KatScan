@@ -10,6 +10,11 @@ import { censorTicker } from '../utils/censorTicker';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, ArcElement, Title, Tooltip, Legend);
 
+const shortenString = (str, startLength = 5, endLength = 5) => {
+  if (str.length <= startLength + endLength) return str;
+  return `${str.slice(0, startLength)}...${str.slice(-endLength)}`;
+};
+
 const TokenDetail = () => {
   const { tokenId } = useParams();
   const navigate = useNavigate();
@@ -24,6 +29,16 @@ const TokenDetail = () => {
   const [holderDistribution, setHolderDistribution] = useState([]);
   const [mintActivity, setMintActivity] = useState([]);
   const [activeTab, setActiveTab] = useState('topHolders');
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const fetchOperations = useCallback(async () => {
     if (loadingMore || !operationsCursor) return;
@@ -188,8 +203,10 @@ const TokenDetail = () => {
   return (
     <div className="token-detail">
       <div className="token-header">
-        <h1>{censorTicker(tokenData.tick)} Token Details</h1>
-        <span className="creation-date">Deployed on {formatDateTime(tokenData.mtsAdd)}</span>
+        <h1>Token Details: {censorTicker(tokenData.tick)}</h1>
+        <span className="creation-date">
+          Deployed on {formatDateTime(tokenData.mtsAdd)}
+        </span>
       </div>
       <Card className="token-info-card">
         <Card.Body>
@@ -225,35 +242,47 @@ const TokenDetail = () => {
       <Tabs defaultActiveKey="topHolders" className="mb-3" onSelect={(k) => setActiveTab(k)}>
         <Tab eventKey="topHolders" title="Top Holders">
           <div className="detail-table-container">
-            <Table striped bordered hover>
-              <thead>
-                <tr>
-                  <th>Rank</th>
-                  <th>Address</th>
-                  <th>Amount</th>
-                  <th>% of Total Supply</th>
-                </tr>
-              </thead>
-              <tbody>
-                {tokenData.holder && tokenData.holder.map((holder, index) => (
-                  <tr key={index}>
-                    <td>{index + 1}</td>
-                    <td>
-                      <span 
-                        className="clickable-address" 
-                        onClick={() => handleAddressClick(holder.address)}
-                      >
-                        {holder.address}
-                      </span>
-                    </td>
-                    <td>{formatNumber(parseRawNumber(holder.amount, tokenData.dec), tokenData.dec)}</td>
-                    <td>
-                      {((parseRawNumber(holder.amount, tokenData.dec) / parseRawNumber(tokenData.max, tokenData.dec)) * 100).toFixed(2)}%
-                    </td>
+            {isMobile ? (
+              <MobileTable
+                data={tokenData.holder}
+                type="holders"
+                tokenData={tokenData}
+                handleAddressClick={handleAddressClick}
+                formatNumber={formatNumber}
+                parseRawNumber={parseRawNumber}
+                shortenString={shortenString}
+              />
+            ) : (
+              <Table striped bordered hover>
+                <thead>
+                  <tr>
+                    <th>Rank</th>
+                    <th>Address</th>
+                    <th>Amount</th>
+                    <th>% of Total Supply</th>
                   </tr>
-                ))}
-              </tbody>
-            </Table>
+                </thead>
+                <tbody>
+                  {tokenData.holder && tokenData.holder.map((holder, index) => (
+                    <tr key={index}>
+                      <td>{index + 1}</td>
+                      <td>
+                        <span
+                          className="clickable-address"
+                          onClick={() => handleAddressClick(holder.address)}
+                        >
+                          {holder.address}
+                        </span>
+                      </td>
+                      <td>{formatNumber(parseRawNumber(holder.amount, tokenData.dec), tokenData.dec)}</td>
+                      <td>
+                        {((parseRawNumber(holder.amount, tokenData.dec) / parseRawNumber(tokenData.max, tokenData.dec)) * 100).toFixed(2)}%
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            )}
           </div>
           <p className="mt-3 text-muted">
             Note: Only top holders are displayed. The total number of holders is {formatNumber(tokenData.holderTotal, 0)}.
@@ -261,42 +290,56 @@ const TokenDetail = () => {
         </Tab>
         <Tab eventKey="recentOperations" title="Recent Operations">
           <div className="detail-table-container">
-            <Table striped bordered hover>
-              <thead>
-                <tr>
-                  <th>Type</th>
-                  <th>Transaction ID</th>
-                  <th>Address</th>
-                  <th>Amount</th>
-                  <th>Timestamp</th>
-                </tr>
-              </thead>
-              <tbody>
-                {operations && operations.map((op, index) => (
-                  <tr key={index} ref={index === operations.length - 1 ? lastOperationElementRef : null}>
-                    <td>{op.op}</td>
-                    <td>
-                      <span 
-                        className="clickable-address" 
-                        onClick={() => handleTransactionClick(op.hashRev)}
-                      >
-                        {op.hashRev}
-                      </span>
-                    </td>
-                    <td>
-                      <span 
-                        className="clickable-address" 
-                        onClick={() => handleAddressClick(op.op === 'mint' ? op.to : op.from)}
-                      >
-                        {op.op === 'mint' ? op.to : op.from}
-                      </span>
-                    </td>
-                    <td>{formatNumber(parseRawNumber(op.amt, tokenData.dec), tokenData.dec)}</td>
-                    <td>{formatDateTime(op.mtsAdd)}</td>
+            {isMobile ? (
+              <MobileTable
+                data={operations}
+                type="operations"
+                tokenData={tokenData}
+                handleAddressClick={handleAddressClick}
+                handleTransactionClick={handleTransactionClick}
+                formatNumber={formatNumber}
+                parseRawNumber={parseRawNumber}
+                formatDateTime={formatDateTime}
+                shortenString={shortenString}
+              />
+            ) : (
+              <Table striped bordered hover>
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Transaction ID</th>
+                    <th>Address</th>
+                    <th>Amount</th>
+                    <th>Timestamp</th>
                   </tr>
-                ))}
-              </tbody>
-            </Table>
+                </thead>
+                <tbody>
+                  {operations && operations.map((op, index) => (
+                    <tr key={index} ref={index === operations.length - 1 ? lastOperationElementRef : null}>
+                      <td>{op.op}</td>
+                      <td>
+                        <span
+                          className="clickable-address"
+                          onClick={() => handleTransactionClick(op.hashRev)}
+                        >
+                          {op.hashRev}
+                        </span>
+                      </td>
+                      <td>
+                        <span
+                          className="clickable-address"
+                          onClick={() => handleAddressClick(op.op === 'mint' ? op.to : op.from)}
+                        >
+                          {op.op === 'mint' ? op.to : op.from}
+                        </span>
+                      </td>
+                      <td>{formatNumber(parseRawNumber(op.amt, tokenData.dec), tokenData.dec)}</td>
+                      <td>{formatDateTime(op.mtsAdd)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            )}
           </div>
           {loadingMore && <div>Loading more operations...</div>}
           {operationsError && <Alert variant="danger">{operationsError}</Alert>}
@@ -305,120 +348,207 @@ const TokenDetail = () => {
 
         <Tab eventKey="holderDistribution" title="Holder Distribution">
           <div className="chart-container">
-            <Bar
-              data={{
-                labels: holderDistribution.map(item => item.label),
-                datasets: [{
-                  label: 'Percentage of Max Supply',
-                  data: holderDistribution.map(item => item.percentage),
-                  backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(201, 203, 207, 0.2)', // Color for Other Holders
-                  ],
-                  borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(201, 203, 207, 1)', // Border color for Other Holders
-                  ],
-                  borderWidth: 1,
-                }]
-              }}
-              options={{
-                responsive: true,
-                plugins: {
-                  legend: {
-                    position: 'right', // Position the legend to the right of the chart
-                    labels: {
-                      boxWidth: 20,
-                      padding: 15,
-                      generateLabels: (chart) => {
-                        const data = chart.data;
-                        if (data.labels.length && data.datasets.length) {
-                          return data.labels.map((label, i) => {
-                            const value = data.datasets[0].data[i];
-                            return {
-                              text: `${label}: ${value.toFixed(2)}%`,
-                              fillStyle: data.datasets[0].backgroundColor[i],
-                              strokeStyle: data.datasets[0].borderColor[i],
-                              lineWidth: data.datasets[0].borderWidth,
-                              hidden: isNaN(data.datasets[0].data[i]) || data.datasets[0].data[i] === null,
-                              index: i
-                            };
-                          });
+            {isMobile ? (
+              <div className="mobile-holder-distribution">
+                <table className="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>Holder Group</th>
+                      <th>Percentage</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {holderDistribution.map((item, index) => (
+                      <tr key={index}>
+                        <td>{item.label}</td>
+                        <td>{item.percentage.toFixed(2)}%</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <Bar
+                data={{
+                  labels: holderDistribution.map(item => item.label),
+                  datasets: [{
+                    label: 'Percentage of Max Supply',
+                    data: holderDistribution.map(item => item.percentage),
+                    backgroundColor: [
+                      'rgba(255, 99, 132, 0.2)',
+                      'rgba(54, 162, 235, 0.2)',
+                      'rgba(255, 206, 86, 0.2)',
+                      'rgba(75, 192, 192, 0.2)',
+                      'rgba(153, 102, 255, 0.2)',
+                      'rgba(201, 203, 207, 0.2)',
+                    ],
+                    borderColor: [
+                      'rgba(255, 99, 132, 1)',
+                      'rgba(54, 162, 235, 1)',
+                      'rgba(255, 206, 86, 1)',
+                      'rgba(75, 192, 192, 1)',
+                      'rgba(153, 102, 255, 1)',
+                      'rgba(201, 203, 207, 1)',
+                    ],
+                  }]
+                }}
+                options={{
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  plugins: {
+                    legend: {
+                      position: 'right',
+                      labels: {
+                        boxWidth: 20,
+                        padding: 15,
+                        generateLabels: (chart) => {
+                          const data = chart.data;
+                          if (data.labels.length && data.datasets.length) {
+                            return data.labels.map((label, i) => {
+                              const value = data.datasets[0].data[i];
+                              return {
+                                text: `${label}: ${value.toFixed(2)}%`,
+                                fillStyle: data.datasets[0].backgroundColor[i],
+                                strokeStyle: data.datasets[0].borderColor[i],
+                                lineWidth: data.datasets[0].borderWidth,
+                                hidden: isNaN(data.datasets[0].data[i]) || data.datasets[0].data[i] === null,
+                                index: i
+                              };
+                            });
+                          }
+                          return [];
                         }
-                        return [];
+                      },
+                    },
+                    title: {
+                      display: true,
+                      text: 'Holder Distribution'
+                    }
+                  },
+                  scales: {
+                    x: {
+                      beginAtZero: true,
+                      title: {
+                        display: true,
+                        text: 'Holders'
                       }
                     },
-                  },
-                  title: {
-                    display: true,
-                    text: 'Holder Distribution'
-                  }
-                },
-                scales: {
-                  x: {
-                    beginAtZero: true,
-                    title: {
-                      display: true,
-                      text: 'Holders'
-                    }
-                  },
-                  y: {
-                    type: 'logarithmic',
-                    beginAtZero: true,
-                    title: {
-                      display: true,
-                      text: 'Percentage of Max Supply'
+                    y: {
+                      type: 'logarithmic',
+                      beginAtZero: true,
+                      title: {
+                        display: true,
+                        text: 'Percentage of Max Supply'
+                      }
                     }
                   }
-                }
-              }}
-            />
+                }}
+              />
+            )}
           </div>
         </Tab>
 
-        <Tab eventKey="mintActivity" title="Mint Activity">
-          <div className="chart-container">
-            <Line
-              data={{
-                labels: mintActivity.map(item => item.date),
-                datasets: [{
-                  label: 'Daily Mints',
-                  data: mintActivity.map(item => item.count),
-                  borderColor: 'rgb(40, 167, 69)', // Green color
-                  backgroundColor: 'rgba(40, 167, 69, 0.5)',
-                }]
-              }}
-              options={{
-                responsive: true,
-                plugins: {
-                  legend: {
-                    position: 'top',
+        {!isMobile && (
+          <Tab eventKey="mintActivity" title="Mint Activity">
+            <div className="chart-container">
+              <Line
+                data={{
+                  labels: mintActivity.map(item => item.date),
+                  datasets: [{
+                    label: 'Daily Mints',
+                    data: mintActivity.map(item => item.count),
+                    borderColor: 'rgb(40, 167, 69)', // Green color
+                    backgroundColor: 'rgba(40, 167, 69, 0.5)',
+                  }]
+                }}
+                options={{
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  plugins: {
+                    legend: {
+                      position: 'top',
+                    },
+                    title: {
+                      display: true,
+                      text: 'Daily Mint Activity'
+                    }
                   },
-                  title: {
-                    display: true,
-                    text: 'Daily Mint Activity'
+                  scales: {
+                    y: {
+                      beginAtZero: true
+                    }
                   }
-                },
-                scales: {
-                  y: {
-                    beginAtZero: true
-                  }
-                }
-              }}
-            />
-          </div>
-        </Tab>
+                }}
+              />
+            </div>
+          </Tab>
+        )}
       </Tabs>
     </div>
   );
 };
+
+const MobileTable = ({ data, type, tokenData, handleAddressClick, handleTransactionClick, formatNumber, parseRawNumber, formatDateTime, shortenString }) => (
+  <div className="mobile-table">
+    {data.map((item, index) => (
+      <div key={index} className="mobile-table-row">
+        {type === 'holders' && (
+          <>
+            <div className="mobile-table-cell">
+              <strong>Rank:</strong> {index + 1}
+            </div>
+            <div className="mobile-table-cell">
+              <strong>Address:</strong>
+              <span
+                className="clickable-address"
+                onClick={() => handleAddressClick(item.address)}
+              >
+                {shortenString(item.address)}
+              </span>
+            </div>
+            <div className="mobile-table-cell">
+              <strong>Amount:</strong> {formatNumber(parseRawNumber(item.amount, tokenData.dec), tokenData.dec)}
+            </div>
+            <div className="mobile-table-cell">
+              <strong>% of Total Supply:</strong>
+              {((parseRawNumber(item.amount, tokenData.dec) / parseRawNumber(tokenData.max, tokenData.dec)) * 100).toFixed(2)}%
+            </div>
+          </>
+        )}
+        {type === 'operations' && (
+          <>
+            <div className="mobile-table-cell">
+              <strong>Type:</strong> {item.op}
+            </div>
+            <div className="mobile-table-cell">
+              <strong>Transaction ID:</strong>
+              <span
+                className="clickable-address"
+                onClick={() => handleTransactionClick(item.hashRev)}
+              >
+                {shortenString(item.hashRev)}
+              </span>
+            </div>
+            <div className="mobile-table-cell">
+              <strong>Address:</strong>
+              <span
+                className="clickable-address"
+                onClick={() => handleAddressClick(item.op === 'mint' ? item.to : item.from)}
+              >
+                {shortenString(item.op === 'mint' ? item.to : item.from)}
+              </span>
+            </div>
+            <div className="mobile-table-cell">
+              <strong>Amount:</strong> {formatNumber(parseRawNumber(item.amt, tokenData.dec), tokenData.dec)}
+            </div>
+            <div className="mobile-table-cell">
+              <strong>Timestamp:</strong> {formatDateTime(item.mtsAdd)}
+            </div>
+          </>
+        )}
+      </div>
+    ))}
+  </div>
+);
 
 export default TokenDetail;

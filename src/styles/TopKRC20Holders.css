@@ -102,3 +102,123 @@
   width: 0;  /* Remove scrollbar space */
   background: transparent;  /* Optional: just make scrollbar invisible */
 }
+
+@media (max-width: 768px) {
+  .top-krc20-holders-wrapper {
+    padding: 10px;
+  }
+
+  .top-krc20-holders-wrapper h1 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+  }
+
+  .mobile-holders-list {
+    overflow-y: auto;
+    max-height: calc(100vh - 100px);
+  }
+
+  .mobile-holders-list .card {
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .mobile-holders-list .card-body {
+    padding: 12px;
+  }
+
+  .mobile-holders-list .table {
+    font-size: 0.9rem;
+  }
+
+  .mobile-holders-list .btn-link {
+    font-size: 0.9rem;
+    color: var(--primary-color) !important;
+  }
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.table-container .table {
+  min-width: 800px;
+}
+
+@media (min-width: 769px) {
+  .top-krc20-holders-wrapper {
+    padding: 30px;
+  }
+
+  .table-container {
+    margin-top: 20px;
+  }
+
+  .table th, .table td {
+    padding: 12px;
+  }
+}
+
+.dark-mode .top-krc20-holders-wrapper {
+  background-color: var(--dark-bg-color);
+}
+
+.dark-mode .top-krc20-holders-wrapper h1 {
+  color: var(--dark-text-color);
+}
+
+.dark-mode .table {
+  background-color: var(--dark-card-bg);
+  color: var(--dark-text-color);
+}
+
+.dark-mode .table th {
+  background-color: var(--dark-header-bg);
+  color: var(--dark-text-color);
+}
+
+.dark-mode .table td {
+  color: var(--dark-text-color);
+}
+
+.dark-mode .btn-link {
+  color: var(--dark-link-color);
+}
+
+.dark-mode .btn-link:hover {
+  color: var(--dark-link-hover-color);
+}
+
+.dark-mode .wallet-link,
+.dark-mode .clickable-address {
+  color: var(--dark-link-color);
+}
+
+.dark-mode .wallet-link:hover,
+.dark-mode .clickable-address:hover {
+  color: var(--dark-link-hover-color);
+}
+
+@media (max-width: 768px) {
+  .dark-mode .mobile-holders-list .card {
+    background-color: var(--dark-card-bg);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  .dark-mode .mobile-holders-list .btn-link {
+    color: var(--dark-primary-color) !important;
+  }
+}
+
+.dark-mode .card {
+  background-color: var(--dark-card-bg);
+  border-color: var(--dark-border-color);
+}
+
+.dark-mode .table tbody tr {
+  background-color: var(--dark-card-bg);
+}
+
+.dark-mode .table tbody tr:nth-of-type(odd) {
+  background-color: var(--dark-stripe-bg);
+}

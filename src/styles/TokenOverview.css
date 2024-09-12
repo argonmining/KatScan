@@ -47,6 +47,8 @@
     border-radius: 8px;
     scrollbar-width: none;  /* Firefox */
     -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    padding-bottom: 25px;
+    overflow-x: auto;
 }
 
 .table-wrapper::-webkit-scrollbar {
@@ -152,4 +154,89 @@ a:hover {
 .token-ticker {
     font-weight: bold;
     color: var(--secondary-primary-color);
+}
+
+/* Dark mode styles */
+
+.dark-mode .token-overview {
+    background-color: var(--dark-bg-color);
+}
+
+.dark-mode .token-overview-header h2 {
+    color: var(--dark-text-color);
+}
+
+.dark-mode .search-form .form-control {
+    background-color: var(--dark-card-bg);
+    color: var(--dark-text-color);
+    border-color: var(--dark-border-color);
+}
+
+.dark-mode .table-wrapper {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.dark-mode th {
+    background-color: var(--dark-header-bg) !important;
+    color: var(--dark-text-color) !important;
+    border-bottom-color: var(--dark-border-color);
+}
+
+.dark-mode td {
+    color: var(--dark-text-color);
+}
+
+.dark-mode tr:nth-child(even) {
+    background-color: var(--dark-stripe-bg);
+}
+
+.dark-mode tr:hover {
+    background-color: var(--dark-nav-hover-bg);
+}
+
+.dark-mode .progress {
+    background-color: var(--dark-progress-bg);
+}
+
+.dark-mode .progress .progress-bar {
+    background-image: linear-gradient(to right, var(--dark-tertiary-color), var(--dark-primary-color));
+}
+
+.dark-mode .token-ticker {
+    color: var(--dark-text-color);
+}
+
+.dark-mode .table {
+    background-color: var(--dark-card-bg);
+}
+
+.dark-mode .table tbody tr {
+    background-color: var(--dark-card-bg);
+}
+
+.dark-mode .table tbody tr:nth-of-type(odd) {
+    background-color: var(--dark-stripe-bg);
+}
+
+.dark-mode .form-control::placeholder {
+    color: var(--dark-muted-color);
+}
+
+.sticky-column {
+    position: sticky;
+    left: 0;
+    z-index: 2;
+    background-color: inherit;
+}
+
+th.sticky-column {
+    z-index: 3;
+}
+
+.dark-mode .sticky-column {
+    background-color: var(--dark-card-bg);
+}
+
+.dark-mode th.sticky-column {
+    background-color: var(--dark-header-bg) !important;
 }

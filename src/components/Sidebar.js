@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
-import { Nav } from 'react-bootstrap';
+import { Nav, Navbar, Container, Modal, Button } from 'react-bootstrap';
 import { NavLink, Link } from 'react-router-dom';
-import { FaSearch, FaWallet, FaCoins, FaExchangeAlt, FaFireAlt, FaChartLine, FaUsers, FaChevronLeft, FaChevronRight, FaHeart } from 'react-icons/fa';
+import {
+  FaSearch, FaWallet, FaCoins, FaExchangeAlt, FaFireAlt, FaChartLine, FaUsers, 
+  FaChevronLeft, FaChevronRight, FaHeart, FaBars
+} from 'react-icons/fa';
 import logo from '../assets/logo.png';
-import qrCode from '../assets/qr.png'; // Add this import
+import qrCode from '../assets/qr.png';
 import '../styles/Sidebar.css';
-import { Modal, Button } from 'react-bootstrap'; // Add this import
 
-const Sidebar = () => {
+const Sidebar = ({ darkMode, toggleDarkMode, isMobile }) => {
   const [collapsed, setCollapsed] = useState(false);
-  const [showDonateModal, setShowDonateModal] = useState(false); // Add this state
+  const [showDonateModal, setShowDonateModal] = useState(false);
+  const [expanded, setExpanded] = useState(false);
 
   const toggleSidebar = () => {
     setCollapsed(!collapsed);
@@ -31,59 +34,121 @@ const Sidebar = () => {
   );
 
   return (
-    <div className={`sidebar ${collapsed ? 'collapsed' : ''}`}>
-      <div className="sidebar-content">
-        <div className="sidebar-header">
-          <Link to="/" className="logo-link">
-            <img src={logo} alt="KatScan Logo" className="logo-image" />
-            {!collapsed && <h1 className="site-title">KatScan</h1>}
-          </Link>
+    <>
+      {isMobile ? (
+        // Mobile Navbar
+        <Navbar expand="lg" bg={darkMode ? "dark" : "light"} variant={darkMode ? "dark" : "light"} expanded={expanded} className="d-lg-none">
+          <Container>
+            <Navbar.Brand as={Link} to="/">
+              <img src={logo} alt="KatScan Logo" className="logo-image" />
+              <span>KatScan</span>
+            </Navbar.Brand>
+            <Navbar.Toggle
+              aria-controls="basic-navbar-nav"
+              onClick={() => setExpanded(!expanded)}
+            >
+              <FaBars />
+            </Navbar.Toggle>
+            <Navbar.Collapse id="basic-navbar-nav">
+              <Nav className="me-auto">
+                <NavLink to="/transaction-lookup" className="nav-link" onClick={() => setExpanded(false)}>
+                  <FaSearch /> Search Transactions
+                </NavLink>
+                <NavLink to="/wallet" className="nav-link" onClick={() => setExpanded(false)}>
+                  <FaWallet /> Search Addresses
+                </NavLink>
+                <NavLink to="/top-holders" className="nav-link" onClick={() => setExpanded(false)}>
+                  <FaUsers /> Top Holders
+                </NavLink>
+                <NavLink to="/tokens" className="nav-link" onClick={() => setExpanded(false)}>
+                  <FaCoins /> All Tokens
+                </NavLink>
+                <NavLink to="/compare" className="nav-link" onClick={() => setExpanded(false)}>
+                  <FaExchangeAlt /> Side by Side
+                </NavLink>
+                <NavLink to="/mint-heatmap" className="nav-link" onClick={() => setExpanded(false)}>
+                  <FaFireAlt /> Mint Heatmap
+                </NavLink>
+                <NavLink to="/marketcap-calc" className="nav-link" onClick={() => setExpanded(false)}>
+                  <FaChartLine /> MarketCap Calc
+                </NavLink>
+                <NavLink to="#" className="nav-link" onClick={handleDonateClick}>
+                  <FaHeart /> Donate
+                </NavLink>
+                <div className="dark-mode-toggle mobile-dark-mode-toggle">
+                  <span className="dark-mode-label">{darkMode ? 'Dark' : 'Light'} Mode</span>
+                  <label className="switch">
+                    <input type="checkbox" checked={darkMode} onChange={toggleDarkMode} />
+                    <span className="slider"></span>
+                  </label>
+                </div>
+              </Nav>
+            </Navbar.Collapse>
+          </Container>
+        </Navbar>
+      ) : (
+        // Desktop Sidebar
+        <div className={`sidebar ${collapsed ? 'collapsed' : ''} d-none d-lg-block`}>
+          <div className="sidebar-content">
+            <div className="sidebar-header">
+              <Link to="/" className="logo-link">
+                <img src={logo} alt="KatScan Logo" className="logo-image sidebar-logo" />
+                {!collapsed && <h1 className="site-title">KatScan</h1>}
+              </Link>
+            </div>
+            <Nav className="flex-column">
+              <NavSection title="KRC-20 Explorer">
+                <NavLink to="/transaction-lookup" className="nav-link">
+                  <FaSearch /> {!collapsed && <span>Search Transactions</span>}
+                </NavLink>
+                <NavLink to="/wallet" className="nav-link">
+                  <FaWallet /> {!collapsed && <span>Search Addresses</span>}
+                </NavLink>
+                <NavLink to="/top-holders" className="nav-link">
+                  <FaUsers /> {!collapsed && <span>Top Holders</span>}
+                </NavLink>
+              </NavSection>
+              <NavSection title="KRC-20 Tokens">
+                <NavLink to="/tokens" className="nav-link">
+                  <FaCoins /> {!collapsed && <span>All Tokens</span>}
+                </NavLink>
+                <NavLink to="/compare" className="nav-link">
+                  <FaExchangeAlt /> {!collapsed && <span>Side by Side</span>}
+                </NavLink>
+                <NavLink to="/mint-heatmap" className="nav-link">
+                  <FaFireAlt /> {!collapsed && <span>Mint Heatmap</span>}
+                </NavLink>
+                <NavLink to="/marketcap-calc" className="nav-link">
+                  <FaChartLine /> {!collapsed && <span>MarketCap Calc</span>}
+                </NavLink>
+              </NavSection>
+            </Nav>
+            <NavLink to="#" className="donate-link" onClick={handleDonateClick}>
+              <FaHeart /> {!collapsed && <span>Donate</span>}
+            </NavLink>
+            <div className="dark-mode-toggle sidebar-dark-mode-toggle">
+              <span className="dark-mode-label">{darkMode ? 'Dark' : 'Light'}</span>
+              <label className="switch">
+                <input type="checkbox" checked={darkMode} onChange={toggleDarkMode} />
+                <span className="slider"></span>
+              </label>
+            </div>
+            <div className="sidebar-footer">
+              {!collapsed && (
+                <p>
+                  Made with ❤️ by the<br />
+                  Nacho the 𐤊at Community
+                </p>
+              )}
+              <button className="collapse-btn" onClick={toggleSidebar}>
+                {collapsed ? <FaChevronRight /> : <FaChevronLeft />}
+              </button>
+            </div>
+          </div>
         </div>
-        <Nav className="flex-column">
-          <NavSection title="KRC-20 Explorer">
-            <NavLink to="/transaction-lookup" className="nav-link" activeClassName="active">
-              <FaSearch /> {!collapsed && <span>Search Transactions</span>}
-            </NavLink>
-            <NavLink to="/wallet" className="nav-link" activeClassName="active">
-              <FaWallet /> {!collapsed && <span>Search Addresses</span>}
-            </NavLink>
-            <NavLink to="/top-holders" className="nav-link" activeClassName="active">
-              <FaUsers /> {!collapsed && <span>Top Holders</span>}
-            </NavLink>
-          </NavSection>
-
-          <NavSection title="KRC-20 Tokens">
-            <NavLink to="/tokens" className="nav-link" activeClassName="active">
-              <FaCoins /> {!collapsed && <span>All Tokens</span>}
-            </NavLink>
-            <NavLink to="/compare" className="nav-link" activeClassName="active">
-              <FaExchangeAlt /> {!collapsed && <span>Side by Side</span>}
-            </NavLink>
-            <NavLink to="/mint-heatmap" className="nav-link" activeClassName="active">
-              <FaFireAlt /> {!collapsed && <span>Mint Heatmap</span>}
-            </NavLink>
-            <NavLink to="/marketcap-calc" className="nav-link" activeClassName="active">
-              <FaChartLine /> {!collapsed && <span>MarketCap Calc</span>}
-            </NavLink>
-          </NavSection>
-        </Nav>
-        <NavLink to="#" className="donate-link" onClick={handleDonateClick}>
-          <FaHeart /> {!collapsed && <span>Donate</span>}
-        </NavLink>
-        <div className="sidebar-footer">
-          {!collapsed && (
-            <p>
-              Made with ❤️ by the<br />
-              Nacho the 𐤊at Community
-            </p>
-          )}
-          <button className="collapse-btn" onClick={toggleSidebar}>
-            {collapsed ? <FaChevronRight /> : <FaChevronLeft />}
-          </button>
-        </div>
-      </div>
-
-      <Modal show={showDonateModal} onHide={handleCloseDonateModal} centered>
+      )}
+      {/* Donate Modal */}
+      <Modal show={showDonateModal} onHide={handleCloseDonateModal} centered className={darkMode ? 'dark-mode' : ''}>
         <Modal.Header closeButton>
           <Modal.Title>Donate</Modal.Title>
         </Modal.Header>
@@ -91,12 +156,12 @@ const Sidebar = () => {
           <p className="mt-3">Send only Kaspa network assets to this address</p>
           <img src={qrCode} alt="Donate QR Code" className="qr-code-image" />
           <p className="address-text">kaspa:qrtsw8lkquppuurmy9zrjdgpgdthfall90ve06yw88vc9dzmr26wqvz3vlqt9</p>
-          <Button variant="outline-secondary" onClick={() => navigator.clipboard.writeText('kaspa:qrtsw8lkquppuurmy9zrjdgpgdthfall90ve06yw88vc9dzmr26wqvz3vlqt9')}>
+          <Button variant={darkMode ? "outline-light" : "outline-secondary"} onClick={() => navigator.clipboard.writeText('kaspa:qrtsw8lkquppuurmy9zrjdgpgdthfall90ve06yw88vc9dzmr26wqvz3vlqt9')}>
             Copy address
           </Button>
         </Modal.Body>
       </Modal>
-    </div>
+    </>
   );
 };
 

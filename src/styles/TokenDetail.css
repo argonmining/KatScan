@@ -10,7 +10,6 @@
 
 .token-header {
     display: flex;
-    justify-content: space-between;
     align-items: baseline;
     margin-bottom: 20px;
 }
@@ -19,6 +18,7 @@
     font-family: var(--header-font);
     color: var(--secondary-primary-color);
     margin: 0;
+    margin-right: 10px;
 }
 
 .creation-date {
@@ -28,16 +28,16 @@
 }
 
 .token-info-card {
-    margin-bottom: 20px !important;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 15px !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
 }
 
 .token-info-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
-    padding: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+    padding: 15px;
 }
 
 .token-info-item {
@@ -51,19 +51,20 @@
     font-family: var(--sub-header-font);
     font-weight: bold;
     color: var(--tertiary-primary-color);
-    font-size: 0.9rem;
-    margin-bottom: 5px;
+    font-size: 0.8rem;
+    margin-bottom: 2px;
 }
 
 .token-info-value {
     font-family: var(--body-font);
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: 500;
     color: var(--secondary-primary-color);
 }
 
 .nav-tabs {
     border-bottom: 1px solid var(--tertiary-primary-color);
+    overflow: hidden;
 }
 
 .nav-tabs .nav-link {
@@ -130,8 +131,11 @@ tr:hover {
 }
 
 .chart-container {
-    flex: 1; /* Allow the chart to fill the remaining space */
-    overflow: hidden; /* Prevent chart from causing page scroll */
+    flex: 1;
+    overflow: hidden;
+    width: 100%;
+    position: relative;
+    height: 400px; /* Set a default height */
 }
 
 .text-muted {
@@ -151,4 +155,328 @@ tr:hover {
 .table-wrapper::-webkit-scrollbar {
     width: 0;  /* Remove scrollbar space */
     background: transparent;  /* Optional: just make scrollbar invisible */
+}
+
+@media (max-width: 768px) {
+    .token-detail {
+        padding: 10px;
+        height: auto;
+        overflow: auto;
+    }
+
+    .token-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .token-header h1 {
+        font-size: 1.5rem;
+        margin-bottom: 5px;
+    }
+
+    .creation-date {
+        font-size: 0.8rem;
+    }
+
+    .token-info-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .tab-content, .tab-pane {
+        overflow: auto;
+    }
+
+    .tab-content>.active {
+        overflow: auto;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .nav-tabs .nav-link {
+        font-size: 0.9rem;
+        padding: 0.5rem 0.75rem;
+    }
+
+    .detail-table-container {
+        max-height: none;
+        overflow-x: auto;
+    }
+
+    .chart-container {
+        height: 100% !important; /* Adjust height for mobile */
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .chart-container canvas {
+        height: 100% !important; /* Adjust height for mobile */
+        display: flex !important;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+    }
+
+    .tab-content > .active {
+        padding-top: 20px;
+    }
+}
+
+.mobile-table {
+    font-size: 0.9rem;
+}
+
+.mobile-table-row {
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #fff;
+}
+
+.mobile-table-cell {
+    margin-bottom: 5px;
+}
+
+.mobile-table-cell strong {
+    color: var(--primary-color);
+}
+
+.mobile-table-cell .clickable-address {
+  word-break: break-all;
+}
+
+.mobile-holder-distribution {
+    overflow-x: auto;
+    width: 98%;
+    margin-top: 40px;
+}
+
+.mobile-holder-distribution table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.mobile-holder-distribution thead {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+
+.mobile-holder-distribution th,
+.mobile-holder-distribution td {
+    padding: 20px 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.mobile-holder-distribution th {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.mobile-holder-distribution tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+@media (max-width: 768px) {
+    .mobile-holder-distribution {
+        margin-top: 0;
+    }
+
+    .tab-content > .active {
+        padding-top: 10px;
+    }
+
+    .mobile-holder-distribution thead {
+        top: 10px;
+    }
+}
+
+/* Dark mode styles */
+body.dark-mode {
+  background-color: var(--dark-bg-color);
+  color: var(--dark-text-color);
+}
+
+.dark-mode .token-detail {
+  background-color: var(--dark-bg-color);
+}
+
+.dark-mode .token-header h1 {
+  color: var(--dark-text-color);
+}
+
+.dark-mode .creation-date {
+  color: var(--dark-muted-color);
+}
+
+.dark-mode .token-info-card {
+  background-color: var(--dark-card-bg);
+  box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .token-info-label {
+  color: var(--dark-muted-color);
+}
+
+.dark-mode .token-info-value {
+  color: var(--dark-text-color);
+}
+
+.dark-mode .nav-tabs {
+  border-bottom-color: var(--dark-border-color);
+}
+
+.dark-mode .nav-tabs .nav-link {
+  color: var(--dark-text-color);
+}
+
+.dark-mode .nav-tabs .nav-link.active {
+  color: var(--dark-primary-color);
+  background-color: var(--dark-active-bg);
+  border-color: var(--dark-border-color);
+}
+
+.dark-mode .detail-table-container .table th {
+  background-color: var(--dark-header-bg);
+  color: var(--dark-text-color);
+}
+
+.dark-mode .detail-table-container .table td {
+  color: var(--dark-text-color);
+}
+
+.dark-mode tr:nth-child(even) {
+  background-color: var(--dark-stripe-bg);
+}
+
+.dark-mode tr:hover {
+  background-color: var(--dark-nav-hover-bg);
+}
+
+.dark-mode .text-muted {
+  color: var(--dark-muted-color) !important;
+}
+
+.dark-mode .clickable-address {
+  color: var(--dark-link-color);
+}
+
+.dark-mode .clickable-address:hover {
+  color: var(--dark-link-hover-color);
+}
+
+@media (max-width: 768px) {
+  .dark-mode .token-detail {
+    padding: 10px;
+    height: auto;
+    overflow: auto;
+  }
+
+  .dark-mode .token-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .dark-mode .token-header h1 {
+    font-size: 1.5rem;
+    margin-bottom: 5px;
+  }
+
+  .dark-mode .creation-date {
+    font-size: 0.8rem;
+  }
+
+  .dark-mode .token-info-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .dark-mode .tab-content, .dark-mode .tab-pane {
+    overflow: auto;
+  }
+
+  .dark-mode .tab-content>.active {
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .dark-mode .nav-tabs .nav-link {
+    font-size: 0.9rem;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .dark-mode .detail-table-container {
+    max-height: none;
+    overflow-x: auto;
+  }
+
+  .dark-mode .chart-container {
+    height: 100% !important; /* Adjust height for mobile */
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .dark-mode .chart-container canvas {
+    height: 100% !important; /* Adjust height for mobile */
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
+}
+
+.dark-mode .mobile-table {
+  font-size: 0.9rem;
+}
+
+.dark-mode .mobile-table-row {
+  border: 1px solid var(--dark-border-color);
+  border-radius: 4px;
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: var(--dark-card-bg);
+}
+
+.dark-mode .mobile-table-cell {
+  margin-bottom: 5px;
+}
+
+.dark-mode .mobile-table-cell strong {
+  color: var(--dark-primary-color);
+}
+
+.dark-mode .mobile-table-cell .clickable-address {
+  word-break: break-all;
+}
+
+.dark-mode .mobile-holder-distribution {
+  overflow-x: auto;
+  width: 98%;
+}
+
+.dark-mode .mobile-holder-distribution table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.dark-mode .mobile-holder-distribution th,
+.dark-mode .mobile-holder-distribution td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid var(--dark-border-color);
+}
+
+.dark-mode .mobile-holder-distribution th {
+  background-color: var(--dark-header-bg);
+  color: var(--dark-text-color);
+}
+
+.dark-mode .mobile-holder-distribution tr:nth-child(even) {
+  background-color: var(--dark-stripe-bg);
 }
