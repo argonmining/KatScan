@@ -150,7 +150,7 @@ const TokenOverview = () => {
         <Table>
           <thead>
             <tr>
-              <th onClick={() => handleSort('tick')}>Ticker {sortField === 'tick' && (sortDirection === 'asc' ? '▲' : '▼')}</th>
+              <th className="sticky-column" onClick={() => handleSort('tick')}>Ticker {sortField === 'tick' && (sortDirection === 'asc' ? '▲' : '▼')}</th>
               <th className="text-center">Launch Type</th>
               <th onClick={() => handleSort('state')}>Status {sortField === 'state' && (sortDirection === 'asc' ? '▲' : '▼')}</th>
               <th onClick={() => handleSort('max')}>Max Supply {sortField === 'max' && (sortDirection === 'asc' ? '▲' : '▼')}</th>
@@ -164,7 +164,7 @@ const TokenOverview = () => {
             {filteredAndSortedTokens.length > 0 ? (
               filteredAndSortedTokens.map((token) => (
                 <tr key={token.tick}>
-                  <td>
+                  <td className="sticky-column">
                     <Link to={`/tokens/${token.tick}`} className="token-ticker">
                       {censorTicker(token.tick)}
                     </Link>
