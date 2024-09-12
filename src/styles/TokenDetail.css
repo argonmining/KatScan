@@ -250,8 +250,7 @@ tr:hover {
 .mobile-holder-distribution {
     overflow-x: auto;
     width: 98%;
-    margin-top: 20px;
-    padding-top: 40px; /* Add padding to the top */
+    margin-top: 40px;
 }
 
 .mobile-holder-distribution table {
@@ -261,9 +260,8 @@ tr:hover {
 }
 
 .mobile-holder-distribution thead {
-    position: fixed; /* Change to fixed positioning */
-    top: 60px; /* Adjust this value based on your layout */
-    background-color: var(--primary-color);
+    position: sticky;
+    top: 0;
     z-index: 2;
 }
 
@@ -286,7 +284,6 @@ tr:hover {
 @media (max-width: 768px) {
     .mobile-holder-distribution {
         margin-top: 0;
-        padding-top: 60px; /* Increase padding for mobile */
     }
 
     .tab-content > .active {
@@ -294,8 +291,7 @@ tr:hover {
     }
 
     .mobile-holder-distribution thead {
-        top: 100px; /* Adjust this value for mobile */
-        width: calc(100% - 40px); /* Adjust width to account for padding */
+        top: 10px;
     }
 }
 
@@ -433,10 +429,6 @@ body.dark-mode {
     align-items: center;
     width: 100%;
   }
-
-  .dark-mode .tab-content > .active {
-    padding-top: 20px;
-  }
 }
 
 .dark-mode .mobile-table {
@@ -466,26 +458,16 @@ body.dark-mode {
 .dark-mode .mobile-holder-distribution {
   overflow-x: auto;
   width: 98%;
-  margin-top: 20px;
-  padding-top: 40px; /* Add padding to the top */
 }
 
 .dark-mode .mobile-holder-distribution table {
   width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-}
-
-.dark-mode .mobile-holder-distribution thead {
-  position: fixed; /* Change to fixed positioning */
-  top: 60px; /* Adjust this value based on your layout */
-  background-color: var(--dark-header-bg);
-  z-index: 2;
+  border-collapse: collapse;
 }
 
 .dark-mode .mobile-holder-distribution th,
 .dark-mode .mobile-holder-distribution td {
-  padding: 12px 8px;
+  padding: 8px;
   text-align: left;
   border-bottom: 1px solid var(--dark-border-color);
 }
@@ -497,20 +479,4 @@ body.dark-mode {
 
 .dark-mode .mobile-holder-distribution tr:nth-child(even) {
   background-color: var(--dark-stripe-bg);
-}
-
-@media (max-width: 768px) {
-  .dark-mode .mobile-holder-distribution {
-    margin-top: 0;
-    padding-top: 60px; /* Increase padding for mobile */
-  }
-
-  .dark-mode .tab-content > .active {
-    padding-top: 10px;
-  }
-
-  .dark-mode .mobile-holder-distribution thead {
-    top: 100px; /* Adjust this value for mobile */
-    width: calc(100% - 40px); /* Adjust width to account for padding */
-  }
 }
