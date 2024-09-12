@@ -217,6 +217,10 @@ tr:hover {
         align-items: center;
         width: 100%;
     }
+
+    .tab-content > .active {
+        padding-top: 20px;
+    }
 }
 
 .mobile-table {
