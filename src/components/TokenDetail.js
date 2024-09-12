@@ -271,7 +271,7 @@ const TokenDetail = () => {
                           className="clickable-address"
                           onClick={() => handleAddressClick(holder.address)}
                         >
-                          {shortenString(holder.address)}
+                          {holder.address}
                         </span>
                       </td>
                       <td>{formatNumber(parseRawNumber(holder.amount, tokenData.dec), tokenData.dec)}</td>
@@ -322,7 +322,7 @@ const TokenDetail = () => {
                           className="clickable-address"
                           onClick={() => handleTransactionClick(op.hashRev)}
                         >
-                          {shortenString(op.hashRev)}
+                          {op.hashRev}
                         </span>
                       </td>
                       <td>
@@ -330,7 +330,7 @@ const TokenDetail = () => {
                           className="clickable-address"
                           onClick={() => handleAddressClick(op.op === 'mint' ? op.to : op.from)}
                         >
-                          {shortenString(op.op === 'mint' ? op.to : op.from)}
+                          {op.op === 'mint' ? op.to : op.from}
                         </span>
                       </td>
                       <td>{formatNumber(parseRawNumber(op.amt, tokenData.dec), tokenData.dec)}</td>
