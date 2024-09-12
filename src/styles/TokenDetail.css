@@ -250,16 +250,24 @@ tr:hover {
 .mobile-holder-distribution {
     overflow-x: auto;
     width: 98%;
+    margin-top: 20px;
 }
 
 .mobile-holder-distribution table {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.mobile-holder-distribution thead {
+    position: sticky;
+    top: 0;
+    z-index: 2;
 }
 
 .mobile-holder-distribution th,
 .mobile-holder-distribution td {
-    padding: 8px;
+    padding: 12px 8px;
     text-align: left;
     border-bottom: 1px solid #ddd;
 }
@@ -271,6 +279,20 @@ tr:hover {
 
 .mobile-holder-distribution tr:nth-child(even) {
     background-color: #f2f2f2;
+}
+
+@media (max-width: 768px) {
+    .mobile-holder-distribution {
+        margin-top: 0;
+    }
+
+    .tab-content > .active {
+        padding-top: 10px;
+    }
+
+    .mobile-holder-distribution thead {
+        top: 10px;
+    }
 }
 
 /* Dark mode styles */
