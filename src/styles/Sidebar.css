@@ -157,11 +157,16 @@
     .qr-code-image {
         width: 200px;
         height: 200px;
+        margin-bottom: 20px;
     }
 
     .address-text {
         font-family: monospace;
         word-break: break-all;
+        margin-bottom: 20px;
+        padding: 10px;
+        background-color: rgba(0, 0, 0, 0.05);
+        border-radius: 5px;
     }
 
     .donate-button {
@@ -348,4 +353,48 @@
 .navbar-brand .sidebar-logo {
     width: 30px;
     height: 30px;
+}
+
+.dark-mode .modal-content {
+    background-color: var(--dark-bg-color);
+    color: var(--dark-text-color);
+}
+
+.dark-mode .modal-header {
+    border-bottom-color: var(--dark-border-color);
+}
+
+.dark-mode .modal-header .close {
+    color: var(--dark-text-color);
+}
+
+.dark-mode .modal-title {
+    color: var(--dark-primary-color);
+}
+
+.dark-mode .address-text {
+    color: var(--dark-text-color);
+}
+
+.dark-mode .btn-outline-light {
+    color: var(--dark-text-color);
+    border-color: var(--dark-text-color);
+}
+
+.dark-mode .btn-outline-light:hover {
+    color: var(--dark-bg-color);
+    background-color: var(--dark-text-color);
+}
+
+.dark-mode .navbar .navbar-brand span {
+    color: var(--dark-text-color);
+}
+
+.dark-mode .navbar-light .navbar-nav .nav-link {
+    color: var(--dark-text-color);
+}
+
+.dark-mode .navbar-light .navbar-nav .nav-link:hover,
+.dark-mode .navbar-light .navbar-nav .nav-link:focus {
+    color: var(--dark-primary-color);
 }

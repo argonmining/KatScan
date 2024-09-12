@@ -148,7 +148,7 @@ const Sidebar = ({ darkMode, toggleDarkMode, isMobile }) => {
         </div>
       )}
       {/* Donate Modal */}
-      <Modal show={showDonateModal} onHide={handleCloseDonateModal} centered>
+      <Modal show={showDonateModal} onHide={handleCloseDonateModal} centered className={darkMode ? 'dark-mode' : ''}>
         <Modal.Header closeButton>
           <Modal.Title>Donate</Modal.Title>
         </Modal.Header>
@@ -156,7 +156,7 @@ const Sidebar = ({ darkMode, toggleDarkMode, isMobile }) => {
           <p className="mt-3">Send only Kaspa network assets to this address</p>
           <img src={qrCode} alt="Donate QR Code" className="qr-code-image" />
           <p className="address-text">kaspa:qrtsw8lkquppuurmy9zrjdgpgdthfall90ve06yw88vc9dzmr26wqvz3vlqt9</p>
-          <Button variant="outline-secondary" onClick={() => navigator.clipboard.writeText('kaspa:qrtsw8lkquppuurmy9zrjdgpgdthfall90ve06yw88vc9dzmr26wqvz3vlqt9')}>
+          <Button variant={darkMode ? "outline-light" : "outline-secondary"} onClick={() => navigator.clipboard.writeText('kaspa:qrtsw8lkquppuurmy9zrjdgpgdthfall90ve06yw88vc9dzmr26wqvz3vlqt9')}>
             Copy address
           </Button>
         </Modal.Body>
