@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useState, useEffect } from 'react';
+import React, { Suspense, useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import Home from './components/Home';
@@ -15,9 +15,6 @@ import TopKRC20Holders from './components/TopKRC20Holders';
 import './styles/darkMode.css';
 import { useMediaQuery } from 'react-responsive';
 import StructuredData from './components/StructuredData';
-
-const Analytics = lazy(() => import('./components/Analytics'));
-const About = lazy(() => import('./components/About'));
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
@@ -50,8 +47,6 @@ function App() {
               <Route path="/tokens" element={<TokenOverview />} />
               <Route path="/tokens/:tokenId" element={<TokenDetail />} />
               <Route path="/compare" element={<TokenComparison />} />
-              <Route path="/analytics" element={<Analytics />} />
-              <Route path="/about" element={<About />} />
               <Route path="/wallet" element={<WalletLookup />} />
               <Route path="/wallet/:walletAddress" element={<WalletLookup />} />
               <Route path="/transaction-lookup/:hashRev?" element={<TransactionLookup />} />
