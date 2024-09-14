@@ -4,6 +4,8 @@ import { Container, Form, InputGroup, Button, Card, Alert, Badge, Row, Col, Acco
 import { FaSearch, FaCopy, FaExternalLinkAlt, FaArrowRight } from 'react-icons/fa';
 import axios from 'axios';
 import '../styles/TransactionLookup.css';
+import SEO from './SEO';
+import JsonLd from './JsonLd';
 
 const TransactionLookup = () => {
   const [transactionHash, setTransactionHash] = useState('');
@@ -186,6 +188,20 @@ const TransactionLookup = () => {
 
   return (
     <Container className="transaction-lookup">
+      <SEO 
+        title="Transaction Lookup"
+        description="Explore detailed information about KRC-20 token transactions on the Kaspa blockchain."
+        keywords="KRC-20, Kaspa, transaction lookup, blockchain explorer, token transfers"
+      />
+      <JsonLd 
+        data={{
+          "@context": "https://schema.org",
+          "@type": "WebApplication",
+          "name": "KatScan Transaction Lookup",
+          "description": "Explore detailed information about KRC-20 token transactions on the Kaspa blockchain.",
+          "url": "https://katscan.xyz/transaction-lookup"
+        }}
+      />
       <h1>Transaction Lookup</h1>
       <Form onSubmit={handleSubmit}>
         <InputGroup className="mb-3">

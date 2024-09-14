@@ -5,6 +5,8 @@ import { FaSearch } from 'react-icons/fa';
 import { getKRC20TokenList } from '../services/dataService';
 import '../styles/TokenOverview.css';
 import { censorTicker } from '../utils/censorTicker';
+import JsonLd from './JsonLd';
+import SEO from './SEO';
 
 const ITEMS_PER_PAGE = 50;
 
@@ -130,6 +132,14 @@ const TokenOverview = () => {
   if (loading) return <div className="token-overview loading">Loading...</div>;
   if (error) return <div className="token-overview error">Error: {error}</div>;
 
+  const jsonLdData = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "KRC-20 Tokens Overview | KatScan",
+    "description": "Overview of all KRC-20 tokens on the Kaspa blockchain.",
+    "url": "https://katscan.xyz/tokens",
+  };
+
   return (
     <div className="token-overview">
       <div className="token-overview-header">
@@ -205,6 +215,12 @@ const TokenOverview = () => {
           </tbody>
         </Table>
       </div>
+      <JsonLd data={jsonLdData} />
+      <SEO 
+        title="Token Overview"
+        description="Explore and analyze all KRC-20 tokens on the Kaspa blockchain."
+        keywords="KRC-20, Kaspa, token overview, cryptocurrency, blockchain"
+      />
     </div>
   );
 };

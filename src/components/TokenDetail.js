@@ -7,6 +7,9 @@ import { getTokenDetails, getTokenOperations } from '../services/dataService';
 import '../styles/TokenDetail.css';
 import axios from 'axios';
 import { censorTicker } from '../utils/censorTicker';
+import SEO from './SEO';
+import JsonLd from './JsonLd';
+import LinkWithTooltip from './LinkWithTooltip';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, ArcElement, Title, Tooltip, Legend);
 
@@ -200,8 +203,22 @@ const TokenDetail = () => {
   if (error) return <Alert variant="danger">{error}</Alert>;
   if (!tokenData) return <Alert variant="warning">No data available</Alert>;
 
+  const jsonLdData = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": `${tokenData.tick} Token Details | KatScan`,
+    "description": `Detailed information about the KRC-20 token ${tokenData.tick} on the Kaspa blockchain.`,
+    "url": `https://katscan.xyz/tokens/${tokenId}`,
+  };
+
   return (
     <div className="token-detail">
+      <JsonLd data={jsonLdData} />
+      <SEO 
+        title="Token Details"
+        description="Explore detailed information about a specific KRC-20 token on the Kaspa blockchain."
+        keywords="KRC-20, Kaspa, token details, blockchain explorer, token information"
+      />
       <div className="token-header">
         <h1>Token Details: {censorTicker(tokenData.tick)}</h1>
         <span className="creation-date">
@@ -267,12 +284,13 @@ const TokenDetail = () => {
                     <tr key={index}>
                       <td>{index + 1}</td>
                       <td>
-                        <span
+                        <LinkWithTooltip
+                          to={`/wallet/${holder.address}`}
+                          tooltip="View wallet details"
                           className="clickable-address"
-                          onClick={() => handleAddressClick(holder.address)}
                         >
                           {holder.address}
-                        </span>
+                        </LinkWithTooltip>
                       </td>
                       <td>{formatNumber(parseRawNumber(holder.amount, tokenData.dec), tokenData.dec)}</td>
                       <td>
@@ -318,20 +336,22 @@ const TokenDetail = () => {
                     <tr key={index} ref={index === operations.length - 1 ? lastOperationElementRef : null}>
                       <td>{op.op}</td>
                       <td>
-                        <span
+                        <LinkWithTooltip
+                          to={`/transaction-lookup/${op.hashRev}`}
+                          tooltip="View transaction details"
                           className="clickable-address"
-                          onClick={() => handleTransactionClick(op.hashRev)}
                         >
                           {op.hashRev}
-                        </span>
+                        </LinkWithTooltip>
                       </td>
                       <td>
-                        <span
+                        <LinkWithTooltip
+                          to={`/wallet/${op.op === 'mint' ? op.to : op.from}`}
+                          tooltip="View wallet details"
                           className="clickable-address"
-                          onClick={() => handleAddressClick(op.op === 'mint' ? op.to : op.from)}
                         >
                           {op.op === 'mint' ? op.to : op.from}
-                        </span>
+                        </LinkWithTooltip>
                       </td>
                       <td>{formatNumber(parseRawNumber(op.amt, tokenData.dec), tokenData.dec)}</td>
                       <td>{formatDateTime(op.mtsAdd)}</td>
@@ -499,12 +519,13 @@ const MobileTable = ({ data, type, tokenData, handleAddressClick, handleTransact
             </div>
             <div className="mobile-table-cell">
               <strong>Address:</strong>
-              <span
+              <LinkWithTooltip
+                to={`/wallet/${item.address}`}
+                tooltip="View wallet details"
                 className="clickable-address"
-                onClick={() => handleAddressClick(item.address)}
               >
                 {shortenString(item.address)}
-              </span>
+              </LinkWithTooltip>
             </div>
             <div className="mobile-table-cell">
               <strong>Amount:</strong> {formatNumber(parseRawNumber(item.amount, tokenData.dec), tokenData.dec)}
@@ -522,21 +543,23 @@ const MobileTable = ({ data, type, tokenData, handleAddressClick, handleTransact
             </div>
             <div className="mobile-table-cell">
               <strong>Transaction ID:</strong>
-              <span
+              <LinkWithTooltip
+                to={`/transaction-lookup/${item.hashRev}`}
+                tooltip="View transaction details"
                 className="clickable-address"
-                onClick={() => handleTransactionClick(item.hashRev)}
               >
                 {shortenString(item.hashRev)}
-              </span>
+              </LinkWithTooltip>
             </div>
             <div className="mobile-table-cell">
               <strong>Address:</strong>
-              <span
+              <LinkWithTooltip
+                to={`/wallet/${item.op === 'mint' ? item.to : item.from}`}
+                tooltip="View wallet details"
                 className="clickable-address"
-                onClick={() => handleAddressClick(item.op === 'mint' ? item.to : item.from)}
               >
                 {shortenString(item.op === 'mint' ? item.to : item.from)}
-              </span>
+              </LinkWithTooltip>
             </div>
             <div className="mobile-table-cell">
               <strong>Amount:</strong> {formatNumber(parseRawNumber(item.amt, tokenData.dec), tokenData.dec)}

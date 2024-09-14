@@ -5,6 +5,8 @@ import axios from 'axios';
 import '../styles/MintHeatmap.css';
 import PropTypes from 'prop-types';
 import { censorTicker } from '../utils/censorTicker';
+import SEO from './SEO';
+import JsonLd from './JsonLd';
 
 const timeframes = [
   { value: 'day', label: 'Last 24 Hours' },
@@ -177,6 +179,20 @@ const MintHeatmap = () => {
 
   return (
     <Container fluid className="mint-heatmap">
+      <SEO 
+        title="Mint Heatmap"
+        description="Visualize KRC-20 token minting activity on the Kaspa blockchain with an interactive heatmap."
+        keywords="KRC-20, Kaspa, mint heatmap, token activity, visualization"
+      />
+      <JsonLd 
+        data={{
+          "@context": "https://schema.org",
+          "@type": "WebApplication",
+          "name": "KatScan Mint Heatmap",
+          "description": "Visualize KRC-20 token minting activity on the Kaspa blockchain with an interactive heatmap.",
+          "url": "https://katscan.xyz/mint-heatmap"
+        }}
+      />
       <h1 className="mb-3">Token Mint Heatmap</h1>
       <Row className="mb-3">
         <Col md={4}>

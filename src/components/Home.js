@@ -3,6 +3,8 @@ import { Container, Row, Col, Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { FaExchangeAlt, FaWallet, FaCoins, FaChartBar, FaCalculator, FaUsers } from 'react-icons/fa';
 import '../styles/Home.css';
+import SEO from './SEO';
+import JsonLd from './JsonLd';
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://api.kasplex.org/v1';
 
@@ -14,6 +16,14 @@ const Home = () => {
   });
 
   const [recentTokens, setRecentTokens] = useState([]);
+
+  const jsonLdData = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "KatScan Home",
+    "description": "Explore KRC-20 tokens on the Kaspa blockchain",
+    "url": "https://katscan.xyz"
+  };
 
   useEffect(() => {
     // Fetch network stats
@@ -63,64 +73,72 @@ const Home = () => {
   );
 
   return (
-    <Container fluid className="home-container d-flex flex-column vh-100">
-      <Row className="header-section py-2">
-        <Col>
-          <h1 className="text-center mb-0">KatScan</h1>
-          <p className="text-center small mb-0">Explore, Analyze, and Compare KRC-20 Token Data</p>
-        </Col>
-      </Row>
+    <>
+      <JsonLd data={jsonLdData} />
+      <Container fluid className="home-container d-flex flex-column vh-100">
+        <SEO 
+          title="Home"
+          description="Explore, analyze, and compare KRC-20 tokens on the Kaspa blockchain with KatScan. Real-time data and insights for crypto enthusiasts and investors."
+          keywords="KRC-20, KRC20, KatScan, Kaspa, blockdag, kaspa explorer, krc20 explorer, kasplex explorer, kaspa blockchain, krc20 blockchain, kaspa tokens, krc20 tokens, kaspa transactions, krc20 transactions, kaspa statistics, krc20 statistics, kaspa network, krc20 network, kaspa development, krc20 development, kaspa statistics, krc20 statistics, kaspa network, krc20 network, kaspa development, krc20 development"
+        />
+        <Row className="header-section py-2">
+          <Col>
+            <h1 className="text-center mb-0">KatScan</h1>
+            <p className="text-center small mb-0">Explore, Analyze, and Compare KRC-20 Token Data</p>
+          </Col>
+        </Row>
 
-      <Row className="mb-3">
-        <Col>
-          <h5 className="section-title mb-2">Key Features</h5>
-          <Row className="mb-2">
-            <FeatureCard title="All Tokens" icon={<FaCoins className="feature-icon" />} link="/tokens" />
-            <FeatureCard title="Address Lookup" icon={<FaWallet className="feature-icon" />} link="/wallet" />
-            <FeatureCard title="Token Comparison" icon={<FaExchangeAlt className="feature-icon" />} link="/compare" />
-          </Row>
-          <Row className="mb-3">
-            <FeatureCard title="Top Holders" icon={<FaUsers className="feature-icon" />} link="/top-holders" />
-            <FeatureCard title="Mint Heatmap" icon={<FaChartBar className="feature-icon" />} link="/mint-heatmap" />
-            <FeatureCard title="MarketCap Calculator" icon={<FaCalculator className="feature-icon" />} link="/marketcap-calc" />
-          </Row>
+        <Row className="mb-3">
+          <Col>
+            <h5 className="section-title mb-2">Key Features</h5>
+            <Row className="mb-2">
+              <FeatureCard title="All Tokens" icon={<FaCoins className="feature-icon" />} link="/tokens" />
+              <FeatureCard title="Address Lookup" icon={<FaWallet className="feature-icon" />} link="/wallet" />
+              <FeatureCard title="Token Comparison" icon={<FaExchangeAlt className="feature-icon" />} link="/compare" />
+            </Row>
+            <Row className="mb-3">
+              <FeatureCard title="Top Holders" icon={<FaUsers className="feature-icon" />} link="/top-holders" />
+              <FeatureCard title="Mint Heatmap" icon={<FaChartBar className="feature-icon" />} link="/mint-heatmap" />
+              <FeatureCard title="MarketCap Calculator" icon={<FaCalculator className="feature-icon" />} link="/marketcap-calc" />
+            </Row>
 
-          <h5 className="section-title mb-2">Kasplex Statistics</h5>
-          <Row className="mb-4">
-            <StatCard
-              title="Total KRC20 Transactions"
-              value={networkStats.opTotal}
-              icon={<FaExchangeAlt className="stat-icon" />}
-            />
-            <StatCard
-              title="Total KRC20 Tokens Deployed"
-              value={networkStats.tokenTotal}
-              icon={<FaCoins className="stat-icon" />}
-            />
-            <StatCard
-              title="Total Fees Paid (KAS)"
-              value={networkStats.feeTotal}
-              icon={<FaWallet className="stat-icon" />}
-            />
-          </Row>
+            <h5 className="section-title mb-2">Kasplex Statistics</h5>
+            <Row className="mb-4">
+              <StatCard
+                title="Total KRC20 Transactions"
+                value={networkStats.opTotal}
+                icon={<FaExchangeAlt className="stat-icon" />}
+              />
+              <StatCard
+                title="Total KRC20 Tokens Deployed"
+                value={networkStats.tokenTotal}
+                icon={<FaCoins className="stat-icon" />}
+              />
+              <StatCard
+                title="Total Fees Paid (KAS)"
+                value={networkStats.feeTotal}
+                icon={<FaWallet className="stat-icon" />}
+              />
+            </Row>
 
-          <h5 className="section-title mb-2">Recently Deployed Tokens</h5>
-          <Row>
-            {recentTokens.map(token => (
-              <Col xs={4} key={token.hashRev} className="mb-2">
-                <Card className="token-card h-100" as={Link} to={`/tokens/${token.tick}`}>
-                  <Card.Body className="p-2">
-                    <Card.Title className="small mb-1">{token.tick}</Card.Title>
-                    <Card.Text className="small mb-0">Max: {new Intl.NumberFormat('en-US', { notation: 'compact' }).format(token.max / Math.pow(10, token.dec))}</Card.Text>
-                    <Card.Text className="small mb-0">Minted: {new Intl.NumberFormat('en-US', { notation: 'compact' }).format(token.minted / Math.pow(10, token.dec))}</Card.Text>
-                  </Card.Body>
-                </Card>
-              </Col>
-            ))}
-          </Row>
-        </Col>
-      </Row>
-    </Container>
+            <h5 className="section-title mb-2">Recently Deployed Tokens</h5>
+            <Row>
+              {recentTokens.map(token => (
+                <Col xs={4} key={token.hashRev} className="mb-2">
+                  <Card className="token-card h-100" as={Link} to={`/tokens/${token.tick}`}>
+                    <Card.Body className="p-2">
+                      <Card.Title className="small mb-1">{token.tick}</Card.Title>
+                      <Card.Text className="small mb-0">Max: {new Intl.NumberFormat('en-US', { notation: 'compact' }).format(token.max / Math.pow(10, token.dec))}</Card.Text>
+                      <Card.Text className="small mb-0">Minted: {new Intl.NumberFormat('en-US', { notation: 'compact' }).format(token.minted / Math.pow(10, token.dec))}</Card.Text>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              ))}
+            </Row>
+          </Col>
+        </Row>
+      </Container>
+    </>
   );
 };
 

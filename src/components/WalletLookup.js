@@ -5,6 +5,8 @@ import { FaSearch, FaCopy } from 'react-icons/fa';
 import axios from 'axios';
 import '../styles/WalletLookup.css';
 import { censorTicker } from '../utils/censorTicker';
+import SEO from './SEO';
+import JsonLd from './JsonLd';
 
 // Helper function for number formatting
 const formatNumber = (number) => {
@@ -236,6 +238,20 @@ const WalletLookup = () => {
 
   return (
     <Container className="wallet-lookup">
+      <SEO 
+        title="Wallet Lookup"
+        description="Look up KRC-20 token balances and transaction history for any wallet address on the Kaspa blockchain."
+        keywords="KRC-20, Kaspa, wallet lookup, token balances, transaction history"
+      />
+      <JsonLd 
+        data={{
+          "@context": "https://schema.org",
+          "@type": "WebApplication",
+          "name": "KatScan Wallet Lookup",
+          "description": "Look up KRC-20 token balances and transaction history for any wallet address on the Kaspa blockchain.",
+          "url": "https://katscan.xyz/wallet"
+        }}
+      />
       <h1>Wallet Lookup</h1>
       <Form onSubmit={handleSubmit}>
         <InputGroup className="mb-3">

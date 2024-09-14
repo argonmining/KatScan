@@ -6,6 +6,8 @@ import { Link } from 'react-router-dom';
 import '../styles/TopKRC20Holders.css';
 import { censorTicker } from '../utils/censorTicker';
 import { useMediaQuery } from 'react-responsive';
+import SEO from './SEO';
+import JsonLd from './JsonLd';
 
 const API_BASE_URL = 'https://katapi.nachowyborski.xyz/api/topHolders';
 
@@ -120,6 +122,20 @@ const TopKRC20Holders = () => {
   return (
     <div className="top-krc20-holders-wrapper">
       <h1>Top KRC20 Token Holders</h1>
+      <SEO 
+        title="Top KRC-20 Token Holders"
+        description="Explore the top holders of KRC-20 tokens on the Kaspa blockchain, ranked by unique token holdings."
+        keywords="KRC-20, Kaspa, top holders, token distribution, whale analysis"
+      />
+      <JsonLd 
+        data={{
+          "@context": "https://schema.org",
+          "@type": "WebApplication",
+          "name": "KatScan Top KRC-20 Token Holders",
+          "description": "Explore the top holders of KRC-20 tokens on the Kaspa blockchain, ranked by unique token holdings.",
+          "url": "https://katscan.xyz/top-holders"
+        }}
+      />
       {isMobile ? (
         <MobileView
           holders={topHolders}
