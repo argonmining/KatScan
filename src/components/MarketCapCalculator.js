@@ -8,6 +8,8 @@ import { getKRC20TokenList, getDetailedTokenInfo } from '../services/dataService
 import { searchCryptos, getCryptoData } from '../services/coingeckoService';
 import '../styles/MarketCapCalculator.css';
 import { censorTicker } from '../utils/censorTicker';
+import SEO from './SEO';
+import JsonLd from './JsonLd';
 
 const MarketCapCalculator = () => {
   const [krc20List, setKrc20List] = useState([]);
@@ -139,6 +141,20 @@ const MarketCapCalculator = () => {
 
   return (
     <Container fluid className="market-cap-calculator">
+      <SEO 
+        title="Market Cap Calculator"
+        description="Calculate and compare market caps of KRC-20 tokens on the Kaspa network."
+        keywords="KRC-20, Kaspa, market cap, calculator, cryptocurrency"
+      />
+      <JsonLd 
+        data={{
+          "@context": "https://schema.org",
+          "@type": "WebApplication",
+          "name": "KatScan Market Cap Calculator",
+          "description": "Calculate and compare market caps of KRC-20 tokens on the Kaspa network.",
+          "url": "https://katscan.xyz/marketcap-calc"
+        }}
+      />
       <Row className="justify-content-center">
         <Col md={10} lg={8}>
           <Card className="main-card">

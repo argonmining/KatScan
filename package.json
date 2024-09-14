@@ -22,6 +22,7 @@
     "react-dom": "^18.3.1",
     "react-force-graph": "^1.44.4",
     "react-heatmap-grid": "^0.9.0",
+    "react-helmet": "^6.1.0",
     "react-icons": "^5.3.0",
     "react-responsive": "^10.0.0",
     "react-router-dom": "^6.26.1",

@@ -7,6 +7,8 @@ import { getKRC20TokenList, getTokenDetails } from '../services/dataService';
 import '../styles/TokenComparison.css';
 import { FaChartBar, FaUsers, FaChartPie } from 'react-icons/fa'; // Import icons
 import { censorTicker } from '../utils/censorTicker';
+import SEO from './SEO';
+import JsonLd from './JsonLd';
 
 ChartJS.register(
   CategoryScale,
@@ -60,7 +62,7 @@ const TokenComparison = () => {
 
     const totalSupply = calculateValue(token.minted, token.dec);
     const sortedHolders = [...token.holder].sort((a, b) => parseInt(b.amount) - parseInt(a.amount));
-    
+
     const top10Amount = sortedHolders.slice(0, 10).reduce((sum, holder) => sum + calculateValue(holder.amount, token.dec), 0);
     const top50Amount = sortedHolders.slice(0, 50).reduce((sum, holder) => sum + calculateValue(holder.amount, token.dec), 0);
 
@@ -199,7 +201,7 @@ const TokenComparison = () => {
         y: {
           type: 'logarithmic',
           ticks: {
-            callback: function(value) {
+            callback: function (value) {
               return formatLargeNumber(value);
             },
             maxTicksLimit: 8
@@ -245,7 +247,7 @@ const TokenComparison = () => {
       plugins: {
         tooltip: {
           callbacks: {
-            label: function(context) {
+            label: function (context) {
               let label = context.dataset.label || '';
               if (label) {
                 label += ': ';
@@ -275,7 +277,7 @@ const TokenComparison = () => {
         y: {
           stacked: true,
           ticks: {
-            callback: function(value) {
+            callback: function (value) {
               return value + '%';
             }
           }
@@ -319,9 +321,9 @@ const TokenComparison = () => {
                 <div className="progress-label">
                   {censorTicker(token1.tick)} <Badge bg={getMintType(token1) === "Fair Mint" ? "success" : "warning"}>{getMintType(token1)}</Badge>
                 </div>
-                <ProgressBar 
-                  now={getMintProgress(token1)} 
-                  label={`${getMintProgress(token1).toFixed(2)}%`} 
+                <ProgressBar
+                  now={getMintProgress(token1)}
+                  label={`${getMintProgress(token1).toFixed(2)}%`}
                   variant="info"
                 />
               </div>
@@ -329,9 +331,9 @@ const TokenComparison = () => {
                 <div className="progress-label">
                   {censorTicker(token2.tick)} <Badge bg={getMintType(token2) === "Fair Mint" ? "success" : "warning"}>{getMintType(token2)}</Badge>
                 </div>
-                <ProgressBar 
-                  now={getMintProgress(token2)} 
-                  label={`${getMintProgress(token2).toFixed(2)}%`} 
+                <ProgressBar
+                  now={getMintProgress(token2)}
+                  label={`${getMintProgress(token2).toFixed(2)}%`}
                   variant="success"
                 />
               </div>
@@ -407,6 +409,20 @@ const TokenComparison = () => {
   return (
     <div className="token-comparison">
       <h2>Compare KRC20 Tokens</h2>
+      <SEO
+        title="Token Comparison"
+        description="Compare KRC-20 tokens on the Kaspa blockchain side by side, analyzing key metrics and holder distributions."
+        keywords="KRC-20, Kaspa, token comparison, cryptocurrency analysis"
+      />
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "WebApplication",
+          "name": "KatScan Token Comparison",
+          "description": "Compare KRC-20 tokens on the Kaspa blockchain side by side, analyzing key metrics and holder distributions.",
+          "url": "https://katscan.xyz/compare"
+        }}
+      />
       <Row className="mb-4">
         <Col md={6}>
           <Form.Group>

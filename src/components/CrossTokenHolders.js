@@ -3,6 +3,8 @@ import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import { getKRC20TokenList } from '../services/dataService';
 import '../styles/CrossTokenHolders.css';
+import SEO from './SEO';
+import JsonLd from './JsonLd';
 
 // Register chart.js components
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
@@ -45,6 +47,20 @@ const CrossTokenHolders = () => {
   return (
     <div className="cross-token-holders">
       <h3>Cross-Token Holders Analysis</h3>
+      <SEO 
+        title="Cross-Token Holders Analysis"
+        description="Analyze and compare holder distributions across different KRC-20 tokens on the Kaspa blockchain."
+        keywords="KRC-20, Kaspa, token holders, cross-token analysis, comparison"
+      />
+      <JsonLd 
+        data={{
+          "@context": "https://schema.org",
+          "@type": "WebApplication",
+          "name": "KatScan Cross-Token Holders Analysis",
+          "description": "Analyze and compare holder distributions across different KRC-20 tokens on the Kaspa blockchain.",
+          "url": "https://katscan.xyz/cross-token-holders"
+        }}
+      />
       <Bar data={chartData} />
     </div>
   );
