@@ -5,8 +5,8 @@ import { FaSearch } from 'react-icons/fa';
 import { getKRC20TokenList } from '../services/dataService';
 import '../styles/TokenOverview.css';
 import { censorTicker } from '../utils/censorTicker';
-import Breadcrumbs from './Breadcrumbs';
 import JsonLd from './JsonLd';
+import SEO from './SEO';
 
 const ITEMS_PER_PAGE = 50;
 
@@ -132,26 +132,12 @@ const TokenOverview = () => {
   if (loading) return <div className="token-overview loading">Loading...</div>;
   if (error) return <div className="token-overview error">Error: {error}</div>;
 
-  const breadcrumbItems = [
-    { label: 'Home', path: '/' },
-    { label: 'Tokens', path: '/tokens' },
-  ];
-
   const jsonLdData = {
     "@context": "https://schema.org",
     "@type": "WebPage",
     "name": "KRC-20 Tokens Overview | KatScan",
     "description": "Overview of all KRC-20 tokens on the Kaspa blockchain.",
     "url": "https://katscan.xyz/tokens",
-    "breadcrumb": {
-      "@type": "BreadcrumbList",
-      "itemListElement": breadcrumbItems.map((item, index) => ({
-        "@type": "ListItem",
-        "position": index + 1,
-        "name": item.label,
-        "item": `https://katscan.xyz${item.path}`
-      }))
-    }
   };
 
   return (
@@ -230,7 +216,11 @@ const TokenOverview = () => {
         </Table>
       </div>
       <JsonLd data={jsonLdData} />
-      <Breadcrumbs items={breadcrumbItems} />
+      <SEO 
+        title="Token Overview"
+        description="Explore and analyze all KRC-20 tokens on the Kaspa blockchain."
+        keywords="KRC-20, Kaspa, token overview, cryptocurrency, blockchain"
+      />
     </div>
   );
 };

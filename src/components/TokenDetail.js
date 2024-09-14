@@ -7,7 +7,7 @@ import { getTokenDetails, getTokenOperations } from '../services/dataService';
 import '../styles/TokenDetail.css';
 import axios from 'axios';
 import { censorTicker } from '../utils/censorTicker';
-import Breadcrumbs from './Breadcrumbs';
+import SEO from './SEO';
 import JsonLd from './JsonLd';
 import LinkWithTooltip from './LinkWithTooltip';
 
@@ -203,33 +203,22 @@ const TokenDetail = () => {
   if (error) return <Alert variant="danger">{error}</Alert>;
   if (!tokenData) return <Alert variant="warning">No data available</Alert>;
 
-  const breadcrumbItems = [
-    { label: 'Home', path: '/' },
-    { label: 'Tokens', path: '/tokens' },
-    { label: tokenData.tick, path: `/tokens/${tokenId}` },
-  ];
-
   const jsonLdData = {
     "@context": "https://schema.org",
     "@type": "WebPage",
     "name": `${tokenData.tick} Token Details | KatScan`,
     "description": `Detailed information about the KRC-20 token ${tokenData.tick} on the Kaspa blockchain.`,
     "url": `https://katscan.xyz/tokens/${tokenId}`,
-    "breadcrumb": {
-      "@type": "BreadcrumbList",
-      "itemListElement": breadcrumbItems.map((item, index) => ({
-        "@type": "ListItem",
-        "position": index + 1,
-        "name": item.label,
-        "item": `https://katscan.xyz${item.path}`
-      }))
-    }
   };
 
   return (
     <div className="token-detail">
       <JsonLd data={jsonLdData} />
-      <Breadcrumbs items={breadcrumbItems} />
+      <SEO 
+        title="Token Details"
+        description="Explore detailed information about a specific KRC-20 token on the Kaspa blockchain."
+        keywords="KRC-20, Kaspa, token details, blockchain explorer, token information"
+      />
       <div className="token-header">
         <h1>Token Details: {censorTicker(tokenData.tick)}</h1>
         <span className="creation-date">
