@@ -18,26 +18,12 @@ const TokenOverview = () => {
   const [sortDirection, setSortDirection] = useState('asc');
   const [searchTerm, setSearchTerm] = useState('');
 
-  const fetchAllTokens = useCallback(async (offset = 0, accumulatedTokens = []) => {
+  const fetchAllTokens = useCallback(async () => {
     try {
-      const data = await getKRC20TokenList(ITEMS_PER_PAGE, sortField, sortDirection, offset);
-      
-      if (data.result && data.result.length > 0) {
-        const newTokens = [...accumulatedTokens, ...data.result];
-        
-        if (data.result.length === ITEMS_PER_PAGE) {
-          // If we received a full page, continue fetching
-          return fetchAllTokens(offset + ITEMS_PER_PAGE, newTokens);
-        } else {
-          // If we received less than a full page, we're done
-          setTokens(newTokens);
-          setLoading(false);
-        }
-      } else {
-        // If we received no results, we're done
-        setTokens(accumulatedTokens);
-        setLoading(false);
-      }
+      setLoading(true);
+      const data = await getKRC20TokenList(ITEMS_PER_PAGE, sortField, sortDirection);
+      setTokens(data.result);
+      setLoading(false);
     } catch (err) {
       console.error('Error in TokenOverview:', err);
       setError(`Failed to fetch tokens: ${err.message}`);

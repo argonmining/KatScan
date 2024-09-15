@@ -14,25 +14,30 @@ export const getTokenDetails = async (tick) => {
 };
 
 // New function to fetch KRC-20 token list
-export const getKRC20TokenList = async (limit = 50, sortField = '', sortDirection = 'asc', cursor = null, direction = 'next') => {
+export const getKRC20TokenList = async (limit = 50, sortField = '', sortDirection = 'asc') => {
   let url = `${BASE_URL}/krc20/tokenlist`;
-  
-  const params = {
-    limit,
-    ...(sortField && { sort: `${sortField}:${sortDirection}` }),
-    ...(cursor && { [direction]: cursor })
-  };
+  let allTokens = [];
+  let cursor = null;
 
-  const fullUrl = `${url}?${new URLSearchParams(params).toString()}`;
-  console.log('Requesting URL:', fullUrl);
+  do {
+    const params = {
+      limit,
+      ...(sortField && { sort: `${sortField}:${sortDirection}` }),
+      ...(cursor && { next: cursor })
+    };
 
-  try {
-    const response = await axios.get(url, { params });
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching KRC20 token list:', error);
-    throw new Error(`Failed to fetch token list: ${error.message}`);
-  }
+    try {
+      const response = await axios.get(url, { params });
+      const data = response.data;
+      allTokens = [...allTokens, ...data.result];
+      cursor = data.next;
+    } catch (error) {
+      console.error('Error fetching KRC20 token list:', error);
+      throw new Error(`Failed to fetch token list: ${error.message}`);
+    }
+  } while (cursor);
+
+  return { result: allTokens };
 };
 
 // New function to fetch token operations
