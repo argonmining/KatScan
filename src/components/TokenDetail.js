@@ -161,7 +161,9 @@ const TokenDetail = () => {
       }
     };
 
-    fetchData();
+    if (tokenId) {
+      fetchData();
+    }
   }, [tokenId, processHolderDistribution]);
 
   useEffect(() => {
