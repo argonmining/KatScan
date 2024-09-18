@@ -59,6 +59,14 @@ const TokenOverview = () => {
     setShowStatusDropdown(false);
   };
 
+  const calculateValue = (value, decimals) => {
+    return parseFloat(value) / Math.pow(10, parseInt(decimals));
+  };
+
+  const calculatePercentage = (part, whole) => {
+    return (part / whole) * 100;
+  };
+
   const filteredAndSortedTokens = useMemo(() => {
     let result = tokens;
     
@@ -108,14 +116,6 @@ const TokenOverview = () => {
       minimumFractionDigits: 0,
       maximumFractionDigits: decimals,
     }).format(value);
-  };
-
-  const calculateValue = (value, decimals) => {
-    return parseFloat(value) / Math.pow(10, parseInt(decimals));
-  };
-
-  const calculatePercentage = (part, whole) => {
-    return (part / whole) * 100;
   };
 
   const formatState = (state) => {
@@ -236,7 +236,7 @@ const TokenOverview = () => {
                   <td>
                     {formatNumber(calculateValue(token.minted, token.dec))}
                     {' '}
-                    <small className="text-muted">{formatPercentage(calculateValue(token.minted, token.dec), calculateValue(token.max, token.dec))}</small>
+                    <small className="text-muted">{formatPercentage(calculateValue(token.minted, token.max), calculateValue(token.max, token.dec))}</small>
                   </td>
                   <td className="text-center">
                     <div className="progress">
