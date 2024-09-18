@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Container, Row, Col, Form } from 'react-bootstrap';
+import { Container, Row, Col, Form, Alert } from 'react-bootstrap';
 import { ResponsiveContainer, Treemap, Tooltip, Legend } from 'recharts';
 import axios from 'axios';
 import '../styles/MintHeatmap.css';
@@ -193,6 +193,9 @@ const MintHeatmap = () => {
           "url": "https://katscan.xyz/mint-heatmap"
         }}
       />
+      <Alert variant="warning">
+        Note: The data displayed on this page may not be accurate due to an ongoing backend service issue.
+      </Alert>
       <h1 className="mb-3">Token Mint Heatmap</h1>
       <Row className="mb-3">
         <Col md={4}>

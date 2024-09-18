@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { Table, ProgressBar, Badge, Form, InputGroup } from 'react-bootstrap'; // eslint-disable-line no-unused-vars
+import { Table, ProgressBar, Badge, Form, InputGroup, DropdownButton, Dropdown } from 'react-bootstrap'; // eslint-disable-line no-unused-vars
 import { FaSearch } from 'react-icons/fa';
 import { getKRC20TokenList } from '../services/dataService';
 import '../styles/TokenOverview.css';
@@ -17,6 +17,8 @@ const TokenOverview = () => {
   const [sortField, setSortField] = useState('');
   const [sortDirection, setSortDirection] = useState('asc');
   const [searchTerm, setSearchTerm] = useState('');
+  const [launchTypeFilter, setLaunchTypeFilter] = useState('');
+  const [statusFilter, setStatusFilter] = useState('');
 
   const fetchAllTokens = useCallback(async () => {
     try {
@@ -55,6 +57,20 @@ const TokenOverview = () => {
       );
     }
 
+    // Filter by launch type
+    if (launchTypeFilter) {
+      result = result.filter(token => 
+        (token.pre === '0' ? 'Fair Mint' : 'Pre-Mint') === launchTypeFilter
+      );
+    }
+
+    // Filter by status
+    if (statusFilter) {
+      result = result.filter(token => 
+        (token.state === 'finished' ? 'Complete' : 'Minting') === statusFilter
+      );
+    }
+
     // Sort
     if (sortField) {
       result.sort((a, b) => {
@@ -65,7 +81,7 @@ const TokenOverview = () => {
     }
 
     return result;
-  }, [tokens, searchTerm, sortField, sortDirection]);
+  }, [tokens, searchTerm, sortField, sortDirection, launchTypeFilter, statusFilter]);
 
   const formatNumber = (value, decimals = 2) => {
     return new Intl.NumberFormat('en-US', {
@@ -141,6 +157,16 @@ const TokenOverview = () => {
             />
           </InputGroup>
         </Form.Group>
+        <DropdownButton id="launch-type-filter" title="Filter by Launch Type" onSelect={(e) => setLaunchTypeFilter(e)}>
+          <Dropdown.Item eventKey="">All</Dropdown.Item>
+          <Dropdown.Item eventKey="Fair Mint">Fair Mint</Dropdown.Item>
+          <Dropdown.Item eventKey="Pre-Mint">Pre-Mint</Dropdown.Item>
+        </DropdownButton>
+        <DropdownButton id="status-filter" title="Filter by Status" onSelect={(e) => setStatusFilter(e)}>
+          <Dropdown.Item eventKey="">All</Dropdown.Item>
+          <Dropdown.Item eventKey="Complete">Complete</Dropdown.Item>
+          <Dropdown.Item eventKey="Minting">Minting</Dropdown.Item>
+        </DropdownButton>
       </div>
       <div className="table-wrapper">
         <Table>
