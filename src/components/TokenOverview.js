@@ -236,7 +236,7 @@ const TokenOverview = () => {
                   <td>
                     {formatNumber(calculateValue(token.minted, token.dec))}
                     {' '}
-                    <small className="text-muted">{formatPercentage(calculateValue(token.minted, token.max), calculateValue(token.max, token.dec))}</small>
+                    <small className="text-muted">{formatPercentage(calculateValue(token.minted, token.dec), calculateValue(token.max, token.dec))}</small>
                   </td>
                   <td className="text-center">
                     <div className="progress">
