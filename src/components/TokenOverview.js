@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { Table, ProgressBar, Badge, Form, InputGroup, DropdownButton, Dropdown } from 'react-bootstrap'; // eslint-disable-line no-unused-vars
+import { Table, ProgressBar, Badge, Form, InputGroup, Dropdown } from 'react-bootstrap'; // eslint-disable-line no-unused-vars
 import { FaSearch } from 'react-icons/fa';
 import { getKRC20TokenList } from '../services/dataService';
 import '../styles/TokenOverview.css';
@@ -165,25 +165,29 @@ const TokenOverview = () => {
           <thead>
             <tr>
               <th className="sticky-column" onClick={() => handleSort('tick')}>Ticker {sortField === 'tick' && (sortDirection === 'asc' ? '▲' : '▼')}</th>
-              <th className="text-center" onClick={() => setShowLaunchTypeDropdown(!showLaunchTypeDropdown)}>
-                Launch Type
-                {showLaunchTypeDropdown && (
-                  <DropdownButton id="launch-type-filter" title="Filter by Launch Type" onSelect={(e) => setLaunchTypeFilter(e)}>
-                    <Dropdown.Item eventKey="">All</Dropdown.Item>
-                    <Dropdown.Item eventKey="Fair Mint">Fair Mint</Dropdown.Item>
-                    <Dropdown.Item eventKey="Pre-Mint">Pre-Mint</Dropdown.Item>
-                  </DropdownButton>
-                )}
+              <th className="text-center">
+                <Dropdown show={showLaunchTypeDropdown} onToggle={() => setShowLaunchTypeDropdown(!showLaunchTypeDropdown)}>
+                  <Dropdown.Toggle as="div" className="dropdown-header">
+                    Launch Type
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    <Dropdown.Item eventKey="" onSelect={(e) => setLaunchTypeFilter(e)}>All</Dropdown.Item>
+                    <Dropdown.Item eventKey="Fair Mint" onSelect={(e) => setLaunchTypeFilter(e)}>Fair Mint</Dropdown.Item>
+                    <Dropdown.Item eventKey="Pre-Mint" onSelect={(e) => setLaunchTypeFilter(e)}>Pre-Mint</Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
               </th>
-              <th onClick={() => setShowStatusDropdown(!showStatusDropdown)}>
-                Status
-                {showStatusDropdown && (
-                  <DropdownButton id="status-filter" title="Filter by Status" onSelect={(e) => setStatusFilter(e)}>
-                    <Dropdown.Item eventKey="">All</Dropdown.Item>
-                    <Dropdown.Item eventKey="Complete">Complete</Dropdown.Item>
-                    <Dropdown.Item eventKey="Minting">Minting</Dropdown.Item>
-                  </DropdownButton>
-                )}
+              <th>
+                <Dropdown show={showStatusDropdown} onToggle={() => setShowStatusDropdown(!showStatusDropdown)}>
+                  <Dropdown.Toggle as="div" className="dropdown-header">
+                    Status
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    <Dropdown.Item eventKey="" onSelect={(e) => setStatusFilter(e)}>All</Dropdown.Item>
+                    <Dropdown.Item eventKey="Complete" onSelect={(e) => setStatusFilter(e)}>Complete</Dropdown.Item>
+                    <Dropdown.Item eventKey="Minting" onSelect={(e) => setStatusFilter(e)}>Minting</Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
               </th>
               <th onClick={() => handleSort('max')}>Max Supply {sortField === 'max' && (sortDirection === 'asc' ? '▲' : '▼')}</th>
               <th onClick={() => handleSort('pre')}>Pre-Minted {sortField === 'pre' && (sortDirection === 'asc' ? '▲' : '▼')}</th>

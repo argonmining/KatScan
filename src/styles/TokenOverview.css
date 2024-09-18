@@ -156,6 +156,33 @@ a:hover {
     color: var(--secondary-primary-color);
 }
 
+/* Dropdown header styles */
+.dropdown-header {
+    display: inline-block;
+    cursor: pointer;
+    padding: 15px 10px;
+    background-color: var(--primary-color) !important;
+    color: white !important;
+    font-family: var(--sub-header-font);
+    font-weight: 500;
+    text-transform: uppercase;
+    border-bottom: 2px solid var(--secondary-color);
+}
+
+.dropdown-menu {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+}
+
+.dropdown-item {
+    color: white;
+}
+
+.dropdown-item:hover {
+    background-color: var(--secondary-color);
+}
+
 /* Dark mode styles */
 
 .dark-mode .token-overview {
@@ -239,4 +266,24 @@ th.sticky-column {
 
 .dark-mode th.sticky-column {
     background-color: var(--dark-header-bg) !important;
+}
+
+/* Dark mode dropdown header styles */
+.dark-mode .dropdown-header {
+    background-color: var(--dark-header-bg) !important;
+    color: var(--dark-text-color) !important;
+    border-bottom-color: var(--dark-border-color);
+}
+
+.dark-mode .dropdown-menu {
+    background-color: var(--dark-header-bg);
+    color: var(--dark-text-color);
+}
+
+.dark-mode .dropdown-item {
+    color: var(--dark-text-color);
+}
+
+.dark-mode .dropdown-item:hover {
+    background-color: var(--dark-secondary-color);
 }
