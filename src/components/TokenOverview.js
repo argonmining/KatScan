@@ -49,6 +49,16 @@ const TokenOverview = () => {
     }
   };
 
+  const handleLaunchTypeSelect = (eventKey) => {
+    setLaunchTypeFilter(eventKey);
+    setShowLaunchTypeDropdown(false);
+  };
+
+  const handleStatusSelect = (eventKey) => {
+    setStatusFilter(eventKey);
+    setShowStatusDropdown(false);
+  };
+
   const filteredAndSortedTokens = useMemo(() => {
     let result = tokens;
     
@@ -76,9 +86,17 @@ const TokenOverview = () => {
     // Sort
     if (sortField) {
       result.sort((a, b) => {
-        if (a[sortField] < b[sortField]) return sortDirection === 'asc' ? -1 : 1;
-        if (a[sortField] > b[sortField]) return sortDirection === 'asc' ? 1 : -1;
-        return 0;
+        if (sortField === 'minted') {
+          const aPercentage = calculatePercentage(calculateValue(a.minted, a.dec), calculateValue(a.max, a.dec));
+          const bPercentage = calculatePercentage(calculateValue(b.minted, b.dec), calculateValue(b.max, b.dec));
+          if (aPercentage < bPercentage) return sortDirection === 'asc' ? -1 : 1;
+          if (aPercentage > bPercentage) return sortDirection === 'asc' ? 1 : -1;
+          return 0;
+        } else {
+          if (a[sortField] < b[sortField]) return sortDirection === 'asc' ? -1 : 1;
+          if (a[sortField] > b[sortField]) return sortDirection === 'asc' ? 1 : -1;
+          return 0;
+        }
       });
     }
 
@@ -171,9 +189,9 @@ const TokenOverview = () => {
                     Launch Type
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
-                    <Dropdown.Item eventKey="" onSelect={(e) => setLaunchTypeFilter(e)}>All</Dropdown.Item>
-                    <Dropdown.Item eventKey="Fair Mint" onSelect={(e) => setLaunchTypeFilter(e)}>Fair Mint</Dropdown.Item>
-                    <Dropdown.Item eventKey="Pre-Mint" onSelect={(e) => setLaunchTypeFilter(e)}>Pre-Mint</Dropdown.Item>
+                    <Dropdown.Item eventKey="" onSelect={handleLaunchTypeSelect}>All</Dropdown.Item>
+                    <Dropdown.Item eventKey="Fair Mint" onSelect={handleLaunchTypeSelect}>Fair Mint</Dropdown.Item>
+                    <Dropdown.Item eventKey="Pre-Mint" onSelect={handleLaunchTypeSelect}>Pre-Mint</Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
               </th>
@@ -183,9 +201,9 @@ const TokenOverview = () => {
                     Status
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
-                    <Dropdown.Item eventKey="" onSelect={(e) => setStatusFilter(e)}>All</Dropdown.Item>
-                    <Dropdown.Item eventKey="Complete" onSelect={(e) => setStatusFilter(e)}>Complete</Dropdown.Item>
-                    <Dropdown.Item eventKey="Minting" onSelect={(e) => setStatusFilter(e)}>Minting</Dropdown.Item>
+                    <Dropdown.Item eventKey="" onSelect={handleStatusSelect}>All</Dropdown.Item>
+                    <Dropdown.Item eventKey="Complete" onSelect={handleStatusSelect}>Complete</Dropdown.Item>
+                    <Dropdown.Item eventKey="Minting" onSelect={handleStatusSelect}>Minting</Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
               </th>
