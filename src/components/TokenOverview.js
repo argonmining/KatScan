@@ -19,6 +19,8 @@ const TokenOverview = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [launchTypeFilter, setLaunchTypeFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
+  const [showLaunchTypeDropdown, setShowLaunchTypeDropdown] = useState(false);
+  const [showStatusDropdown, setShowStatusDropdown] = useState(false);
 
   const fetchAllTokens = useCallback(async () => {
     try {
@@ -157,24 +159,32 @@ const TokenOverview = () => {
             />
           </InputGroup>
         </Form.Group>
-        <DropdownButton id="launch-type-filter" title="Filter by Launch Type" onSelect={(e) => setLaunchTypeFilter(e)}>
-          <Dropdown.Item eventKey="">All</Dropdown.Item>
-          <Dropdown.Item eventKey="Fair Mint">Fair Mint</Dropdown.Item>
-          <Dropdown.Item eventKey="Pre-Mint">Pre-Mint</Dropdown.Item>
-        </DropdownButton>
-        <DropdownButton id="status-filter" title="Filter by Status" onSelect={(e) => setStatusFilter(e)}>
-          <Dropdown.Item eventKey="">All</Dropdown.Item>
-          <Dropdown.Item eventKey="Complete">Complete</Dropdown.Item>
-          <Dropdown.Item eventKey="Minting">Minting</Dropdown.Item>
-        </DropdownButton>
       </div>
       <div className="table-wrapper">
         <Table>
           <thead>
             <tr>
               <th className="sticky-column" onClick={() => handleSort('tick')}>Ticker {sortField === 'tick' && (sortDirection === 'asc' ? '▲' : '▼')}</th>
-              <th className="text-center">Launch Type</th>
-              <th onClick={() => handleSort('state')}>Status {sortField === 'state' && (sortDirection === 'asc' ? '▲' : '▼')}</th>
+              <th className="text-center" onClick={() => setShowLaunchTypeDropdown(!showLaunchTypeDropdown)}>
+                Launch Type
+                {showLaunchTypeDropdown && (
+                  <DropdownButton id="launch-type-filter" title="Filter by Launch Type" onSelect={(e) => setLaunchTypeFilter(e)}>
+                    <Dropdown.Item eventKey="">All</Dropdown.Item>
+                    <Dropdown.Item eventKey="Fair Mint">Fair Mint</Dropdown.Item>
+                    <Dropdown.Item eventKey="Pre-Mint">Pre-Mint</Dropdown.Item>
+                  </DropdownButton>
+                )}
+              </th>
+              <th onClick={() => setShowStatusDropdown(!showStatusDropdown)}>
+                Status
+                {showStatusDropdown && (
+                  <DropdownButton id="status-filter" title="Filter by Status" onSelect={(e) => setStatusFilter(e)}>
+                    <Dropdown.Item eventKey="">All</Dropdown.Item>
+                    <Dropdown.Item eventKey="Complete">Complete</Dropdown.Item>
+                    <Dropdown.Item eventKey="Minting">Minting</Dropdown.Item>
+                  </DropdownButton>
+                )}
+              </th>
               <th onClick={() => handleSort('max')}>Max Supply {sortField === 'max' && (sortDirection === 'asc' ? '▲' : '▼')}</th>
               <th onClick={() => handleSort('pre')}>Pre-Minted {sortField === 'pre' && (sortDirection === 'asc' ? '▲' : '▼')}</th>
               <th onClick={() => handleSort('minted')}>Total Minted {sortField === 'minted' && (sortDirection === 'asc' ? '▲' : '▼')}</th>
