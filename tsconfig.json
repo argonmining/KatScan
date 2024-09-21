@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "baseUrl": "./",
+    "sourceMap": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "module": "es2022",
+    "moduleResolution": "node",
+    "jsx": "react"
+  },
+  "include": [
+    "src"
+  ]
+}
