@@ -1,7 +1,7 @@
 {
     "env": {
       "browser": true,
-      "es2022": true
+      "es2021": true
     },
     "extends": ["eslint:recommended", "plugin:react/recommended", "plugin:react-hooks/recommended"],
     "parserOptions": {
@@ -9,11 +9,15 @@
       "sourceType": "module",
       "ecmaFeatures": {
         "jsx": true
-      }
+      },
+      "parser": "@typescript-eslint/parser",
+      "tsconfigRootDir": "./",
+      "project": "tsconfig.json"
     },
-    "plugins": ["react", "react-hooks"],
+    "plugins": ["react", "react-hooks", "@typescript-eslint/eslint-plugin"],
     "rules": {
       "react-hooks/rules-of-hooks": "warn",
       "react-hooks/exhaustive-deps": "warn"
-    }
+    },
+    "ignorePatterns": ["src/**/*.js"]
 }
