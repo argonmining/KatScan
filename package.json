@@ -2,7 +2,6 @@
   "name": "katscan",
   "version": "0.1.0",
   "private": true,
-  "homepage": ".",
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.6.0",
     "@fortawesome/free-solid-svg-icons": "^6.6.0",
@@ -31,12 +30,10 @@
     "react-select": "^5.8.0",
     "react-tooltip": "^5.28.0",
     "recharts": "^2.12.7",
-    "web-vitals": "^2.1.4",
-    "webpack": "^5.94.0",
-    "webpack-cli": "^5.1.4"
+    "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start --mode=development -d source-map",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
