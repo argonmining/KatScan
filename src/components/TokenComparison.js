@@ -448,7 +448,7 @@ const TokenComparison = () => {
           </Form.Group>
         </Col>
       </Row>
-      {loading && <LoadingSpinner/>}
+      {loading && <LoadingSpinner useFlexHeight={true}/>}
       {error && (
         <div className="error-message">
           <p>{error}</p>

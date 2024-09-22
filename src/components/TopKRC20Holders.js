@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import { Table, Spinner, Alert, Button, Card } from 'react-bootstrap';
-import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import {Alert, Button, Card, Table} from 'react-bootstrap';
+import {FaChevronDown, FaChevronUp} from 'react-icons/fa';
+import {Link} from 'react-router-dom';
 import '../styles/TopKRC20Holders.css';
-import { censorTicker } from '../utils/censorTicker';
-import { useMediaQuery } from 'react-responsive';
+import {censorTicker} from '../utils/censorTicker';
+import {useMediaQuery} from 'react-responsive';
 import SEO from './SEO';
 import JsonLd from './JsonLd';
+import {LoadingSpinner} from "./LoadingSpinner";
 
 const API_BASE_URL = 'https://katapi.nachowyborski.xyz/api/topHolders';
 
@@ -112,7 +113,7 @@ const TopKRC20Holders = () => {
   };
 
   if (loading) {
-    return <Spinner animation="border" />;
+    return <LoadingSpinner/>
   }
 
   if (error) {

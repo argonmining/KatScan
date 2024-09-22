@@ -224,7 +224,7 @@ const MintHeatmap = () => {
       </Row>
       {!timeframe && <p>Please select a timeframe to view the mint heatmap.</p>}
       {error && <p className="text-danger">{error}</p>}
-      {loading && <LoadingSpinner/>}
+      {loading && <LoadingSpinner useFlexHeight={true}/>}
       {timeframe && mintData.length > 0 && (
         <div className="chart-container">
           <ResponsiveContainer width="100%" height="100%">
