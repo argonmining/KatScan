@@ -1,12 +1,13 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { Container, Form, InputGroup, Button, Table, Tabs, Tab, Alert, Card, Spinner } from 'react-bootstrap';
-import { FaSearch, FaCopy } from 'react-icons/fa';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
+import {useNavigate, useParams} from 'react-router-dom';
+import {Alert, Button, Card, Container, Form, InputGroup, Tab, Table, Tabs} from 'react-bootstrap';
+import {FaCopy, FaSearch} from 'react-icons/fa';
 import axios from 'axios';
 import '../styles/WalletLookup.css';
-import { censorTicker } from '../utils/censorTicker';
+import {censorTicker} from '../utils/censorTicker';
 import SEO from './SEO';
 import JsonLd from './JsonLd';
+import {LoadingSpinner} from "./LoadingSpinner";
 
 // Helper function for number formatting
 const formatNumber = (number) => {
@@ -267,7 +268,7 @@ const WalletLookup = () => {
         </InputGroup>
       </Form>
 
-      {loading && <Spinner animation="border" />}
+      {loading && <LoadingSpinner/>}
       {error && <Alert variant="danger">{error}</Alert>}
 
       {walletData && (

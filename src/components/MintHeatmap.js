@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import { censorTicker } from '../utils/censorTicker';
 import SEO from './SEO';
 import JsonLd from './JsonLd';
+import {LoadingSpinner} from "./LoadingSpinner";
 
 const timeframes = [
   { value: 'day', label: 'Last 24 Hours' },
@@ -223,7 +224,7 @@ const MintHeatmap = () => {
       </Row>
       {!timeframe && <p>Please select a timeframe to view the mint heatmap.</p>}
       {error && <p className="text-danger">{error}</p>}
-      {loading && <p>Loading...</p>}
+      {loading && <LoadingSpinner useFlexHeight={true}/>}
       {timeframe && mintData.length > 0 && (
         <div className="chart-container">
           <ResponsiveContainer width="100%" height="100%">
