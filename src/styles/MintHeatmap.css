@@ -3,6 +3,8 @@
   background-color: #f8f9fa;
   height: calc(100vh - 60px);
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .mint-heatmap h1 {

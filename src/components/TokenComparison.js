@@ -9,6 +9,7 @@ import { FaChartBar, FaUsers, FaChartPie } from 'react-icons/fa'; // Import icon
 import { censorTicker } from '../utils/censorTicker';
 import SEO from './SEO';
 import JsonLd from './JsonLd';
+import {LoadingSpinner} from "./LoadingSpinner";
 
 ChartJS.register(
   CategoryScale,
@@ -447,7 +448,7 @@ const TokenComparison = () => {
           </Form.Group>
         </Col>
       </Row>
-      {loading && <p>Loading...</p>}
+      {loading && <LoadingSpinner useFlexHeight={true}/>}
       {error && (
         <div className="error-message">
           <p>{error}</p>

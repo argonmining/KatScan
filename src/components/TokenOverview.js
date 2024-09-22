@@ -7,6 +7,7 @@ import '../styles/TokenOverview.css';
 import { censorTicker } from '../utils/censorTicker';
 import JsonLd from './JsonLd';
 import SEO from './SEO';
+import {LoadingSpinner} from "./LoadingSpinner";
 
 const ITEMS_PER_PAGE = 50;
 
@@ -151,7 +152,7 @@ const TokenOverview = () => {
     return `${formatNumber(value)} ${formatPercentage(value, calculateValue(max, decimals))}`;
   };
 
-  if (loading) return <div className="token-overview loading">Loading...</div>;
+  if (loading) return <LoadingSpinner/>
   if (error) return <div className="token-overview error">Error: {error}</div>;
 
   const jsonLdData = {

@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { Container, Form, InputGroup, Button, Card, Alert, Badge, Row, Col, Accordion, Spinner } from 'react-bootstrap';
-import { FaSearch, FaCopy, FaExternalLinkAlt, FaArrowRight } from 'react-icons/fa';
+import React, {useEffect, useState} from 'react';
+import {useNavigate, useParams} from 'react-router-dom';
+import {Accordion, Alert, Badge, Button, Card, Col, Container, Form, InputGroup, Row} from 'react-bootstrap';
+import {FaArrowRight, FaCopy, FaExternalLinkAlt, FaSearch} from 'react-icons/fa';
 import axios from 'axios';
 import '../styles/TransactionLookup.css';
 import SEO from './SEO';
 import JsonLd from './JsonLd';
+import {LoadingSpinner} from "./LoadingSpinner";
 
 const TransactionLookup = () => {
   const [transactionHash, setTransactionHash] = useState('');
@@ -217,7 +218,7 @@ const TransactionLookup = () => {
         </InputGroup>
       </Form>
 
-      {loading && <Spinner animation="border" role="status" />}
+      {loading && <LoadingSpinner/>}
       {error && <Alert variant="danger">{error}</Alert>}
       
       {transactionData && (
