@@ -1,6 +1,11 @@
+import React from "react";
 import {Spinner} from "react-bootstrap";
+import {FC} from "react";
 
-export const LoadingSpinner = ({useFlexHeight = false}) => {
+type Props = {
+    useFlexHeight?: boolean
+}
+export const LoadingSpinner:FC<Props> = ({useFlexHeight = false}) => {
     return <div
         style={{
             width: '100%',

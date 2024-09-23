@@ -21,7 +21,7 @@ import axios from 'axios';
 import {censorTicker} from '../utils/censorTicker';
 import SEO from './SEO';
 import JsonLd from './JsonLd';
-import LinkWithTooltip from './LinkWithTooltip';
+import {LinkWithTooltip} from './LinkWithTooltip';
 import {LoadingSpinner} from "./LoadingSpinner";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, ArcElement, Title, Tooltip, Legend, LogarithmicScale);

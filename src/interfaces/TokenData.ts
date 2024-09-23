@@ -1,16 +1,16 @@
 export type TokenData = {
     tick: string
-    max: string
+    max: number
     lim: string
     pre: string
     to: string
-    dec: string
-    minted: string
+    dec: number
+    minted: number
     opScoreAdd: string
     opScoreMod: string
     state: string
     hashRev: string
-    mtsAdd: string
+    mtsAdd: number
 }
 
 export type TokenSearchResult = TokenData & {

@@ -1,4 +1,4 @@
-import React, {Suspense, useState, useEffect, lazy} from 'react';
+import React, {Suspense, useState, useEffect, lazy, FC} from 'react';
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import {useMediaQuery} from 'react-responsive';
 import Sidebar from "./components/Sidebar";
@@ -22,8 +22,8 @@ const MarketCapCalculator = lazy(() => import('./components/MarketCapCalculator'
 const TopKRC20Holders = lazy(() => import('./components/TopKRC20Holders'))
 const StructuredData = lazy(() => import('./components/StructuredData'))
 
-function App() {
-    const [darkMode, setDarkMode] = useState(getLocalStorageItem('darkMode') ?? false)
+const App:FC = () => {
+    const [darkMode, setDarkMode] = useState<boolean>(getLocalStorageItem('darkMode') ?? false)
     const isMobile = useMediaQuery({maxWidth: 991});
 
     useEffect(() => {

@@ -1,4 +1,4 @@
-export interface OpData {
+export interface OpTransactionData {
     p: string
     op: string
     tick: string

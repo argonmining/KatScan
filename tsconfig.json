@@ -11,7 +11,8 @@
   },
   "lib": ["es2021"],
   "include": [
-    "src"
+    "src",
+    "src/declaration.d.ts"
   ],
   "exclude": ["node_modules", "build", "dist", "src/**/*.js", "src/**/*.jsx"]
 }

@@ -19,37 +19,40 @@ import {censorTicker} from '../utils/censorTicker';
 import SEO from './SEO';
 import JsonLd from './JsonLd';
 import {LoadingSpinner} from "./LoadingSpinner";
+import {TokenData, TokenSearchResult} from "../interfaces/TokenData";
 
+// todo / under maintenance?
 const MarketCapCalculator = () => {
-    const [krc20List, setKrc20List] = useState([]);
-    const [selectedKrc20Token, setSelectedKrc20Token] = useState(null);
+    const [krc20List, setKrc20List] = useState<TokenData[]>([]);
+    const [selectedKrc20Token, setSelectedKrc20Token] = useState<{value:string, tick: string}|null>(null);
     const [selectedCrypto, setSelectedCrypto] = useState(null);
     const [calculationResult, setCalculationResult] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [detailedTokenInfo, setDetailedTokenInfo] = useState(null);
+    const [detailedTokenInfo, setDetailedTokenInfo] = useState<TokenSearchResult|null>(null);
 
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetchKRC20Tokens();
+        const fetchKRC20Tokens = async () => {
+            try {
+                const data = await getKRC20TokenList();
+                const formattedList = data.result.map(token => ({
+                    value: token.tick,
+                    label: censorTicker(token.tick),
+                    ...token
+                }));
+                setKrc20List(formattedList);
+            } catch (error) {
+                console.error('Error fetching KRC20 tokens:', error);
+            }
+        };
+
+        void fetchKRC20Tokens();
     }, []);
 
-    const fetchKRC20Tokens = async () => {
-        try {
-            const data = await getKRC20TokenList();
-            const formattedList = data.result.map(token => ({
-                value: token.tick,
-                label: censorTicker(token.tick),
-                ...token
-            }));
-            setKrc20List(formattedList);
-        } catch (error) {
-            console.error('Error fetching KRC20 tokens:', error);
-        }
-    };
 
-    const handleCryptoSearch = async (inputValue) => {
+    const handleCryptoSearch = async (inputValue:string) => {
         if (inputValue.length > 1) {
             try {
                 const results = await searchCryptos(inputValue);
@@ -62,7 +65,7 @@ const MarketCapCalculator = () => {
         return [];
     };
 
-    const fetchDetailedTokenInfo = useCallback(async (tick) => {
+    const fetchDetailedTokenInfo = useCallback(async (tick:string) => {
         try {
             const data = await getDetailedTokenInfo(tick);
             setDetailedTokenInfo(data);
@@ -73,7 +76,7 @@ const MarketCapCalculator = () => {
 
     useEffect(() => {
         if (selectedKrc20Token) {
-            fetchDetailedTokenInfo(selectedKrc20Token.tick);
+            void fetchDetailedTokenInfo(selectedKrc20Token.tick);
         }
     }, [selectedKrc20Token, fetchDetailedTokenInfo]);
 

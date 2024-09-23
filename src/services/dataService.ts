@@ -1,14 +1,14 @@
 import {TokenData, TokenSearchResult} from "../interfaces/TokenData";
 import {sendRequest, simpleRequest} from "./RequestService";
-import {TokenListResponse, TokenResponse} from "../interfaces/ApiResponseTypes";
-import {OpData} from "../interfaces/OpData";
+import {TokenListResponse, ResultResponse} from "../interfaces/ApiResponseTypes";
+import {OpTransactionData} from "../interfaces/OpTransactionData";
 
 const BASE_URL = 'https://api.kasplex.org/v1';
 
 // Simulating an API call to fetch token details
 export const getTokenDetails = async (tick: string): Promise<TokenSearchResult> => {
     try {
-        const response = await simpleRequest<TokenResponse<TokenSearchResult[]>>(`${BASE_URL}/krc20/token/${tick}`);
+        const response = await simpleRequest<ResultResponse<TokenSearchResult[]>>(`${BASE_URL}/krc20/token/${tick}`);
         return response.result[0];
     } catch (error) {
         console.error('Error fetching token details:', error);
@@ -23,7 +23,7 @@ export const getKRC20TokenList = async (limit = 50, sortField = '', sortDirectio
     let allTokens: TokenData[] = [];
     let cursor = null;
 
-    //todo
+    //todo + todo data check
     do {
         const params: Record<string, string | number> = {
             limit,
@@ -41,8 +41,7 @@ export const getKRC20TokenList = async (limit = 50, sortField = '', sortDirectio
             cursor = response.next;
         } catch (error) {
             console.error('Error fetching KRC20 token list:', error);
-            // @ts-ignore todo define error
-            throw new Error(`Failed to fetch token list: ${error.message}`);
+            throw new Error(`Failed to fetch token list: ${(error as Record<string,string>).message}`);
         }
     } while (cursor);
 
@@ -50,11 +49,11 @@ export const getKRC20TokenList = async (limit = 50, sortField = '', sortDirectio
 };
 
 // New function to fetch token operations
-export const getTokenOperations = async (tick: string, limit = 50, cursor = null): Promise<OpData[]> => {
+export const getTokenOperations = async (tick: string, limit = 50, cursor = null): Promise<OpTransactionData[]> => {
     try {
         const params: Record<string, string> = {tick, limit: limit.toString()}
         if (cursor) params['next'] = cursor
-        const response = await sendRequest<TokenListResponse<OpData[]>>({
+        const response = await sendRequest<TokenListResponse<OpTransactionData[]>>({
             method: 'GET', url: `${BASE_URL}/krc20/oplist`, params
         });
         return response.result;
@@ -65,11 +64,11 @@ export const getTokenOperations = async (tick: string, limit = 50, cursor = null
 };
 
 // New function to fetch mint operations
-export const getMintOperations = async (tick: string, limit = 50, cursor = null): Promise<OpData[]> => {
+export const getMintOperations = async (tick: string, limit = 50, cursor = null): Promise<OpTransactionData[]> => {
     try {
         const params: Record<string, string> = {tick, limit: limit.toString(), op: 'mint'}
         if (cursor) params['next'] = cursor
-        const response = await sendRequest<TokenListResponse<OpData[]>>({
+        const response = await sendRequest<TokenListResponse<OpTransactionData[]>>({
             method: 'GET',
             url: `${BASE_URL}/krc20/oplist`,
             params
@@ -84,7 +83,7 @@ export const getMintOperations = async (tick: string, limit = 50, cursor = null)
 // Add this new function to fetch detailed token information
 export const getDetailedTokenInfo = async (tick: string): Promise<TokenSearchResult> => {
     try {
-        const response = await simpleRequest<TokenResponse<TokenSearchResult[]>>(`${BASE_URL}/krc20/token/${tick}`);
+        const response = await simpleRequest<ResultResponse<TokenSearchResult[]>>(`${BASE_URL}/krc20/token/${tick}`);
         return response.result[0];
     } catch (error) {
         console.error('Error fetching detailed token information:', error);
