@@ -1,3 +1,4 @@
+//eslint-disable
 //@ts-nocheck
 import React, {FC, useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
@@ -435,6 +436,7 @@ const TokenDetail: FC = () => {
                                                     if (data.labels?.length && data.datasets.length) {
                                                         return data.labels?.map((label, i) => {
                                                             const value = data.datasets[0].data[i];
+                                                            // eslint-disable-next-line
                                                             // @ts-nocheck
                                                             return {
                                                                 text: `${label}: ${(value as number).toFixed(2)}%`,

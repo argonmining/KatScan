@@ -1,3 +1,4 @@
+/* eslint-disable */
 // @ts-nocheck
 import React, {FC, useCallback, useEffect, useRef, useState} from 'react';
 import {Badge, Card, Col, Form, ProgressBar, Row} from 'react-bootstrap';

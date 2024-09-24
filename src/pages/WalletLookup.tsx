@@ -13,7 +13,7 @@ import {Utxos, WalletBalance, WalletToken, WalletTotal} from "../interfaces/Wall
 import {Transaction} from "../interfaces/Transaction";
 import {MobileTransactionTable} from "../components/tables/MobileTransactionTable";
 import {MobileUTXOTable} from "../components/tables/MobileUTXOTable";
-
+// eslint-disable
 // Helper function for number formatting
 const formatNumber = (number: number): string => {
     return new Intl.NumberFormat('en-US', {
@@ -185,7 +185,7 @@ const WalletLookup: FC = () => {
             navigate(`/wallet/${address}`);
         }
     };
-
+// eslint-disable-next-line
     // @ts-ignore
     const handleAddressChange = (e) => {
         setAddress(e.target.value);

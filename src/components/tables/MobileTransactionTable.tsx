@@ -18,7 +18,7 @@ export const MobileTransactionTable: FC<Props> = (
     }
 ) => (
     <div className="mobile-table">
-        {transactions.map((tx, index) => (
+        {transactions.map(tx => (
             <Card key={tx.transaction_id} className="mb-3">
                 <Card.Body>
                     <div className="mobile-table-row" onClick={() => openExplorer(tx.transaction_id)}>

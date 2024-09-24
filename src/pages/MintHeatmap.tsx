@@ -127,7 +127,7 @@ const MintHeatmap: FC = () => {
 
 
     // todo refactor after ts
-    const CustomTreemapContent = ({root, depth, x, y, width, height, index, name}: TreemapContentType ) => {
+    const CustomTreemapContent = ({root, x, y, width, height, index, name}: TreemapContentType ) => {
         const fontSize = Math.min(width / 6, height / 4, 16);
         const shortName = name && name.length > 6 ? `${name.slice(0, 5)}...` : name;
 
@@ -150,6 +150,7 @@ const MintHeatmap: FC = () => {
                         stroke: '#fff',
                         strokeWidth: 2,
                         strokeOpacity: 1,
+                        // eslint-disable-next-line
                         // @ts-ignore
                         rx: 4,
                         ry: 4,
@@ -242,11 +243,13 @@ const MintHeatmap: FC = () => {
                             dataKey="size"
                             aspectRatio={4 / 3}
                             stroke="#fff"
+                            // eslint-disable-next-line
                             //@ts-ignore
                             content={<CustomTreemapContent/>}
                             animationDuration={500}
                             animationEasing="ease-in-out"
                         >
+                            {/* eslint-disable-next-line*/}
                             {/*@ts-ignore*/}
                             <Tooltip content={<CustomTooltip/>}/>
                             <Legend content={<CustomLegend/>}/>

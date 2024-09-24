@@ -17,7 +17,7 @@ export const MobileUTXOTable: FC<Props> = (
     }
 ) => (
     <div className="mobile-table">
-        {utxos.map((utxo, index) => (
+        {utxos.map(utxo => (
             <Card key={`${utxo.outpoint.transactionId}-${utxo.outpoint.index}`} className="mb-3">
                 <Card.Body>
                     <div className="mobile-table-row" onClick={() => openExplorer(utxo.outpoint.transactionId)}>
