@@ -49,7 +49,7 @@ export const getKRC20TokenList = async (limit = 50, sortField = '', sortDirectio
 };
 
 // New function to fetch token operations
-export const getTokenOperations = async (tick: string, limit = 50, cursor = null): Promise<OpTransactionData[]> => {
+export const getTokenOperations = async (tick: string, limit = 50, cursor:null | string = null ): Promise<OpTransactionData[]> => {
     try {
         const params: Record<string, string> = {tick, limit: limit.toString()}
         if (cursor) params['next'] = cursor

@@ -1,3 +1,4 @@
+//@ts-nocheck
 import React, {FC, useCallback, useEffect, useRef, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import {Alert, Button, Card, Container, Form, InputGroup, Tab, Table, Tabs} from 'react-bootstrap';
@@ -5,9 +6,9 @@ import {FaCopy, FaSearch} from 'react-icons/fa';
 import axios from 'axios';
 import '../styles/WalletLookup.css';
 import {censorTicker} from '../utils/censorTicker';
-import SEO from './SEO';
-import JsonLd from './JsonLd';
-import {LoadingSpinner} from "./LoadingSpinner";
+import SEO from '../components/SEO';
+import JsonLd from '../components/JsonLd';
+import {LoadingSpinner} from "../components/LoadingSpinner";
 import {simpleRequest} from "../services/RequestService";
 
 // Helper function for number formatting

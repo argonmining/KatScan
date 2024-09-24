@@ -5,9 +5,9 @@ import {FaSearch} from 'react-icons/fa';
 import {getKRC20TokenList} from '../services/dataService';
 import '../styles/TokenOverview.css';
 import {censorTicker} from '../utils/censorTicker';
-import JsonLd from './JsonLd';
-import SEO from './SEO';
-import {LoadingSpinner} from "./LoadingSpinner";
+import JsonLd from '../components/JsonLd';
+import SEO from '../components/SEO';
+import {LoadingSpinner} from "../components/LoadingSpinner";
 import {TokenData} from "../interfaces/TokenData";
 
 const ITEMS_PER_PAGE = 50;
@@ -191,11 +191,9 @@ const TokenOverview: FC = () => {
                                     Launch Type
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu>
-                                    <Dropdown.Item eventKey="" onSelect={handleLaunchTypeSelect}>All</Dropdown.Item>
-                                    <Dropdown.Item eventKey="Fair Mint" onSelect={handleLaunchTypeSelect}>Fair
-                                        Mint</Dropdown.Item>
-                                    <Dropdown.Item eventKey="Pre-Mint"
-                                                   onSelect={handleLaunchTypeSelect}>Pre-Mint</Dropdown.Item>
+                                    <Dropdown.Item onClick={()=>handleLaunchTypeSelect("")}>All</Dropdown.Item>
+                                    <Dropdown.Item onClick={()=>handleLaunchTypeSelect("Fair Mint")}>Fair Mint</Dropdown.Item>
+                                    <Dropdown.Item onClick={()=>handleLaunchTypeSelect("Pre-Mint")}>Pre-Mint</Dropdown.Item>
                                 </Dropdown.Menu>
                             </Dropdown>
                         </th>
@@ -206,11 +204,9 @@ const TokenOverview: FC = () => {
                                     Status
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu>
-                                    <Dropdown.Item eventKey="" onSelect={handleStatusSelect}>All</Dropdown.Item>
-                                    <Dropdown.Item eventKey="Complete"
-                                                   onSelect={handleStatusSelect}>Complete</Dropdown.Item>
-                                    <Dropdown.Item eventKey="Minting"
-                                                   onSelect={handleStatusSelect}>Minting</Dropdown.Item>
+                                    <Dropdown.Item onClick={()=>handleStatusSelect("")}>All</Dropdown.Item>
+                                    <Dropdown.Item onClick={()=>handleStatusSelect("Complete")}>Complete</Dropdown.Item>
+                                    <Dropdown.Item onClick={()=>handleStatusSelect("Minting")}>Minting</Dropdown.Item>
                                 </Dropdown.Menu>
                             </Dropdown>
                         </th>

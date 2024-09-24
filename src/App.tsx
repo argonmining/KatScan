@@ -9,18 +9,18 @@ import {LoadingSpinner} from "./components/LoadingSpinner";
 import {getLocalStorageItem, setLocalStorageItem} from "./services/LocalStorageHelper";
 
 /**
- * Lazy loading the pages to improve initial loading time
+ * Lazy loading the pages to improve initial loading time in prod
  */
-const Home = lazy(() => import('./components/Home'))
-const TokenOverview = lazy(() => import('./components/TokenOverview'))
-const TokenDetail = lazy(() => import('./components/TokenDetail'))
-const TokenComparison = lazy(() => import('./components/TokenComparison'))
-const WalletLookup = lazy(() => import('./components/WalletLookup'))
-const TransactionLookup = lazy(() => import('./components/TransactionLookup'))
-const MintHeatmap = lazy(() => import('./components/MintHeatmap'))
-const MarketCapCalculator = lazy(() => import('./components/MarketCapCalculator'))
-const TopKRC20Holders = lazy(() => import('./components/TopKRC20Holders'))
-const StructuredData = lazy(() => import('./components/StructuredData'))
+const Home = lazy(() => import('./pages/Home'))
+const TokenOverview = lazy(() => import('./pages/TokenOverview'))
+const TokenDetail = lazy(() => import('./pages/TokenDetail'))
+const TokenComparison = lazy(() => import('./pages/TokenComparison'))
+const WalletLookup = lazy(() => import('./pages/WalletLookup'))
+const TransactionLookup = lazy(() =>  import('./pages/UnderMaintenance').then(module => ({default: module.UnderMaintenance})))
+const MintHeatmap = lazy(() => import('./pages/MintHeatmap'))
+const MarketCapCalculator = lazy(() => import('./pages/UnderMaintenance').then(module => ({default: module.UnderMaintenance})))
+const TopKRC20Holders = lazy(() => import('./pages/TopKRC20Holders'))
+const StructuredData = lazy(() => import('./pages/StructuredData'))
 
 const App:FC = () => {
     const [darkMode, setDarkMode] = useState<boolean>(getLocalStorageItem('darkMode') ?? false)

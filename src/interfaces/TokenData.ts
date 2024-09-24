@@ -24,3 +24,8 @@ type Holder = {
     address: string
     amount: number
 }
+
+export type TopHolder = {
+    address: string
+    balances: { tick: string, balance: string }[]
+}

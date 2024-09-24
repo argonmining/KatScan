@@ -3,9 +3,9 @@ import {Alert, Col, Container, Form, Row} from 'react-bootstrap';
 import {Legend, ResponsiveContainer, Tooltip, Treemap} from 'recharts';
 import '../styles/MintHeatmap.css';
 import {censorTicker} from '../utils/censorTicker';
-import SEO from './SEO';
-import JsonLd from './JsonLd';
-import {LoadingSpinner} from "./LoadingSpinner";
+import SEO from '../components/SEO';
+import JsonLd from '../components/JsonLd';
+import {LoadingSpinner} from "../components/LoadingSpinner";
 import {sendRequest} from "../services/RequestService";
 import {MintData} from "../interfaces/MintData";
 
