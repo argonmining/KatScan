@@ -1,7 +1,6 @@
-/* eslint-disable */
 import React, {FC, FormEvent, useCallback, useEffect, useRef, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
-import {Alert, Button, Card, Container, Form, InputGroup, Tab, Table, Tabs} from 'react-bootstrap';
+import {Alert, Button, Container, Form, InputGroup, Tab, Table, Tabs} from 'react-bootstrap';
 import {FaCopy, FaSearch} from 'react-icons/fa';
 import '../styles/WalletLookup.css';
 import {censorTicker} from '../utils/censorTicker';
@@ -14,19 +13,9 @@ import {Utxos, WalletBalance, WalletToken, WalletTotal} from "../interfaces/Wall
 import {Transaction} from "../interfaces/Transaction";
 import {MobileTransactionTable} from "../components/tables/MobileTransactionTable";
 import {MobileUTXOTable} from "../components/tables/MobileUTXOTable";
-
-// Helper function for number formatting
-const formatNumber = (number: number): string => {
-    return new Intl.NumberFormat('en-US', {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 5,
-    }).format(parseFloat(number.toFixed(5)));
-};
-
-const shortenString = (str: string, startLength = 5, endLength = 5): string => {
-    if (str.length <= startLength + endLength) return str;
-    return `${str.slice(0, startLength)}...${str.slice(-endLength)}`;
-};
+import {formatNumber, shortenString} from "../services/Helper";
+import {NormalCard} from "../components/Cards";
+import {useMobile} from "../hooks/mobile";
 
 type InternalWalletData = {
     address: string
@@ -36,13 +25,15 @@ type InternalWalletData = {
 }
 
 const WalletLookup: FC = () => {
+
+    const {walletAddress} = useParams();
+    const navigate = useNavigate();
+    const {isMobile} = useMobile()
+
     const [address, setAddress] = useState('');
     const [walletData, setWalletData] = useState<InternalWalletData | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const {walletAddress} = useParams();
-    const navigate = useNavigate();
-
     const [transactions, setTransactions] = useState<Transaction[]>([]);
     const [utxos, setUtxos] = useState<Utxos[]>([]);
     const [transactionPage, setTransactionPage] = useState(0);
@@ -54,17 +45,6 @@ const WalletLookup: FC = () => {
 
     const transactionObserver = useRef<IntersectionObserver>();
     const utxoObserver = useRef<IntersectionObserver>();
-
-    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-
-    useEffect(() => {
-        const handleResize = () => {
-            setIsMobile(window.innerWidth <= 768);
-        };
-
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
 
     const fetchTransactions = async (addr: string, page: number) => {
         setLoadingTransactions(true);
@@ -109,8 +89,12 @@ const WalletLookup: FC = () => {
     };
 
     const lastTransactionElementRef = useCallback((node: HTMLTableRowElement) => {
-        if (loadingTransactions || walletData === null) return;
-        if (transactionObserver.current) transactionObserver.current.disconnect();
+        if (loadingTransactions || walletData === null) {
+            return
+        }
+        if (transactionObserver.current) {
+            transactionObserver.current.disconnect()
+        }
         transactionObserver.current = new IntersectionObserver(entries => {
             if (entries[0].isIntersecting && hasMoreTransactions) {
                 void fetchTransactions(walletData.address, transactionPage + 1);
@@ -120,14 +104,22 @@ const WalletLookup: FC = () => {
     }, [loadingTransactions, hasMoreTransactions, walletData, transactionPage]);
 
     const lastUtxoElementRef = useCallback((node: HTMLTableRowElement) => {
-        if (loadingUtxos || walletData === null) return;
-        if (utxoObserver.current) utxoObserver.current.disconnect();
+        if (loadingUtxos || walletData === null) {
+            return
+        }
+        if (utxoObserver.current) {
+            utxoObserver.current.disconnect()
+        }
+
         utxoObserver.current = new IntersectionObserver(entries => {
             if (entries[0].isIntersecting && hasMoreUtxos) {
                 void fetchUtxos(walletData.address, utxoPage + 1);
             }
-        });
-        if (node) utxoObserver.current.observe(node);
+        })
+
+        if (node) {
+            utxoObserver.current.observe(node)
+        }
     }, [loadingUtxos, hasMoreUtxos, walletData, utxoPage]);
 
     useEffect(() => {
@@ -135,7 +127,6 @@ const WalletLookup: FC = () => {
             return
         }
         setAddress(walletAddress);
-
         setLoading(true);
         setError(null);
 
@@ -177,7 +168,6 @@ const WalletLookup: FC = () => {
                 setLoading(false);
             })
 
-
     }, [walletAddress])
 
     const handleSubmit = (e: FormEvent) => {
@@ -186,10 +176,8 @@ const WalletLookup: FC = () => {
             navigate(`/wallet/${address}`);
         }
     };
-    // eslint-disable-next-line
-    // @ts-ignore
-    const handleAddressChange = (e) => {
-        // @ts-ignore
+
+    const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setAddress(e.target.value);
     };
 
@@ -202,7 +190,7 @@ const WalletLookup: FC = () => {
     };
 
     return (
-        <Container className="wallet-lookup">
+        <Container className='wallet-lookup'>
             <SEO
                 title="Wallet Lookup"
                 description="Look up KRC-20 token balances and transaction history for any wallet address on the Kaspa blockchain."
@@ -238,19 +226,19 @@ const WalletLookup: FC = () => {
             {walletData && (
                 <div className="wallet-details">
                     <div className="wallet-overview">
-                        <Card>
-                            <Card.Body>
-                                <Card.Title>Wallet Overview</Card.Title>
-                                <Card.Text>
-                                    <strong>Address:</strong> {walletData.address}{' '}
+                        <NormalCard title={'Wallet Overview'}>
+                            <div className={'grid'}>
+                                <strong>Address:</strong>
+                                <div>
+                                    {walletData.address}
                                     <FaCopy className="clickable" onClick={() => copyToClipboard(walletData.address)}/>
-                                    <br/>
-                                    <strong>Kaspa Balance:</strong> {formatNumber(walletData.kaspaBalance / 1e8)} KAS
-                                    <br/>
-                                    <strong>Transaction Count:</strong> {walletData.transactionCount}
-                                </Card.Text>
-                            </Card.Body>
-                        </Card>
+                                </div>
+
+                                <strong>Kaspa Balance:</strong>
+                                <div>{formatNumber(walletData.kaspaBalance / 1e8)} KAS</div>
+                                <strong>Transaction Count:</strong> {walletData.transactionCount}
+                            </div>
+                        </NormalCard>
                     </div>
 
                     <Tabs defaultActiveKey="krc20" className="mb-3">
