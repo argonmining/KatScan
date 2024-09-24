@@ -174,6 +174,9 @@ const TokenDetail: FC = () => {
         //todo type
         simpleRequest<Record<string, string>[]>(`https://katapi.nachowyborski.xyz/api/mintsovertime?tick=${tokenData.tick.toUpperCase()}`)
             .then(data => {
+                if (data.length === 0){
+                    return
+                }
                 const filledData = [];
                 const startDate = new Date(data[data.length - 1].date);
                 const endDate = new Date();

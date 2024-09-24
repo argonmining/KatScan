@@ -138,7 +138,7 @@ const TokenComparison: FC = () => {
             }
         };
 
-        fetchTokenDetails();
+        void fetchTokenDetails();
     }, [selectedTokens, calculateHolderPercentages]);
 
     const handleTokenSelect = (option, index) => {
