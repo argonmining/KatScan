@@ -1,51 +1,51 @@
 :root {
-  --primary-color: #70C7BA;
-  --secondary-primary-color: #231F20;
-  --tertiary-primary-color: #B6B6B6;
-  --secondary-color: #49EACB;
+    --primary-color: #70c7ba;
+    --secondary-primary-color: #231f20;
+    --tertiary-primary-color: #b6b6b6;
+    --secondary-color: #49eacb;
 
-  --header-font: 'Rubik', sans-serif;
-  --sub-header-font: 'Oswald', sans-serif;
-  --body-font: 'Lato', sans-serif;
+    --header-font: 'Rubik', sans-serif;
+    --sub-header-font: 'Oswald', sans-serif;
+    --body-font: 'Lato', sans-serif;
 
-  /* Dark mode colors */
-  --dark-bg-color: #121212;
-  --dark-text-color: #e0e0e0;
-  --dark-primary-color: #90ccc0;
-  --dark-secondary-color: #6aeedd;
-  --dark-tertiary-color: #808080;
-  --dark-card-bg: #1e1e1e;
-  --dark-border-color: #333;
-  --dark-active-bg: #2c2c2c;
-  --dark-header-bg: #2a2a2a;
-  --dark-stripe-bg: #252525;
-  --dark-progress-bg: #333;
-  --dark-progress-fill: #4a4a4a;
-  --dark-link-color: #90ccc0;
-  --dark-link-hover-color: #6aeedd;
-  --dark-muted-color: #a0a0a0;
-  --dark-badge-bg: #333;
-  --dark-badge-text: #e0e0e0;
-  --dark-badge-fair-mint-bg: #1e5245;
-  --dark-badge-fair-mint-text: #e0e0e0;
-  --dark-badge-pre-mint-bg: #5c4a1e;
-  --dark-badge-pre-mint-text: #e0e0e0;
-  --dark-sidebar-bg: #1a1a1a;
-  --dark-sidebar-text: #e0e0e0;
-  --dark-nav-hover-bg: #2c2c2c;
-  --dark-nav-active-bg: #333;
-  --dark-nav-active-text: #90ccc0;
-  --dark-collapse-btn-bg: #333;
-  --dark-collapse-btn-text: #e0e0e0;
-  --dark-collapse-btn-hover-bg: #444;
+    /* Dark mode colors */
+    --dark-bg-color: #121212;
+    --dark-text-color: #e0e0e0;
+    --dark-primary-color: #90ccc0;
+    --dark-secondary-color: #6aeedd;
+    --dark-tertiary-color: #808080;
+    --dark-card-bg: #1e1e1e;
+    --dark-border-color: #333;
+    --dark-active-bg: #2c2c2c;
+    --dark-header-bg: #2a2a2a;
+    --dark-stripe-bg: #252525;
+    --dark-progress-bg: #333;
+    --dark-progress-fill: #4a4a4a;
+    --dark-link-color: #90ccc0;
+    --dark-link-hover-color: #6aeedd;
+    --dark-muted-color: #a0a0a0;
+    --dark-badge-bg: #333;
+    --dark-badge-text: #e0e0e0;
+    --dark-badge-fair-mint-bg: #1e5245;
+    --dark-badge-fair-mint-text: #e0e0e0;
+    --dark-badge-pre-mint-bg: #5c4a1e;
+    --dark-badge-pre-mint-text: #e0e0e0;
+    --dark-sidebar-bg: #1a1a1a;
+    --dark-sidebar-text: #e0e0e0;
+    --dark-nav-hover-bg: #2c2c2c;
+    --dark-nav-active-bg: #333;
+    --dark-nav-active-text: #90ccc0;
+    --dark-collapse-btn-bg: #333;
+    --dark-collapse-btn-text: #e0e0e0;
+    --dark-collapse-btn-hover-bg: #444;
 }
 
 html,
 body {
-  height: 100% !important;
-  margin: 0;
-  font-family: var(--body-font);
-  color: var(--secondary-primary-color);
+    height: 100% !important;
+    margin: 0;
+    font-family: var(--body-font);
+    color: var(--secondary-primary-color);
 }
 
 h1,
@@ -54,111 +54,108 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: var(--header-font);
+    font-family: var(--header-font);
 }
 
 .sub-header {
-  font-family: var(--sub-header-font);
+    font-family: var(--sub-header-font);
 }
 
 @media (max-width: 768px) {
-  .dark-mode-toggle {
-    position: fixed;
-    top: 2px;
-    right: 50px;
-    z-index: 1000;
-    display: flex;
-    align-items: center;
-  }
+    .dark-mode-toggle {
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+    }
 }
 
 @media (min-width: 769px) {
-  .dark-mode-toggle {
-    position: fixed;
-    top: 15px;
-    right: 10px;
-    z-index: 1000;
-    display: flex;
-    align-items: center;
-  }
+    .dark-mode-toggle {
+        position: fixed;
+        top: 15px;
+        right: 10px;
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+    }
 }
 
 .switch {
-  position: relative;
-  display: inline-block;
-  width: 60px;
-  height: 34px;
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
 }
 
 .switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
+    opacity: 0;
+    width: 0;
+    height: 0;
 }
 
 .slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  transition: .4s;
-  border-radius: 34px;
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 34px;
 }
 
 .slider:before {
-  position: absolute;
-  content: "";
-  height: 26px;
-  width: 26px;
-  left: 4px;
-  bottom: 4px;
-  background-color: white;
-  transition: .4s;
-  border-radius: 50%;
+    position: absolute;
+    content: '';
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
 }
 
-input:checked+.slider {
-  background-color: var(--primary-color);
+input:checked + .slider {
+    background-color: var(--primary-color);
 }
 
-input:checked+.slider:before {
-  transform: translateX(26px);
+input:checked + .slider:before {
+    transform: translateX(26px);
 }
 
 .dark-mode-label {
-  margin-right: 10px;
-  font-weight: bold;
+    margin-right: 10px;
+    font-weight: bold;
 }
 
 .nav-tabs {
-  overflow: hidden !important;
+    overflow: hidden !important;
 }
 
 /* Hide scrollbars for all tables */
 table {
-  scrollbar-width: none;  /* Firefox */
-  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
 }
 
 table::-webkit-scrollbar {
-  display: none;  /* WebKit */
+    display: none; /* WebKit */
 }
 
 /* Ensure table containers also hide scrollbars */
 .table-wrapper,
 .table-container,
 .detail-table-container,
-div[class*="table"] {
-  scrollbar-width: none;  /* Firefox */
-  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+div[class*='table'] {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
 }
 
 .table-wrapper::-webkit-scrollbar,
 .table-container::-webkit-scrollbar,
 .detail-table-container::-webkit-scrollbar,
-div[class*="table"]::-webkit-scrollbar {
-  display: none;  /* WebKit */
+div[class*='table']::-webkit-scrollbar {
+    display: none; /* WebKit */
 }
