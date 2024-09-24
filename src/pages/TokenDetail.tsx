@@ -1,4 +1,4 @@
-//eslint-disable
+/*eslint-disable*/
 //@ts-nocheck
 import React, {FC, useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';

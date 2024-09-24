@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, {FC, FormEvent, useCallback, useEffect, useRef, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import {Alert, Button, Card, Container, Form, InputGroup, Tab, Table, Tabs} from 'react-bootstrap';
@@ -188,7 +189,6 @@ const WalletLookup: FC = () => {
     // eslint-disable-next-line
     // @ts-ignore
     const handleAddressChange = (e) => {
-        // eslint-disable-next-line
         // @ts-ignore
         setAddress(e.target.value);
     };
