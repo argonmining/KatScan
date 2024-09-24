@@ -31,6 +31,7 @@ import {TokenSearchResult} from "../interfaces/TokenData";
 import {MobileOperationsTable} from "../components/tables/MobileOperationsTable";
 import {MobileHolderTable} from "../components/tables/MobileHolderTable";
 import {formatDateTime, formatNumber, parseRawNumber} from "../services/Helper";
+import {useMobile} from "../hooks/mobile";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, ArcElement, Title, Tooltip, Legend, LogarithmicScale);
 
@@ -53,16 +54,7 @@ const TokenDetail: FC = () => {
     const observer = useRef<IntersectionObserver>();
     const [mintActivity, setMintActivity] = useState<unknown[]>([]);
     const [activeTab, setActiveTab] = useState('topHolders');
-    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-
-    useEffect(() => {
-        const handleResize = () => {
-            setIsMobile(window.innerWidth <= 768);
-        };
-
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
+    const {isMobile} = useMobile()
 
     const fetchOperations = useCallback(async () => {
         if (loadingMore || !operationsCursor || tokenId === undefined) return;
@@ -177,7 +169,7 @@ const TokenDetail: FC = () => {
         //todo type
         simpleRequest<Record<string, string>[]>(`https://katapi.nachowyborski.xyz/api/mintsovertime?tick=${tokenData.tick.toUpperCase()}`)
             .then(data => {
-                if (data.length === 0){
+                if (data.length === 0) {
                     return
                 }
                 const filledData = [];

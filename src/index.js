@@ -4,12 +4,18 @@ import './index.css';
 import App from './App';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {HelmetProvider} from "react-helmet-async";
+import {DarkModeProvider} from "./hooks/darkMode";
+import {MobileProvider} from "./hooks/mobile";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <React.StrictMode>
         <HelmetProvider>
-            <App/>
+            <DarkModeProvider>
+                <MobileProvider>
+                    <App/>
+                </MobileProvider>
+            </DarkModeProvider>
         </HelmetProvider>
     </React.StrictMode>
 );
