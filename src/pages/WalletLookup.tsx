@@ -1,15 +1,18 @@
-//@ts-nocheck
-import React, {FC, useCallback, useEffect, useRef, useState} from 'react';
+import React, {FC, FormEvent, useCallback, useEffect, useRef, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import {Alert, Button, Card, Container, Form, InputGroup, Tab, Table, Tabs} from 'react-bootstrap';
 import {FaCopy, FaSearch} from 'react-icons/fa';
-import axios from 'axios';
 import '../styles/WalletLookup.css';
 import {censorTicker} from '../utils/censorTicker';
 import SEO from '../components/SEO';
 import JsonLd from '../components/JsonLd';
 import {LoadingSpinner} from "../components/LoadingSpinner";
 import {simpleRequest} from "../services/RequestService";
+import {TokenListResponse} from "../interfaces/ApiResponseTypes";
+import {Utxos, WalletBalance, WalletToken, WalletTotal} from "../interfaces/WalletData";
+import {Transaction} from "../interfaces/Transaction";
+import {MobileTransactionTable} from "../components/tables/MobileTransactionTable";
+import {MobileUTXOTable} from "../components/tables/MobileUTXOTable";
 
 // Helper function for number formatting
 const formatNumber = (number: number): string => {
@@ -24,16 +27,23 @@ const shortenString = (str: string, startLength = 5, endLength = 5): string => {
     return `${str.slice(0, startLength)}...${str.slice(-endLength)}`;
 };
 
+type InternalWalletData = {
+    address: string
+    krc20Balances: WalletToken[]
+    kaspaBalance: number
+    transactionCount: number
+}
+
 const WalletLookup: FC = () => {
     const [address, setAddress] = useState('');
-    const [walletData, setWalletData] = useState(null);
+    const [walletData, setWalletData] = useState<InternalWalletData | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const {walletAddress} = useParams();
     const navigate = useNavigate();
 
-    const [transactions, setTransactions] = useState([]);
-    const [utxos, setUtxos] = useState([]);
+    const [transactions, setTransactions] = useState<Transaction[]>([]);
+    const [utxos, setUtxos] = useState<Utxos[]>([]);
     const [transactionPage, setTransactionPage] = useState(0);
     const [utxoPage, setUtxoPage] = useState(0);
     const [hasMoreTransactions, setHasMoreTransactions] = useState(true);
@@ -41,8 +51,8 @@ const WalletLookup: FC = () => {
     const [loadingTransactions, setLoadingTransactions] = useState(false);
     const [loadingUtxos, setLoadingUtxos] = useState(false);
 
-    const transactionObserver = useRef();
-    const utxoObserver = useRef();
+    const transactionObserver = useRef<IntersectionObserver>();
+    const utxoObserver = useRef<IntersectionObserver>();
 
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
@@ -55,52 +65,12 @@ const WalletLookup: FC = () => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    const fetchWalletData = useCallback(async (addr: string) => {
-        setLoading(true);
-        setError(null);
-        try {
-            const [krc20Response, balanceResponse, transactionCountResponse] = await Promise.all([
-                simpleRequest(`https://api.kasplex.org/v1/krc20/address/${addr}/tokenlist`),
-                simpleRequest(`https://api.kaspa.org/addresses/${addr}/balance`),
-                simpleRequest(`https://api.kaspa.org/addresses/${addr}/transactions-count`)
-            ]);
-
-            const krc20Balances = krc20Response.result.map(token => ({
-                ...token,
-                balance: token.balance / Math.pow(10, token.dec),
-            }));
-
-            setWalletData({
-                address: addr,
-                krc20Balances,
-                kaspaBalance: balanceResponse.data.balance,
-                transactionCount: transactionCountResponse.data.total,
-            });
-
-            // Reset pagination
-            setTransactionPage(0);
-            setUtxoPage(0);
-            setTransactions([]);
-            setUtxos([]);
-            setHasMoreTransactions(true);
-            setHasMoreUtxos(true);
-
-            // Fetch initial transactions and UTXOs
-            await fetchTransactions(addr, 0);
-            await fetchUtxos(addr, 0);
-        } catch (err) {
-            setError('Failed to fetch wallet data. Please try again.');
-        } finally {
-            setLoading(false);
-        }
-    }, []);
-
     const fetchTransactions = async (addr: string, page: number) => {
         setLoadingTransactions(true);
         try {
-            const response = await axios.get(`https://api.kaspa.org/addresses/${addr}/full-transactions?limit=20&offset=${page * 20}&resolve_previous_outpoints=light`);
-            setTransactions(prev => [...prev, ...response.data]);
-            setHasMoreTransactions(response.data.length === 20);
+            const response = await simpleRequest<Transaction[]>(`https://api.kaspa.org/addresses/${addr}/full-transactions?limit=20&offset=${page * 20}&resolve_previous_outpoints=light`);
+            setTransactions(prev => ([...prev, ...response]));
+            setHasMoreTransactions(response.length === 20);
             setTransactionPage(page);
         } catch (err) {
             console.error('Failed to fetch transactions:', err);
@@ -112,8 +82,7 @@ const WalletLookup: FC = () => {
     const fetchUtxos = async (addr: string, page: number) => {
         setLoadingUtxos(true);
         try {
-            const response = await axios.get(`https://api.kaspa.org/addresses/${addr}/utxos?limit=20&offset=${page * 20}`);
-            const newUtxos = response.data;
+            const newUtxos = await simpleRequest<Utxos[]>(`https://api.kaspa.org/addresses/${addr}/utxos?limit=20&offset=${page * 20}`);
 
             setUtxos(prevUtxos => {
                 // Create a Set of unique identifiers for existing UTXOs
@@ -138,107 +107,97 @@ const WalletLookup: FC = () => {
         }
     };
 
-    const lastTransactionElementRef = useCallback(node => {
-        if (loadingTransactions) return;
+    const lastTransactionElementRef = useCallback((node: HTMLTableRowElement) => {
+        if (loadingTransactions || walletData === null) return;
         if (transactionObserver.current) transactionObserver.current.disconnect();
         transactionObserver.current = new IntersectionObserver(entries => {
             if (entries[0].isIntersecting && hasMoreTransactions) {
-                fetchTransactions(walletData.address, transactionPage + 1);
+                void fetchTransactions(walletData.address, transactionPage + 1);
             }
         });
         if (node) transactionObserver.current.observe(node);
     }, [loadingTransactions, hasMoreTransactions, walletData, transactionPage]);
 
-    const lastUtxoElementRef = useCallback(node => {
-        if (loadingUtxos) return;
+    const lastUtxoElementRef = useCallback((node: HTMLTableRowElement) => {
+        if (loadingUtxos || walletData === null) return;
         if (utxoObserver.current) utxoObserver.current.disconnect();
         utxoObserver.current = new IntersectionObserver(entries => {
             if (entries[0].isIntersecting && hasMoreUtxos) {
-                fetchUtxos(walletData.address, utxoPage + 1);
+                void fetchUtxos(walletData.address, utxoPage + 1);
             }
         });
         if (node) utxoObserver.current.observe(node);
     }, [loadingUtxos, hasMoreUtxos, walletData, utxoPage]);
 
     useEffect(() => {
-        if (walletAddress) {
-            setAddress(walletAddress);
-            fetchWalletData(walletAddress);
+        if (!walletAddress) {
+            return
         }
-    }, [walletAddress, fetchWalletData]);
+        setAddress(walletAddress);
 
-    const handleSubmit = (e) => {
+        setLoading(true);
+        setError(null);
+
+        Promise.all([
+            simpleRequest<TokenListResponse<WalletToken[]>>(`https://api.kasplex.org/v1/krc20/address/${walletAddress}/tokenlist`),
+            simpleRequest<WalletBalance>(`https://api.kaspa.org/addresses/${walletAddress}/balance`),
+            simpleRequest<WalletTotal>(`https://api.kaspa.org/addresses/${walletAddress}/transactions-count`)
+        ])
+            .then(async ([krc20Response, balanceResponse, transactionCountResponse]) => {
+
+                const krc20Balances: WalletToken[] = krc20Response.result.map(token => ({
+                    ...token,
+                    balance: token.balance / Math.pow(10, token.dec),
+                }));
+
+                setWalletData({
+                    address: walletAddress,
+                    krc20Balances,
+                    kaspaBalance: balanceResponse.balance,
+                    transactionCount: transactionCountResponse.total,
+                });
+
+                // Reset pagination
+                setTransactionPage(0);
+                setUtxoPage(0);
+                setTransactions([]);
+                setUtxos([]);
+                setHasMoreTransactions(true);
+                setHasMoreUtxos(true);
+
+                // Fetch initial transactions and UTXOs
+                await fetchTransactions(walletAddress, 0);
+                await fetchUtxos(walletAddress, 0);
+            })
+            .catch(() => {
+                setError('Failed to fetch wallet data. Please try again.');
+            })
+            .finally(() => {
+                setLoading(false);
+            })
+
+
+    }, [walletAddress])
+
+    const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
         if (address) {
             navigate(`/wallet/${address}`);
         }
     };
 
+    // @ts-ignore
     const handleAddressChange = (e) => {
         setAddress(e.target.value);
     };
 
-    const copyToClipboard = (text: string):void => {
+    const copyToClipboard = (text: string): void => {
         void navigator.clipboard.writeText(text);
     };
 
-    const openExplorer = (transactionId:string) => {
+    const openExplorer = (transactionId: string) => {
         window.open(`https://explorer.kaspa.org/txs/${transactionId}`, '_blank', 'noopener,noreferrer');
     };
-
-    const MobileTransactionTable = ({transactions, openExplorer, formatNumber, shortenString}) => (
-        <div className="mobile-table">
-            {transactions.map((tx, index) => (
-                <Card key={tx.transaction_id} className="mb-3">
-                    <Card.Body>
-                        <div className="mobile-table-row" onClick={() => openExplorer(tx.transaction_id)}>
-                            <div className="mobile-table-cell">
-                                <strong>Transaction ID:</strong> {shortenString(tx.transaction_id)}
-                            </div>
-                            <div className="mobile-table-cell">
-                                <strong>Amount
-                                    (KAS):</strong> {formatNumber(tx.outputs.reduce((sum, output) => sum + parseInt(output.amount), 0) / 1e8)}
-                            </div>
-                            <div className="mobile-table-cell">
-                                <strong>Block Time:</strong> {new Date(tx.block_time).toLocaleString()}
-                            </div>
-                        </div>
-                    </Card.Body>
-                </Card>
-            ))}
-        </div>
-    );
-
-    const MobileUTXOTable = ({utxos, openExplorer, formatNumber, shortenString}) => (
-        <div className="mobile-table">
-            {utxos.map((utxo, index) => (
-                <Card key={`${utxo.outpoint.transactionId}-${utxo.outpoint.index}`} className="mb-3">
-                    <Card.Body>
-                        <div className="mobile-table-row" onClick={() => openExplorer(utxo.outpoint.transactionId)}>
-                            <div className="mobile-table-cell">
-                                <strong>Transaction ID:</strong> {shortenString(utxo.outpoint.transactionId)}
-                            </div>
-                            <div className="mobile-table-cell">
-                                <strong>Index:</strong> {utxo.outpoint.index}
-                            </div>
-                            <div className="mobile-table-cell">
-                                <strong>Amount (KAS):</strong> {formatNumber(parseInt(utxo.utxoEntry.amount) / 1e8)}
-                            </div>
-                            <div className="mobile-table-cell">
-                                <strong>Block DAA Score:</strong> {utxo.utxoEntry.blockDaaScore}
-                            </div>
-                            <div className="mobile-table-cell">
-                                <strong>Miner Reward:</strong> {utxo.utxoEntry.isCoinbase ? 'Yes' : 'No'}
-                            </div>
-                            <div className="mobile-table-cell">
-                                <strong>Status:</strong> Unspent
-                            </div>
-                        </div>
-                    </Card.Body>
-                </Card>
-            ))}
-        </div>
-    );
 
     return (
         <Container className="wallet-lookup">

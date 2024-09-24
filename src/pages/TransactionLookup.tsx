@@ -24,7 +24,7 @@ type TransactionData = {
     }
 }
 
-//TODO umbau -> rendering etc -> under maintenance page?
+//TODO rendering etc -> under maintenance
 const TransactionLookup: FC = () => {
     return null
     // const [transactionHash, setTransactionHash] = useState('');

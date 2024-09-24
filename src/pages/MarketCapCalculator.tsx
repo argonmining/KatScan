@@ -21,7 +21,7 @@ import JsonLd from '../components/JsonLd';
 import {LoadingSpinner} from "../components/LoadingSpinner";
 import {TokenData, TokenSearchResult} from "../interfaces/TokenData";
 
-// todo / under maintenance?
+// todo / under maintenance
 const MarketCapCalculator = () => {
     return null
     // const [krc20List, setKrc20List] = useState<TokenData[]>([]);

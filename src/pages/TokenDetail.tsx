@@ -144,14 +144,12 @@ const TokenDetail: FC = () => {
         setLoading(true);
         setError(null);
 
-        Promise.all([
-            getTokenDetails(tokenId),
-            getTokenOperations(tokenId, 50)
-        ])
-            .then(([data, opsData]) => {
+        getTokenDetails(tokenId)
+            .then(async (data) => {
                 if (!data) {
                     throw new Error('No data returned from API');
                 }
+                const opsData = await getTokenOperations(tokenId, 50)
                 setTokenData(data);
                 setOperations(opsData);
                 // todo next?

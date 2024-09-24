@@ -24,6 +24,8 @@ type InternalMintData = {
 
 type TreemapContentType = { root: Record<string, string | []>, depth: number, x: number, y: number, width: number, height: number, index: number, name: string }
 type TooltipType = { active: boolean, payload: { payload: { name: string, actualSize: number } }[] }
+
+// todo refactor
 const MintHeatmap: FC = () => {
     const [mintData, setMintData] = useState<InternalMintData[]>([]);
     const [loading, setLoading] = useState(false);
@@ -185,8 +187,6 @@ const MintHeatmap: FC = () => {
         </div>
     );
 
-    // @ts-ignore
-    // @ts-ignore
     return (
         <Container fluid className="mint-heatmap">
             <SEO

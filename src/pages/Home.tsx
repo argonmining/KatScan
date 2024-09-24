@@ -1,28 +1,16 @@
-import React, {FC, ReactNode, useEffect, useState} from 'react';
-import {Container, Row, Col, Card} from 'react-bootstrap';
+import React, {FC, useEffect, useState} from 'react';
+import {Card, Col, Container, Row} from 'react-bootstrap';
 import {Link} from 'react-router-dom';
-import {FaExchangeAlt, FaWallet, FaCoins, FaChartBar, FaCalculator, FaUsers} from 'react-icons/fa';
+import {FaCalculator, FaChartBar, FaCoins, FaExchangeAlt, FaUsers, FaWallet} from 'react-icons/fa';
 import '../styles/Home.css';
 import SEO from '../components/SEO';
 import JsonLd from '../components/JsonLd';
 import {simpleRequest} from "../services/RequestService";
 import {TokenListResponse} from "../interfaces/ApiResponseTypes";
 import {TokenData} from "../interfaces/TokenData";
+import {FeatureCard, StatCard} from "../components/Cards";
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://api.kasplex.org/v1';
-
-type BaseCardType = {
-    title: string
-    icon: ReactNode
-}
-
-type FeatureCard = BaseCardType &{
-    link: string
-}
-
-type StatCard = BaseCardType &{
-    value: string
-}
 
 export const Home: FC = () => {
     const [networkStats, setNetworkStats] = useState({
@@ -43,7 +31,7 @@ export const Home: FC = () => {
 
     useEffect(() => {
         // Fetch network stats
-        simpleRequest<{result:{opTotal:number, tokenTotal:number, feeTotal:number}}>(`${API_BASE_URL}/info`)
+        simpleRequest<{ result: { opTotal: number, tokenTotal: number, feeTotal: number } }>(`${API_BASE_URL}/info`)
             .then(data => {
                 const {opTotal, tokenTotal, feeTotal} = data.result;
                 setNetworkStats({
@@ -62,29 +50,6 @@ export const Home: FC = () => {
             })
             .catch(error => console.error('Error fetching recent tokens:', error));
     }, []);
-
-    const FeatureCard = ({title, icon, link}: FeatureCard) => (
-        <Col xs={4} className="mb-2">
-            <Card className="feature-card h-100" as={Link} to={link}>
-                <Card.Body className="d-flex flex-column align-items-center justify-content-center p-2">
-                    {icon}
-                    <Card.Title className="mt-1 text-center small">{title}</Card.Title>
-                </Card.Body>
-            </Card>
-        </Col>
-    );
-
-    const StatCard = ({title, value, icon}: StatCard) => (
-        <Col xs={4} className="mb-2">
-            <Card className="stat-card h-100">
-                <Card.Body className="d-flex flex-column align-items-center justify-content-center p-2">
-                    {icon}
-                    <h3 className="mt-1 mb-0">{value}</h3>
-                    <Card.Text className="text-center small">{title}</Card.Text>
-                </Card.Body>
-            </Card>
-        </Col>
-    );
 
     return (
         <>

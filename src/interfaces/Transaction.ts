@@ -12,7 +12,7 @@ outputs: TransactionOutputs[]
 type TransactionOutputs = {
 	transaction_id: string
 	index: number
-	amount: number
+	amount: string
 	script_public_key: string
 	script_public_key_address: string
 	script_public_key_type: string

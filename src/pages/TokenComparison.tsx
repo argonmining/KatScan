@@ -48,7 +48,7 @@ const HOLDER_GROUP_COLORS = {
     top50: 'rgba(255, 206, 86, 0.6)',   // Yellow
     others: 'rgba(75, 192, 192, 0.6)',  // Green
 };
-
+//todo refactor
 const TokenComparison: FC = () => {
     const [allTokens, setAllTokens] = useState<TokenData[]>([]);
     const [selectedTokens, setSelectedTokens] = useState([null, null]);
