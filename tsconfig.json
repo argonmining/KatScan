@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "es2021",
+    "baseUrl": "./",
+    "sourceMap": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "module": "es2022",
+    "moduleResolution": "node",
+    "jsx": "react"
+  },
+  "lib": ["es2021"],
+  "include": [
+    "src",
+    "src/declaration.d.ts"
+  ],
+  "exclude": ["node_modules", "build", "dist", "src/**/*.js", "src/**/*.jsx"]
+}

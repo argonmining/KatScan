@@ -1,49 +1,57 @@
-import React, {useState, useEffect, useCallback, useRef} from 'react';
-import {useParams, useNavigate} from 'react-router-dom';
-import {Card, Tabs, Tab, Table, Alert} from 'react-bootstrap';
-import {Line, Bar} from 'react-chartjs-2';
+/*eslint-disable*/
+//@ts-nocheck
+import React, {FC, useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import {useNavigate, useParams} from 'react-router-dom';
+import {Alert, Card, Tab, Table, Tabs} from 'react-bootstrap';
+import {Bar, Line} from 'react-chartjs-2';
 import {
-    Chart as ChartJS,
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    BarElement,
     ArcElement,
-    Title,
-    Tooltip,
+    BarElement,
+    CategoryScale,
+    Chart as ChartJS, ChartDatasetProperties,
     Legend,
-    LogarithmicScale
+    LegendItem,
+    LinearScale,
+    LineElement,
+    LogarithmicScale,
+    PointElement,
+    Title,
+    Tooltip
 } from 'chart.js';
 import {getTokenDetails, getTokenOperations} from '../services/dataService';
 import '../styles/TokenDetail.css';
-import axios from 'axios';
 import {censorTicker} from '../utils/censorTicker';
-import SEO from './SEO';
-import JsonLd from './JsonLd';
-import LinkWithTooltip from './LinkWithTooltip';
-import {LoadingSpinner} from "./LoadingSpinner";
+import SEO from '../components/SEO';
+import JsonLd from '../components/JsonLd';
+import {LinkWithTooltip} from '../components/LinkWithTooltip';
+import {LoadingSpinner} from "../components/LoadingSpinner";
+import {OpTransactionData} from "../interfaces/OpTransactionData";
+import {simpleRequest} from "../services/RequestService";
+import {TokenSearchResult} from "../interfaces/TokenData";
+import {MobileOperationsTable} from "../components/tables/MobileOperationsTable";
+import {MobileHolderTable} from "../components/tables/MobileHolderTable";
+import {formatDateTime, formatNumber, parseRawNumber} from "../services/Helper";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, ArcElement, Title, Tooltip, Legend, LogarithmicScale);
 
-const shortenString = (str, startLength = 5, endLength = 5) => {
+const shortenString = (str: string, startLength = 5, endLength = 5): string => {
     if (str.length <= startLength + endLength) return str;
     return `${str.slice(0, startLength)}...${str.slice(-endLength)}`;
 };
 
-const TokenDetail = () => {
+// todo refactoring
+const TokenDetail: FC = () => {
     const {tokenId} = useParams();
     const navigate = useNavigate();
-    const [tokenData, setTokenData] = useState(null);
-    const [operations, setOperations] = useState([]);
-    const [operationsCursor, setOperationsCursor] = useState(null);
+    const [tokenData, setTokenData] = useState<TokenSearchResult | null>(null);
+    const [operations, setOperations] = useState<OpTransactionData[]>([]);
+    const [operationsCursor, setOperationsCursor] = useState<OpTransactionData | null>(null);
     const [loading, setLoading] = useState(true);
     const [loadingMore, setLoadingMore] = useState(false);
-    const [error, setError] = useState(null);
-    const [operationsError, setOperationsError] = useState(null);
-    const observer = useRef();
-    const [holderDistribution, setHolderDistribution] = useState([]);
-    const [mintActivity, setMintActivity] = useState([]);
+    const [error, setError] = useState<string | null>(null);
+    const [operationsError, setOperationsError] = useState<string | null>(null);
+    const observer = useRef<IntersectionObserver>();
+    const [mintActivity, setMintActivity] = useState<unknown[]>([]);
     const [activeTab, setActiveTab] = useState('topHolders');
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
@@ -57,13 +65,16 @@ const TokenDetail = () => {
     }, []);
 
     const fetchOperations = useCallback(async () => {
-        if (loadingMore || !operationsCursor) return;
+        if (loadingMore || !operationsCursor || tokenId === undefined) return;
         try {
             setLoadingMore(true);
             setOperationsError(null);
+            // eslint-disable-next-line
+            // @ts-ignore
             const data = await getTokenOperations(tokenId, 50, operationsCursor);
-            setOperations(prevOps => [...prevOps, ...data.result]);
-            setOperationsCursor(data.next);
+            setOperations(prevOps => [...prevOps, ...data]);
+            //todo
+            // setOperationsCursor(data.next);
         } catch (err) {
             console.error('Failed to fetch operations:', err);
             setOperationsError('Failed to load more operations. Please try again.');
@@ -72,49 +83,23 @@ const TokenDetail = () => {
         }
     }, [tokenId, operationsCursor, loadingMore]);
 
-    const lastOperationElementRef = useCallback(node => {
+    const lastOperationElementRef = useCallback((node: HTMLTableRowElement) => {
         if (loadingMore) return;
         if (observer.current) observer.current.disconnect();
         observer.current = new IntersectionObserver(entries => {
             if (entries[0].isIntersecting && operationsCursor) {
-                fetchOperations();
+                void fetchOperations();
             }
         });
-        if (node) observer.current.observe(node);
+        if (node) observer.current?.observe(node);
     }, [loadingMore, operationsCursor, fetchOperations]);
 
-    const fetchMintActivity = useCallback(async (tick) => {
-        try {
-            const response = await axios.get(`https://katapi.nachowyborski.xyz/api/mintsovertime?tick=${tick}`);
-            const data = response.data;
-            return fillMissingDates(data);
-        } catch (error) {
-            console.error('Failed to fetch mint activity data:', error);
-            return [];
-        }
-    }, []);
-
-    const fillMissingDates = (data) => {
-        const filledData = [];
-        const startDate = new Date(data[data.length - 1].date);
-        const endDate = new Date();
-        const dateMap = new Map(data.map(item => [item.date, item.count]));
-
-        // Add a date one day before the oldest record with a count of 0
-        const preStartDate = new Date(startDate);
-        preStartDate.setDate(preStartDate.getDate() - 1);
-        filledData.push({date: preStartDate.toISOString().split('T')[0], count: 0});
-
-        for (let d = startDate; d <= endDate; d.setDate(d.getDate() + 1)) {
-            const dateStr = d.toISOString().split('T')[0];
-            filledData.push({date: dateStr, count: dateMap.get(dateStr) || 0});
+    const holderDistribution = useMemo(() => {
+        if (tokenData === null) {
+            return []
         }
 
-        return filledData;
-    };
-
-    const processHolderDistribution = useCallback((holders, maxSupply, decimals) => {
-        if (!holders || holders.length === 0) {
+        if (tokenData.holder.length === 0) {
             return [
                 {
                     label: 'Other Holders',
@@ -122,6 +107,9 @@ const TokenDetail = () => {
                 }
             ];
         }
+        const holders = tokenData.holder
+        const decimals = tokenData.dec
+        const maxSupply = tokenData.max
 
         const groups = [
             {label: 'Top 1-10 Holders', total: 0},
@@ -133,84 +121,91 @@ const TokenDetail = () => {
 
         holders.slice(0, 50).forEach((holder, index) => {
             const groupIndex = Math.floor(index / 10);
-            groups[groupIndex].total += parseRawNumber(holder.amount, decimals);
+            groups[groupIndex].total += parseRawNumber(holder.amount.toString(), decimals);
         });
 
         const top50Total = groups.reduce((sum, group) => sum + group.total, 0);
-        const otherHoldersTotal = parseRawNumber(maxSupply, decimals) - top50Total;
+        const otherHoldersTotal = parseRawNumber(maxSupply.toString(), decimals) - top50Total;
 
         return [
             ...groups.map(group => ({
                 label: group.label,
-                percentage: (group.total / parseRawNumber(maxSupply, decimals)) * 100,
+                percentage: (group.total / parseRawNumber(maxSupply.toString(), decimals)) * 100,
             })),
             {
                 label: 'Other Holders',
-                percentage: (otherHoldersTotal / parseRawNumber(maxSupply, decimals)) * 100,
+                percentage: (otherHoldersTotal / parseRawNumber(maxSupply.toString(), decimals)) * 100,
             }
         ];
-    }, []);
+    }, [tokenData]);
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                setLoading(true);
-                setError(null);
-                const data = await getTokenDetails(tokenId);
+        if (!tokenId) {
+            return
+        }
+
+        setLoading(true);
+        setError(null);
+
+        getTokenDetails(tokenId)
+            .then(async (data) => {
                 if (!data) {
                     throw new Error('No data returned from API');
                 }
+                const opsData = await getTokenOperations(tokenId, 50)
                 setTokenData(data);
-                const opsData = await getTokenOperations(tokenId, 50);
-                setOperations(opsData.result);
-                setOperationsCursor(opsData.next);
-
-                setHolderDistribution(processHolderDistribution(data.holder, data.max, data.dec));
-            } catch (err) {
+                setOperations(opsData);
+                // todo next?
+                // setOperationsCursor(opsData.next);
+            })
+            .catch(err => {
                 console.error('Failed to fetch token details:', err);
                 setError('Failed to fetch token details');
-            } finally {
-                setLoading(false);
-            }
-        };
+            })
+            .finally(() => setLoading(false));
 
-        if (tokenId) {
-            fetchData();
-        }
-    }, [tokenId, processHolderDistribution]);
+    }, [tokenId]);
 
     useEffect(() => {
-        const fetchMintActivityData = async () => {
-            if (activeTab === 'mintActivity' && mintActivity.length === 0) {
-                const mintActivityData = await fetchMintActivity(tokenData.tick.toUpperCase());
-                setMintActivity(mintActivityData);
-            }
-        };
+        if (activeTab !== 'mintActivity' && mintActivity.length !== 0) {
+            return
+        }
+        if (!tokenData) {
+            return
+        }
 
-        fetchMintActivityData();
-    }, [activeTab, mintActivity.length, tokenData, fetchMintActivity]);
+        //todo type
+        simpleRequest<Record<string, string>[]>(`https://katapi.nachowyborski.xyz/api/mintsovertime?tick=${tokenData.tick.toUpperCase()}`)
+            .then(data => {
+                if (data.length === 0){
+                    return
+                }
+                const filledData = [];
+                const startDate = new Date(data[data.length - 1].date);
+                const endDate = new Date();
+                const dateMap = new Map(data.map(item => [item.date, item.count]));
 
-    const parseRawNumber = (rawNumber, decimals) => {
-        return Number(rawNumber) / Math.pow(10, decimals);
-    };
+                // Add a date one day before the oldest record with a count of 0
+                const preStartDate = new Date(startDate);
+                preStartDate.setDate(preStartDate.getDate() - 1);
+                filledData.push({date: preStartDate.toISOString().split('T')[0], count: 0});
 
-    const formatNumber = (rawNumber, decimals) => {
-        return new Intl.NumberFormat('en-US', {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: decimals,
-        }).format(rawNumber);
-    };
+                for (let d = startDate; d <= endDate; d.setDate(d.getDate() + 1)) {
+                    const dateStr = d.toISOString().split('T')[0];
+                    filledData.push({date: dateStr, count: dateMap.get(dateStr) || 0});
+                }
+                setMintActivity(filledData)
+            })
+            .catch(error => {
+                console.error('Failed to fetch mint activity data:', error);
+            })
+    }, [activeTab, mintActivity.length, tokenData]);
 
-    const formatDateTime = (timestamp) => {
-        const date = new Date(parseInt(timestamp));
-        return date.toLocaleString('en-US', {timeZoneName: 'short'});
-    };
-
-    const handleAddressClick = (address) => {
+    const handleAddressClick = (address: string) => {
         navigate(`/wallet/${address}`);
     };
 
-    const handleTransactionClick = (hashRev) => {
+    const handleTransactionClick = (hashRev: string) => {
         navigate(`/transaction-lookup/${hashRev}`);
     };
 
@@ -237,7 +232,7 @@ const TokenDetail = () => {
             <div className="token-header">
                 <h1>Token Details: {censorTicker(tokenData.tick)}</h1>
                 <span className="creation-date">
-          Deployed on {formatDateTime(tokenData.mtsAdd)}
+          Deployed on {formatDateTime(tokenData.mtsAdd.toString())}
         </span>
             </div>
             <Card className="token-info-card">
@@ -278,11 +273,9 @@ const TokenDetail = () => {
                 <Tab eventKey="topHolders" title="Top Holders">
                     <div className="detail-table-container">
                         {isMobile ? (
-                            <MobileTable
+                            <MobileHolderTable
                                 data={tokenData.holder}
-                                type="holders"
                                 tokenData={tokenData}
-                                handleAddressClick={handleAddressClick}
                                 formatNumber={formatNumber}
                                 parseRawNumber={parseRawNumber}
                                 shortenString={shortenString}
@@ -328,9 +321,8 @@ const TokenDetail = () => {
                 <Tab eventKey="recentOperations" title="Recent Operations">
                     <div className="detail-table-container">
                         {isMobile ? (
-                            <MobileTable
+                            <MobileOperationsTable
                                 data={operations}
-                                type="operations"
                                 tokenData={tokenData}
                                 handleAddressClick={handleAddressClick}
                                 handleTransactionClick={handleTransactionClick}
@@ -441,19 +433,21 @@ const TokenDetail = () => {
                                             labels: {
                                                 boxWidth: 20,
                                                 padding: 15,
-                                                generateLabels: (chart) => {
+                                                generateLabels: (chart): LegendItem[] => {
                                                     const data = chart.data;
-                                                    if (data.labels.length && data.datasets.length) {
-                                                        return data.labels.map((label, i) => {
+                                                    if (data.labels?.length && data.datasets.length) {
+                                                        return data.labels?.map((label, i) => {
                                                             const value = data.datasets[0].data[i];
+                                                            // eslint-disable-next-line
+                                                            // @ts-nocheck
                                                             return {
-                                                                text: `${label}: ${value.toFixed(2)}%`,
-                                                                fillStyle: data.datasets[0].backgroundColor[i],
-                                                                strokeStyle: data.datasets[0].borderColor[i],
-                                                                lineWidth: data.datasets[0].borderWidth,
+                                                                text: `${label}: ${(value as number).toFixed(2)}%`,
+                                                                fillStyle: data.datasets[0].backgroundColor[i] as LegendItem['fillStyle'],
+                                                                strokeStyle: data.datasets[0].borderColor[i] as LegendItem['strokeStyle'],
+                                                                lineWidth: data.datasets[0].borderWidth as LegendItem['lineWidth'],
                                                                 hidden: isNaN(data.datasets[0].data[i]) || data.datasets[0].data[i] === null,
                                                                 index: i
-                                                            };
+                                                            } as LegendItem;
                                                         });
                                                     }
                                                     return [];
@@ -493,10 +487,10 @@ const TokenDetail = () => {
                         <div className="chart-container">
                             <Line
                                 data={{
-                                    labels: mintActivity.map(item => item.date),
+                                    labels: mintActivity.map(item => item?.date as ChartDatasetProperties<string, unknown>),
                                     datasets: [{
                                         label: 'Daily Mints',
-                                        data: mintActivity.map(item => item.count),
+                                        data: mintActivity.map(item => item?.count as ChartDatasetProperties<string, unknown>),
                                         borderColor: 'rgb(40, 167, 69)', // Green color
                                         backgroundColor: 'rgba(40, 167, 69, 0.5)',
                                     }]
@@ -528,80 +522,5 @@ const TokenDetail = () => {
     );
 };
 
-const MobileTable = ({
-                         data,
-                         type,
-                         tokenData,
-                         handleAddressClick,
-                         handleTransactionClick,
-                         formatNumber,
-                         parseRawNumber,
-                         formatDateTime,
-                         shortenString
-                     }) => (
-    <div className="mobile-table">
-        {data.map((item, index) => (
-            <div key={index} className="mobile-table-row">
-                {type === 'holders' && (
-                    <>
-                        <div className="mobile-table-cell">
-                            <strong>Rank:</strong> {index + 1}
-                        </div>
-                        <div className="mobile-table-cell">
-                            <strong>Address:</strong>
-                            <LinkWithTooltip
-                                to={`/wallet/${item.address}`}
-                                tooltip="View wallet details"
-                                className="clickable-address"
-                            >
-                                {shortenString(item.address)}
-                            </LinkWithTooltip>
-                        </div>
-                        <div className="mobile-table-cell">
-                            <strong>Amount:</strong> {formatNumber(parseRawNumber(item.amount, tokenData.dec), tokenData.dec)}
-                        </div>
-                        <div className="mobile-table-cell">
-                            <strong>% of Total Supply:</strong>
-                            {((parseRawNumber(item.amount, tokenData.dec) / parseRawNumber(tokenData.max, tokenData.dec)) * 100).toFixed(2)}%
-                        </div>
-                    </>
-                )}
-                {type === 'operations' && (
-                    <>
-                        <div className="mobile-table-cell">
-                            <strong>Type:</strong> {item.op}
-                        </div>
-                        <div className="mobile-table-cell">
-                            <strong>Transaction ID:</strong>
-                            <LinkWithTooltip
-                                to={`/transaction-lookup/${item.hashRev}`}
-                                tooltip="View transaction details"
-                                className="clickable-address"
-                            >
-                                {shortenString(item.hashRev)}
-                            </LinkWithTooltip>
-                        </div>
-                        <div className="mobile-table-cell">
-                            <strong>Address:</strong>
-                            <LinkWithTooltip
-                                to={`/wallet/${item.op === 'mint' ? item.to : item.from}`}
-                                tooltip="View wallet details"
-                                className="clickable-address"
-                            >
-                                {shortenString(item.op === 'mint' ? item.to : item.from)}
-                            </LinkWithTooltip>
-                        </div>
-                        <div className="mobile-table-cell">
-                            <strong>Amount:</strong> {formatNumber(parseRawNumber(item.amt, tokenData.dec), tokenData.dec)}
-                        </div>
-                        <div className="mobile-table-cell">
-                            <strong>Timestamp:</strong> {formatDateTime(item.mtsAdd)}
-                        </div>
-                    </>
-                )}
-            </div>
-        ))}
-    </div>
-);
 
 export default TokenDetail;

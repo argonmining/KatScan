@@ -1,6 +1,6 @@
-import React from 'react';
+import React, {FC} from 'react';
 
-const StructuredData = () => {
+const StructuredData:FC = () => {
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "WebApplication",

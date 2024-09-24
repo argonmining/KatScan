@@ -1,7 +1,13 @@
-import React from 'react';
+import React, {FC} from 'react';
 import {Helmet} from 'react-helmet-async';
 
-const SEO = ({title, description, keywords, canonicalUrl}) => {
+type Props = {
+    title: string
+    description: string
+    keywords: string
+    canonicalUrl?: string
+}
+const SEO: FC<Props> = ({title, description, keywords, canonicalUrl}) => {
     const fullTitle = `${title} | KatScan - KRC-20 Explorer for Kaspa`;
     return (
         <Helmet>
