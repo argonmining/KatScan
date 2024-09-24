@@ -1,13 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import {
-    Table,
-    ProgressBar,
-    Badge,
-    Form,
-    InputGroup,
-    Dropdown,
-} from 'react-bootstrap' // eslint-disable-line no-unused-vars
+import { Table, Form, InputGroup, Dropdown } from 'react-bootstrap' // eslint-disable-line no-unused-vars
 import { FaSearch } from 'react-icons/fa'
 import { getKRC20TokenList } from '../services/dataService'
 import '../styles/TokenOverview.css'

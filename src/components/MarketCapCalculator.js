@@ -7,7 +7,6 @@ import {
     faChartLine,
     faCoins,
     faDollarSign,
-    faExchangeAlt,
     faExternalLinkAlt,
     faInfoCircle,
     faUsers,
