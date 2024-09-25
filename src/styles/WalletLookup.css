@@ -18,6 +18,14 @@
 
 .wallet-overview {
     margin-bottom: 10px;
+    .grid {
+        display: grid;
+        grid-template-columns: 200px calc(100% - 200px);
+
+        .clickable {
+            margin-left: 10px;
+        }
+    }
 }
 
 .tab-content {
@@ -134,6 +142,10 @@
     background-color: var(--dark-card-bg);
     color: var(--dark-text-color);
     border-color: var(--dark-border-color);
+
+    &::placeholder {
+        color: var(--dark-text-color);
+    }
 }
 
 .dark-mode .wallet-lookup .btn-primary {
