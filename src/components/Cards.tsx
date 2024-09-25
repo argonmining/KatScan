@@ -1,6 +1,8 @@
-import {Card, Col} from "react-bootstrap";
+import {Button, Card, CardProps, Col} from "react-bootstrap";
 import {Link} from "react-router-dom";
-import React, {FC, ReactNode} from "react";
+import React, {Children, FC, PropsWithChildren, ReactNode, useState} from "react";
+import {FaChevronDown, FaChevronUp} from "react-icons/fa";
+import {debounce} from "chart.js/helpers";
 
 type BaseCardType = {
     title: string
@@ -47,6 +49,59 @@ export const NormalCard: FC<NormalCard> = ({title, children}) => {
             <Card.Text>
                 {children}
             </Card.Text>
+        </Card.Body>
+    </Card>
+}
+
+export const CollapseAbleCard: FC<PropsWithChildren<CardProps>> = ({children, ...props}) => {
+
+    const [isCollapsed, setIsCollapsed] = useState(false)
+
+    const changeView = debounce(() => setIsCollapsed(current => !current), 50)
+
+    return <Card {...props}>
+        <Card.Body>
+            {Children.toArray(children)[0]}
+            <Button
+                variant="link"
+                onClick={changeView}
+                aria-expanded={!isCollapsed}
+                className="mt-2 p-0"
+            >
+                {isCollapsed
+                    ? 'Show Tokens'
+                    : 'Hide Tokens'}
+                {isCollapsed
+                    ? <FaChevronDown className="ml-1"/>
+                    : <FaChevronUp className="ml-1"/>}
+            </Button>
+            {!isCollapsed && Children.toArray(children)[1]}
+        </Card.Body>
+    </Card>
+}
+export const ExpandableCard: FC<PropsWithChildren<CardProps>> = ({children, ...props}) => {
+
+    const [isExpanded, setIsExpanded] = useState(false)
+
+    const changeView = debounce(() => setIsExpanded(current => !current), 50)
+
+    return <Card {...props}>
+        <Card.Body>
+            {Children.toArray(children)[0]}
+            <Button
+                variant="link"
+                onClick={changeView}
+                aria-expanded={isExpanded}
+                className="mt-2 p-0"
+            >
+                {isExpanded
+                    ? 'Show Tokens'
+                    : 'Hide Tokens'}
+                {isExpanded
+                    ? <FaChevronDown className="ml-1"/>
+                    : <FaChevronUp className="ml-1"/>}
+            </Button>
+            {isExpanded && Children.toArray(children)[1]}
         </Card.Body>
     </Card>
 }
