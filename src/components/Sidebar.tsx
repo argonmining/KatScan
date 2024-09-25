@@ -70,6 +70,7 @@ const Sidebar: FC<Props> = ({ darkMode, toggleDarkMode, isMobile }) => {
                     <Container>
                         <Navbar.Brand as={Link} to="/">
                             <img
+                                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                                 src={logo}
                                 alt="KatScan Logo"
                                 className="logo-image"
