@@ -1,8 +1,8 @@
 @import './globals.css';
 
 :root {
-    --sidebar-bg: #f8f9fa;  /* Light gray background */
-    --sidebar-hover-bg: #e9ecef;  /* Slightly darker gray for hover background */
+    --sidebar-bg: #f8f9fa; /* Light gray background */
+    --sidebar-hover-bg: #e9ecef; /* Slightly darker gray for hover background */
 }
 
 /* Show the sidebar only on screens larger than 992px */
@@ -231,16 +231,16 @@
 /* Hide the sidebar on screens smaller than 992px (bootstrap lg) */
 @media (max-width: 991px) {
     .sidebar {
-        display: none !important;  /* This ensures the sidebar is completely hidden */
+        display: none !important; /* This ensures the sidebar is completely hidden */
     }
 
     /* Navbar (hamburger menu) should show here */
     .navbar {
-        display: block;  /* Ensure the navbar (hamburger menu) is visible */
+        display: block; /* Ensure the navbar (hamburger menu) is visible */
     }
 
     .main-content {
-        width: 100%;  /* Ensure the main content takes the full width */
+        width: 100%; /* Ensure the main content takes the full width */
     }
 
     .navbar .logo-image {

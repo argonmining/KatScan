@@ -1,224 +1,225 @@
 .top-krc20-holders-wrapper {
-  display: flex;
-  flex-direction: column;
-  height: 100vh !important; /* Full viewport height */
-  padding: 20px;
-  overflow: hidden !important;
+    display: flex;
+    flex-direction: column;
+    height: 100vh !important; /* Full viewport height */
+    padding: 20px;
+    overflow: hidden !important;
 }
 
 .top-krc20-holders-wrapper h1 {
-  font-family: var(--header-font);
-  color: var(--secondary-primary-color);
-  margin-bottom: 20px;
+    font-family: var(--header-font);
+    color: var(--primary-color);
+    margin-bottom: 20px;
 }
 
 .table {
-  margin-bottom: 0;
-  font-family: var(--body-font);
-  border-radius: 8px; /* Add rounded corners */
-  overflow: hidden; /* Ensure rounded corners are visible */
+    margin-bottom: 0;
+    font-family: var(--body-font);
+    border-radius: 8px; /* Add rounded corners */
+    overflow: hidden; /* Ensure rounded corners are visible */
 }
 
 .table th {
-  position: sticky;
-  top: 0;
-  background-color: var(--primary-color);
-  color: white;
-  font-family: var(--sub-header-font);
-  z-index: 1;
-  padding: 10px 8px; /* Adjust padding for better spacing */
-  text-align: left; /* Align text to the left */
-  font-size: 0.9rem; /* Adjust font size */
+    position: sticky;
+    top: 0;
+    background-color: var(--primary-color);
+    color: white;
+    font-family: var(--sub-header-font);
+    z-index: 1;
+    padding: 10px 8px; /* Adjust padding for better spacing */
+    text-align: left; /* Align text to the left */
+    font-size: 0.9rem; /* Adjust font size */
 }
 
 .table td {
-  vertical-align: middle;
-  padding: 2px; /* Adjust padding for better spacing */
-  font-size: 14px; /* Adjust font size */
-  font-family: var(--body-font); 
-  white-space: nowrap;
+    vertical-align: middle;
+    padding: 2px; /* Adjust padding for better spacing */
+    font-size: 14px; /* Adjust font size */
+    font-family: var(--body-font);
+    white-space: nowrap;
 }
 
 .btn-link {
-  padding: 0;
-  color: var(--secondary-color);
+    padding: 0;
+    color: var(--secondary-color);
 }
 
 .btn-link:hover {
-  text-decoration: none;
-  color: var(--primary-color);
+    text-decoration: none;
+    color: var(--primary-color);
 }
 
 .table-sm {
-  margin-top: 10px;
-  margin-bottom: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .wallet-link {
-  color: var(--secondary-color);
-  text-decoration: none;
+    color: var(--secondary-color);
+    text-decoration: none;
 }
 
 .wallet-link:hover {
-  text-decoration: underline;
-  color: var(--primary-color);
+    text-decoration: underline;
+    color: var(--primary-color);
 }
 
 .table-container {
-  height: 98vh !important;
-  flex: 1;
-  overflow-y: auto !important;
-  overflow-x: auto;
+    height: 98vh !important;
+    flex: 1;
+    overflow-y: auto !important;
+    overflow-x: auto;
 }
 
 .table-container .table {
-  margin-bottom: 0;
-  font-family: var(--body-font);
+    margin-bottom: 0;
+    font-family: var(--body-font);
 }
 
 .table-container .table th {
-  position: sticky;
-  background-color: var(--primary-color);
-  color: white;
-  font-family: var(--sub-header-font);
-  vertical-align: middle;
+    position: sticky;
+    background-color: var(--primary-color);
+    color: white;
+    font-family: var(--sub-header-font);
+    vertical-align: middle;
 }
 
 .table-container .table td {
-  vertical-align: middle;
+    vertical-align: middle;
 }
 
 .clickable-address {
-  color: var(--secondary-primary-color);
-  cursor: pointer;
+    color: var(--secondary-primary-color);
+    cursor: pointer;
 }
 
 .clickable-address:hover {
-  text-decoration: underline;
-  color: var(--primary-color);
+    text-decoration: underline;
+    color: var(--primary-color);
 }
 
 .top-krc20-holders-wrapper::-webkit-scrollbar {
-  width: 0;  /* Remove scrollbar space */
-  background: transparent;  /* Optional: just make scrollbar invisible */
+    width: 0; /* Remove scrollbar space */
+    background: transparent; /* Optional: just make scrollbar invisible */
 }
 
 @media (max-width: 768px) {
-  .top-krc20-holders-wrapper {
-    padding: 10px;
-  }
+    .top-krc20-holders-wrapper {
+        padding: 10px;
+    }
 
-  .top-krc20-holders-wrapper h1 {
-    font-size: 1.5rem;
-    margin-bottom: 15px;
-  }
+    .top-krc20-holders-wrapper h1 {
+        font-size: 1.5rem;
+        margin-bottom: 15px;
+    }
 
-  .mobile-holders-list {
-    overflow-y: auto;
-    max-height: calc(100vh - 100px);
-  }
+    .mobile-holders-list {
+        overflow-y: auto;
+        max-height: calc(100vh - 100px);
+    }
 
-  .mobile-holders-list .card {
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
+    .mobile-holders-list .card {
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
 
-  .mobile-holders-list .card-body {
-    padding: 12px;
-  }
+    .mobile-holders-list .card-body {
+        padding: 12px;
+    }
 
-  .mobile-holders-list .table {
-    font-size: 0.9rem;
-  }
+    .mobile-holders-list .table {
+        font-size: 0.9rem;
+    }
 
-  .mobile-holders-list .btn-link {
-    font-size: 0.9rem;
-    color: var(--primary-color) !important;
-  }
+    .mobile-holders-list .btn-link {
+        font-size: 0.9rem;
+        color: var(--primary-color) !important;
+    }
 }
 
 .table-container {
-  overflow-x: auto;
+    overflow-x: auto;
 }
 
 .table-container .table {
-  min-width: 800px;
+    min-width: 800px;
 }
 
 @media (min-width: 769px) {
-  .top-krc20-holders-wrapper {
-    padding: 30px;
-  }
+    .top-krc20-holders-wrapper {
+        padding: 30px;
+    }
 
-  .table-container {
-    margin-top: 20px;
-  }
+    .table-container {
+        margin-top: 20px;
+    }
 
-  .table th, .table td {
-    padding: 12px;
-  }
+    .table th,
+    .table td {
+        padding: 12px;
+    }
 }
 
 .dark-mode .top-krc20-holders-wrapper {
-  background-color: var(--dark-bg-color);
+    background-color: var(--dark-bg-color);
 }
 
 .dark-mode .top-krc20-holders-wrapper h1 {
-  color: var(--dark-text-color);
+    color: var(--primary-color);
 }
 
 .dark-mode .table {
-  background-color: var(--dark-card-bg);
-  color: var(--dark-text-color);
+    background-color: var(--dark-card-bg);
+    color: var(--dark-text-color);
 }
 
 .dark-mode .table th {
-  background-color: var(--dark-header-bg);
-  color: var(--dark-text-color);
+    background-color: var(--dark-header-bg);
+    color: var(--dark-text-color);
 }
 
 .dark-mode .table td {
-  color: var(--dark-text-color);
+    color: var(--dark-text-color);
 }
 
 .dark-mode .btn-link {
-  color: var(--dark-link-color);
+    color: var(--dark-link-color);
 }
 
 .dark-mode .btn-link:hover {
-  color: var(--dark-link-hover-color);
+    color: var(--dark-link-hover-color);
 }
 
 .dark-mode .wallet-link,
 .dark-mode .clickable-address {
-  color: var(--dark-link-color);
+    color: var(--dark-link-color);
 }
 
 .dark-mode .wallet-link:hover,
 .dark-mode .clickable-address:hover {
-  color: var(--dark-link-hover-color);
+    color: var(--dark-link-hover-color);
 }
 
 @media (max-width: 768px) {
-  .dark-mode .mobile-holders-list .card {
-    background-color: var(--dark-card-bg);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-  }
+    .dark-mode .mobile-holders-list .card {
+        background-color: var(--dark-card-bg);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
 
-  .dark-mode .mobile-holders-list .btn-link {
-    color: var(--dark-primary-color) !important;
-  }
+    .dark-mode .mobile-holders-list .btn-link {
+        color: var(--dark-primary-color) !important;
+    }
 }
 
 .dark-mode .card {
-  background-color: var(--dark-card-bg);
-  border-color: var(--dark-border-color);
+    background-color: var(--dark-card-bg);
+    border-color: var(--dark-border-color);
 }
 
 .dark-mode .table tbody tr {
-  background-color: var(--dark-card-bg);
+    background-color: var(--dark-card-bg);
 }
 
 .dark-mode .table tbody tr:nth-of-type(odd) {
-  background-color: var(--dark-stripe-bg);
+    background-color: var(--dark-stripe-bg);
 }

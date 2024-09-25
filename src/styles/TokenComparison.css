@@ -6,145 +6,146 @@
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-  }
-  
-  .chart-section {
+}
+
+.chart-section {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 20px;
-  }
-  
-  .card {
+}
+
+.card {
     margin-bottom: 30px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
     border-radius: 8px; /* Rounded corners */
-  }
-  
-  .token-comparison h2 {
+}
+
+.token-comparison h2 {
     margin-bottom: 20px;
-  }
-  
-  .token-comparison .card {
+    color: var(--primary-color);
+}
+
+.token-comparison .card {
     height: 100%;
-  }
-  
-  .token-comparison .card-body {
+}
+
+.token-comparison .card-body {
     display: flex;
     flex-direction: column;
     padding: 25px; /* Add padding */
-  }
-  
-  .token-comparison .card-title {
+}
+
+.token-comparison .card-title {
     margin-bottom: 25px;
     font-size: 1.25rem; /* Consistent font size */
     font-weight: bold; /* Consistent font weight */
-  }
-  
-  .token-comparison canvas {
+}
+
+.token-comparison canvas {
     max-height: 350px;
-  }
+}
 
 .progress-wrapper {
-  margin-bottom: 20px;
+    margin-bottom: 20px;
 }
 
 .progress-label {
-  margin-bottom: 10px;
-  font-weight: bold;
+    margin-bottom: 10px;
+    font-weight: bold;
 }
 
 .table-responsive {
-  max-height: 400px;
-  overflow-y: auto;
+    max-height: 400px;
+    overflow-y: auto;
 }
 
 @media (max-width: 768px) {
-  .token-comparison {
-    padding: 10px;
-  }
+    .token-comparison {
+        padding: 10px;
+    }
 }
 
 .progress-label .badge {
-  margin-left: 10px;
-  font-size: 0.8em;
+    margin-left: 10px;
+    font-size: 0.8em;
 }
 
 .token-comparison .row {
-  margin-right: -15px;
-  margin-left: -15px;
+    margin-right: -15px;
+    margin-left: -15px;
 }
 
 .token-comparison .col,
-.token-comparison [class*="col-"] {
-  padding-right: 15px;
-  padding-left: 15px;
+.token-comparison [class*='col-'] {
+    padding-right: 15px;
+    padding-left: 15px;
 }
 
 /* Add some space between the select inputs */
 .token-comparison .form-group {
-  margin-bottom: 20px;
+    margin-bottom: 20px;
 }
 
 /* Adjust the table styles */
 .table {
-  margin-bottom: 0;
+    margin-bottom: 0;
 }
 
 .table th,
 .table td {
-  padding: 12px;
-  vertical-align: middle;
+    padding: 12px;
+    vertical-align: middle;
 }
 
 /* Add space between the minting progress card and the token details table */
 .minting-progress-card {
-  margin-bottom: 40px !important;
+    margin-bottom: 40px !important;
 }
 
 /* Ensure consistent spacing between all cards */
 .token-comparison .card {
-  margin-bottom: 40px;
+    margin-bottom: 40px;
 }
 
 /* Remove margin from the last card */
 .token-comparison .card:last-child {
-  margin-bottom: 0;
+    margin-bottom: 0;
 }
 
 /* Dark mode styles */
 
 .dark-mode .token-comparison {
-  background-color: var(--dark-bg-color);
+    background-color: var(--dark-bg-color);
 }
 
 .dark-mode .card {
-  background-color: var(--dark-card-bg);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    background-color: var(--dark-card-bg);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
-.dark-mode .token-comparison h2,
+.dark-mode .token-comparison h1,
 .dark-mode .token-comparison .card-title {
-  color: var(--dark-text-color);
+    color: var(--primary-color);
 }
 
 .dark-mode .token-comparison canvas {
-  filter: invert(0.9) hue-rotate(180deg);
+    filter: invert(0.9) hue-rotate(180deg);
 }
 
 .dark-mode .progress-label {
-  color: var(--dark-text-color);
+    color: var(--dark-text-color);
 }
 
 .dark-mode .table th,
 .dark-mode .table td {
-  color: var(--dark-text-color);
-  border-color: var(--dark-border-color);
+    color: var(--dark-text-color);
+    border-color: var(--dark-border-color);
 }
 
 .dark-mode .table-striped tbody tr:nth-of-type(odd) {
-  background-color: var(--dark-stripe-bg);
+    background-color: var(--dark-stripe-bg);
 }
 
 .dark-mode .minting-progress-card {
-  background-color: var(--dark-card-bg);
+    background-color: var(--dark-card-bg);
 }

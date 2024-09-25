@@ -14,9 +14,9 @@
     margin-bottom: 20px;
 }
 
-.token-overview-header h2 {
+.token-overview-header h1 {
     font-family: var(--header-font);
-    color: var(--secondary-primary-color);
+    color: var(--primary-color);
     margin: 0;
     white-space: nowrap;
     margin-right: 20px; /* Add some space between title and search bar */
@@ -28,7 +28,7 @@
 }
 
 .search-form .input-group {
-    width: 100%;
+    width: 70%;
 }
 
 .search-form .form-control {
@@ -45,15 +45,15 @@
     overflow: auto;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
-    scrollbar-width: none;  /* Firefox */
-    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
     padding-bottom: 25px;
     overflow-x: auto;
 }
 
 .table-wrapper::-webkit-scrollbar {
-    width: 0;  /* Remove scrollbar space */
-    background: transparent;  /* Optional: just make scrollbar invisible */
+    width: 0; /* Remove scrollbar space */
+    background: transparent; /* Optional: just make scrollbar invisible */
 }
 
 table {
@@ -102,7 +102,11 @@ tr:hover {
 }
 
 .progress .progress-bar {
-    background-image: linear-gradient(to right, var(--tertiary-primary-color), var(--primary-color));
+    background-image: linear-gradient(
+        to right,
+        var(--tertiary-primary-color),
+        var(--primary-color)
+    );
     border-radius: 4px;
     transition: width 0.6s ease;
 }
@@ -226,7 +230,11 @@ a:hover {
 }
 
 .dark-mode .progress .progress-bar {
-    background-image: linear-gradient(to right, var(--dark-tertiary-color), var(--dark-primary-color));
+    background-image: linear-gradient(
+        to right,
+        var(--dark-tertiary-color),
+        var(--dark-primary-color)
+    );
 }
 
 .dark-mode .token-ticker {
@@ -252,7 +260,6 @@ a:hover {
 .sticky-column {
     position: sticky;
     left: 0;
-    z-index: 2;
     background-color: inherit;
 }
 
@@ -286,4 +293,24 @@ th.sticky-column {
 
 .dark-mode .dropdown-item:hover {
     background-color: var(--dark-secondary-color);
+}
+
+/* Mobile View  */
+@media (max-width: 991px) {
+    .token-overview-header {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .search-form {
+        width: 100%;
+        margin-left: 0;
+    }
+    .search-form .input-group {
+        width: 100%;
+        margin-top: 10px;
+    }
 }

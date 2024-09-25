@@ -1,4 +1,6 @@
-body, html, #root {
+body,
+html,
+#root {
     height: 100%;
     margin: 0;
     padding: 0;
@@ -91,7 +93,6 @@ body {
 /* Dark mode toggle styles */
 .dark-mode-toggle {
     display: flex;
-    align-items: center;
 }
 
 .switch {
@@ -115,19 +116,19 @@ body {
     right: 0;
     bottom: 0;
     background-color: #ccc;
-    transition: .4s;
+    transition: 0.4s;
     border-radius: 34px;
 }
 
 .slider:before {
     position: absolute;
-    content: "";
+    content: '';
     height: 26px;
     width: 26px;
     left: 4px;
     bottom: 4px;
     background-color: white;
-    transition: .4s;
+    transition: 0.4s;
     border-radius: 50%;
 }
 

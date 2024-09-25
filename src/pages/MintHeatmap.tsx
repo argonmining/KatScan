@@ -204,10 +204,12 @@ const MintHeatmap: FC = () => {
                     "url": "https://katscan.xyz/mint-heatmap"
                 }}
             />
+            <h1 style={{ color: `var(--primary-color)` }}>
+                Token Mint Heatmap
+            </h1>
             <Alert variant="warning">
                 Note: The data displayed on this page may not be accurate due to an ongoing backend service issue.
             </Alert>
-            <h1 className="mb-3">Token Mint Heatmap</h1>
             <Row className="mb-3">
                 <Col md={4}>
                     <Form.Group>
