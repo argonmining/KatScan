@@ -25,12 +25,12 @@ import {TokenData, TokenSearchResult} from "../interfaces/TokenData";
 const MarketCapCalculator = () => {
     return null
     // const [krc20List, setKrc20List] = useState<TokenData[]>([]);
-    // const [selectedKrc20Token, setSelectedKrc20Token] = useState<{value:string, tick: string}|null>(null);
+    // const [selectedKrc20Token, setSelectedKrc20Token] = useState<{ value: string, tick: string } | null>(null);
     // const [selectedCrypto, setSelectedCrypto] = useState(null);
     // const [calculationResult, setCalculationResult] = useState(null);
     // const [isLoading, setIsLoading] = useState(false);
     // const [error, setError] = useState(null);
-    // const [detailedTokenInfo, setDetailedTokenInfo] = useState<TokenSearchResult|null>(null);
+    // const [detailedTokenInfo, setDetailedTokenInfo] = useState<TokenSearchResult | null>(null);
     //
     // const navigate = useNavigate();
     //
@@ -53,7 +53,7 @@ const MarketCapCalculator = () => {
     // }, []);
     //
     //
-    // const handleCryptoSearch = async (inputValue:string) => {
+    // const handleCryptoSearch = async (inputValue: string) => {
     //     if (inputValue.length > 1) {
     //         try {
     //             const results = await searchCryptos(inputValue);
@@ -66,7 +66,7 @@ const MarketCapCalculator = () => {
     //     return [];
     // };
     //
-    // const fetchDetailedTokenInfo = useCallback(async (tick:string) => {
+    // const fetchDetailedTokenInfo = useCallback(async (tick: string) => {
     //     try {
     //         const data = await getDetailedTokenInfo(tick);
     //         setDetailedTokenInfo(data);
@@ -168,145 +168,138 @@ const MarketCapCalculator = () => {
     //                 "url": "https://katscan.xyz/marketcap-calc"
     //             }}
     //         />
+    //         <h1 className="mb-4">MarketCap Calculator</h1>
     //         <Row className="justify-content-center">
     //             <Col md={10} lg={8}>
-    //                 <Card className="main-card">
-    //                     <Card.Body>
-    //                         <h2 className="text-center mb-4">
-    //                             <FontAwesomeIcon icon={faExchangeAlt} className="me-2"/>
-    //                             MarketCap Calculator
-    //                         </h2>
-    //                         <Row className="mb-4">
-    //                             <Col md={6}>
-    //                                 <Form.Group>
-    //                                     <Form.Label>Select KRC20 Token</Form.Label>
-    //                                     <AsyncSelect
-    //                                         cacheOptions
-    //                                         defaultOptions={krc20List}
-    //                                         loadOptions={(inputValue) => Promise.resolve(krc20List.filter(option =>
-    //                                             option.label.toLowerCase().includes(inputValue.toLowerCase())
-    //                                         ))}
-    //                                         onChange={setSelectedKrc20Token}
-    //                                         placeholder="Select KRC20 Token"
-    //                                     />
-    //                                 </Form.Group>
-    //                             </Col>
-    //                             <Col md={6}>
-    //                                 <Form.Group>
-    //                                     <Form.Label>Select Cryptocurrency</Form.Label>
-    //                                     <AsyncSelect
-    //                                         cacheOptions
-    //                                         loadOptions={handleCryptoSearch}
-    //                                         onChange={setSelectedCrypto}
-    //                                         placeholder="Start typing a cryptocurrency on CoinGecko"
-    //                                     />
-    //                                 </Form.Group>
-    //                             </Col>
-    //                         </Row>
-    //                         {isLoading && (
-    //                             <LoadingSpinner/>
-    //                         )}
-    //                         {error && (
-    //                             <div className="alert alert-danger mt-4" role="alert">
-    //                                 {error}
-    //                             </div>
-    //                         )}
-    //                         {calculationResult && (
-    //                             <div className="calculation-result">
-    //                                 <h4 className="text-center mb-4">Calculation Result</h4>
-    //                                 <Row>
-    //                                     <Col md={6} className="mb-4">
-    //                                         <Card className="h-100 token-card krc20-card">
-    //                                             <Card.Body>
-    //                                                 <h5 className="text-center">{censorTicker(calculationResult.krc20Token.tick)} (KRC20
-    //                                                     Token)</h5>
-    //                                                 <ul className="list-unstyled">
-    //                                                     <li className="d-flex justify-content-between align-items-center mb-2">
+    //                 <Row className="mb-4">
+    //                     <Col md={6}>
+    //                         <Form.Group>
+    //                             <Form.Label>Select KRC20 Token</Form.Label>
+    //                             <AsyncSelect
+    //                                 cacheOptions
+    //                                 defaultOptions={krc20List}
+    //                                 loadOptions={(inputValue) => Promise.resolve(krc20List.filter(option =>
+    //                                     option.label.toLowerCase().includes(inputValue.toLowerCase())
+    //                                 ))}
+    //                                 onChange={setSelectedKrc20Token}
+    //                                 placeholder="Select KRC20 Token"
+    //                             />
+    //                         </Form.Group>
+    //                     </Col>
+    //                     <Col md={6}>
+    //                         <Form.Group>
+    //                             <Form.Label>Select Cryptocurrency</Form.Label>
+    //                             <AsyncSelect
+    //                                 cacheOptions
+    //                                 loadOptions={handleCryptoSearch}
+    //                                 onChange={setSelectedCrypto}
+    //                                 placeholder="Start typing a cryptocurrency on CoinGecko"
+    //                             />
+    //                         </Form.Group>
+    //                     </Col>
+    //                 </Row>
+    //                 {isLoading && (
+    //                     <LoadingSpinner/>
+    //                 )}
+    //                 {error && (
+    //                     <div className="alert alert-danger mt-4" role="alert">
+    //                         {error}
+    //                     </div>
+    //                 )}
+    //                 {calculationResult && (
+    //                     <div className="calculation-result">
+    //                         <h4 className="text-center mb-4">Calculation Result</h4>
+    //                         <Row>
+    //                             <Col md={6} className="mb-4">
+    //                                 <Card className="h-100 token-card krc20-card">
+    //                                     <Card.Body>
+    //                                         <h5 className="text-center">{censorTicker(calculationResult.krc20Token.tick)} (KRC20
+    //                                             Token)</h5>
+    //                                         <ul className="list-unstyled">
+    //                                             <li className="d-flex justify-content-between align-items-center mb-2">
     //                                                         <span><FontAwesomeIcon icon={faCoins}
     //                                                                                className="me-2 text-primary"/> Max Supply:</span>
-    //                                                         <strong>{formatNumber(calculationResult.krc20Supply)}</strong>
-    //                                                     </li>
-    //                                                     <li className="d-flex justify-content-between align-items-center mb-2">
+    //                                                 <strong>{formatNumber(calculationResult.krc20Supply)}</strong>
+    //                                             </li>
+    //                                             <li className="d-flex justify-content-between align-items-center mb-2">
     //                                                         <span><FontAwesomeIcon icon={faUsers}
     //                                                                                className="me-2 text-primary"/> Total Holders:</span>
-    //                                                         <strong>{formatInteger(calculationResult.krc20Token.holderTotal)}</strong>
-    //                                                     </li>
-    //                                                     <li className="d-flex justify-content-between align-items-center">
+    //                                                 <strong>{formatInteger(calculationResult.krc20Token.holderTotal)}</strong>
+    //                                             </li>
+    //                                             <li className="d-flex justify-content-between align-items-center">
     //                                                         <span><FontAwesomeIcon icon={faChartLine}
     //                                                                                className="me-2 text-primary"/> Total Minted:</span>
-    //                                                         <strong>{formatNumber(parseFloat(calculationResult.krc20Token.minted) / Math.pow(10, parseInt(calculationResult.krc20Token.dec || '0')))}</strong>
-    //                                                     </li>
-    //                                                 </ul>
-    //                                                 <div className="text-center mt-3">
-    //                                                     <Button
-    //                                                         variant="primary"
-    //                                                         onClick={handleKRC20DetailClick}
-    //                                                         className="details-button"
-    //                                                     >
-    //                                                         <FontAwesomeIcon icon={faExternalLinkAlt} className="me-2"/>
-    //                                                         {censorTicker(calculationResult.krc20Token.tick)} Details
-    //                                                     </Button>
-    //                                                 </div>
-    //                                             </Card.Body>
-    //                                         </Card>
-    //                                     </Col>
-    //                                     <Col md={6} className="mb-4">
-    //                                         <Card className="h-100 token-card coingecko-card">
-    //                                             <Card.Body>
-    //                                                 <h5 className="text-center">{calculationResult.crypto.symbol.toUpperCase()} (CoinGecko)</h5>
-    //                                                 <ul className="list-unstyled">
-    //                                                     <li className="d-flex justify-content-between align-items-center mb-2">
-    //                                                         <span><FontAwesomeIcon icon={faCoins}
-    //                                                                                className="me-2 text-success"/> Max Supply:</span>
-    //                                                         <strong>{calculationResult.crypto.maxSupply ? formatNumber(calculationResult.crypto.maxSupply) : 'N/A'}</strong>
-    //                                                     </li>
-    //                                                     <li className="d-flex justify-content-between align-items-center mb-2">
-    //                                                         <span><FontAwesomeIcon icon={faDollarSign}
-    //                                                                                className="me-2 text-success"/> Current Price:</span>
-    //                                                         <strong>${formatNumber(calculationResult.crypto.currentPrice, 6)}</strong>
-    //                                                     </li>
-    //                                                     <li className="d-flex justify-content-between align-items-center">
-    //                                                         <span><FontAwesomeIcon icon={faChartLine}
-    //                                                                                className="me-2 text-success"/> Market Cap:</span>
-    //                                                         <strong>${formatNumber(calculationResult.crypto.marketCap)}</strong>
-    //                                                     </li>
-    //                                                 </ul>
-    //                                                 <div className="text-center mt-3">
-    //                                                     <Button
-    //                                                         variant="success"
-    //                                                         onClick={handleCoinGeckoClick}
-    //                                                         className="details-button"
-    //                                                     >
-    //                                                         <FontAwesomeIcon icon={faExternalLinkAlt} className="me-2"/>
-    //                                                         {calculationResult.crypto.symbol.toUpperCase()} Details
-    //                                                     </Button>
-    //                                                 </div>
-    //                                             </Card.Body>
-    //                                         </Card>
-    //                                     </Col>
-    //                                 </Row>
-    //                                 <Card className="mt-4 hypothetical-price-card">
-    //                                     <Card.Body className="text-center">
-    //                                         <h5>Hypothetical {censorTicker(calculationResult.krc20Token.tick)} Price</h5>
-    //                                         <p className="lead mb-3">
-    //                                             If {censorTicker(calculationResult.krc20Token.tick)} had {calculationResult.crypto.symbol.toUpperCase()}'s
-    //                                             market cap:
-    //                                         </p>
-    //                                         <h3 className="text-success price-highlight mb-3">
-    //                                             <FontAwesomeIcon icon={faDollarSign} className="me-2"/>
-    //                                             {formatNumber(calculationResult.calculatedPrice, 6)}
-    //                                         </h3>
-    //                                         <p className="text-muted disclaimer mb-0">
-    //                                             <FontAwesomeIcon icon={faInfoCircle} className="me-2"/>
-    //                                             This is a hypothetical price based on current market conditions and
-    //                                             should not be considered as financial advice.
-    //                                         </p>
+    //                                                 <strong>{formatNumber(parseFloat(calculationResult.krc20Token.minted) / Math.pow(10, parseInt(calculationResult.krc20Token.dec || '0')))}</strong>
+    //                                             </li>
+    //                                         </ul>
+    //                                         <div className="text-center mt-3">
+    //                                             <Button
+    //                                                 variant="primary"
+    //                                                 onClick={handleKRC20DetailClick}
+    //                                                 className="details-button"
+    //                                             >
+    //                                                 <FontAwesomeIcon icon={faExternalLinkAlt} className="me-2"/>
+    //                                                 {censorTicker(calculationResult.krc20Token.tick)} Details
+    //                                             </Button>
+    //                                         </div>
     //                                     </Card.Body>
     //                                 </Card>
-    //                             </div>
-    //                         )}
-    //                     </Card.Body>
-    //                 </Card>
+    //                             </Col>
+    //                             <Col md={6} className="mb-4">
+    //                                 <Card className="h-100 token-card coingecko-card">
+    //                                     <Card.Body>
+    //                                         <h5 className="text-center">{calculationResult.crypto.symbol.toUpperCase()} (CoinGecko)</h5>
+    //                                         <ul className="list-unstyled">
+    //                                             <li className="d-flex justify-content-between align-items-center mb-2">
+    //                                                         <span><FontAwesomeIcon icon={faCoins}
+    //                                                                                className="me-2 text-success"/> Max Supply:</span>
+    //                                                 <strong>{calculationResult.crypto.maxSupply ? formatNumber(calculationResult.crypto.maxSupply) : 'N/A'}</strong>
+    //                                             </li>
+    //                                             <li className="d-flex justify-content-between align-items-center mb-2">
+    //                                                         <span><FontAwesomeIcon icon={faDollarSign}
+    //                                                                                className="me-2 text-success"/> Current Price:</span>
+    //                                                 <strong>${formatNumber(calculationResult.crypto.currentPrice, 6)}</strong>
+    //                                             </li>
+    //                                             <li className="d-flex justify-content-between align-items-center">
+    //                                                         <span><FontAwesomeIcon icon={faChartLine}
+    //                                                                                className="me-2 text-success"/> Market Cap:</span>
+    //                                                 <strong>${formatNumber(calculationResult.crypto.marketCap)}</strong>
+    //                                             </li>
+    //                                         </ul>
+    //                                         <div className="text-center mt-3">
+    //                                             <Button
+    //                                                 variant="success"
+    //                                                 onClick={handleCoinGeckoClick}
+    //                                                 className="details-button"
+    //                                             >
+    //                                                 <FontAwesomeIcon icon={faExternalLinkAlt} className="me-2"/>
+    //                                                 {calculationResult.crypto.symbol.toUpperCase()} Details
+    //                                             </Button>
+    //                                         </div>
+    //                                     </Card.Body>
+    //                                 </Card>
+    //                             </Col>
+    //                         </Row>
+    //                         <Card className="mt-4 hypothetical-price-card">
+    //                             <Card.Body className="text-center">
+    //                                 <h5>Hypothetical {censorTicker(calculationResult.krc20Token.tick)} Price</h5>
+    //                                 <p className="lead mb-3">
+    //                                     If {censorTicker(calculationResult.krc20Token.tick)} had {calculationResult.crypto.symbol.toUpperCase()}'s
+    //                                     market cap:
+    //                                 </p>
+    //                                 <h3 className="text-success price-highlight mb-3">
+    //                                     <FontAwesomeIcon icon={faDollarSign} className="me-2"/>
+    //                                     {formatNumber(calculationResult.calculatedPrice, 6)}
+    //                                 </h3>
+    //                                 <p className="text-muted disclaimer mb-0">
+    //                                     <FontAwesomeIcon icon={faInfoCircle} className="me-2"/>
+    //                                     This is a hypothetical price based on current market conditions and
+    //                                     should not be considered as financial advice.
+    //                                 </p>
+    //                             </Card.Body>
+    //                         </Card>
+    //                     </div>
+    //                 )}
     //             </Col>
     //         </Row>
     //     </Container>
