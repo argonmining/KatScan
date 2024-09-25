@@ -14,9 +14,9 @@
     margin-bottom: 20px;
 }
 
-.token-overview-header h2 {
+.token-overview-header h1 {
     font-family: var(--header-font);
-    color: var(--secondary-primary-color);
+    color: var(--primary-color);
     margin: 0;
     white-space: nowrap;
     margin-right: 20px; /* Add some space between title and search bar */

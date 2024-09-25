@@ -199,7 +199,7 @@ const TokenOverview = () => {
     return (
         <div className="token-overview">
             <div className="token-overview-header">
-                <h2>All KRC-20 Tokens</h2>
+                <h1>All KRC-20 Tokens</h1>
                 <Form.Group>
                     <InputGroup>
                         <InputGroup.Text>
