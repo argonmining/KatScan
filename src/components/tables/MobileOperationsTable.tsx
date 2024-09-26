@@ -2,29 +2,16 @@ import React, {FC} from "react";
 import {TokenSearchResult} from "../../interfaces/TokenData";
 import {OpTransactionData} from "../../interfaces/OpTransactionData";
 import {LinkWithTooltip} from "../LinkWithTooltip";
+import {formatDateTime, formatNumber, parseRawNumber, shortenString} from "../../services/Helper";
 
 type MobileOperationsTable = {
-    data: OpTransactionData[];
-    tokenData: TokenSearchResult;
-    handleAddressClick: (address: string) => void;
-    formatNumber: (rawNumber: number, decimals: number) => string;
-    parseRawNumber: (rawNumber: string, decimals: number) => number;
-    shortenString: (str: string, startLength?: number, endLength?: number) => string
-    handleTransactionClick: (value: string) => void
-    formatDateTime: (value: string) => string
+    data: OpTransactionData[]
+    tokenData: TokenSearchResult
 }
-// todo
-// handleAddressClick,
-// handleTransactionClick,
-// is unused
 export const MobileOperationsTable: FC<MobileOperationsTable> = (
     {
         data,
-        tokenData,
-        formatNumber,
-        parseRawNumber,
-        formatDateTime,
-        shortenString
+        tokenData
     }
 ) => {
     return <div className="mobile-table">
