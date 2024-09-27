@@ -1,6 +1,6 @@
 import React, {FC, useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
-import {Alert, Card, Tab, Tabs} from 'react-bootstrap';
+import {Alert, Card} from 'react-bootstrap';
 import {getTokenDetails} from '../services/dataService';
 import 'styles/TokenDetail.css';
 import {censorTicker} from '../utils/censorTicker';
@@ -14,14 +14,18 @@ import {HolderDistribution} from "../components/tabs/tokendetail/HolderDistribut
 import {RecentOperations} from "../components/tabs/tokendetail/RecentOperations";
 import {TopHolder} from "../components/tabs/tokendetail/TopHolder";
 import {MintActivity} from "../components/tabs/tokendetail/MintActivity";
+import {CustomTabs} from "../components/CustomTabs";
+import {useRegister} from "../hooks/useRegister";
+
+const titles = ['Top Holders', 'Recent Operations', 'Holder Distribution', 'Mint Activity']
 
 const TokenDetail: FC = () => {
         const {tokenId} = useParams();
         const [tokenData, setTokenData] = useState<TokenSearchResult | null>(null);
-        const [activeTab, setActiveTab] = useState<string | null>('topHolders');
         const [loading, setLoading] = useState(true);
         const [error, setError] = useState<string | null>(null);
         const {isMobile} = useMobile()
+        useRegister()
 
         useEffect(() => {
             if (!tokenId) {
@@ -106,24 +110,12 @@ const TokenDetail: FC = () => {
                     </Card.Body>
                 </Card>
 
-                <Tabs defaultActiveKey="topHolders" className="mb-3" onSelect={(k) => setActiveTab(k)}>
-                    <Tab eventKey="topHolders" title="Top Holders">
-                        <TopHolder tokenData={tokenData}/>
-                    </Tab>
-                    <Tab eventKey="recentOperations" title="Recent Operations">
-                        <RecentOperations tokenData={tokenData} tokenId={tokenId}/>
-                    </Tab>
-
-                    <Tab eventKey="holderDistribution" title="Holder Distribution">
-                        <HolderDistribution tokenData={tokenData}/>
-                    </Tab>
-
-                    {!isMobile && (
-                        <Tab eventKey="mintActivity" title="Mint Activity">
-                            {activeTab === 'mintActivity' && <MintActivity tokenData={tokenData}/>}
-                        </Tab>
-                    )}
-                </Tabs>
+                <CustomTabs titles={titles}>
+                    <TopHolder tokenData={tokenData}/>
+                    <RecentOperations tokenData={tokenData} tokenId={tokenId}/>
+                    <HolderDistribution tokenData={tokenData}/>
+                    {!isMobile && <MintActivity tokenData={tokenData}/>}
+                </CustomTabs>
             </div>
         );
     }

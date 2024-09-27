@@ -8,12 +8,14 @@ import {OpTransactionData} from "../../../interfaces/OpTransactionData";
 import {TokenSearchResult} from "../../../interfaces/TokenData";
 import {getTokenOperations} from "../../../services/dataService";
 import {TokenListResponse} from "../../../interfaces/ApiResponseTypes";
+import {appendToRegister} from "../../../hooks/useRegister";
 
 type Props = {
     tokenData: TokenSearchResult
     tokenId: string | undefined
 }
 
+let cachingData: Record<string, { data: OpTransactionData[], cursor: number }> = {}
 export const RecentOperations: FC<Props> = (
     {
         tokenData,
@@ -32,10 +34,19 @@ export const RecentOperations: FC<Props> = (
         if (tokenId === null || tokenId === undefined) {
             return
         }
-        getTokenOperations(tokenId, 50).then((opsData) => {
-            setOperations(opsData.result);
-            setOperationsCursor(opsData.next);
-        })
+        appendToRegister('recentOperations', () => cachingData = {})
+        if (cachingData[tokenId]) {
+            setOperations(cachingData[tokenId].data)
+            setOperationsCursor(cachingData[tokenId].cursor)
+            return
+        }
+
+        getTokenOperations(tokenId, 50)
+            .then((opsData) => {
+                setOperations(opsData.result);
+                setOperationsCursor(opsData.next);
+                cachingData[tokenId] = {data: opsData.result, cursor: opsData.next}
+            })
             .catch(err => {
                 console.error('Failed to fetch operations:', err);
                 setOperationsError('Failed to fetch operation details');
@@ -47,11 +58,14 @@ export const RecentOperations: FC<Props> = (
         try {
             setLoadingMore(true);
             setOperationsError(null);
-            // eslint-disable-next-line
-            // @ts-ignore
             const data = await getTokenOperations(tokenId, 50, operationsCursor);
             setOperations(prevOps => [...prevOps, ...data.result]);
             setOperationsCursor(data.next);
+
+            cachingData[tokenId] = {
+                data: [...cachingData[tokenId].data, ...data.result],
+                cursor: data.next
+            }
         } catch (err) {
             console.error('Failed to fetch operations:', err);
             setOperationsError('Failed to load more operations. Please try again.');
@@ -90,7 +104,7 @@ export const RecentOperations: FC<Props> = (
                     </tr>
                     </thead>
                     <tbody>
-                    {operations && operations.map((op, index) => (
+                    {operations.map((op, index) => (
                         <tr key={index}
                             ref={index === operations.length - 1 ? lastOperationElementRef : null}>
                             <td>{op.op}</td>

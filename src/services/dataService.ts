@@ -49,9 +49,9 @@ export const getKRC20TokenList = async (limit = 50, sortField = '', sortDirectio
 };
 
 // New function to fetch token operations
-export const getTokenOperations = async (tick: string, limit = 50, cursor:null | string = null ): Promise<TokenListResponse<OpTransactionData[]>> => {
+export const getTokenOperations = async (tick: string, limit = 50, cursor:null | number = null ): Promise<TokenListResponse<OpTransactionData[]>> => {
     try {
-        const params: Record<string, string> = {tick, limit: limit.toString()}
+        const params: Record<string, string | number> = {tick, limit: limit.toString()}
         if (cursor) params['next'] = cursor
         return sendRequest<TokenListResponse<OpTransactionData[]>>({
             method: 'GET', url: `${BASE_URL}/krc20/oplist`, params
