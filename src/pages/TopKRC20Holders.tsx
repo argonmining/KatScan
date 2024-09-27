@@ -1,7 +1,7 @@
 import React, {FC, ReactElement, useEffect, useState} from 'react';
 import {Alert, Table} from 'react-bootstrap';
 import {Link} from 'react-router-dom';
-import '../styles/TopKRC20Holders.css';
+import 'styles/TopKRC20Holders.css';
 import {censorTicker} from '../utils/censorTicker';
 import {useMediaQuery} from 'react-responsive';
 import SEO from '../components/SEO';

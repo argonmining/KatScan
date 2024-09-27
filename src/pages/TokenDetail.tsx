@@ -2,7 +2,7 @@ import React, {FC, useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
 import {Alert, Card, Tab, Tabs} from 'react-bootstrap';
 import {getTokenDetails} from '../services/dataService';
-import '../styles/TokenDetail.css';
+import 'styles/TokenDetail.css';
 import {censorTicker} from '../utils/censorTicker';
 import SEO from '../components/SEO';
 import JsonLd from '../components/JsonLd';

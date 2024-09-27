@@ -2,6 +2,7 @@ import React, {FC} from "react";
 import {TokenSearchResult} from "../../interfaces/TokenData";
 import {LinkWithTooltip} from "../LinkWithTooltip";
 import {formatNumber, parseRawNumber, shortenString} from "../../services/Helper";
+import 'styles/components/MobileTable.css'
 
 type MobileHolderTable = {
     data: TokenSearchResult['holder'];

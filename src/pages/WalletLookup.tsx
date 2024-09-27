@@ -2,7 +2,7 @@ import React, {FC, FormEvent, useCallback, useEffect, useRef, useState} from 're
 import {useNavigate, useParams} from 'react-router-dom';
 import {Alert, Button, Container, Form, InputGroup, Tab, Table, Tabs} from 'react-bootstrap';
 import {FaCopy, FaSearch} from 'react-icons/fa';
-import '../styles/WalletLookup.css';
+import 'styles/WalletLookup.css';
 import {censorTicker} from '../utils/censorTicker';
 import SEO from '../components/SEO';
 import JsonLd from '../components/JsonLd';

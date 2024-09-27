@@ -1,6 +1,7 @@
 import {Card} from "react-bootstrap";
 import React, {FC} from "react";
 import {Utxos} from "../../interfaces/WalletData";
+import 'styles/components/MobileTable.css'
 
 type Props = {
     utxos: Utxos[]

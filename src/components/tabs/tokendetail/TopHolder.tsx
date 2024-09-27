@@ -5,6 +5,7 @@ import {Table} from "react-bootstrap";
 import {LinkWithTooltip} from "../../LinkWithTooltip";
 import {useMobile} from "../../../hooks/mobile";
 import {TokenSearchResult} from "../../../interfaces/TokenData";
+import 'styles/components/MobileTable.css'
 
 type Props = {
     tokenData: TokenSearchResult
@@ -17,6 +18,7 @@ export const TopHolder: FC<Props> = (
 ) => {
 
     const {isMobile} = useMobile()
+
     return <>
         <div className="detail-table-container">
             {isMobile ? (
@@ -34,7 +36,7 @@ export const TopHolder: FC<Props> = (
                         <th>% of Total Supply</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody style={{position: 'relative'}}>
                     {tokenData.holder && tokenData.holder.map((holder, index) => (
                         <tr key={index}>
                             <td>{index + 1}</td>

@@ -2,7 +2,7 @@ import React, {FC, FormEvent, useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import {Accordion, Alert, Badge, Button, Card, Col, Container, Form, InputGroup, Row} from 'react-bootstrap';
 import {FaArrowRight, FaCopy, FaExternalLinkAlt, FaSearch} from 'react-icons/fa';
-import '../styles/TransactionLookup.css';
+import 'styles/TransactionLookup.css';
 import SEO from '../components/SEO';
 import JsonLd from '../components/JsonLd';
 import {LoadingSpinner} from "../components/LoadingSpinner";

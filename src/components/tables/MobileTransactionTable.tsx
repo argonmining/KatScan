@@ -1,6 +1,7 @@
 import React, {FC} from "react";
 import {Card} from "react-bootstrap";
 import {Transaction} from "../../interfaces/Transaction";
+import 'styles/components/MobileTable.css'
 
 type Props = {
     transactions: Transaction[]

@@ -7,6 +7,7 @@ import {useMobile} from "../../../hooks/mobile";
 import {OpTransactionData} from "../../../interfaces/OpTransactionData";
 import {TokenSearchResult} from "../../../interfaces/TokenData";
 import {getTokenOperations} from "../../../services/dataService";
+import {TokenListResponse} from "../../../interfaces/ApiResponseTypes";
 
 type Props = {
     tokenData: TokenSearchResult
@@ -24,7 +25,7 @@ export const RecentOperations: FC<Props> = (
     const [operations, setOperations] = useState<OpTransactionData[]>([]);
     const [loadingMore, setLoadingMore] = useState(false);
     const [operationsError, setOperationsError] = useState<string | null>(null);
-    const [operationsCursor, setOperationsCursor] = useState<OpTransactionData | null>(null);
+    const [operationsCursor, setOperationsCursor] = useState<TokenListResponse<OpTransactionData[]>['next'] | null>(null);
     const observer = useRef<IntersectionObserver>();
 
     useEffect(() => {
@@ -32,9 +33,8 @@ export const RecentOperations: FC<Props> = (
             return
         }
         getTokenOperations(tokenId, 50).then((opsData) => {
-            setOperations(opsData);
-            // todo next?
-            // setOperationsCursor(opsData.next);
+            setOperations(opsData.result);
+            setOperationsCursor(opsData.next);
         })
             .catch(err => {
                 console.error('Failed to fetch operations:', err);
@@ -50,9 +50,8 @@ export const RecentOperations: FC<Props> = (
             // eslint-disable-next-line
             // @ts-ignore
             const data = await getTokenOperations(tokenId, 50, operationsCursor);
-            setOperations(prevOps => [...prevOps, ...data]);
-            //todo
-            // setOperationsCursor(data.next);
+            setOperations(prevOps => [...prevOps, ...data.result]);
+            setOperationsCursor(data.next);
         } catch (err) {
             console.error('Failed to fetch operations:', err);
             setOperationsError('Failed to load more operations. Please try again.');

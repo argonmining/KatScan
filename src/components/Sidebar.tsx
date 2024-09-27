@@ -16,7 +16,7 @@ import {
 } from 'react-icons/fa'
 import logo from '../assets/logo.png'
 import qrCode from '../assets/qr.png'
-import '../styles/Sidebar.css'
+import 'styles/Sidebar.css'
 
 type Props = {
     darkMode: boolean

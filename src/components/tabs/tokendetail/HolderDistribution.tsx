@@ -4,6 +4,7 @@ import {ApexOptions} from "apexcharts";
 import {formatNumber, parseRawNumber} from "../../../services/Helper";
 import {TokenSearchResult} from "../../../interfaces/TokenData";
 import {useMobile} from "../../../hooks/mobile";
+import 'styles/tokendetail/HolderDistribution.css'
 
 type Props = {
     tokenData: TokenSearchResult | null
@@ -61,6 +62,7 @@ export const HolderDistribution: FC<Props> = (
         ];
     }, [tokenData]);
 
+    //todo
     const testOptions: ApexOptions = {
         chart: {
             id: "basic-pie",
@@ -109,9 +111,18 @@ export const HolderDistribution: FC<Props> = (
                     </thead>
                     <tbody>
                     {holderDistribution.map((item, index) => (
-                        <tr key={index}>
+                        <tr key={index} style={{position: 'relative'}}>
                             <td>{item.label}</td>
                             <td>{item.percentage.toFixed(2)}%</td>
+                            <div style={{
+                                left: 0,
+                                top: 0,
+                                height: '100%',
+                                position: 'absolute',
+                                padding:0,
+                                backgroundColor: 'rgb(112, 199, 186, 40%)',
+                                width: `${Number(item.percentage)}%`
+                            }}/>
                         </tr>
                     ))}
                     </tbody>
