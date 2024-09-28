@@ -1,37 +1,32 @@
-import React, {FC, useEffect, useState} from "react";
+import React, {Dispatch, FC, SetStateAction, useEffect} from "react";
 import {simpleRequest} from "../../../services/RequestService";
 import {TokenSearchResult} from "../../../interfaces/TokenData";
 import Chart from "react-apexcharts";
 import {ApexOptions} from "apexcharts";
-import {appendToRegister} from "../../../hooks/useRegister";
 
-type MintOvertimeType = {
+export type MintOvertimeType = {
     count: number
     date: string
 }
 
 type Props = {
     tokenData: TokenSearchResult
+    mintActivityData: MintOvertimeType[]
+    setMintActivityData: Dispatch<SetStateAction<MintOvertimeType[]>>
 }
 
-let cachingData: Record<string, { data: MintOvertimeType[] }> = {}
 export const MintActivity: FC<Props> = (
     {
-        tokenData
+        tokenData,
+        mintActivityData,
+        setMintActivityData
     }
 ) => {
-    const [mintActivity, setMintActivity] = useState<MintOvertimeType[]>([]);
 
     useEffect(() => {
-        if (!tokenData || mintActivity.length !== 0) {
+        if (!tokenData || mintActivityData.length !== 0) {
             return
         }
-        if (cachingData[tokenData.tick]) {
-            setMintActivity(cachingData[tokenData.tick].data)
-            return
-        }
-
-        appendToRegister('mintActivity', () => cachingData = {})
 
         simpleRequest<MintOvertimeType[]>(`https://katapi.nachowyborski.xyz/api/mintsovertime?tick=${tokenData.tick.toUpperCase()}`)
             .then(data => {
@@ -53,13 +48,12 @@ export const MintActivity: FC<Props> = (
                     filledData.push({date: dateStr, count: dateMap.get(dateStr) || 0});
                 }
 
-                setMintActivity(filledData)
-                cachingData[tokenData.tick] = {data: filledData}
+                setMintActivityData(filledData)
             })
             .catch(error => {
                 console.error('Failed to fetch mint activity data:', error);
             })
-    }, [mintActivity.length, tokenData]);
+    }, [mintActivityData.length, setMintActivityData, tokenData]);
 
     //outside of component because its static
     const chartOptions: ApexOptions = {
@@ -111,7 +105,7 @@ export const MintActivity: FC<Props> = (
         type: 'line',
 
         // labels: mintActivity.map(item => item.date),
-        data: mintActivity.map(item => item.count)
+        data: mintActivityData.map(item => item.count)
     }]
 
     // data={{

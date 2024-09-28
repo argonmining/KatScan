@@ -13,9 +13,10 @@ import {useMobile} from "../hooks/mobile";
 import {HolderDistribution} from "../components/tabs/tokendetail/HolderDistribution";
 import {RecentOperations} from "../components/tabs/tokendetail/RecentOperations";
 import {TopHolder} from "../components/tabs/tokendetail/TopHolder";
-import {MintActivity} from "../components/tabs/tokendetail/MintActivity";
+import {MintActivity, MintOvertimeType} from "../components/tabs/tokendetail/MintActivity";
 import {CustomTabs} from "../components/CustomTabs";
-import {useRegister} from "../hooks/useRegister";
+import {OpTransactionData} from "../interfaces/OpTransactionData";
+import {TokenListResponse} from "../interfaces/ApiResponseTypes";
 
 const titles = ['Top Holders', 'Recent Operations', 'Holder Distribution', 'Mint Activity']
 
@@ -25,7 +26,9 @@ const TokenDetail: FC = () => {
         const [loading, setLoading] = useState(true);
         const [error, setError] = useState<string | null>(null);
         const {isMobile} = useMobile()
-        useRegister()
+        const [mintActivity, setMintActivity] = useState<MintOvertimeType[]>([]);
+        const [operations, setOperations] = useState<OpTransactionData[]>([]);
+        const [operationsCursor, setOperationsCursor] = useState<TokenListResponse<OpTransactionData[]>['next'] | null>(null);
 
         useEffect(() => {
             if (!tokenId) {
@@ -112,9 +115,15 @@ const TokenDetail: FC = () => {
 
                 <CustomTabs titles={titles}>
                     <TopHolder tokenData={tokenData}/>
-                    <RecentOperations tokenData={tokenData} tokenId={tokenId}/>
+                    <RecentOperations tokenData={tokenData}
+                                      tokenId={tokenId}
+                                      setOperations={setOperations}
+                                      operations={operations}
+                                      operationsCursor={operationsCursor}
+                                      setOperationsCursor={setOperationsCursor}/>
                     <HolderDistribution tokenData={tokenData}/>
-                    {!isMobile && <MintActivity tokenData={tokenData}/>}
+                    {!isMobile && <MintActivity tokenData={tokenData} mintActivityData={mintActivity}
+                                                setMintActivityData={setMintActivity}/>}
                 </CustomTabs>
             </div>
         );

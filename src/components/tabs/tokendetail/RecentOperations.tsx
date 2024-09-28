@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useEffect, useRef, useState} from "react";
+import React, {Dispatch, FC, SetStateAction, useCallback, useEffect, useRef, useState} from "react";
 import {MobileOperationsTable} from "../../tables/MobileOperationsTable";
 import {formatDateTime, formatNumber, parseRawNumber} from "../../../services/Helper";
 import {Alert, Table} from "react-bootstrap";
@@ -7,37 +7,34 @@ import {useMobile} from "../../../hooks/mobile";
 import {OpTransactionData} from "../../../interfaces/OpTransactionData";
 import {TokenSearchResult} from "../../../interfaces/TokenData";
 import {getTokenOperations} from "../../../services/dataService";
-import {TokenListResponse} from "../../../interfaces/ApiResponseTypes";
-import {appendToRegister} from "../../../hooks/useRegister";
 
 type Props = {
     tokenData: TokenSearchResult
     tokenId: string | undefined
+    operations: OpTransactionData[]
+    setOperations: Dispatch<SetStateAction<OpTransactionData[]>>
+    operationsCursor: number | null
+    setOperationsCursor: Dispatch<SetStateAction<number | null>>
 }
 
-let cachingData: Record<string, { data: OpTransactionData[], cursor: number }> = {}
 export const RecentOperations: FC<Props> = (
     {
         tokenData,
-        tokenId
+        tokenId,
+        operations,
+        setOperations,
+        operationsCursor,
+        setOperationsCursor
     }
 ) => {
     const {isMobile} = useMobile()
 
-    const [operations, setOperations] = useState<OpTransactionData[]>([]);
     const [loadingMore, setLoadingMore] = useState(false);
     const [operationsError, setOperationsError] = useState<string | null>(null);
-    const [operationsCursor, setOperationsCursor] = useState<TokenListResponse<OpTransactionData[]>['next'] | null>(null);
     const observer = useRef<IntersectionObserver>();
 
     useEffect(() => {
-        if (tokenId === null || tokenId === undefined) {
-            return
-        }
-        appendToRegister('recentOperations', () => cachingData = {})
-        if (cachingData[tokenId]) {
-            setOperations(cachingData[tokenId].data)
-            setOperationsCursor(cachingData[tokenId].cursor)
+        if (tokenId === null || tokenId === undefined || operations.length !== 0) {
             return
         }
 
@@ -45,13 +42,12 @@ export const RecentOperations: FC<Props> = (
             .then((opsData) => {
                 setOperations(opsData.result);
                 setOperationsCursor(opsData.next);
-                cachingData[tokenId] = {data: opsData.result, cursor: opsData.next}
             })
             .catch(err => {
                 console.error('Failed to fetch operations:', err);
                 setOperationsError('Failed to fetch operation details');
             })
-    }, [tokenId])
+    }, [operations.length, setOperations, setOperationsCursor, tokenId])
 
     const fetchOperations = useCallback(async () => {
         if (loadingMore || !operationsCursor || tokenId === undefined) return;
@@ -61,18 +57,13 @@ export const RecentOperations: FC<Props> = (
             const data = await getTokenOperations(tokenId, 50, operationsCursor);
             setOperations(prevOps => [...prevOps, ...data.result]);
             setOperationsCursor(data.next);
-
-            cachingData[tokenId] = {
-                data: [...cachingData[tokenId].data, ...data.result],
-                cursor: data.next
-            }
         } catch (err) {
             console.error('Failed to fetch operations:', err);
             setOperationsError('Failed to load more operations. Please try again.');
         } finally {
             setLoadingMore(false);
         }
-    }, [tokenId, operationsCursor, loadingMore]);
+    }, [loadingMore, operationsCursor, tokenId, setOperations, setOperationsCursor]);
 
     const lastOperationElementRef = useCallback((node: HTMLTableRowElement) => {
         if (loadingMore) return;
