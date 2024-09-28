@@ -1,4 +1,4 @@
-import {Button, Card, CardProps, Col} from "react-bootstrap";
+import {Button, Card, CardProps, CardTextProps, CardTitleProps, Col} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import React, {Children, FC, PropsWithChildren, ReactNode, useState} from "react";
 import {FaChevronDown, FaChevronUp} from "react-icons/fa";
@@ -42,14 +42,23 @@ export const StatCard: FC<StatCard> = ({title, value, icon}) => (
 
 type NormalCard = {
     title: string
+    titleProps?: CardTitleProps
+    textProps?: CardTextProps
     children: ReactNode
 }
-export const NormalCard: FC<NormalCard> = ({title, children}) => {
+export const NormalCard: FC<NormalCard> = (
+    {
+        title,
+        titleProps,
+        textProps,
+        children
+    }
+) => {
     return (
         <Card>
             <Card.Body>
-                <Card.Title>{title}</Card.Title>
-                <Card.Text>{children}</Card.Text>
+                <Card.Title {...titleProps}>{title}</Card.Title>
+                <Card.Text {...textProps}>{children}</Card.Text>
             </Card.Body>
         </Card>
     )

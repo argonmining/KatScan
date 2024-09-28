@@ -15,5 +15,5 @@ export const setLocalStorageItem = <T extends keyof LocalStorage>(key: T, value:
     if (value === null || value === undefined) {
         localStorage.removeItem(key)
     }
-    localStorage.setItem(key, JSON.stringify(key))
+    localStorage.setItem(key, JSON.stringify(value))
 }

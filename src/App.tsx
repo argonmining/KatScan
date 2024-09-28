@@ -1,14 +1,12 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import React, { FC, lazy, Suspense } from 'react'
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
-import { useMediaQuery } from 'react-responsive'
+import React, {FC, lazy, Suspense} from 'react'
+import {BrowserRouter as Router, Route, Routes} from 'react-router-dom'
+import {useMediaQuery} from 'react-responsive'
 import Sidebar from './components/Sidebar'
 import './styles/App.css'
 import './styles/globals.css'
 import './styles/darkMode.css'
-import { LoadingSpinner } from './components/LoadingSpinner'
-import { useDarkMode } from './hooks/darkMode'
+import {LoadingSpinner} from './components/LoadingSpinner'
+import {useDarkMode} from './hooks/darkMode'
 
 /**
  * Lazy loading the pages to improve initial loading time in prod
@@ -18,11 +16,7 @@ const TokenOverview = lazy(() => import('./pages/TokenOverview'))
 const TokenDetail = lazy(() => import('./pages/TokenDetail'))
 const TokenComparison = lazy(() => import('./pages/TokenComparison'))
 const WalletLookup = lazy(() => import('./pages/WalletLookup'))
-const TransactionLookup = lazy(() =>
-    import('./pages/UnderMaintenance').then(module => ({
-        default: module.UnderMaintenance,
-    })),
-)
+const TransactionLookup = lazy(() => import('./pages/TransactionLookup'))
 const MintHeatmap = lazy(() => import('./pages/MintHeatmap'))
 const MarketCapCalculator = lazy(() =>
     import('./pages/UnderMaintenance').then(module => ({
@@ -33,8 +27,8 @@ const TopKRC20Holders = lazy(() => import('./pages/TopKRC20Holders'))
 const StructuredData = lazy(() => import('./pages/StructuredData'))
 
 const App: FC = () => {
-    const isMobile = useMediaQuery({ maxWidth: 991 })
-    const { isDarkMode, toggleDarkMode } = useDarkMode()
+    const isMobile = useMediaQuery({maxWidth: 991})
+    const {isDarkMode, toggleDarkMode} = useDarkMode()
 
     return (
         <Router>
@@ -45,38 +39,38 @@ const App: FC = () => {
                     isMobile={isMobile}
                 />
                 <div className="main-content">
-                    <Suspense fallback={<LoadingSpinner />}>
+                    <Suspense fallback={<LoadingSpinner/>}>
                         <Routes>
-                            <Route path="/" element={<Home />} />
-                            <Route path="/tokens" element={<TokenOverview />} />
+                            <Route path="/" element={<Home/>}/>
+                            <Route path="/tokens" element={<TokenOverview/>}/>
                             <Route
                                 path="/tokens/:tokenId"
-                                element={<TokenDetail />}
+                                element={<TokenDetail/>}
                             />
                             <Route
                                 path="/compare"
-                                element={<TokenComparison />}
+                                element={<TokenComparison/>}
                             />
-                            <Route path="/wallet" element={<WalletLookup />} />
+                            <Route path="/wallet" element={<WalletLookup/>}/>
                             <Route
                                 path="/wallet/:walletAddress"
-                                element={<WalletLookup />}
+                                element={<WalletLookup/>}
                             />
                             <Route
                                 path="/transaction-lookup/:hashRev?"
-                                element={<TransactionLookup />}
+                                element={<TransactionLookup/>}
                             />
                             <Route
                                 path="/mint-heatmap"
-                                element={<MintHeatmap />}
+                                element={<MintHeatmap/>}
                             />
                             <Route
                                 path="/marketcap-calc"
-                                element={<MarketCapCalculator />}
+                                element={<MarketCapCalculator/>}
                             />
                             <Route
                                 path="/top-holders"
-                                element={<TopKRC20Holders />}
+                                element={<TopKRC20Holders/>}
                             />
                             <Route
                                 path="*"
@@ -85,7 +79,7 @@ const App: FC = () => {
                         </Routes>
                     </Suspense>
                 </div>
-                <StructuredData />
+                <StructuredData/>
             </div>
         </Router>
     )
