@@ -58,7 +58,7 @@ export const NormalCard: FC<NormalCard> = (
         <Card>
             <Card.Body>
                 <Card.Title {...titleProps}>{title}</Card.Title>
-                <Card.Text {...textProps}>{children}</Card.Text>
+                <Card.Text as={'div'} {...textProps}>{children}</Card.Text>
             </Card.Body>
         </Card>
     )
