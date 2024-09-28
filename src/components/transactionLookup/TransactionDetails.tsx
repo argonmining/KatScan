@@ -50,8 +50,7 @@ export const TransactionDetails: FC<TransactionDetails> = (
             </Card>
 
             <TransactionInputsOutputs data={data.inputs} title={'Inputs'}/>
-            {/*<TransactionInputsOutputs data={data.outputs} title={'Outputs'}/>*/}
-                {/*{renderInputsOutputs(data.outputs, "Outputs", `${isCommit ? 'commit' : 'reveal'}-outputs`)}*/}
+            <TransactionInputsOutputs data={data.outputs} title={'Outputs'}/>
         </ExpandableDiv>
     </div>
 );
@@ -67,7 +66,6 @@ const TransactionInputsOutputs: FC<TransactionInputsOutputs> = (
     }
 ) => (
     <ExpandableDiv title={<span className="ms-2"><strong>{title}</strong> ({data.length})</span>}>
-
         {data.map((item, index) => (
             <Card key={index} className="mb-3">
                 <Card.Body>

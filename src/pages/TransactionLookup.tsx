@@ -51,7 +51,6 @@ const TransactionLookup: FC = () => {
             const commitHash = revealData.inputs?.[0].previous_outpoint_hash;
             const commitData = await simpleRequest<TransactionData['commitData']>(`https://api.kaspa.org/transactions/${commitHash ?? ''}`);
 
-            //todo revealData
             setTransactionData({krc20Data, revealData, commitData});
         } catch (err) {
             console.error('Failed to fetch transaction data:', err);
@@ -78,7 +77,6 @@ const TransactionLookup: FC = () => {
     const openExplorerForP2SH = (address: string): void => {
         window.open(`https://explorer.kaspa.org/addresses/${address}`, '_blank', 'noopener,noreferrer');
     };
-
 
     const capitalizeFirstLetter = (string: string): string => {
         return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
@@ -176,7 +174,6 @@ const TransactionLookup: FC = () => {
                     </div>
                     <TransactionDetails data={transactionData.commitData}
                                         title={"Commit Transaction Details"}/>
-                    {/*{renderTransactionDetails(transactionData.revealData, "Reveal Transaction Details", false)}*/}
                 </div>
             )}
         </Container>
