@@ -33,24 +33,6 @@
     margin-bottom: 1rem;
 }
 
-.transaction-lookup .accordion-button:not(.collapsed) {
-    background-color: var(--primary-color);
-    color: white;
-}
-
-.transaction-lookup .accordion-button:focus {
-    box-shadow: none;
-    border-color: rgba(0, 0, 0, 0.125);
-}
-
-.transaction-lookup .accordion .accordion-item {
-    border: none;
-}
-
-.transaction-lookup .accordion .accordion-item .accordion-button {
-    padding-left: 1.5rem;
-}
-
 .signature-script {
     display: flex;
     align-items: flex-start;
@@ -139,12 +121,6 @@
     border-color: var(--dark-primary-color);
 }
 
-.dark-mode .accordion-button.collapsed {
-    background-color: var(--dark-card-bg);
-    color: var(--dark-text-color);
-    border-color: var(--dark-border-color);
-}
-
 .dark-mode .transaction-lookup .btn-primary:hover {
     background-color: var(--dark-secondary-color);
     border-color: var(--dark-secondary-color);
@@ -153,25 +129,6 @@
 .dark-mode .transaction-lookup .card {
     background-color: var(--dark-card-bg);
     border-color: var(--dark-border-color);
-}
-
-.dark-mode .transaction-lookup .accordion-button:not(.collapsed) {
-    background-color: var(--dark-active-bg);
-    color: var(--dark-text-color);
-}
-
-.dark-mode .transaction-lookup .accordion-button:focus {
-    box-shadow: none;
-    border-color: var(--dark-border-color);
-}
-
-.dark-mode .transaction-lookup .accordion .accordion-item {
-    background-color: var(--dark-card-bg);
-    border-color: var(--dark-border-color);
-}
-
-.dark-mode .transaction-lookup .accordion-body {
-    color: var(--dark-text-color);
 }
 
 .dark-mode .signature-script {
@@ -185,4 +142,9 @@
 
 .dark-mode .clickable-address:hover {
     color: var(--dark-link-hover-color);
+}
+
+.dark-mode .transaction-flow {
+    background-color: var(--dark-card-bg);
+    color: var(--dark-text-color);
 }

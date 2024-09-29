@@ -1,0 +1,61 @@
+.expandable-div-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 16px 20px;
+    align-items: center;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    font-family: 'Rubic', sans-serif ;
+    margin-bottom: 16px;
+
+    &.extended {
+        background-color: var(--primary-color);
+        color: white;
+        margin-bottom: unset;
+    }
+}
+
+.expandable-div-header:hover {
+    cursor: pointer;
+}
+
+.expandable-div-header {
+    &svg {
+        color: var(--tertiary-primary-color);
+    }
+
+    &.extended svg {
+        color: white;
+    }
+}
+
+.expandable-div-body {
+    padding: 1rem 1.25rem;
+}
+
+.dark-mode .expandable-div-header {
+    background-color: var(--dark-card-bg);
+    color: var(--dark-text-color);
+    border-color: var(--dark-border-color);
+
+    &.extended {
+        background-color: var(--dark-active-bg);
+        color: var(--dark-text-color);
+    }
+}
+
+.dark-mode .expandable-div-header {
+    & svg {
+        color: var(--dark-secondary-color);
+    }
+
+    &.extended svg {
+        color: var(--dark-primary-color);
+    }
+}
+
+.dark-mode .expandable-div-body {
+    color: var(--dark-text-color);
+    background-color: var(--dark-bg-color);
+}
