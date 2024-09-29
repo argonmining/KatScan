@@ -61,7 +61,7 @@ const MintHeatmap: FC = () => {
         try {
             const response = await sendRequest<MintData[]>({
                 method: 'GET',
-                url: 'https://katapi.nachowyborski.xyz/api/mint-totals',
+                url: 'http://152.53.38.82:3000/api/mint-totals',
                 params: {
                     startDate: startDate.toISOString(),
                     endDate: endDate.toISOString()

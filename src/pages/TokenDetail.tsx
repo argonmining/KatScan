@@ -167,7 +167,7 @@ const TokenDetail: FC = () => {
         }
 
         //todo type
-        simpleRequest<Record<string, string>[]>(`https://katapi.nachowyborski.xyz/api/mintsovertime?tick=${tokenData.tick.toUpperCase()}`)
+        simpleRequest<Record<string, string>[]>(`http://152.53.38.82:3000/api/mintsovertime?tick=${tokenData.tick.toUpperCase()}`)
             .then(data => {
                 if (data.length === 0) {
                     return

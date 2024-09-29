@@ -11,7 +11,7 @@ import {TopHolder} from "../interfaces/TokenData";
 import {MobileTopKRC20Holders} from "../components/mobileComponents/MobileTopKRC20Holders";
 import {ExpandAbleList} from "../components/ExpandAbleList";
 
-const API_BASE_URL = 'https://katapi.nachowyborski.xyz/api/topHolders';
+const API_BASE_URL = 'http://152.53.38.82:3000/api/topHolders';
 
 type InternalTopHolder = {
     address: string
