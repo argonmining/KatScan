@@ -207,9 +207,10 @@ const MintHeatmap: FC = () => {
             <h1 style={{ color: `var(--primary-color)` }}>
                 Token Mint Heatmap
             </h1>
-            <Alert variant="warning">
+            {/* Remove the following Alert component */}
+            {/* <Alert variant="warning">
                 Note: The data displayed on this page may not be accurate due to an ongoing backend service issue.
-            </Alert>
+            </Alert> */}
             <Row className="mb-3">
                 <Col md={4}>
                     <Form.Group>
