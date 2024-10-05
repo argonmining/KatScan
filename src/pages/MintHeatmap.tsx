@@ -67,7 +67,6 @@ const MintHeatmap: FC = () => {
                     endDate: endDate.toISOString()
                 }
             });
-            console.log('API Response:', response);
             if (!response || !Array.isArray(response)) {
                 throw new Error('Invalid response format');
             }
@@ -80,14 +79,11 @@ const MintHeatmap: FC = () => {
                         size: Math.log(item.mintTotal + 1),
                         actualSize: item.mintTotal,
                     }));
-                console.log('Processed Data:', processedData);
                 setMintData([{
                     name: 'tokens',
                     children: processedData
                 }]);
                 setTotalMints(response.reduce((sum, item) => sum + item.mintTotal, 0));
-                console.log('Mint Data State:', mintData);
-                console.log('Total Mints State:', totalMints);
             } else {
                 setMintData([{
                     name: 'tokens',
@@ -105,7 +101,7 @@ const MintHeatmap: FC = () => {
             setTotalMints(0);
         }
         setLoading(false);
-    }, [mintData, timeframe, totalMints]);
+    }, [timeframe]);
 
     useEffect(() => {
         if (timeframe) {
