@@ -6,7 +6,7 @@ export const formatNumber = (number: number | string, maxDigits = 5): string => 
         minimumFractionDigits: 0,
         maximumFractionDigits: maxDigits,
     }).format(internalNumber);
-};
+}
 
 export const shortenString = (str: number | string, startLength = 5, endLength = 5): string => {
     const internalString = typeof str === 'string' ? str : String(str)
@@ -16,7 +16,7 @@ export const shortenString = (str: number | string, startLength = 5, endLength =
     }
 
     return `${internalString.slice(0, startLength)}...${internalString.slice(-endLength)}`;
-};
+}
 
 const parsingNumber = (value: string): number => {
     return value.includes('.') ? parseFloat(value) : parseInt(value)
@@ -24,9 +24,26 @@ const parsingNumber = (value: string): number => {
 
 export const parseRawNumber = (rawNumber: string | number, decimals: number): number => {
     return Number(rawNumber) / Math.pow(10, decimals);
-};
+}
 
 export const formatDateTime = (timestamp: string): string => {
     const date = new Date(parseInt(timestamp));
     return date.toLocaleString('en-US', {timeZoneName: 'short'});
-};
+}
+
+export const openExplorer = (hash: string): void => {
+    window.open(`https://explorer.kaspa.org/txs/${hash}`, '_blank', 'noopener,noreferrer');
+}
+
+export const copyToClipboard = (text: string): void => {
+    void navigator.clipboard.writeText(text);
+    // TODO: Add a toast notification here
+}
+
+export const formatKaspa = (amount: string): string => {
+    return (parseFloat(amount) / 100000000).toFixed(8) + " KAS";
+}
+
+export const formatKRC20Amount = (amount: string, decimals: number, tick: string): string => {
+    return `${parseRawNumber(amount, decimals).toFixed(decimals)} ${tick}`;
+}
