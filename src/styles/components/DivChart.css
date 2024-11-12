@@ -63,7 +63,7 @@
 }
 
 .chart-overlay {
-    background-color: rgb(112, 199, 186, 40%)
+    background-color: rgb(112, 199, 186, 40%) !important;
 }
 .dark-mode .chart-overlay {
     background-color: rgb(255, 255, 255, 25%)
