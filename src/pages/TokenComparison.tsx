@@ -15,7 +15,7 @@ import {
 } from 'chart.js';
 import Select from 'react-select';
 import {getKRC20TokenList, getTokenDetails} from '../services/dataService';
-import '../styles/TokenComparison.css';
+import 'styles/TokenComparison.css';
 import {FaChartBar, FaChartPie, FaUsers} from 'react-icons/fa'; // Import icons
 import {censorTicker} from '../utils/censorTicker';
 import SEO from '../components/SEO';
@@ -96,25 +96,29 @@ const TokenComparison: FC = () => {
         };
     }, [calculateValue]);
 
+    const onError = useCallback((err) => {
+        console.error('Error in fetchTokenList:', err);
+        setError(`Failed to fetch token list: ${(err as Record<string, string>).message}`);
+        setLoading(false);
+    }, [])
+
     useEffect(() => {
         const fetchTokenList = async () => {
             try {
                 setLoading(true);
                 const data = await getKRC20TokenList(1000);
                 if (!data || !data.result) {
-                    throw new Error('Invalid data structure received from API');
+                    onError({message: 'Invalid data structure received from API'})
                 }
                 setAllTokens(data.result);
                 setLoading(false);
             } catch (err) {
-                console.error('Error in fetchTokenList:', err);
-                setError(`Failed to fetch token list: ${(err as Record<string, string>).message}`);
-                setLoading(false);
+                onError(err)
             }
         };
 
         void fetchTokenList();
-    }, []);
+    }, [onError]);
 
     useEffect(() => {
         const fetchTokenDetails = async () => {
@@ -124,7 +128,7 @@ const TokenComparison: FC = () => {
                 try {
                     const details = await Promise.all(selectedTokens.map(token => getTokenDetails(token.value)));
                     console.log('Raw token details:', details);
-                    const processedDetails:TokenInternal[] = details.map(token => ({
+                    const processedDetails: TokenInternal[] = details.map(token => ({
                         ...token,
                         ...calculateHolderPercentages(token)
                     }));
@@ -167,7 +171,7 @@ const TokenComparison: FC = () => {
             return parseFloat(value) / Math.pow(10, parseInt(decimals));
         };
 
-        const formatNumber = (num:number) :string => {
+        const formatNumber = (num: number): string => {
             if (num === undefined || isNaN(num)) {
                 console.warn('formatNumber received invalid number:', num);
                 return 'N/A';
@@ -175,7 +179,7 @@ const TokenComparison: FC = () => {
             return num.toLocaleString();
         };
 
-        const formatLargeNumber = (num:number):string => {
+        const formatLargeNumber = (num: number): string => {
             if (num >= 1e12) {
                 return (num / 1e12).toFixed(3) + ' T';
             } else if (num >= 1e9) {
@@ -220,7 +224,7 @@ const TokenComparison: FC = () => {
                 y: {
                     type: 'logarithmic',
                     ticks: {
-                        callback: function (value:number) {
+                        callback: function (value: number) {
                             return formatLargeNumber(value);
                         },
                         maxTicksLimit: 8
@@ -272,7 +276,10 @@ const TokenComparison: FC = () => {
                                 label += ': ';
                             }
                             if (context.parsed.y !== null) {
-                                label += new Intl.NumberFormat('en-US', {style: 'percent', minimumFractionDigits: 2}).format(context.parsed.y / 100);
+                                label += new Intl.NumberFormat('en-US', {
+                                    style: 'percent',
+                                    minimumFractionDigits: 2
+                                }).format(context.parsed.y / 100);
                             }
                             return label;
                         }
@@ -296,7 +303,7 @@ const TokenComparison: FC = () => {
                 y: {
                     stacked: true,
                     ticks: {
-                        callback: function (value:string) {
+                        callback: function (value: string) {
                             return value + '%';
                         }
                     }
@@ -304,13 +311,13 @@ const TokenComparison: FC = () => {
             },
         };
 
-        const getMintProgress = (token:TokenData) => {
+        const getMintProgress = (token: TokenData) => {
             const minted = calculateValue(token.minted, token.dec);
             const max = calculateValue(token.max, token.dec);
             return max > 0 ? (minted / max) * 100 : 0;
         };
 
-        const getMintType = (token:TokenData) => {
+        const getMintType = (token: TokenData) => {
             return calculateValue(token.pre, token.dec) > 0 ? "Pre-Mint" : "Fair Mint";
         };
 

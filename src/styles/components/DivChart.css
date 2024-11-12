@@ -1,0 +1,70 @@
+.div-chart {
+    width: 100%;
+}
+.div-chart table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.div-chart thead {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+
+.div-chart th,
+.div-chart td {
+    padding: 20px 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.div-chart th {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.div-chart tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+@media (max-width: 768px) {
+    .div-chart {
+        margin-top: 0;
+    }
+
+}
+
+.dark-mode .div-chart {
+    overflow-x: auto;
+}
+
+.dark-mode .div-chart table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.dark-mode .div-chart th,
+.dark-mode .div-chart td {
+    padding: 20px 8px;
+    text-align: left;
+    border-bottom: 1px solid var(--dark-border-color);
+    color: var(--dark-text-color);
+}
+
+.dark-mode .div-chart th {
+    background-color: var(--dark-header-bg);
+    color: var(--dark-text-color);
+}
+
+.dark-mode .div-chart tr:nth-child(even) {
+    background-color: var(--dark-stripe-bg);
+}
+
+.chart-overlay {
+    background-color: rgb(112, 199, 186, 40%) !important;
+}
+.dark-mode .chart-overlay {
+    background-color: rgb(255, 255, 255, 25%)
+}

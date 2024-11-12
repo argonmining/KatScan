@@ -1,22 +1,18 @@
 import React, {FC} from "react";
 import {TokenSearchResult} from "../../interfaces/TokenData";
 import {LinkWithTooltip} from "../LinkWithTooltip";
+import {formatNumber, parseRawNumber, shortenString} from "../../services/Helper";
+import 'styles/components/MobileTable.css'
 
 type MobileHolderTable = {
     data: TokenSearchResult['holder'];
     tokenData: TokenSearchResult;
-    formatNumber: (rawNumber: number, decimals: number) => string;
-    parseRawNumber: (rawNumber: number, decimals: number) => number;
-    shortenString: (str: string, startLength?: number, endLength?: number) => string
 }
 
 export const MobileHolderTable: FC<MobileHolderTable> = (
     {
         data,
         tokenData,
-        formatNumber,
-        parseRawNumber,
-        shortenString
     }
 ) => {
     return <div className="mobile-table">

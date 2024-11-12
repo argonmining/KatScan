@@ -14,7 +14,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import {getDetailedTokenInfo, getKRC20TokenList} from '../services/dataService';
 import {getCryptoData, searchCryptos} from '../services/coingeckoService';
-import '../styles/MarketCapCalculator.css';
+import 'styles/MarketCapCalculator.css';
 import {censorTicker} from '../utils/censorTicker';
 import SEO from '../components/SEO';
 import JsonLd from '../components/JsonLd';

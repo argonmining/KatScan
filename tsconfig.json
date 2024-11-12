@@ -7,7 +7,10 @@
     "strict": true,
     "module": "es2022",
     "moduleResolution": "node",
-    "jsx": "react"
+    "jsx": "react",
+    "paths": {
+      "styles/*": ["./src/styles/*"],
+    }
   },
   "lib": ["es2021"],
   "include": [

@@ -1,0 +1,48 @@
+
+.mobile-table {
+    font-size: 0.9rem;
+}
+
+.mobile-table-row {
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #fff;
+}
+
+.mobile-table-cell {
+    margin-bottom: 5px;
+}
+
+.mobile-table-cell strong {
+    color: var(--primary-color);
+}
+
+.mobile-table-cell .clickable-address {
+    word-break: break-all;
+}
+
+.dark-mode .mobile-table {
+    font-size: 0.9rem;
+}
+
+.dark-mode .mobile-table-row {
+    border: 1px solid var(--dark-border-color);
+    border-radius: 4px;
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: var(--dark-card-bg);
+}
+
+.dark-mode .mobile-table-cell {
+    margin-bottom: 5px;
+}
+
+.dark-mode .mobile-table-cell strong {
+    color: var(--dark-primary-color);
+}
+
+.dark-mode .mobile-table-cell .clickable-address {
+    word-break: break-all;
+}

@@ -1,3 +1,4 @@
+
 // Helper function for number formatting
 export const formatNumber = (number: number | string, maxDigits = 5): string => {
     const internalNumber = typeof number === 'string' ? parsingNumber(number) : number
@@ -21,7 +22,7 @@ const parsingNumber = (value: string): number => {
     return value.includes('.') ? parseFloat(value) : parseInt(value)
 }
 
-export const parseRawNumber = (rawNumber: string, decimals: number): number => {
+export const parseRawNumber = (rawNumber: string | number, decimals: number): number => {
     return Number(rawNumber) / Math.pow(10, decimals);
 }
 

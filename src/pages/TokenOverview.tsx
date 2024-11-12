@@ -1,9 +1,9 @@
 import React, {FC, useEffect, useMemo, useState} from 'react';
 import {Link} from 'react-router-dom';
-import {Dropdown, Form, InputGroup, Table} from 'react-bootstrap'; // eslint-disable-line no-unused-vars
+import {Dropdown, Form, InputGroup, Table} from 'react-bootstrap';
 import {FaSearch} from 'react-icons/fa';
 import {getKRC20TokenList} from '../services/dataService';
-import '../styles/TokenOverview.css';
+import 'styles/TokenOverview.css';
 import {censorTicker} from '../utils/censorTicker';
 import JsonLd from '../components/JsonLd';
 import SEO from '../components/SEO';

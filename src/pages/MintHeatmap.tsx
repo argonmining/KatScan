@@ -1,7 +1,7 @@
 import React, {FC, useCallback, useEffect, useState} from 'react';
 import {Col, Container, Form, Row} from 'react-bootstrap';
 import {Legend, ResponsiveContainer, Tooltip, Treemap} from 'recharts';
-import '../styles/MintHeatmap.css';
+import 'styles/MintHeatmap.css';
 import {censorTicker} from '../utils/censorTicker';
 import SEO from '../components/SEO';
 import JsonLd from '../components/JsonLd';
