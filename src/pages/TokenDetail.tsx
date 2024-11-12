@@ -18,7 +18,7 @@ import {CustomTabs} from "../components/CustomTabs";
 import {OpTransactionData} from "../interfaces/OpTransactionData";
 import {TokenListResponse} from "../interfaces/ApiResponseTypes";
 
-const titles = ['Top Holders', 'Recent Operations', 'Holder Distribution', 'Mint Activity']
+const titles = ['Top Holders', 'Recent Operations', 'Holder Distribution']
 
 const TokenDetail: FC = () => {
         const {tokenId} = useParams();
@@ -29,6 +29,10 @@ const TokenDetail: FC = () => {
         const [mintActivity, setMintActivity] = useState<MintOvertimeType[]>([]);
         const [operations, setOperations] = useState<OpTransactionData[]>([]);
         const [operationsCursor, setOperationsCursor] = useState<TokenListResponse<OpTransactionData[]>['next'] | null>(null);
+        if (!isMobile) {
+            // disable until endpoint done
+            // titles[3] = 'Mint Activity'
+        }
 
         useEffect(() => {
             if (!tokenId) {

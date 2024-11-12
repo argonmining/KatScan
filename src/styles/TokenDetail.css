@@ -135,7 +135,6 @@ tr:hover {
     overflow: hidden;
     width: 100%;
     position: relative;
-    height: 400px; /* Set a default height */
 }
 
 .text-muted {

@@ -1,10 +1,8 @@
 import React, {FC, useMemo} from "react";
-import Chart from "react-apexcharts";
-import {ApexOptions} from "apexcharts";
-import {formatNumber, parseRawNumber} from "../../../services/Helper";
+import {parseRawNumber} from "../../../services/Helper";
 import {TokenSearchResult} from "../../../interfaces/TokenData";
-import {useMobile} from "../../../hooks/mobile";
 import 'styles/tokendetail/HolderDistribution.css'
+import {DivChart} from "../../DivChart";
 
 type Props = {
     tokenData: TokenSearchResult | null
@@ -15,8 +13,6 @@ export const HolderDistribution: FC<Props> = (
         tokenData
     }
 ) => {
-    const {isMobile} = useMobile()
-
     const holderDistribution = useMemo(() => {
         if (tokenData === null) {
             return []
@@ -62,74 +58,7 @@ export const HolderDistribution: FC<Props> = (
         ];
     }, [tokenData]);
 
-    //todo
-    const testOptions: ApexOptions = {
-        chart: {
-            id: "basic-pie",
-            type: 'pie',
-
-        },
-        tooltip: {
-            enabled: true
-        },
-        colors: [
-            'rgba(255,99,132,0.5)',
-            'rgba(54,162,235,0.5)',
-            'rgba(255,206,86,0.5)',
-            'rgba(75,192,192,0.5)',
-            'rgba(153,102,255,0.5)',
-            'rgba(201,203,207,0.5)',
-        ],
-        legend: {
-            labels: {
-                useSeriesColors: true
-            },
-            fontSize: '20px',
-            onItemHover: {
-                highlightDataSeries: false
-            }
-        },
-        dataLabels: {
-            enabled: true,
-            formatter: function (val: number) {
-                return formatNumber(val, 2) + "%"
-            },
-
-        },
-        labels: holderDistribution.map(item => item.label),
-    }
-    const testSeries = holderDistribution.map(item => item.percentage)
     return <div className="chart-container">
-        {isMobile ? (
-            <div className="mobile-holder-distribution">
-                <table className="table table-striped">
-                    <thead>
-                    <tr>
-                        <th>Holder Group</th>
-                        <th>Percentage</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {holderDistribution.map((item, index) => (
-                        <tr key={index} style={{position: 'relative'}}>
-                            <td>{item.label}</td>
-                            <td>{item.percentage.toFixed(2)}%</td>
-                            <div style={{
-                                left: 0,
-                                top: 0,
-                                height: '100%',
-                                position: 'absolute',
-                                padding:0,
-                                backgroundColor: 'rgb(112, 199, 186, 40%)',
-                                width: `${Number(item.percentage)}%`
-                            }}/>
-                        </tr>
-                    ))}
-                    </tbody>
-                </table>
-            </div>
-        ) : (
-            <Chart type={'pie'} options={testOptions} series={testSeries} width={'50%'} height={400}/>
-        )}
+        <DivChart data={holderDistribution} groupLabel={'Holder Group'}/>
     </div>
 }
