@@ -1,4 +1,5 @@
 import {sendHeadRequest} from "./RequestService";
+import {CoinbaseInfo} from "../interfaces/CoinbaseInfo";
 
 const COINGECKO_API_URL = 'https://api.coingecko.com/api/v3';
 const API_KEY = 'CG-f8E4yaD4zQYKtqHawS59TAnY';
@@ -8,8 +9,9 @@ const headers = {
     'x-cg-demo-api-key': API_KEY
 }
 
-type Crypto = { id: number, name: string, symbol: string }
-export const searchCryptos = async (query: string): Promise<({ value: number, label: string } & Crypto)[]> => {
+type Crypto = { id: string, name: string, symbol: string }
+export type CryptoSearch = { value: string, label: string } & Crypto
+export const searchCryptos = async (query: string): Promise<CryptoSearch[]> => {
     try {
         const response = await sendHeadRequest<{ coins: Crypto[] }>({
             method: 'GET',
@@ -28,10 +30,9 @@ export const searchCryptos = async (query: string): Promise<({ value: number, la
     }
 };
 
-export const getCryptoData = async (id: number) => {
+export const getCryptoData = async (id: string) :Promise<CoinbaseInfo> => {
     try {
-        //todo
-        return sendHeadRequest({method: 'GET', url: `${COINGECKO_API_URL}/coins/${id}`, params: undefined, headers});
+        return sendHeadRequest<CoinbaseInfo>({method: 'GET', url: `${COINGECKO_API_URL}/coins/${id}`, params: undefined, headers});
     } catch (error) {
         console.error('Error fetching cryptocurrency data:', error);
         throw error;

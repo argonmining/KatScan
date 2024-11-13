@@ -1,4 +1,3 @@
-
 // Helper function for number formatting
 export const formatNumber = (number: number | string, maxDigits = 5): string => {
     const internalNumber = typeof number === 'string' ? parsingNumber(number) : number
@@ -7,6 +6,17 @@ export const formatNumber = (number: number | string, maxDigits = 5): string => 
         maximumFractionDigits: maxDigits,
     }).format(internalNumber);
 }
+
+export const formatInteger = (num: number |string): string => {
+    const internalNumber = typeof num === 'string' ? parseInt(num) : num
+    if (isNaN(internalNumber)) {
+        return 'N/A';
+    }
+    return new Intl.NumberFormat('en-US', {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+    }).format(internalNumber);
+};
 
 export const shortenString = (str: number | string, startLength = 5, endLength = 5): string => {
     const internalString = typeof str === 'string' ? str : String(str)
