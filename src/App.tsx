@@ -18,11 +18,7 @@ const TokenComparison = lazy(() => import('./pages/TokenComparison'))
 const WalletLookup = lazy(() => import('./pages/WalletLookup'))
 const TransactionLookup = lazy(() => import('./pages/TransactionLookup'))
 const MintHeatmap = lazy(() => import('./pages/MintHeatmap'))
-const MarketCapCalculator = lazy(() =>
-    import('./pages/UnderMaintenance').then(module => ({
-        default: module.UnderMaintenance,
-    })),
-)
+const MarketCapCalculator = lazy(() =>import('./pages/MarketCapCalculator'))
 const TopKRC20Holders = lazy(() => import('./pages/TopKRC20Holders'))
 const StructuredData = lazy(() => import('./pages/StructuredData'))
 
