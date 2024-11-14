@@ -114,12 +114,17 @@
 
     .collapse-btn {
         background-color: var(--primary-color);
+        aspect-ratio: 1/1;
         border: none;
         font-size: 1.2rem;
         cursor: pointer;
         padding: 0.5rem;
         color: white;
         transition: background-color 0.3s ease;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: auto;
     }
 
     .collapse-btn:hover {

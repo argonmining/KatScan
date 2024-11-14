@@ -1,0 +1,1 @@
+export const iconBaseUrl = "https://krc20-assets.kas.fyi/icons/"
