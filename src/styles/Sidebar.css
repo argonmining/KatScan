@@ -301,7 +301,6 @@
     align-items: center;
     justify-content: center;
     padding: 1rem;
-    border-top: 1px solid var(--border-color);
 }
 
 .dark-mode-toggle .switch {
@@ -326,7 +325,6 @@
 
 .sidebar-dark-mode-toggle {
     padding: 0.75rem 1rem;
-    border-top: 1px solid var(--border-color);
 }
 
 .dark-mode .sidebar-dark-mode-toggle {
@@ -338,7 +336,6 @@
     align-items: center;
     justify-content: space-between;
     padding: 0.5rem 1rem;
-    border-top: 1px solid var(--border-color);
     margin-top: 1rem;
 }
 
