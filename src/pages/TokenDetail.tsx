@@ -13,10 +13,12 @@ import {useMobile} from "../hooks/mobile";
 import {HolderDistribution} from "../components/tabs/tokendetail/HolderDistribution";
 import {RecentOperations} from "../components/tabs/tokendetail/RecentOperations";
 import {TopHolder} from "../components/tabs/tokendetail/TopHolder";
-import {MintActivity, MintOvertimeType} from "../components/tabs/tokendetail/MintActivity";
+// import {MintActivity, MintOvertimeType} from "../components/tabs/tokendetail/MintActivity";
 import {CustomTabs} from "../components/CustomTabs";
 import {OpTransactionData} from "../interfaces/OpTransactionData";
 import {TokenListResponse} from "../interfaces/ApiResponseTypes";
+import {Thumbnail} from "../components/Image";
+import {iconBaseUrl} from "../utils/StaticVariables";
 
 const titles = ['Top Holders', 'Recent Operations', 'Holder Distribution']
 
@@ -26,7 +28,7 @@ const TokenDetail: FC = () => {
         const [loading, setLoading] = useState(true);
         const [error, setError] = useState<string | null>(null);
         const {isMobile} = useMobile()
-        const [mintActivity, setMintActivity] = useState<MintOvertimeType[]>([]);
+        // const [mintActivity, setMintActivity] = useState<MintOvertimeType[]>([]);
         const [operations, setOperations] = useState<OpTransactionData[]>([]);
         const [operationsCursor, setOperationsCursor] = useState<TokenListResponse<OpTransactionData[]>['next'] | null>(null);
         if (!isMobile) {
@@ -86,6 +88,9 @@ const TokenDetail: FC = () => {
                 <Card className="token-info-card">
                     <Card.Body>
                         <div className="token-info-grid">
+                            <div className="token-info-item-image">
+                               <Thumbnail src={`${iconBaseUrl}${tokenData.tick}.jpg`} alt={`${tokenData.tick}.jpg`}/>
+                            </div>
                             <div className="token-info-item">
                                 <span className="token-info-label">Max Supply</span>
                                 <span
@@ -126,8 +131,8 @@ const TokenDetail: FC = () => {
                                       operationsCursor={operationsCursor}
                                       setOperationsCursor={setOperationsCursor}/>
                     <HolderDistribution tokenData={tokenData}/>
-                    {!isMobile && <MintActivity tokenData={tokenData} mintActivityData={mintActivity}
-                                                setMintActivityData={setMintActivity}/>}
+                    {/*{!isMobile && <MintActivity tokenData={tokenData} mintActivityData={mintActivity}*/}
+                    {/*                            setMintActivityData={setMintActivity}/>}*/}
                 </CustomTabs>
             </div>
         );

@@ -1,0 +1,10 @@
+.thumbnail-image {
+    width: 60px;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+}
+.small-thumbnail-image {
+    width: 30px;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+}

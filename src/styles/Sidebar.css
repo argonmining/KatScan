@@ -114,12 +114,17 @@
 
     .collapse-btn {
         background-color: var(--primary-color);
+        aspect-ratio: 1/1;
         border: none;
         font-size: 1.2rem;
         cursor: pointer;
         padding: 0.5rem;
         color: white;
         transition: background-color 0.3s ease;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: auto;
     }
 
     .collapse-btn:hover {
@@ -296,7 +301,6 @@
     align-items: center;
     justify-content: center;
     padding: 1rem;
-    border-top: 1px solid var(--border-color);
 }
 
 .dark-mode-toggle .switch {
@@ -321,7 +325,6 @@
 
 .sidebar-dark-mode-toggle {
     padding: 0.75rem 1rem;
-    border-top: 1px solid var(--border-color);
 }
 
 .dark-mode .sidebar-dark-mode-toggle {
@@ -333,7 +336,6 @@
     align-items: center;
     justify-content: space-between;
     padding: 0.5rem 1rem;
-    border-top: 1px solid var(--border-color);
     margin-top: 1rem;
 }
 

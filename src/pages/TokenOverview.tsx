@@ -9,6 +9,8 @@ import JsonLd from '../components/JsonLd';
 import SEO from '../components/SEO';
 import {LoadingSpinner} from "../components/LoadingSpinner";
 import {TokenData} from "../interfaces/TokenData";
+import {SmallThumbnail} from "../components/Image";
+import {iconBaseUrl} from "../utils/StaticVariables";
 
 const ITEMS_PER_PAGE = 50;
 
@@ -182,6 +184,7 @@ const TokenOverview: FC = () => {
                 <Table>
                     <thead>
                     <tr>
+                        <th style={{width: '50px'}}/>
                         <th className="sticky-column"
                             onClick={() => handleSort('tick')}>Ticker {sortField === 'tick' && (sortDirection === 'asc' ? '▲' : '▼')}</th>
                         <th className="text-center">
@@ -191,9 +194,11 @@ const TokenOverview: FC = () => {
                                     Launch Type
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu>
-                                    <Dropdown.Item onClick={()=>handleLaunchTypeSelect("")}>All</Dropdown.Item>
-                                    <Dropdown.Item onClick={()=>handleLaunchTypeSelect("Fair Mint")}>Fair Mint</Dropdown.Item>
-                                    <Dropdown.Item onClick={()=>handleLaunchTypeSelect("Pre-Mint")}>Pre-Mint</Dropdown.Item>
+                                    <Dropdown.Item onClick={() => handleLaunchTypeSelect("")}>All</Dropdown.Item>
+                                    <Dropdown.Item onClick={() => handleLaunchTypeSelect("Fair Mint")}>Fair
+                                        Mint</Dropdown.Item>
+                                    <Dropdown.Item
+                                        onClick={() => handleLaunchTypeSelect("Pre-Mint")}>Pre-Mint</Dropdown.Item>
                                 </Dropdown.Menu>
                             </Dropdown>
                         </th>
@@ -204,9 +209,10 @@ const TokenOverview: FC = () => {
                                     Status
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu>
-                                    <Dropdown.Item onClick={()=>handleStatusSelect("")}>All</Dropdown.Item>
-                                    <Dropdown.Item onClick={()=>handleStatusSelect("Complete")}>Complete</Dropdown.Item>
-                                    <Dropdown.Item onClick={()=>handleStatusSelect("Minting")}>Minting</Dropdown.Item>
+                                    <Dropdown.Item onClick={() => handleStatusSelect("")}>All</Dropdown.Item>
+                                    <Dropdown.Item
+                                        onClick={() => handleStatusSelect("Complete")}>Complete</Dropdown.Item>
+                                    <Dropdown.Item onClick={() => handleStatusSelect("Minting")}>Minting</Dropdown.Item>
                                 </Dropdown.Menu>
                             </Dropdown>
                         </th>
@@ -224,6 +230,15 @@ const TokenOverview: FC = () => {
                     {filteredAndSortedTokens.length > 0 ? (
                         filteredAndSortedTokens.map((token) => (
                             <tr key={token.tick}>
+                                <td>
+                                    <div style={{width: '30px', overflow: 'hidden'}}>
+                                        <Link to={`/tokens/${token.tick}`} className="token-ticker">
+                                            <SmallThumbnail src={`${iconBaseUrl}${token.tick}.jpg`}
+                                                            alt={token.tick}
+                                                            loading="lazy"/>
+                                        </Link>
+                                    </div>
+                                </td>
                                 <td className="sticky-column">
                                     <Link to={`/tokens/${token.tick}`} className="token-ticker">
                                         {censorTicker(token.tick)}
