@@ -13,7 +13,7 @@ import {useMobile} from "../hooks/mobile";
 import {HolderDistribution} from "../components/tabs/tokendetail/HolderDistribution";
 import {RecentOperations} from "../components/tabs/tokendetail/RecentOperations";
 import {TopHolder} from "../components/tabs/tokendetail/TopHolder";
-import {MintActivity, MintOvertimeType} from "../components/tabs/tokendetail/MintActivity";
+// import {MintActivity, MintOvertimeType} from "../components/tabs/tokendetail/MintActivity";
 import {CustomTabs} from "../components/CustomTabs";
 import {OpTransactionData} from "../interfaces/OpTransactionData";
 import {TokenListResponse} from "../interfaces/ApiResponseTypes";
@@ -28,7 +28,7 @@ const TokenDetail: FC = () => {
         const [loading, setLoading] = useState(true);
         const [error, setError] = useState<string | null>(null);
         const {isMobile} = useMobile()
-        const [mintActivity, setMintActivity] = useState<MintOvertimeType[]>([]);
+        // const [mintActivity, setMintActivity] = useState<MintOvertimeType[]>([]);
         const [operations, setOperations] = useState<OpTransactionData[]>([]);
         const [operationsCursor, setOperationsCursor] = useState<TokenListResponse<OpTransactionData[]>['next'] | null>(null);
         if (!isMobile) {
