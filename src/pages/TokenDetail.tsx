@@ -1,5 +1,5 @@
 import React, {FC, useEffect, useState} from 'react';
-import {useParams} from 'react-router-dom';
+import {Link, useParams} from 'react-router-dom';
 import {Alert, Card} from 'react-bootstrap';
 import {getTokenDetails} from '../services/dataService';
 import 'styles/TokenDetail.css';
@@ -17,10 +17,13 @@ import {TopHolder} from "../components/tabs/tokendetail/TopHolder";
 import {CustomTabs} from "../components/CustomTabs";
 import {OpTransactionData} from "../interfaces/OpTransactionData";
 import {TokenListResponse} from "../interfaces/ApiResponseTypes";
-import {Thumbnail} from "../components/Image";
+import {SmallThumbnail, Thumbnail} from "../components/Image";
 import {iconBaseUrl} from "../utils/StaticVariables";
+import {simpleRequest} from "../services/RequestService";
 
 const titles = ['Top Holders', 'Recent Operations', 'Holder Distribution']
+
+type Socials = { type: string, url: string }
 
 const TokenDetail: FC = () => {
         const {tokenId} = useParams();
@@ -31,6 +34,7 @@ const TokenDetail: FC = () => {
         // const [mintActivity, setMintActivity] = useState<MintOvertimeType[]>([]);
         const [operations, setOperations] = useState<OpTransactionData[]>([]);
         const [operationsCursor, setOperationsCursor] = useState<TokenListResponse<OpTransactionData[]>['next'] | null>(null);
+        const [socials, setSocials] = useState<Socials[]>([])
         if (!isMobile) {
             // disable until endpoint done
             // titles[3] = 'Mint Activity'
@@ -43,13 +47,16 @@ const TokenDetail: FC = () => {
 
             setLoading(true);
             setError(null);
-
-            getTokenDetails(tokenId)
-                .then((data) => {
+            Promise.all([
+                getTokenDetails(tokenId),
+                simpleRequest<Record<string, unknown>>(`https://api-v2-do.kas.fyi/token/krc20/${tokenId}/info?includeCharts=false`)
+            ])
+                .then(([data, tokenInfo]) => {
                     if (!data) {
                         throw new Error('No data returned from API');
                     }
                     setTokenData(data);
+                    setSocials((tokenInfo?.socialLinks ?? []) as Socials[])
                 })
                 .catch(err => {
                     console.error('Failed to fetch token details:', err);
@@ -71,6 +78,19 @@ const TokenDetail: FC = () => {
             "url": `https://katscan.xyz/tokens/${tokenId ?? ''}`,
         };
 
+        const getIcon = (type: string) => {
+            switch (type){
+                case 'twitter':
+                    return <SmallThumbnail src={"https://kas.fyi/media/svg/brand-logos/twitter.svg"} alt={'twitter'}/>
+                case 'discord':
+                    return <SmallThumbnail src={"https://kas.fyi/media/svg/brand-logos/discord.svg"} alt={'discord'}/>
+                case 'telegram':
+                    return <SmallThumbnail src={"https://kas.fyi/media/svg/brand-logos/telegram.svg"} alt={'telegram'}/>
+                default:
+                    return <SmallThumbnail src={`${iconBaseUrl}${tokenData.tick}.jpg`} alt={'website'}/>
+            }
+        }
+
         return (
             <div className="token-detail">
                 <JsonLd data={jsonLdData}/>
@@ -89,7 +109,7 @@ const TokenDetail: FC = () => {
                     <Card.Body>
                         <div className="token-info-grid">
                             <div className="token-info-item-image">
-                               <Thumbnail src={`${iconBaseUrl}${tokenData.tick}.jpg`} alt={`${tokenData.tick}.jpg`}/>
+                                <Thumbnail src={`${iconBaseUrl}${tokenData.tick}.jpg`} alt={`${tokenData.tick}.jpg`}/>
                             </div>
                             <div className="token-info-item">
                                 <span className="token-info-label">Max Supply</span>
@@ -117,6 +137,16 @@ const TokenDetail: FC = () => {
                             <div className="token-info-item">
                                 <span className="token-info-label">Total Transfers</span>
                                 <span className="token-info-value">{formatNumber(tokenData.transferTotal, 0)}</span>
+                            </div>
+                            <div className="token-info-socials">
+                                <span className="token-info-label">Socials</span>
+                                <div className={'token-info-socials-wrapper'}>
+                                    {socials.map(single =>
+                                        <Link key={single.type} to={single.url}>
+                                            {getIcon(single.type)}
+                                        </Link>
+                                    )}
+                                </div>
                             </div>
                         </div>
                     </Card.Body>
