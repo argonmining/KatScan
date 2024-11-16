@@ -4,16 +4,13 @@ import { Link, NavLink } from 'react-router-dom'
 import {
     FaBars,
     FaChartLine,
-    FaChevronLeft,
-    FaChevronRight,
     FaCoins,
     FaExchangeAlt,
     FaFireAlt,
-    /*FaHeart,*/
     FaSearch,
     FaUsers,
     FaWallet,
-    FaPlus,
+    FaColumns,
     FaRobot,
 } from 'react-icons/fa'
 import logo from '../assets/logo.png'
@@ -28,13 +25,14 @@ type Props = {
 }
 
 const Sidebar: FC<Props> = ({ darkMode, toggleDarkMode, isMobile }) => {
-    const [collapsed, setCollapsed] = useState(false)
+    /*const [collapsed, setCollapsed] = useState(false)*/
+    const [collapsed] = useState(false)
     const [showDonateModal, setShowDonateModal] = useState(false)
     const [expanded, setExpanded] = useState(false)
 
-    const toggleSidebar = () => {
+    /*const toggleSidebar = () => {
         setCollapsed(!collapsed)
-    }
+    }*/
 
     const handleDonateClick = () => {
         setShowDonateModal(true)
@@ -135,7 +133,7 @@ const Sidebar: FC<Props> = ({ darkMode, toggleDarkMode, isMobile }) => {
                                     className="nav-link"
                                     onClick={() => setExpanded(false)}
                                 >
-                                    <FaExchangeAlt /> Side by Side
+                                    <FaColumns /> Side by Side
                                 </NavLink>
                                 <NavLink
                                     to="/mint-heatmap"
@@ -237,7 +235,7 @@ const Sidebar: FC<Props> = ({ darkMode, toggleDarkMode, isMobile }) => {
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >
-                                    <FaPlus /> {!collapsed && <span>Deploy Token</span>}
+                                    <FaExchangeAlt /> {!collapsed && <span>Trade on KSPR</span>}
                                 </NavLink>
                                 <NavLink
                                     to="https://t.me/kspr_home_bot?start=nacho"
@@ -245,7 +243,7 @@ const Sidebar: FC<Props> = ({ darkMode, toggleDarkMode, isMobile }) => {
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >
-                                    <FaRobot /> {!collapsed && <span>Mint Tokens</span>}
+                                    <FaRobot /> {!collapsed && <span>Mint & Deploy</span>}
                                 </NavLink>
                             </NavSection>
                             <div className="ad-container">
@@ -284,16 +282,6 @@ const Sidebar: FC<Props> = ({ darkMode, toggleDarkMode, isMobile }) => {
                                     Nacho the 𐤊at Community
                                 </p>
                             )}
-                            <button
-                                className="collapse-btn"
-                                onClick={toggleSidebar}
-                            >
-                                {collapsed ? (
-                                    <FaChevronRight />
-                                ) : (
-                                    <FaChevronLeft />
-                                )}
-                            </button>
                         </div>
                     </div>
                 </div>
