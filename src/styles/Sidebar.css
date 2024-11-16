@@ -234,7 +234,7 @@
 
     .ad-container {
         flex-grow: 1;
-        max-height: 260px;
+        max-height: 300px;
         display: flex;
         align-items: center;
         justify-content: center;

@@ -4,12 +4,9 @@ import { Link, NavLink } from 'react-router-dom'
 import {
     FaBars,
     FaChartLine,
-    FaChevronLeft,
-    FaChevronRight,
     FaCoins,
     FaExchangeAlt,
     FaFireAlt,
-    /*FaHeart,*/
     FaSearch,
     FaUsers,
     FaWallet,
@@ -28,13 +25,14 @@ type Props = {
 }
 
 const Sidebar: FC<Props> = ({ darkMode, toggleDarkMode, isMobile }) => {
-    const [collapsed, setCollapsed] = useState(false)
+    /*const [collapsed, setCollapsed] = useState(false)*/
+    const [collapsed] = useState(false)
     const [showDonateModal, setShowDonateModal] = useState(false)
     const [expanded, setExpanded] = useState(false)
 
-    const toggleSidebar = () => {
+    /*const toggleSidebar = () => {
         setCollapsed(!collapsed)
-    }
+    }*/
 
     const handleDonateClick = () => {
         setShowDonateModal(true)
@@ -284,16 +282,6 @@ const Sidebar: FC<Props> = ({ darkMode, toggleDarkMode, isMobile }) => {
                                     Nacho the 𐤊at Community
                                 </p>
                             )}
-                            <button
-                                className="collapse-btn"
-                                onClick={toggleSidebar}
-                            >
-                                {collapsed ? (
-                                    <FaChevronRight />
-                                ) : (
-                                    <FaChevronLeft />
-                                )}
-                            </button>
                         </div>
                     </div>
                 </div>
