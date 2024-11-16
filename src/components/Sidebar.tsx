@@ -9,13 +9,16 @@ import {
     FaCoins,
     FaExchangeAlt,
     FaFireAlt,
-    FaHeart,
+    /*FaHeart,*/
     FaSearch,
     FaUsers,
     FaWallet,
+    FaPlus,
+    FaRobot,
 } from 'react-icons/fa'
 import logo from '../assets/logo.png'
 import qrCode from '../assets/qr.png'
+import yourAdHere from '../assets/youradhere.png'
 import 'styles/Sidebar.css'
 
 type Props = {
@@ -148,6 +151,7 @@ const Sidebar: FC<Props> = ({ darkMode, toggleDarkMode, isMobile }) => {
                                 >
                                     <FaChartLine /> MarketCap Calc
                                 </NavLink>
+                                {/*
                                 <NavLink
                                     to="#"
                                     className="nav-link"
@@ -155,6 +159,7 @@ const Sidebar: FC<Props> = ({ darkMode, toggleDarkMode, isMobile }) => {
                                 >
                                     <FaHeart /> Donate
                                 </NavLink>
+                                */}
                             </Nav>
                         </Navbar.Collapse>
                     </Container>
@@ -225,7 +230,31 @@ const Sidebar: FC<Props> = ({ darkMode, toggleDarkMode, isMobile }) => {
                                     {!collapsed && <span>MarketCap Calc</span>}
                                 </NavLink>
                             </NavSection>
+                            <NavSection title="KRC-20 Tools">
+                                <NavLink
+                                    to="https://t.me/kspr_home_bot?start=nacho"
+                                    className="nav-link"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    <FaPlus /> {!collapsed && <span>Deploy Token</span>}
+                                </NavLink>
+                                <NavLink
+                                    to="https://t.me/kspr_home_bot?start=nacho"
+                                    className="nav-link"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    <FaRobot /> {!collapsed && <span>Mint Tokens</span>}
+                                </NavLink>
+                            </NavSection>
+                            <div className="ad-container">
+                                <a href="https://nachowyborski.xyz" target="_blank" rel="noopener noreferrer">
+                                    <img src={yourAdHere as string} alt="Advertise Your Project Here" className="ad-image" />
+                                </a>
+                            </div>
                         </Nav>
+                        {/*
                         <NavLink
                             to="#"
                             className="donate-link"
@@ -233,6 +262,7 @@ const Sidebar: FC<Props> = ({ darkMode, toggleDarkMode, isMobile }) => {
                         >
                             <FaHeart /> {!collapsed && <span>Donate</span>}
                         </NavLink>
+                        */}
                         <div className="dark-mode-toggle sidebar-dark-mode-toggle">
                             <span className="dark-mode-label">
                                 {darkMode ? 'Dark' : 'Light'}
@@ -248,7 +278,7 @@ const Sidebar: FC<Props> = ({ darkMode, toggleDarkMode, isMobile }) => {
                         </div>
                         <div className="sidebar-footer">
                             {!collapsed && (
-                                <p>
+                                <p onClick={handleDonateClick} style={{ cursor: 'pointer' }}>
                                     Made with ❤️ by the
                                     <br />
                                     Nacho the 𐤊at Community

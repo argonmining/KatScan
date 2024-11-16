@@ -30,7 +30,7 @@ const MintHeatmap: FC = () => {
     const [mintData, setMintData] = useState<InternalMintData[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [timeframe, setTimeframe] = useState('');
+    const [timeframe, setTimeframe] = useState('week');
     const [totalMints, setTotalMints] = useState(0);
 
     const getStartDate = (timeframe: string): Date => {
