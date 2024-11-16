@@ -36,9 +36,9 @@ const Sidebar: FC<Props> = ({ darkMode, toggleDarkMode, isMobile }) => {
         setCollapsed(!collapsed)
     }
 
-    /*const handleDonateClick = () => {
+    const handleDonateClick = () => {
         setShowDonateModal(true)
-    }*/
+    }
 
     const handleCloseDonateModal = () => {
         setShowDonateModal(false)
@@ -278,7 +278,7 @@ const Sidebar: FC<Props> = ({ darkMode, toggleDarkMode, isMobile }) => {
                         </div>
                         <div className="sidebar-footer">
                             {!collapsed && (
-                                <p>
+                                <p onClick={handleDonateClick} style={{ cursor: 'pointer' }}>
                                     Made with ❤️ by the
                                     <br />
                                     Nacho the 𐤊at Community
