@@ -228,7 +228,7 @@ const Sidebar: FC<Props> = ({ darkMode, toggleDarkMode, isMobile }) => {
                             </NavSection>
                             <NavSection title="KRC-20 Tools">
                                 <NavLink
-                                    to={{ pathname: "https://t.me/kspr_home_bot?start=nacho" }}
+                                    to="https://t.me/kspr_home_bot?start=nacho"
                                     className="nav-link"
                                     target="_blank"
                                     rel="noopener noreferrer"
@@ -236,7 +236,7 @@ const Sidebar: FC<Props> = ({ darkMode, toggleDarkMode, isMobile }) => {
                                     <FaTools /> {!collapsed && <span>Deploy Token</span>}
                                 </NavLink>
                                 <NavLink
-                                    to={{ pathname: "https://t.me/kspr_home_bot?start=nacho" }}
+                                    to="https://t.me/kspr_home_bot?start=nacho"
                                     className="nav-link"
                                     target="_blank"
                                     rel="noopener noreferrer"
