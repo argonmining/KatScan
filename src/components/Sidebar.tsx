@@ -247,7 +247,7 @@ const Sidebar: FC<Props> = ({ darkMode, toggleDarkMode, isMobile }) => {
                             </NavSection>
                             <div className="ad-container">
                                 <a href="https://nachowyborski.xyz" target="_blank" rel="noopener noreferrer">
-                                    <img src="/assets/youradhere.png" alt="Advertise Your Project Here" className="ad-image" />
+                                    <img src="../assets/youradhere.png" alt="Advertise Your Project Here" className="ad-image" />
                                 </a>
                             </div>
                         </Nav>
