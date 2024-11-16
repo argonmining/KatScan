@@ -13,7 +13,8 @@ import {
     FaSearch,
     FaUsers,
     FaWallet,
-    FaTools,
+    FaPlus,
+    FaRobot,
 } from 'react-icons/fa'
 import logo from '../assets/logo.png'
 import qrCode from '../assets/qr.png'
@@ -233,7 +234,7 @@ const Sidebar: FC<Props> = ({ darkMode, toggleDarkMode, isMobile }) => {
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >
-                                    <FaTools /> {!collapsed && <span>Deploy Token</span>}
+                                    <FaPlus /> {!collapsed && <span>Deploy Token</span>}
                                 </NavLink>
                                 <NavLink
                                     to="https://t.me/kspr_home_bot?start=nacho"
@@ -241,7 +242,7 @@ const Sidebar: FC<Props> = ({ darkMode, toggleDarkMode, isMobile }) => {
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >
-                                    <FaTools /> {!collapsed && <span>Mint Tokens</span>}
+                                    <FaRobot /> {!collapsed && <span>Mint Tokens</span>}
                                 </NavLink>
                             </NavSection>
                             <div className="ad-container">
