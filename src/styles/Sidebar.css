@@ -234,11 +234,11 @@
 
     .ad-container {
         flex-grow: 1;
-        max-height: 300px;
+        max-height: 240px;
         display: flex;
         align-items: center;
         justify-content: center;
-        background-color: rgba(0, 0, 0, 0.05);
+        background-color: var(--sidebar-bg);
         margin: 5px;
         border-radius: 5px;
         text-align: center;
