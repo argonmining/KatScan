@@ -245,6 +245,10 @@
         font-size: 0.9rem;
         padding: 10px;
     }
+
+    .sidebar.collapsed .ad-container {
+        display: none; /* Hide the ad container */
+    }
 }
 
 /* Hide the sidebar on screens smaller than 992px (bootstrap lg) */

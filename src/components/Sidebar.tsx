@@ -246,7 +246,9 @@ const Sidebar: FC<Props> = ({ darkMode, toggleDarkMode, isMobile }) => {
                                 </NavLink>
                             </NavSection>
                             <div className="ad-container">
-                                {/* Future advertising content goes here */}
+                                <a href="https://nachowyborski.xyz" target="_blank" rel="noopener noreferrer">
+                                    <img src="/assets/youradhere.png" alt="Advertise Your Project Here" className="ad-image" />
+                                </a>
                             </div>
                         </Nav>
                         <NavLink
