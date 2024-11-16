@@ -233,17 +233,18 @@
     }
 
     .ad-container {
-        flex-grow: 1; /* Allow the container to take up remaining space */
+        flex-grow: 1;
+        max-height: 300px;
         display: flex;
         align-items: center;
         justify-content: center;
-        background-color: rgba(0, 0, 0, 0.05); /* Light background color */
-        margin: 10px; /* Add some margin for spacing */
-        border-radius: 5px; /* Rounded corners */
+        background-color: rgba(0, 0, 0, 0.05);
+        margin: 5px;
+        border-radius: 5px;
         text-align: center;
         color: var(--secondary-primary-color);
         font-size: 0.9rem;
-        padding: 10px;
+        padding: 5px;
     }
 
     .sidebar.collapsed .ad-container {
@@ -426,4 +427,12 @@
 .dark-mode .navbar-light .navbar-nav .nav-link:hover,
 .dark-mode .navbar-light .navbar-nav .nav-link:focus {
     color: var(--dark-primary-color);
+}
+
+.sidebar-footer {
+    text-align: center;
+    line-height: 1.2;
+    margin-bottom: 5px;
+    font-size: 0.8rem;
+    padding: 5px;
 }
