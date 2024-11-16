@@ -235,7 +235,7 @@ const Sidebar: FC<Props> = ({ darkMode, toggleDarkMode, isMobile }) => {
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >
-                                    <FaExchangeAlt /> {!collapsed && <span>Trade Tokens</span>}
+                                    <FaExchangeAlt /> {!collapsed && <span>Trade on KSPR</span>}
                                 </NavLink>
                                 <NavLink
                                     to="https://t.me/kspr_home_bot?start=nacho"
