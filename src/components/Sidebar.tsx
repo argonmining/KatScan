@@ -10,7 +10,7 @@ import {
     FaSearch,
     FaUsers,
     FaWallet,
-    FaPlus,
+    FaColumns,
     FaRobot,
 } from 'react-icons/fa'
 import logo from '../assets/logo.png'
@@ -133,7 +133,7 @@ const Sidebar: FC<Props> = ({ darkMode, toggleDarkMode, isMobile }) => {
                                     className="nav-link"
                                     onClick={() => setExpanded(false)}
                                 >
-                                    <FaExchangeAlt /> Side by Side
+                                    <FaColumns /> Side by Side
                                 </NavLink>
                                 <NavLink
                                     to="/mint-heatmap"
@@ -235,7 +235,7 @@ const Sidebar: FC<Props> = ({ darkMode, toggleDarkMode, isMobile }) => {
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >
-                                    <FaPlus /> {!collapsed && <span>Deploy Token</span>}
+                                    <FaExchangeAlt /> {!collapsed && <span>Trade Tokens</span>}
                                 </NavLink>
                                 <NavLink
                                     to="https://t.me/kspr_home_bot?start=nacho"
@@ -243,7 +243,7 @@ const Sidebar: FC<Props> = ({ darkMode, toggleDarkMode, isMobile }) => {
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >
-                                    <FaRobot /> {!collapsed && <span>Mint Tokens</span>}
+                                    <FaRobot /> {!collapsed && <span>Mint & Deploy</span>}
                                 </NavLink>
                             </NavSection>
                             <div className="ad-container">
