@@ -231,6 +231,20 @@
     .navbar {
         display: none; /* Ensure navbar is hidden on desktop */
     }
+
+    .ad-container {
+        flex-grow: 1; /* Allow the container to take up remaining space */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: rgba(0, 0, 0, 0.05); /* Light background color */
+        margin: 10px; /* Add some margin for spacing */
+        border-radius: 5px; /* Rounded corners */
+        text-align: center;
+        color: var(--secondary-primary-color);
+        font-size: 0.9rem;
+        padding: 10px;
+    }
 }
 
 /* Hide the sidebar on screens smaller than 992px (bootstrap lg) */
