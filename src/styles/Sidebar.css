@@ -234,12 +234,13 @@
 
     .ad-container {
         flex-grow: 1;
-        max-height: 240px;
+        max-height: 260px;
         display: flex;
         align-items: center;
         justify-content: center;
         background-color: var(--sidebar-bg);
         margin: 5px;
+        margin-top: 10px;
         border-radius: 5px;
         text-align: center;
         color: var(--secondary-primary-color);
