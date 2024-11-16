@@ -9,7 +9,7 @@ import {
     FaCoins,
     FaExchangeAlt,
     FaFireAlt,
-    FaHeart,
+    /*FaHeart,*/
     FaSearch,
     FaUsers,
     FaWallet,
@@ -36,9 +36,9 @@ const Sidebar: FC<Props> = ({ darkMode, toggleDarkMode, isMobile }) => {
         setCollapsed(!collapsed)
     }
 
-    const handleDonateClick = () => {
+    /*const handleDonateClick = () => {
         setShowDonateModal(true)
-    }
+    }*/
 
     const handleCloseDonateModal = () => {
         setShowDonateModal(false)
@@ -151,6 +151,7 @@ const Sidebar: FC<Props> = ({ darkMode, toggleDarkMode, isMobile }) => {
                                 >
                                     <FaChartLine /> MarketCap Calc
                                 </NavLink>
+                                {/*
                                 <NavLink
                                     to="#"
                                     className="nav-link"
@@ -158,6 +159,7 @@ const Sidebar: FC<Props> = ({ darkMode, toggleDarkMode, isMobile }) => {
                                 >
                                     <FaHeart /> Donate
                                 </NavLink>
+                                */}
                             </Nav>
                         </Navbar.Collapse>
                     </Container>
@@ -252,6 +254,7 @@ const Sidebar: FC<Props> = ({ darkMode, toggleDarkMode, isMobile }) => {
                                 </a>
                             </div>
                         </Nav>
+                        {/*
                         <NavLink
                             to="#"
                             className="donate-link"
@@ -259,6 +262,7 @@ const Sidebar: FC<Props> = ({ darkMode, toggleDarkMode, isMobile }) => {
                         >
                             <FaHeart /> {!collapsed && <span>Donate</span>}
                         </NavLink>
+                        */}
                         <div className="dark-mode-toggle sidebar-dark-mode-toggle">
                             <span className="dark-mode-label">
                                 {darkMode ? 'Dark' : 'Light'}
