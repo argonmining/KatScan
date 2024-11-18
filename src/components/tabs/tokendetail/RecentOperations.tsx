@@ -2,8 +2,7 @@ import React, {Dispatch, FC, SetStateAction, useCallback, useEffect, useRef, use
 import {MobileOperationsTable} from "../../tables/MobileOperationsTable";
 import {formatDateTime, formatNumber, parseRawNumber} from "../../../services/Helper";
 import {Alert, Table} from "react-bootstrap";
-import {LinkWithTooltip} from "../../LinkWithTooltip";
-import {useMobile} from "../../../hooks/mobile";
+import {LinkWithTooltip, useMobile} from "nacho-component-library/dist";
 import {OpTransactionData} from "../../../interfaces/OpTransactionData";
 import {TokenSearchResult} from "../../../interfaces/TokenData";
 import {getTokenOperations} from "../../../services/dataService";

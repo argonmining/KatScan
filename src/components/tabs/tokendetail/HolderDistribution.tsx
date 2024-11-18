@@ -2,7 +2,7 @@ import React, {FC, useMemo} from "react";
 import {parseRawNumber} from "../../../services/Helper";
 import {TokenSearchResult} from "../../../interfaces/TokenData";
 import 'styles/tokendetail/HolderDistribution.css'
-import {DivChart} from "../../DivChart";
+import {DivChart} from "nacho-component-library/dist";
 
 type Props = {
     tokenData: TokenSearchResult | null

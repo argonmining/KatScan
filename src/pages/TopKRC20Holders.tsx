@@ -4,12 +4,9 @@ import {Link} from 'react-router-dom';
 import 'styles/TopKRC20Holders.css';
 import {censorTicker} from '../utils/censorTicker';
 import {useMediaQuery} from 'react-responsive';
-import SEO from '../components/SEO';
-import JsonLd from '../components/JsonLd';
-import {simpleRequest} from "../services/RequestService";
 import {TopHolder} from "../interfaces/TokenData";
 import {MobileTopKRC20Holders} from "../components/mobileComponents/MobileTopKRC20Holders";
-import {ExpandAbleList} from "../components/ExpandAbleList";
+import {SEO,JsonLd, ExpandAbleList, simpleRequest} from "nacho-component-library/dist";
 
 const API_BASE_URL = 'https://katapi.nachowyborski.xyz/api/topHolders';
 

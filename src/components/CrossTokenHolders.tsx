@@ -3,8 +3,7 @@ import {Bar} from 'react-chartjs-2';
 import {Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend} from 'chart.js';
 import {getKRC20TokenList} from '../services/dataService';
 import 'styles/CrossTokenHolders.css';
-import SEO from './SEO';
-import JsonLd from './JsonLd';
+import {JsonLd, SEO} from "nacho-component-library/dist";
 
 // Register chart.js components
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);

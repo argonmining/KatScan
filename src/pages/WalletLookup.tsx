@@ -4,18 +4,13 @@ import {Alert, Button, Container, Form, InputGroup, Tab, Table, Tabs} from 'reac
 import {FaCopy, FaSearch} from 'react-icons/fa';
 import 'styles/WalletLookup.css';
 import {censorTicker} from '../utils/censorTicker';
-import SEO from '../components/SEO';
-import JsonLd from '../components/JsonLd';
-import {LoadingSpinner} from "../components/LoadingSpinner";
-import {simpleRequest} from "../services/RequestService";
 import {TokenListResponse} from "../interfaces/ApiResponseTypes";
 import {Utxos, WalletBalance, WalletToken, WalletTotal} from "../interfaces/WalletData";
 import {Transaction} from "../interfaces/Transaction";
 import {MobileTransactionTable} from "../components/tables/MobileTransactionTable";
 import {MobileUTXOTable} from "../components/tables/MobileUTXOTable";
 import {formatNumber, shortenString} from "../services/Helper";
-import {NormalCard} from "../components/Cards";
-import {useMobile} from "../hooks/mobile";
+import {NormalCard, JsonLd, LoadingSpinner, SEO, simpleRequest, useMobile} from "nacho-component-library/dist";
 
 type InternalWalletData = {
     address: string

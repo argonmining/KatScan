@@ -4,7 +4,7 @@ import {FaCopy, FaExternalLinkAlt} from "react-icons/fa";
 import {TransactionData} from "../../pages/TransactionLookup";
 import {copyToClipboard, formatDateTime, formatKaspa, openExplorer} from "../../services/Helper";
 import {Link} from "react-router-dom";
-import {ExpandableDiv} from "../ExpandableDiv";
+import {ExpandableDiv} from "nacho-component-library/dist";
 
 type TransactionDetails = {
     data: TransactionData['commitData']
