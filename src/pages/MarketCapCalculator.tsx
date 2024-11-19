@@ -21,6 +21,7 @@ import {LoadingSpinner} from "../components/LoadingSpinner";
 import {TokenData, TokenSearchResult} from "../interfaces/TokenData";
 import {CoinbaseInfo} from "../interfaces/CoinbaseInfo";
 import {formatInteger, formatNumber} from "../services/Helper";
+import {NormalCard} from "../components/Cards";
 
 type CalculationResult = {
     krc20Token: {
@@ -274,9 +275,10 @@ const MarketCapCalculator: FC = () => {
                                     </Card>
                                 </Col>
                             </Row>
-                            <Card className="mt-4 hypothetical-price-card">
+                            <NormalCard title={`Hypothetical ${censorTicker(calculationResult.krc20Token.tick)} Price`}
+                                        titleProps={{className: "mt-4 text-center fw-bold"}}>
                                 <Card.Body className="text-center">
-                                    <h5>Hypothetical {censorTicker(calculationResult.krc20Token.tick)} Price</h5>
+                                    <h5></h5>
                                     <p className="lead mb-3">
                                         {`If ${censorTicker(calculationResult.krc20Token.tick)} had ${calculationResult.crypto.symbol.toUpperCase()}'s
                                         market cap:`}
@@ -291,7 +293,7 @@ const MarketCapCalculator: FC = () => {
                                         should not be considered as financial advice.
                                     </p>
                                 </Card.Body>
-                            </Card>
+                            </NormalCard>
                         </div>
                     )}
                 </Col>
