@@ -291,7 +291,7 @@ const Sidebar: FC<Props> = ({ darkMode, toggleDarkMode, isMobile }) => {
                 show={showDonateModal}
                 onHide={handleCloseDonateModal}
                 centered
-                className={darkMode ? 'dark-mode' : ''}
+                className={`${darkMode ? 'dark-mode' : ''} donate-modal`}
             >
                 <Modal.Header closeButton>
                     <Modal.Title>Donate</Modal.Title>
