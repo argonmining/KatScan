@@ -206,7 +206,7 @@ const TokenOverview: FC = () => {
 
     const formatNumberWithWords = (value: number, decimals: number): string => {
         const integerPart = Math.floor(value / Math.pow(10, decimals));
-        if (integerPart.toString().length > 15) {
+        if (integerPart.toString().length >= 15) {
             return formatLargeNumber(integerPart);
         }
         return formatNumber(value / Math.pow(10, decimals));
