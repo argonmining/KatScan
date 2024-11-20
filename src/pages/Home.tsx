@@ -9,6 +9,14 @@ import {TokenData} from "../interfaces/TokenData";
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://api.kasplex.org/v1';
 
+const jsonLdData = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "KatScan Home",
+    "description": "Explore KRC-20 tokens on the Kaspa blockchain",
+    "url": "https://katscan.xyz"
+};
+
 export const Home: FC = () => {
     const [networkStats, setNetworkStats] = useState({
         opTotal: "0",
@@ -17,14 +25,6 @@ export const Home: FC = () => {
     });
 
     const [recentTokens, setRecentTokens] = useState<TokenData[]>([]);
-
-    const jsonLdData = {
-        "@context": "https://schema.org",
-        "@type": "WebPage",
-        "name": "KatScan Home",
-        "description": "Explore KRC-20 tokens on the Kaspa blockchain",
-        "url": "https://katscan.xyz"
-    };
 
     useEffect(() => {
         // Fetch network stats
@@ -105,7 +105,7 @@ export const Home: FC = () => {
                         <h5 className="section-title mb-2">Recently Deployed Tokens</h5>
                         <Row>
                             {recentTokens.map(token => (
-                                <Col xs={4} key={token.hashRev} className="mb-2">
+                                <Col xs={4} key={token.hashRev} className="mb-4">
                                     <Card className="token-card h-100" as={Link} to={`/tokens/${token.tick}`}>
                                         <Card.Body className="p-2">
                                             <Card.Title className="small mb-1">{token.tick}</Card.Title>

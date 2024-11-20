@@ -1,7 +1,6 @@
 .market-cap-calculator {
     padding: 30px 15px;
     background-color: #f8f9fa;
-    min-height: 100vh;
     overflow: auto;
 }
 
@@ -183,4 +182,10 @@
 
 .dark-mode .market-cap-calculator .disclaimer {
     color: var(--dark-muted-color);
+}
+
+.dark-mode .market-cap-calculator {
+    & input {
+        color: var(--dark-text-color) !important;
+    }
 }

@@ -240,7 +240,6 @@
         justify-content: center;
         background-color: var(--sidebar-bg);
         margin: 10px;
-        margin-top: 10px;
         border-radius: 5px;
         text-align: center;
         color: var(--secondary-primary-color);
@@ -436,4 +435,17 @@
     margin-bottom: 5px;
     font-size: 0.8rem;
     padding: 5px;
+}
+
+.dark-mode .donate-modal {
+    background-color: #000000a3;
+    .modal-content {
+        box-shadow: 0 0 5px whitesmoke;
+
+        .modal-header {
+            .btn-close {
+                color: white !important;
+            }
+        }
+    }
 }

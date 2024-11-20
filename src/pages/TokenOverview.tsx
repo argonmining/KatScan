@@ -1,8 +1,8 @@
-import React, {FC, useEffect, useMemo, useState} from 'react';
+import React, {FC, useEffect, useMemo, useRef, useState} from 'react';
 import {Link} from 'react-router-dom';
 import {Dropdown, Form, InputGroup, Table} from 'react-bootstrap';
 import {FaSearch} from 'react-icons/fa';
-import {getKRC20TokenList} from '../services/dataService';
+import {getKRC20TokenListSequential} from '../services/dataService';
 import 'styles/TokenOverview.css';
 import {censorTicker} from '../utils/censorTicker';
 import {TokenData} from "../interfaces/TokenData";
@@ -10,6 +10,14 @@ import {SEO, JsonLd, LoadingSpinner, SmallThumbnail} from "nacho-component-libra
 import {iconBaseUrl} from "../utils/StaticVariables";
 
 const ITEMS_PER_PAGE = 50;
+
+const jsonLdData = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "KRC-20 Tokens Overview | KatScan",
+    "description": "Overview of all KRC-20 tokens on the Kaspa blockchain.",
+    "url": "https://katscan.xyz/tokens",
+};
 
 const TokenOverview: FC = () => {
     const [tokens, setTokens] = useState<TokenData[]>([]);
@@ -22,14 +30,32 @@ const TokenOverview: FC = () => {
     const [statusFilter, setStatusFilter] = useState('');
     const [showLaunchTypeDropdown, setShowLaunchTypeDropdown] = useState(false);
     const [showStatusDropdown, setShowStatusDropdown] = useState(false);
+    const [cursor, setCursor] = useState<null | number>(null)
+    const [isFinished, setIsFinished] = useState<boolean>(false)
+    const loadingRef = useRef<number | null>()
 
     useEffect(() => {
+        if (isFinished || loadingRef.current === cursor) {
+            return
+        }
+
         const fetchAllTokens = async (): Promise<void> => {
             try {
                 setLoading(true);
-                const data = await getKRC20TokenList(ITEMS_PER_PAGE, sortField, sortDirection);
-                setTokens(data.result);
-                setLoading(false);
+                loadingRef.current = cursor
+                const data = await getKRC20TokenListSequential(ITEMS_PER_PAGE, sortField, sortDirection, cursor);
+                if (loadingRef.current !== cursor) {
+                    //something changed, return
+                    return
+                }
+                setTokens(current => ([...current, ...data.result]));
+                console.log(data.cursor)
+                if (data.cursor === undefined) {
+                    setIsFinished(true)
+                    setLoading(false);
+                    return
+                }
+                setCursor(data.cursor)
             } catch (err) {
                 console.error('Error in TokenOverview:', err);
                 setError(`Failed to fetch tokens: ${(err as Record<string, string>).message}`);
@@ -37,7 +63,14 @@ const TokenOverview: FC = () => {
             }
         }
         void fetchAllTokens();
-    }, [sortField, sortDirection])
+    }, [sortField, sortDirection, cursor, isFinished])
+
+    const resetAll = () => {
+        setTokens([])
+        setCursor(null)
+        setIsFinished(false)
+        loadingRef.current = undefined
+    }
 
     const handleSort = (field: keyof TokenData): void => {
         if (field === sortField) {
@@ -46,11 +79,13 @@ const TokenOverview: FC = () => {
             setSortField(field);
             setSortDirection('asc');
         }
+        resetAll()
     };
 
     const handleLaunchTypeSelect = (eventKey: string): void => {
         setLaunchTypeFilter(eventKey);
         setShowLaunchTypeDropdown(false);
+        resetAll()
     };
 
     const handleStatusSelect = (eventKey: string): void => {
@@ -150,16 +185,7 @@ const TokenOverview: FC = () => {
         return `${formatNumber(value)} ${formatPercentage(value, calculateValue(max, decimals))}`;
     };
 
-    if (loading) return <LoadingSpinner/>
     if (error) return <div className="token-overview error">Error: {error}</div>;
-
-    const jsonLdData = {
-        "@context": "https://schema.org",
-        "@type": "WebPage",
-        "name": "KRC-20 Tokens Overview | KatScan",
-        "description": "Overview of all KRC-20 tokens on the Kaspa blockchain.",
-        "url": "https://katscan.xyz/tokens",
-    };
 
     return (
         <div className="token-overview">
@@ -268,13 +294,18 @@ const TokenOverview: FC = () => {
                                 <td className="text-right">{formatDateTime(token.mtsAdd)}</td>
                             </tr>
                         ))
-                    ) : (
+                    ) : !loading && (
                         <tr>
-                            <td colSpan={8} className="text-center">
-                                {loading ? 'Loading...' : 'No tokens to display'}
+                            <td colSpan={9} className="text-center">
+                                {'No tokens to display'}
                             </td>
                         </tr>
                     )}
+                    {loading && <tr>
+                        <td colSpan={9} className="text-center">
+                            {<LoadingSpinner/>}
+                        </td>
+                    </tr>}
                     </tbody>
                 </Table>
             </div>

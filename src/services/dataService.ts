@@ -48,8 +48,35 @@ export const getKRC20TokenList = async (limit = 50, sortField = '', sortDirectio
     return {result: allTokens};
 };
 
+// New function to fetch KRC-20 token list
+export const getKRC20TokenListSequential = async (limit = 50, sortField = '', sortDirection = 'asc', cursor: number | null): Promise<{
+    result: TokenData[], cursor: number
+}> => {
+    const params: Record<string, string | number> = {
+        limit,
+        ...(sortField && {sort: `${sortField}:${sortDirection}`}),
+        ...(cursor && {next: cursor})
+    };
+
+    try {
+        const response = await sendRequest<TokenListResponse<TokenData[]>>({
+            method: 'GET',
+            url: `${BASE_URL}/krc20/tokenlist`,
+            params
+        });
+        return {result: response.result, cursor: response.next}
+        // cursor = response.next;
+    } catch (error) {
+        console.error('Error fetching KRC20 token list:', error);
+        throw new Error(`Failed to fetch token list: ${(error as Record<string, string>).message}`);
+    }
+    // } while (cursor);
+
+
+};
+
 // New function to fetch token operations
-export const getTokenOperations = async (tick: string, limit = 50, cursor:null | number = null ): Promise<TokenListResponse<OpTransactionData[]>> => {
+export const getTokenOperations = async (tick: string, limit = 50, cursor: null | number = null): Promise<TokenListResponse<OpTransactionData[]>> => {
     try {
         const params: Record<string, string | number> = {tick, limit: limit.toString()}
         if (cursor) params['next'] = cursor
