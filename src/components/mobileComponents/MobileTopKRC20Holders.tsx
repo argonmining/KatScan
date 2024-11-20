@@ -1,8 +1,8 @@
 import React, {FC} from "react";
-import {ExpandableCard} from "../Cards";
 import {Link} from "react-router-dom";
 import {Table} from "react-bootstrap";
 import {censorTicker} from "../../utils/censorTicker";
+import {ExpandableCard} from "nacho-component-library";
 
 type InternalTopHolder = {
     address: string

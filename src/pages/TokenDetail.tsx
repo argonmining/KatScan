@@ -4,22 +4,25 @@ import {Alert, Card} from 'react-bootstrap';
 import {getTokenDetails} from '../services/dataService';
 import 'styles/TokenDetail.css';
 import {censorTicker} from '../utils/censorTicker';
-import SEO from '../components/SEO';
-import JsonLd from '../components/JsonLd';
-import {LoadingSpinner} from "../components/LoadingSpinner";
 import {TokenSearchResult} from "../interfaces/TokenData";
 import {formatDateTime, formatNumber, parseRawNumber} from "../services/Helper";
-import {useMobile} from "../hooks/mobile";
 import {HolderDistribution} from "../components/tabs/tokendetail/HolderDistribution";
 import {RecentOperations} from "../components/tabs/tokendetail/RecentOperations";
 import {TopHolder} from "../components/tabs/tokendetail/TopHolder";
 // import {MintActivity, MintOvertimeType} from "../components/tabs/tokendetail/MintActivity";
-import {CustomTabs} from "../components/CustomTabs";
 import {OpTransactionData} from "../interfaces/OpTransactionData";
 import {TokenListResponse} from "../interfaces/ApiResponseTypes";
-import {SmallThumbnail, Thumbnail} from "../components/Image";
 import {iconBaseUrl} from "../utils/StaticVariables";
-import {simpleRequest} from "../services/RequestService";
+import {
+    CustomTabs,
+    JsonLd,
+    LoadingSpinner,
+    SEO,
+    simpleRequest,
+    SmallThumbnail,
+    Thumbnail,
+    useMobile
+} from "nacho-component-library/dist";
 
 const titles = ['Top Holders', 'Recent Operations', 'Holder Distribution']
 

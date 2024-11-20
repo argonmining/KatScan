@@ -5,11 +5,8 @@ import {FaSearch} from 'react-icons/fa';
 import {getKRC20TokenList} from '../services/dataService';
 import 'styles/TokenOverview.css';
 import {censorTicker} from '../utils/censorTicker';
-import JsonLd from '../components/JsonLd';
-import SEO from '../components/SEO';
-import {LoadingSpinner} from "../components/LoadingSpinner";
 import {TokenData} from "../interfaces/TokenData";
-import {SmallThumbnail} from "../components/Image";
+import {SEO, JsonLd, LoadingSpinner, SmallThumbnail} from "nacho-component-library/dist";
 import {iconBaseUrl} from "../utils/StaticVariables";
 
 const ITEMS_PER_PAGE = 50;

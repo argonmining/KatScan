@@ -3,12 +3,9 @@ import {Card, Col, Container, Row} from 'react-bootstrap';
 import {Link} from 'react-router-dom';
 import {FaCalculator, FaChartBar, FaCoins, FaExchangeAlt, FaUsers, FaWallet} from 'react-icons/fa';
 import 'styles/Home.css';
-import SEO from '../components/SEO';
-import JsonLd from '../components/JsonLd';
-import {simpleRequest} from "../services/RequestService";
+import {SEO, JsonLd, FeatureCard, StatCard, simpleRequest} from "nacho-component-library/dist";
 import {TokenListResponse} from "../interfaces/ApiResponseTypes";
 import {TokenData} from "../interfaces/TokenData";
-import {FeatureCard, StatCard} from "../components/Cards";
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://api.kasplex.org/v1';
 

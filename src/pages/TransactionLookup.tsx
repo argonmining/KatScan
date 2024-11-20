@@ -3,14 +3,11 @@ import {Link, useNavigate, useParams} from 'react-router-dom';
 import {Alert, Button, Col, Container, Form, InputGroup, Row} from 'react-bootstrap';
 import {FaArrowRight, FaExternalLinkAlt, FaSearch} from 'react-icons/fa';
 import '../styles/TransactionLookup.css';
-import SEO from '../components/SEO';
-import JsonLd from '../components/JsonLd';
-import {LoadingSpinner} from "../components/LoadingSpinner";
-import {simpleRequest} from "../services/RequestService";
+import {simpleRequest} from "nacho-component-library/dist";
 import {OpTransactionData} from "../interfaces/OpTransactionData";
 import {Transaction} from "../interfaces/Transaction";
 import {ResultResponse} from "../interfaces/ApiResponseTypes";
-import {NormalCard} from "../components/Cards";
+import {SEO, JsonLd, LoadingSpinner, NormalCard} from "nacho-component-library/dist";
 import {TransactionDetails} from "../components/transactionLookup/TransactionDetails";
 import {formatKaspa, formatKRC20Amount} from "../services/Helper";
 

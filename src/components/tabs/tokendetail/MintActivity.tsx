@@ -1,8 +1,9 @@
 import React, {Dispatch, FC, SetStateAction, useEffect} from "react";
-import {simpleRequest} from "../../../services/RequestService";
+
 import {TokenSearchResult} from "../../../interfaces/TokenData";
 import Chart from "react-apexcharts";
 import {ApexOptions} from "apexcharts";
+import {simpleRequest} from "nacho-component-library/dist";
 
 export type MintOvertimeType = {
     count: number

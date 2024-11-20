@@ -5,8 +5,7 @@ import Sidebar from './components/Sidebar'
 import './styles/App.css'
 import './styles/globals.css'
 import './styles/darkMode.css'
-import {LoadingSpinner} from './components/LoadingSpinner'
-import {useDarkMode} from './hooks/darkMode'
+import {LoadingSpinner, useDarkMode} from 'nacho-component-library/dist'
 
 /**
  * Lazy loading the pages to improve initial loading time in prod

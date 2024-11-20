@@ -1,7 +1,7 @@
 import React, {FC} from "react";
 import {TokenSearchResult} from "../../interfaces/TokenData";
 import {OpTransactionData} from "../../interfaces/OpTransactionData";
-import {LinkWithTooltip} from "../LinkWithTooltip";
+import {LinkWithTooltip} from "nacho-component-library/dist";
 import {formatDateTime, formatNumber, parseRawNumber, shortenString} from "../../services/Helper";
 import 'styles/components/MobileTable.css'
 
