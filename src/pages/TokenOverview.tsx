@@ -35,35 +35,42 @@ const TokenOverview: FC = () => {
     const loadingRef = useRef<number | null>()
 
     useEffect(() => {
+        let isMounted = true;
+
         if (isFinished || loadingRef.current === cursor) {
-            return
+            return;
         }
 
         const fetchAllTokens = async (): Promise<void> => {
             try {
                 setLoading(true);
-                loadingRef.current = cursor
+                loadingRef.current = cursor;
                 const data = await getKRC20TokenListSequential(ITEMS_PER_PAGE, sortField, sortDirection, cursor);
-                if (loadingRef.current !== cursor) {
-                    //something changed, return
-                    return
+                if (!isMounted || loadingRef.current !== cursor) {
+                    return;
                 }
                 setTokens(current => ([...current, ...data.result]));
-                console.log(data.cursor)
+                console.log(data.cursor);
                 if (data.cursor === undefined) {
-                    setIsFinished(true)
+                    setIsFinished(true);
                     setLoading(false);
-                    return
+                    return;
                 }
-                setCursor(data.cursor)
+                setCursor(data.cursor);
             } catch (err) {
                 console.error('Error in TokenOverview:', err);
-                setError(`Failed to fetch tokens: ${(err as Record<string, string>).message}`);
-                setLoading(false);
+                if (isMounted) {
+                    setError(`Failed to fetch tokens: ${(err as Record<string, string>).message}`);
+                    setLoading(false);
+                }
             }
-        }
+        };
         void fetchAllTokens();
-    }, [sortField, sortDirection, cursor, isFinished])
+
+        return () => {
+            isMounted = false;
+        };
+    }, [sortField, sortDirection, cursor, isFinished]);
 
     const resetAll = () => {
         setTokens([])
