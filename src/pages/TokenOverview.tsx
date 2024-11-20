@@ -158,12 +158,11 @@ const TokenOverview: FC = () => {
 
     const formatDateTime = (timestamp: number): string => {
         return new Date(parseInt(String(timestamp))).toLocaleString('en-US', {
-            year: 'numeric',
+            year: '2-digit',
             month: 'short',
             day: 'numeric',
             hour: '2-digit',
             minute: '2-digit',
-            second: '2-digit',
             hour12: true,
             timeZoneName: 'short'
         });

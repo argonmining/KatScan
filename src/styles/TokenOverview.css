@@ -314,3 +314,15 @@ th.sticky-column {
         margin-top: 10px;
     }
 }
+
+.table {
+    table-layout: auto; /* Allow columns to adjust based on content */
+    width: 100%;
+}
+
+.table th, .table td {
+    white-space: nowrap; /* Prevent text wrapping */
+    overflow: hidden; /* Hide overflow */
+    text-overflow: ellipsis; /* Add ellipsis for overflow */
+    vertical-align: middle;
+}
