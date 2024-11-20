@@ -191,6 +191,27 @@ const TokenOverview: FC = () => {
         return `${formatNumber(value)} ${formatPercentage(value, calculateValue(max, decimals))}`;
     };
 
+    const formatLargeNumber = (value: number): string => {
+        const units = ["", "Thousand", "Million", "Billion", "Trillion", "Quadrillion", "Quintillion", "Sextillion"];
+        let unitIndex = 0;
+        let num = value;
+
+        while (num >= 1000 && unitIndex < units.length - 1) {
+            num /= 1000;
+            unitIndex++;
+        }
+
+        return `${num.toFixed(2)} ${units[unitIndex]}`.trim();
+    };
+
+    const formatNumberWithWords = (value: number, decimals: number): string => {
+        const integerPart = Math.floor(value / Math.pow(10, decimals));
+        if (integerPart.toString().length > 15) {
+            return formatLargeNumber(integerPart);
+        }
+        return formatNumber(value / Math.pow(10, decimals));
+    };
+
     if (error) return <div className="token-overview error">Error: {error}</div>;
 
     return (
@@ -279,12 +300,12 @@ const TokenOverview: FC = () => {
                     </span>
                                 </td>
                                 <td>{formatState(token.state)}</td>
-                                <td>{formatNumber(calculateValue(token.max, token.dec))}</td>
+                                <td>{formatNumberWithWords(token.max, token.dec)}</td>
                                 <td>
                                     {formatPreMinted(token.pre, token.max, token.dec)}
                                 </td>
                                 <td>
-                                    {formatNumber(calculateValue(token.minted, token.dec))}
+                                    {formatNumberWithWords(token.minted, token.dec)}
                                     {' '}
                                     <small
                                         className="text-muted">{formatPercentage(calculateValue(token.minted, token.dec), calculateValue(token.max, token.dec))}</small>
