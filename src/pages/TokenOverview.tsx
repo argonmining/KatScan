@@ -192,7 +192,7 @@ const TokenOverview: FC = () => {
     };
 
     const formatLargeNumber = (value: number): string => {
-        const units = ["", "Thousand", "Million", "Billion", "Trillion", "Quadrillion", "Quintillion", "Sextillion"];
+        const units = ["", "Thousand", "Million", "Billion", "Trillion", "Quadrillion", "Quintillion", "Sextillion", "Septillion", "Octillion", "Nonillion", "Decillion", "Undecillion", "Duodecillion", "Tredecillion", "Quattuordecillion", "Quindecillion", "Sexdecillion", "Septendecillion", "Octodecillion", "Novemdecillion", "Vigintillion"];
         let unitIndex = 0;
         let num = value;
 
@@ -206,7 +206,7 @@ const TokenOverview: FC = () => {
 
     const formatNumberWithWords = (value: number, decimals: number): string => {
         const integerPart = Math.floor(value / Math.pow(10, decimals));
-        if (integerPart.toString().length >= 15) {
+        if (integerPart.toString().length >= 14) {
             return formatLargeNumber(integerPart);
         }
         return formatNumber(value / Math.pow(10, decimals));
