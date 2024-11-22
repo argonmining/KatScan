@@ -1,6 +1,6 @@
 
 import {CoinbaseInfo} from "../interfaces/CoinbaseInfo";
-import {sendHeadRequest} from "nacho-component-library/dist";
+import {sendHeadRequest} from "nacho-component-library";
 
 const COINGECKO_API_URL = 'https://api.coingecko.com/api/v3';
 const API_KEY = 'CG-f8E4yaD4zQYKtqHawS59TAnY';

@@ -6,7 +6,7 @@ import {getKRC20TokenListSequential} from '../services/dataService';
 import 'styles/TokenOverview.css';
 import {censorTicker} from '../utils/censorTicker';
 import {TokenData} from "../interfaces/TokenData";
-import {SEO, JsonLd, LoadingSpinner, SmallThumbnail} from "nacho-component-library/dist";
+import {SEO, JsonLd, LoadingSpinner, SmallThumbnail} from "nacho-component-library";
 import {iconBaseUrl} from "../utils/StaticVariables";
 
 const ITEMS_PER_PAGE = 50;

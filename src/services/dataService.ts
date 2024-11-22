@@ -1,5 +1,5 @@
 import {TokenData, TokenSearchResult} from "../interfaces/TokenData";
-import {sendRequest, simpleRequest} from "nacho-component-library/dist";
+import {sendRequest, simpleRequest} from "nacho-component-library";
 import {TokenListResponse, ResultResponse} from "../interfaces/ApiResponseTypes";
 import {OpTransactionData} from "../interfaces/OpTransactionData";
 
