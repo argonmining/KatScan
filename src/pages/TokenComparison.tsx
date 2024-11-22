@@ -18,7 +18,7 @@ import {getKRC20TokenList, getTokenDetails} from '../services/dataService';
 import 'styles/TokenComparison.css';
 import {FaChartBar, FaChartPie, FaUsers} from 'react-icons/fa'; // Import icons
 import {censorTicker} from '../utils/censorTicker';
-import {SEO, JsonLd, LoadingSpinner} from "nacho-component-library/dist";
+import {SEO, JsonLd, LoadingSpinner} from "nacho-component-library";
 import {TokenData, TokenSearchResult} from "../interfaces/TokenData";
 
 ChartJS.register(

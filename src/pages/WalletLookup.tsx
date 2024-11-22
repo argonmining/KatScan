@@ -10,7 +10,7 @@ import {Transaction} from "../interfaces/Transaction";
 import {MobileTransactionTable} from "../components/tables/MobileTransactionTable";
 import {MobileUTXOTable} from "../components/tables/MobileUTXOTable";
 import {formatNumber, shortenString} from "../services/Helper";
-import {NormalCard, JsonLd, LoadingSpinner, SEO, simpleRequest, useMobile} from "nacho-component-library/dist";
+import {NormalCard, JsonLd, LoadingSpinner, SEO, simpleRequest, useMobile} from "nacho-component-library";
 
 type InternalWalletData = {
     address: string

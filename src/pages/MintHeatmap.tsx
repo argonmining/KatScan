@@ -3,7 +3,7 @@ import {Col, Container, Form, Row} from 'react-bootstrap';
 import {Legend, ResponsiveContainer, Tooltip, Treemap} from 'recharts';
 import 'styles/MintHeatmap.css';
 import {censorTicker} from '../utils/censorTicker';
-import {LoadingSpinner, SEO, JsonLd, sendRequest} from "nacho-component-library/dist";
+import {LoadingSpinner, SEO, JsonLd, sendRequest} from "nacho-component-library";
 import {MintData} from "../interfaces/MintData";
 
 const timeframes = [

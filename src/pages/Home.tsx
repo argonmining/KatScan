@@ -3,7 +3,7 @@ import {Card, Col, Container, Row} from 'react-bootstrap';
 import {Link} from 'react-router-dom';
 import {FaCalculator, FaChartBar, FaCoins, FaExchangeAlt, FaUsers, FaWallet} from 'react-icons/fa';
 import 'styles/Home.css';
-import {SEO, JsonLd, FeatureCard, StatCard, simpleRequest} from "nacho-component-library/dist";
+import {SEO, JsonLd, FeatureCard, StatCard, simpleRequest} from "nacho-component-library";
 import {TokenListResponse} from "../interfaces/ApiResponseTypes";
 import {TokenData} from "../interfaces/TokenData";
 

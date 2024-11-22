@@ -18,7 +18,7 @@ import {censorTicker} from '../utils/censorTicker';
 import {TokenData, TokenSearchResult} from "../interfaces/TokenData";
 import {CoinbaseInfo} from "../interfaces/CoinbaseInfo";
 import {formatInteger, formatNumber} from "../services/Helper";
-import {JsonLd, SEO, NormalCard, LoadingSpinner} from "nacho-component-library/dist";
+import {JsonLd, SEO, NormalCard, LoadingSpinner} from "nacho-component-library";
 
 type CalculationResult = {
     krc20Token: {

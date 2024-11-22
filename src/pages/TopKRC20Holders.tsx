@@ -6,7 +6,7 @@ import {censorTicker} from '../utils/censorTicker';
 import {useMediaQuery} from 'react-responsive';
 import {TopHolder} from "../interfaces/TokenData";
 import {MobileTopKRC20Holders} from "../components/mobileComponents/MobileTopKRC20Holders";
-import {SEO,JsonLd, ExpandAbleList, simpleRequest} from "nacho-component-library/dist";
+import {SEO,JsonLd, ExpandAbleList, simpleRequest} from "nacho-component-library";
 
 const API_BASE_URL = 'https://katapi.nachowyborski.xyz/api/topHolders';
 

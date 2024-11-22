@@ -2,7 +2,7 @@ import React, {FC} from "react";
 import {MobileHolderTable} from "../../tables/MobileHolderTable";
 import {formatNumber, parseRawNumber} from "../../../services/Helper";
 import {Table} from "react-bootstrap";
-import {LinkWithTooltip, useMobile} from "nacho-component-library/dist";
+import {LinkWithTooltip, useMobile} from "nacho-component-library";
 import {TokenSearchResult} from "../../../interfaces/TokenData";
 import 'styles/components/MobileTable.css'
 

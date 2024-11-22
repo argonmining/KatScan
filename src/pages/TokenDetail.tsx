@@ -12,7 +12,7 @@ import {TopHolder} from "../components/tabs/tokendetail/TopHolder";
 // import {MintActivity, MintOvertimeType} from "../components/tabs/tokendetail/MintActivity";
 import {OpTransactionData} from "../interfaces/OpTransactionData";
 import {TokenListResponse} from "../interfaces/ApiResponseTypes";
-import {Page, CustomTabs, JsonLd, LoadingSpinner, SEO, simpleRequest, useMobile} from "nacho-component-library/dist";
+import {Page, CustomTabs, JsonLd, LoadingSpinner, SEO, simpleRequest, useMobile} from "nacho-component-library";
 import {TokenDetailsTokenInfo} from "../components/TokenDetailsTokenInfo";
 
 export type Socials = { type: string, url: string }

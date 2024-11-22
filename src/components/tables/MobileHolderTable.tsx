@@ -1,6 +1,6 @@
 import React, {FC} from "react";
 import {TokenSearchResult} from "../../interfaces/TokenData";
-import {LinkWithTooltip} from "nacho-component-library/dist";
+import {LinkWithTooltip} from "nacho-component-library";
 import {formatNumber, parseRawNumber, shortenString} from "../../services/Helper";
 import 'styles/components/MobileTable.css'
 

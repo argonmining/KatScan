@@ -4,7 +4,7 @@ import Sidebar from './components/Sidebar'
 import './styles/App.css'
 import './styles/globals.css'
 import './styles/darkMode.css'
-import {LoadingSpinner, useDarkMode, useMobile, usePageResize} from 'nacho-component-library/dist'
+import {LoadingSpinner, useDarkMode, useMobile, usePageResize} from 'nacho-component-library'
 
 /**
  * Lazy loading the pages to improve initial loading time in prod
