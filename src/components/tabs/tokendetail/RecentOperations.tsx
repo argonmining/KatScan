@@ -76,7 +76,7 @@ export const RecentOperations: FC<Props> = (
     }, [loadingMore, operationsCursor, fetchOperations]);
 
     return <>
-        <div className="detail-table-container">
+        <div className="detail-table-container" style={{height:'100%'}}>
             {isMobile ? (
                 <MobileOperationsTable
                     data={operations}
