@@ -1,15 +1,8 @@
 .top-krc20-holders-wrapper {
     display: flex;
     flex-direction: column;
-    height: 100vh !important; /* Full viewport height */
-    padding: 20px;
+    height: 100%;
     overflow: hidden !important;
-}
-
-.top-krc20-holders-wrapper h1 {
-    font-family: var(--header-font);
-    color: var(--primary-color);
-    margin-bottom: 20px;
 }
 
 .table {
@@ -96,11 +89,6 @@
 .clickable-address:hover {
     text-decoration: underline;
     color: var(--primary-color);
-}
-
-.top-krc20-holders-wrapper::-webkit-scrollbar {
-    width: 0; /* Remove scrollbar space */
-    background: transparent; /* Optional: just make scrollbar invisible */
 }
 
 @media (max-width: 768px) {

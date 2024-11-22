@@ -10,7 +10,16 @@ import {Transaction} from "../interfaces/Transaction";
 import {MobileTransactionTable} from "../components/tables/MobileTransactionTable";
 import {MobileUTXOTable} from "../components/tables/MobileUTXOTable";
 import {formatNumber, shortenString} from "../services/Helper";
-import {NormalCard, JsonLd, LoadingSpinner, SEO, simpleRequest, useMobile} from "nacho-component-library";
+import {
+    NormalCard,
+    JsonLd,
+    LoadingSpinner,
+    SEO,
+    simpleRequest,
+    useMobile,
+    Page,
+    CustomTabs
+} from "nacho-component-library";
 
 type InternalWalletData = {
     address: string
@@ -185,6 +194,7 @@ const WalletLookup: FC = () => {
     };
 
     return (
+        <Page header={'Wallet Lookup'}>
         <Container className='wallet-lookup'>
             <SEO
                 title="Wallet Lookup"
@@ -200,7 +210,6 @@ const WalletLookup: FC = () => {
                     "url": "https://katscan.xyz/wallet"
                 }}
             />
-            <h1>Wallet Lookup</h1>
             <Form onSubmit={handleSubmit}>
                 <InputGroup className="mb-3">
                     <Form.Control
@@ -235,9 +244,8 @@ const WalletLookup: FC = () => {
                             </div>
                         </NormalCard>
                     </div>
-
-                    <Tabs defaultActiveKey="krc20" className="mb-3">
-                        <Tab eventKey="krc20" title="KRC20 Tokens">
+                    <CustomTabs titles={['KRC20 Tokens', 'Recent Transactions', 'UTXOs']}>
+                    {/*<Tabs defaultActiveKey="krc20" className="mb-3">*/}
                             <div className="table-wrapper">
                                 <Table striped bordered hover>
                                     <thead>
@@ -256,9 +264,7 @@ const WalletLookup: FC = () => {
                                     </tbody>
                                 </Table>
                             </div>
-                        </Tab>
 
-                        <Tab eventKey="transactions" title="Recent Transactions">
                             <div className="table-wrapper">
                                 {isMobile ? (
                                     <MobileTransactionTable
@@ -295,9 +301,7 @@ const WalletLookup: FC = () => {
                                 {loadingTransactions &&
                                     <div className="loading-message">Loading more transactions...</div>}
                             </div>
-                        </Tab>
 
-                        <Tab eventKey="utxos" title="UTXOs">
                             <div className="table-wrapper">
                                 {isMobile ? (
                                     <MobileUTXOTable
@@ -339,11 +343,11 @@ const WalletLookup: FC = () => {
                                 )}
                                 {loadingUtxos && <div className="loading-message">Loading more UTXOs...</div>}
                             </div>
-                        </Tab>
-                    </Tabs>
+                    </CustomTabs>
                 </div>
             )}
         </Container>
+        </Page>
     );
 };
 

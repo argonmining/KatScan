@@ -18,7 +18,7 @@ import {getKRC20TokenList, getTokenDetails} from '../services/dataService';
 import 'styles/TokenComparison.css';
 import {FaChartBar, FaChartPie, FaUsers} from 'react-icons/fa'; // Import icons
 import {censorTicker} from '../utils/censorTicker';
-import {SEO, JsonLd, LoadingSpinner} from "nacho-component-library";
+import {SEO, JsonLd, LoadingSpinner, Page} from "nacho-component-library";
 import {TokenData, TokenSearchResult} from "../interfaces/TokenData";
 
 ChartJS.register(
@@ -433,55 +433,56 @@ const TokenComparison: FC = () => {
     }, []);
 
     return (
-        <div className="token-comparison">
-            <h2>Compare KRC20 Tokens</h2>
-            <SEO
-                title="Token Comparison"
-                description="Compare KRC-20 tokens on the Kaspa blockchain side by side, analyzing key metrics and holder distributions."
-                keywords="KRC-20, Kaspa, token comparison, cryptocurrency analysis"
-            />
-            <JsonLd
-                data={{
-                    "@context": "https://schema.org",
-                    "@type": "WebApplication",
-                    "name": "KatScan Token Comparison",
-                    "description": "Compare KRC-20 tokens on the Kaspa blockchain side by side, analyzing key metrics and holder distributions.",
-                    "url": "https://katscan.xyz/compare"
-                }}
-            />
-            <Row className="mb-4">
-                <Col md={6}>
-                    <Form.Group>
-                        <Form.Label>Select Token 1</Form.Label>
-                        <Select
-                            options={allTokens.map(token => ({value: token.tick, label: censorTicker(token.tick)}))}
-                            onChange={(option) => handleTokenSelect(option, 0)}
-                            isClearable
-                            placeholder="Search for a token..."
-                        />
-                    </Form.Group>
-                </Col>
-                <Col md={6}>
-                    <Form.Group>
-                        <Form.Label>Select Token 2</Form.Label>
-                        <Select
-                            options={allTokens.map(token => ({value: token.tick, label: censorTicker(token.tick)}))}
-                            onChange={(option) => handleTokenSelect(option, 1)}
-                            isClearable
-                            placeholder="Search for a token..."
-                        />
-                    </Form.Group>
-                </Col>
-            </Row>
-            {loading && <LoadingSpinner useFlexHeight={true}/>}
-            {error && (
-                <div className="error-message">
-                    <p>{error}</p>
-                    <p>Please try selecting the tokens again or contact support if the issue persists.</p>
-                </div>
-            )}
-            {!loading && !error && tokenDetails[0] && tokenDetails[1] && renderComparison()}
-        </div>
+        <Page header={'Compare KRC20 Tokens'}>
+            <div className="token-comparison">
+                <SEO
+                    title="Token Comparison"
+                    description="Compare KRC-20 tokens on the Kaspa blockchain side by side, analyzing key metrics and holder distributions."
+                    keywords="KRC-20, Kaspa, token comparison, cryptocurrency analysis"
+                />
+                <JsonLd
+                    data={{
+                        "@context": "https://schema.org",
+                        "@type": "WebApplication",
+                        "name": "KatScan Token Comparison",
+                        "description": "Compare KRC-20 tokens on the Kaspa blockchain side by side, analyzing key metrics and holder distributions.",
+                        "url": "https://katscan.xyz/compare"
+                    }}
+                />
+                <Row className="mb-4">
+                    <Col md={6}>
+                        <Form.Group>
+                            <Form.Label>Select Token 1</Form.Label>
+                            <Select
+                                options={allTokens.map(token => ({value: token.tick, label: censorTicker(token.tick)}))}
+                                onChange={(option) => handleTokenSelect(option, 0)}
+                                isClearable
+                                placeholder="Search for a token..."
+                            />
+                        </Form.Group>
+                    </Col>
+                    <Col md={6}>
+                        <Form.Group>
+                            <Form.Label>Select Token 2</Form.Label>
+                            <Select
+                                options={allTokens.map(token => ({value: token.tick, label: censorTicker(token.tick)}))}
+                                onChange={(option) => handleTokenSelect(option, 1)}
+                                isClearable
+                                placeholder="Search for a token..."
+                            />
+                        </Form.Group>
+                    </Col>
+                </Row>
+                {loading && <LoadingSpinner useFlexHeight={true}/>}
+                {error && (
+                    <div className="error-message">
+                        <p>{error}</p>
+                        <p>Please try selecting the tokens again or contact support if the issue persists.</p>
+                    </div>
+                )}
+                {!loading && !error && tokenDetails[0] && tokenDetails[1] && renderComparison()}
+            </div>
+        </Page>
     );
 };
 

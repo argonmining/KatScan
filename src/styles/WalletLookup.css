@@ -3,10 +3,14 @@
 .wallet-lookup {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 20px;
-    height: calc(100vh - 40px); /* Adjust based on your layout */
+    height: 100%; /* Adjust based on your layout */
     display: flex;
     flex-direction: column;
+    /*todo table wrapper global remove*/
+    .table-wrapper{
+        height:100%;
+        padding: unset;
+    }
 }
 
 .wallet-details {
@@ -74,18 +78,7 @@
 }
 
 .wallet-lookup .table-wrapper {
-    height: calc(100vh - 440px); /* Adjust this value as needed */
     overflow-y: auto;
-}
-
-.wallet-lookup .table-wrapper::-webkit-scrollbar {
-    width: 0;
-    background: transparent;
-}
-
-.wallet-lookup .table-wrapper {
-    scrollbar-width: none;
-    -ms-overflow-style: none;
 }
 
 .wallet-lookup .table {

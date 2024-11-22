@@ -11,6 +11,16 @@ body {
     background-color: #f4f7fc;
 }
 
+/* Scrollbar disabling for all elements */
+body * {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+* ::-webkit-scrollbar {
+    width: 0; /* Remove scrollbar space */
+    background: transparent; /* Optional: just make scrollbar invisible */
+}
+
 .App-header {
     text-align: center;
     padding: 20px;

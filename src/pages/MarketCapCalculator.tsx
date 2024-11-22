@@ -18,7 +18,7 @@ import {censorTicker} from '../utils/censorTicker';
 import {TokenData, TokenSearchResult} from "../interfaces/TokenData";
 import {CoinbaseInfo} from "../interfaces/CoinbaseInfo";
 import {formatInteger, formatNumber} from "../services/Helper";
-import {JsonLd, SEO, NormalCard, LoadingSpinner} from "nacho-component-library";
+import {JsonLd, SEO, NormalCard, LoadingSpinner, Page} from "nacho-component-library";
 
 type CalculationResult = {
     krc20Token: {
@@ -155,12 +155,12 @@ const MarketCapCalculator: FC = () => {
     };
 
     return (
+        <Page header={'MarketCap Calculator'}>
         <Container fluid className="market-cap-calculator">
             <SEO title="Market Cap Calculator"
                  description="Calculate and compare market caps of KRC-20 tokens on the Kaspa network."
                  keywords="KRC-20, Kaspa, market cap, calculator, cryptocurrency"/>
             <JsonLd data={jsonData}/>
-            <h1 className="mb-4">MarketCap Calculator</h1>
             <Row className="justify-content-center">
                 <Col md={10} lg={8}>
                     <Row className="mb-4">
@@ -296,6 +296,7 @@ const MarketCapCalculator: FC = () => {
                 </Col>
             </Row>
         </Container>
+        </Page>
     );
 };
 

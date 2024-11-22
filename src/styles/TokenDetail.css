@@ -162,11 +162,6 @@ tr:hover {
     color: var(--primary-color);
 }
 
-.table-wrapper::-webkit-scrollbar {
-    width: 0; /* Remove scrollbar space */
-    background: transparent; /* Optional: just make scrollbar invisible */
-}
-
 @media (max-width: 768px) {
     .creation-date {
         font-size: 0.8rem;

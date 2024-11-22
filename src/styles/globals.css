@@ -133,29 +133,3 @@ input:checked + .slider:before {
 .nav-tabs {
     overflow: hidden !important;
 }
-
-/* Hide scrollbars for all tables */
-table {
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* Internet Explorer 10+ */
-}
-
-table::-webkit-scrollbar {
-    display: none; /* WebKit */
-}
-
-/* Ensure table containers also hide scrollbars */
-.table-wrapper,
-.table-container,
-.detail-table-container,
-div[class*='table'] {
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* Internet Explorer 10+ */
-}
-
-.table-wrapper::-webkit-scrollbar,
-.table-container::-webkit-scrollbar,
-.detail-table-container::-webkit-scrollbar,
-div[class*='table']::-webkit-scrollbar {
-    display: none; /* WebKit */
-}
