@@ -1,6 +1,6 @@
 import React, {FC, FormEvent, useCallback, useEffect, useRef, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
-import {Alert, Button, Container, Form, InputGroup, Tab, Table, Tabs} from 'react-bootstrap';
+import {Alert, Button, Container, Form, InputGroup, Table} from 'react-bootstrap';
 import {FaCopy, FaSearch} from 'react-icons/fa';
 import 'styles/WalletLookup.css';
 import {censorTicker} from '../utils/censorTicker';
@@ -11,14 +11,14 @@ import {MobileTransactionTable} from "../components/tables/MobileTransactionTabl
 import {MobileUTXOTable} from "../components/tables/MobileUTXOTable";
 import {formatNumber, shortenString} from "../services/Helper";
 import {
-    NormalCard,
+    CustomTabs,
     JsonLd,
     LoadingSpinner,
+    NormalCard,
+    Page,
     SEO,
     simpleRequest,
-    useMobile,
-    Page,
-    CustomTabs
+    useMobile
 } from "nacho-component-library";
 
 type InternalWalletData = {
@@ -195,57 +195,57 @@ const WalletLookup: FC = () => {
 
     return (
         <Page header={'Wallet Lookup'}>
-        <Container className='wallet-lookup'>
-            <SEO
-                title="Wallet Lookup"
-                description="Look up KRC-20 token balances and transaction history for any wallet address on the Kaspa blockchain."
-                keywords="KRC-20, Kaspa, wallet lookup, token balances, transaction history"
-            />
-            <JsonLd
-                data={{
-                    "@context": "https://schema.org",
-                    "@type": "WebApplication",
-                    "name": "KatScan Wallet Lookup",
-                    "description": "Look up KRC-20 token balances and transaction history for any wallet address on the Kaspa blockchain.",
-                    "url": "https://katscan.xyz/wallet"
-                }}
-            />
-            <Form onSubmit={handleSubmit}>
-                <InputGroup className="mb-3">
-                    <Form.Control
-                        type="text"
-                        placeholder="Enter wallet address"
-                        value={address}
-                        onChange={handleAddressChange}
-                    />
-                    <Button variant="primary" type="submit">
-                        <FaSearch/> Search
-                    </Button>
-                </InputGroup>
-            </Form>
+            <Container className='wallet-lookup'>
+                <SEO
+                    title="Wallet Lookup"
+                    description="Look up KRC-20 token balances and transaction history for any wallet address on the Kaspa blockchain."
+                    keywords="KRC-20, Kaspa, wallet lookup, token balances, transaction history"
+                />
+                <JsonLd
+                    data={{
+                        "@context": "https://schema.org",
+                        "@type": "WebApplication",
+                        "name": "KatScan Wallet Lookup",
+                        "description": "Look up KRC-20 token balances and transaction history for any wallet address on the Kaspa blockchain.",
+                        "url": "https://katscan.xyz/wallet"
+                    }}
+                />
+                <Form onSubmit={handleSubmit}>
+                    <InputGroup className="mb-3">
+                        <Form.Control
+                            type="text"
+                            placeholder="Enter wallet address"
+                            value={address}
+                            onChange={handleAddressChange}
+                        />
+                        <Button variant="primary" type="submit">
+                            <FaSearch/> Search
+                        </Button>
+                    </InputGroup>
+                </Form>
 
-            {loading && <LoadingSpinner/>}
-            {error && <Alert variant="danger">{error}</Alert>}
+                {loading && <LoadingSpinner/>}
+                {error && <Alert variant="danger">{error}</Alert>}
 
-            {walletData && (
-                <div className="wallet-details">
-                    <div className="wallet-overview">
-                        <NormalCard title={'Wallet Overview'}>
-                            <div className={'grid'}>
-                                <strong>Address:</strong>
-                                <div>
-                                    {walletData.address}
-                                    <FaCopy className="clickable" onClick={() => copyToClipboard(walletData.address)}/>
+                {walletData && (
+                    <div className="wallet-details">
+                        <div className="wallet-overview">
+                            <NormalCard title={'Wallet Overview'}>
+                                <div className={'grid'}>
+                                    <strong>Address:</strong>
+                                    <div>
+                                        {walletData.address}
+                                        <FaCopy className="clickable"
+                                                onClick={() => copyToClipboard(walletData.address)}/>
+                                    </div>
+
+                                    <strong>Kaspa Balance:</strong>
+                                    <div>{formatNumber(walletData.kaspaBalance / 1e8)} KAS</div>
+                                    <strong>Transaction Count:</strong> {walletData.transactionCount}
                                 </div>
-
-                                <strong>Kaspa Balance:</strong>
-                                <div>{formatNumber(walletData.kaspaBalance / 1e8)} KAS</div>
-                                <strong>Transaction Count:</strong> {walletData.transactionCount}
-                            </div>
-                        </NormalCard>
-                    </div>
-                    <CustomTabs titles={['KRC20 Tokens', 'Recent Transactions', 'UTXOs']}>
-                    {/*<Tabs defaultActiveKey="krc20" className="mb-3">*/}
+                            </NormalCard>
+                        </div>
+                        <CustomTabs titles={['KRC20 Tokens', 'Recent Transactions', 'UTXOs']}>
                             <div className="table-wrapper">
                                 <Table striped bordered hover>
                                     <thead>
@@ -343,10 +343,10 @@ const WalletLookup: FC = () => {
                                 )}
                                 {loadingUtxos && <div className="loading-message">Loading more UTXOs...</div>}
                             </div>
-                    </CustomTabs>
-                </div>
-            )}
-        </Container>
+                        </CustomTabs>
+                    </div>
+                )}
+            </Container>
         </Page>
     );
 };
