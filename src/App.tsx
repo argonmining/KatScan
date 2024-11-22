@@ -1,11 +1,10 @@
-import React, {FC, lazy, Suspense} from 'react'
+import React, {FC, lazy, Suspense, useRef} from 'react'
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom'
-import {useMediaQuery} from 'react-responsive'
 import Sidebar from './components/Sidebar'
 import './styles/App.css'
 import './styles/globals.css'
 import './styles/darkMode.css'
-import {LoadingSpinner, useDarkMode} from 'nacho-component-library/dist'
+import {LoadingSpinner, useDarkMode, useMobile, usePageResize} from 'nacho-component-library/dist'
 
 /**
  * Lazy loading the pages to improve initial loading time in prod
@@ -22,18 +21,20 @@ const TopKRC20Holders = lazy(() => import('./pages/TopKRC20Holders'))
 const StructuredData = lazy(() => import('./pages/StructuredData'))
 
 const App: FC = () => {
-    const isMobile = useMediaQuery({maxWidth: 991})
+    const elementRef = useRef<HTMLDivElement | null>(null)
+    const {isMobile} = useMobile()
     const {isDarkMode, toggleDarkMode} = useDarkMode()
+    const styling = usePageResize(elementRef, 'mainContent')
 
     return (
         <Router>
             <div className="App">
-                <Sidebar
+                <Sidebar ref={elementRef}
                     darkMode={isDarkMode}
                     toggleDarkMode={toggleDarkMode}
                     isMobile={isMobile}
                 />
-                <div className="main-content">
+                <div className="main-content" style={styling}>
                     <Suspense fallback={<LoadingSpinner/>}>
                         <Routes>
                             <Route path="/" element={<Home/>}/>

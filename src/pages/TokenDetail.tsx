@@ -1,32 +1,24 @@
 import React, {FC, useEffect, useState} from 'react';
-import {Link, useParams} from 'react-router-dom';
-import {Alert, Card} from 'react-bootstrap';
+import {useParams} from 'react-router-dom';
+import {Alert} from 'react-bootstrap';
 import {getTokenDetails} from '../services/dataService';
 import 'styles/TokenDetail.css';
 import {censorTicker} from '../utils/censorTicker';
 import {TokenSearchResult} from "../interfaces/TokenData";
-import {formatDateTime, formatNumber, parseRawNumber} from "../services/Helper";
+import {formatDateTime} from "../services/Helper";
 import {HolderDistribution} from "../components/tabs/tokendetail/HolderDistribution";
 import {RecentOperations} from "../components/tabs/tokendetail/RecentOperations";
 import {TopHolder} from "../components/tabs/tokendetail/TopHolder";
 // import {MintActivity, MintOvertimeType} from "../components/tabs/tokendetail/MintActivity";
 import {OpTransactionData} from "../interfaces/OpTransactionData";
 import {TokenListResponse} from "../interfaces/ApiResponseTypes";
-import {iconBaseUrl} from "../utils/StaticVariables";
-import {
-    CustomTabs,
-    JsonLd,
-    LoadingSpinner,
-    SEO,
-    simpleRequest,
-    SmallThumbnail,
-    Thumbnail,
-    useMobile
-} from "nacho-component-library/dist";
+import {Page, CustomTabs, JsonLd, LoadingSpinner, SEO, simpleRequest, useMobile} from "nacho-component-library/dist";
+import {TokenDetailsTokenInfo} from "../components/TokenDetailsTokenInfo";
+
+export type Socials = { type: string, url: string }
 
 const titles = ['Top Holders', 'Recent Operations', 'Holder Distribution']
-
-type Socials = { type: string, url: string }
+const mobileTabs = ['General Info', 'Additional Info']
 
 const TokenDetail: FC = () => {
         const {tokenId} = useParams();
@@ -81,93 +73,52 @@ const TokenDetail: FC = () => {
             "url": `https://katscan.xyz/tokens/${tokenId ?? ''}`,
         };
 
-        const getIcon = (type: string) => {
-            switch (type){
-                case 'twitter':
-                    return <SmallThumbnail src={"https://kas.fyi/media/svg/brand-logos/twitter.svg"} alt={'twitter'}/>
-                case 'discord':
-                    return <SmallThumbnail src={"https://kas.fyi/media/svg/brand-logos/discord.svg"} alt={'discord'}/>
-                case 'telegram':
-                    return <SmallThumbnail src={"https://kas.fyi/media/svg/brand-logos/telegram.svg"} alt={'telegram'}/>
-                default:
-                    return <SmallThumbnail src={`${iconBaseUrl}${tokenData.tick}.jpg`} alt={'website'}/>
-            }
-        }
-
         return (
-            <div className="token-detail">
-                <JsonLd data={jsonLdData}/>
-                <SEO
-                    title="Token Details"
-                    description="Explore detailed information about a specific KRC-20 token on the Kaspa blockchain."
-                    keywords="KRC-20, Kaspa, token details, blockchain explorer, token information"
-                />
-                <div className="token-header">
-                    <h1>Token Details: {censorTicker(tokenData.tick)}</h1>
-                    <span className="creation-date">
-          Deployed on {formatDateTime(tokenData.mtsAdd.toString())}
-        </span>
-                </div>
-                <Card className="token-info-card">
-                    <Card.Body>
-                        <div className="token-info-grid">
-                            <div className="token-info-item-image">
-                                <Thumbnail src={`${iconBaseUrl}${tokenData.tick}.jpg`} alt={`${tokenData.tick}.jpg`}/>
-                            </div>
-                            <div className="token-info-item">
-                                <span className="token-info-label">Max Supply</span>
-                                <span
-                                    className="token-info-value">{formatNumber(parseRawNumber(tokenData.max, tokenData.dec), tokenData.dec)}</span>
-                            </div>
-                            <div className="token-info-item">
-                                <span className="token-info-label">Total Minted</span>
-                                <span
-                                    className="token-info-value">{formatNumber(parseRawNumber(tokenData.minted, tokenData.dec), tokenData.dec)}</span>
-                            </div>
-                            <div className="token-info-item">
-                                <span className="token-info-label">Limit per Mint</span>
-                                <span
-                                    className="token-info-value">{formatNumber(parseRawNumber(tokenData.lim, tokenData.dec), tokenData.dec)}</span>
-                            </div>
-                            <div className="token-info-item">
-                                <span className="token-info-label">Total Mints</span>
-                                <span className="token-info-value">{formatNumber(tokenData.mintTotal, 0)}</span>
-                            </div>
-                            <div className="token-info-item">
-                                <span className="token-info-label">Total Holders</span>
-                                <span className="token-info-value">{formatNumber(tokenData.holderTotal, 0)}</span>
-                            </div>
-                            <div className="token-info-item">
-                                <span className="token-info-label">Total Transfers</span>
-                                <span className="token-info-value">{formatNumber(tokenData.transferTotal, 0)}</span>
-                            </div>
-                            <div className="token-info-socials">
-                                <span className="token-info-label">Socials</span>
-                                <div className={'token-info-socials-wrapper'}>
-                                    {socials.map(single =>
-                                        <Link key={single.type} to={single.url}>
-                                            {getIcon(single.type)}
-                                        </Link>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-                    </Card.Body>
-                </Card>
+            <Page header={`Token Details: ${censorTicker(tokenData.tick)}`}
+                  additionalHeaderInfo={
+                      <span className="creation-date">Deployed on {formatDateTime(tokenData.mtsAdd.toString())}</span>
+                  }>
+                <div className="token-detail">
+                    <JsonLd data={jsonLdData}/>
+                    <SEO
+                        title="Token Details"
+                        description="Explore detailed information about a specific KRC-20 token on the Kaspa blockchain."
+                        keywords="KRC-20, Kaspa, token details, blockchain explorer, token information"
+                    />
 
-                <CustomTabs titles={titles}>
-                    <TopHolder tokenData={tokenData}/>
-                    <RecentOperations tokenData={tokenData}
-                                      tokenId={tokenId}
-                                      setOperations={setOperations}
-                                      operations={operations}
-                                      operationsCursor={operationsCursor}
-                                      setOperationsCursor={setOperationsCursor}/>
-                    <HolderDistribution tokenData={tokenData}/>
-                    {/*{!isMobile && <MintActivity tokenData={tokenData} mintActivityData={mintActivity}*/}
-                    {/*                            setMintActivityData={setMintActivity}/>}*/}
-                </CustomTabs>
-            </div>
+                    {isMobile
+                        ?
+                        <CustomTabs titles={mobileTabs}>
+                            <TokenDetailsTokenInfo tokenData={tokenData} socials={socials}/>
+                            <CustomTabs titles={titles}>
+                                <TopHolder tokenData={tokenData}/>
+                                <RecentOperations tokenData={tokenData}
+                                                  tokenId={tokenId}
+                                                  setOperations={setOperations}
+                                                  operations={operations}
+                                                  operationsCursor={operationsCursor}
+                                                  setOperationsCursor={setOperationsCursor}/>
+                                <HolderDistribution tokenData={tokenData}/>
+                            </CustomTabs>
+                        </CustomTabs>
+                        : <>
+                            <TokenDetailsTokenInfo tokenData={tokenData} socials={socials}/>
+                            <CustomTabs titles={titles}>
+                                <TopHolder tokenData={tokenData}/>
+                                <RecentOperations tokenData={tokenData}
+                                                  tokenId={tokenId}
+                                                  setOperations={setOperations}
+                                                  operations={operations}
+                                                  operationsCursor={operationsCursor}
+                                                  setOperationsCursor={setOperationsCursor}/>
+                                <HolderDistribution tokenData={tokenData}/>
+                                {/*{!isMobile && <MintActivity tokenData={tokenData} mintActivityData={mintActivity}*/}
+                                {/*                            setMintActivityData={setMintActivity}/>}*/}
+                            </CustomTabs>
+                        </>}
+
+                </div>
+            </Page>
         );
     }
 ;

@@ -58,7 +58,7 @@ export const HolderDistribution: FC<Props> = (
         ];
     }, [tokenData]);
 
-    return <div className="chart-container">
+    return <div className="holder-distribution">
         <DivChart data={holderDistribution} groupLabel={'Holder Group'}/>
     </div>
 }

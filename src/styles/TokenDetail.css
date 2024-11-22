@@ -1,24 +1,10 @@
 @import './globals.css';
 
 .token-detail {
-    padding: 20px;
-    height: 100vh; /* Set the height to 100vh to prevent page scrolling */
+    height: 100%; /* Set the height to 100vh to prevent page scrolling */
     overflow: hidden; /* Prevent page scrolling */
     display: flex;
     flex-direction: column;
-}
-
-.token-header {
-    display: flex;
-    align-items: baseline;
-    margin-bottom: 20px;
-}
-
-.token-header h1 {
-    font-family: var(--header-font);
-    color: var(--secondary-primary-color);
-    margin: 0;
-    margin-right: 10px;
 }
 
 .creation-date {
@@ -103,7 +89,8 @@
 
 .detail-table-container {
     overflow-y: auto; /* Make the table scrollable */
-    max-height: calc(100vh - 380px); /* Adjust the height to fit within the viewport */
+    /*max-height: calc(100vh - 380px); !* Adjust the height to fit within the viewport *!*/
+    height: calc(100% - 42px);
 }
 
 .detail-table-container .table {
@@ -181,48 +168,12 @@ tr:hover {
 }
 
 @media (max-width: 768px) {
-    .token-detail {
-        padding: 10px;
-        height: auto;
-        overflow: auto;
-    }
-
-    .token-header {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .token-header h1 {
-        font-size: 1.5rem;
-        margin-bottom: 5px;
-    }
-
     .creation-date {
         font-size: 0.8rem;
     }
 
     .token-info-grid {
         grid-template-columns: repeat(2, 1fr);
-    }
-
-    .tab-content, .tab-pane {
-        overflow: auto;
-    }
-
-    .tab-content > .active {
-        overflow: auto;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .nav-tabs .nav-link {
-        font-size: 0.9rem;
-        padding: 0.5rem 0.75rem;
-    }
-
-    .detail-table-container {
-        max-height: none;
-        overflow-x: auto;
     }
 
     .chart-container {
@@ -239,18 +190,6 @@ tr:hover {
         justify-content: center;
         align-items: center;
         width: 100%;
-    }
-
-    .tab-content > .active {
-        padding-top: 20px;
-    }
-
-    .tab-content {
-        height: calc(100% - 405px);
-    }
-
-    .tab-content > .active {
-        padding-top: 0;
     }
 
     .token-info-item-image {
@@ -277,10 +216,6 @@ body.dark-mode {
     background-color: var(--dark-bg-color);
 }
 
-.dark-mode .token-header h1 {
-    color: var(--dark-text-color);
-}
-
 .dark-mode .creation-date {
     color: var(--dark-muted-color);
 }
@@ -296,20 +231,6 @@ body.dark-mode {
 
 .dark-mode .token-info-value {
     color: var(--dark-text-color);
-}
-
-.dark-mode .nav-tabs {
-    border-bottom-color: var(--dark-border-color);
-}
-
-.dark-mode .nav-tabs .nav-link {
-    color: var(--dark-text-color);
-}
-
-.dark-mode .nav-tabs .nav-link.active {
-    color: var(--dark-primary-color);
-    background-color: var(--dark-active-bg);
-    border-color: var(--dark-border-color);
 }
 
 .dark-mode .detail-table-container .table th {
@@ -342,21 +263,6 @@ body.dark-mode {
 }
 
 @media (max-width: 768px) {
-    .dark-mode .token-detail {
-        padding: 10px;
-        height: auto;
-        overflow: auto;
-    }
-
-    .dark-mode .token-header {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .dark-mode .token-header h1 {
-        font-size: 1.5rem;
-        margin-bottom: 5px;
-    }
 
     .dark-mode .creation-date {
         font-size: 0.8rem;
@@ -364,26 +270,6 @@ body.dark-mode {
 
     .dark-mode .token-info-grid {
         grid-template-columns: repeat(2, 1fr);
-    }
-
-    .dark-mode .tab-content, .dark-mode .tab-pane {
-        overflow: auto;
-    }
-
-    .dark-mode .tab-content > .active {
-        overflow: auto;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .dark-mode .nav-tabs .nav-link {
-        font-size: 0.9rem;
-        padding: 0.5rem 0.75rem;
-    }
-
-    .dark-mode .detail-table-container {
-        max-height: none;
-        overflow-x: auto;
     }
 
     .dark-mode .chart-container {
