@@ -45,11 +45,11 @@ const TokenOverview: FC = () => {
                 setLoading(true);
                 loadingRef.current = cursor;
                 const data = await getKRC20TokenListSequential(ITEMS_PER_PAGE, sortField, sortDirection, cursor);
-                if (loadingRef.current !== cursor) {
+                if (!isMounted || loadingRef.current !== cursor) {
                     return;
                 }
                 setTokens(current => ([...current, ...data.result]));
-                console.log(data.cursor);
+
                 if (data.cursor === undefined) {
                     setIsFinished(true);
                     setLoading(false);
