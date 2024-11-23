@@ -32,29 +32,10 @@
     }
 }
 
-.tab-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-}
-
-.tab-pane {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-}
-
 .table-wrapper {
     flex: 1;
     overflow-x: auto;
     overflow-y: auto;
-}
-
-.wallet-lookup h1 {
-    color: var(--primary-color);
-    margin-bottom: 20px;
 }
 
 .wallet-lookup .card {
@@ -109,10 +90,6 @@
 
 .dark-mode .wallet-lookup {
     background-color: var(--dark-bg-color);
-}
-
-.dark-mode .wallet-lookup h1 {
-    color: var(--dark-primary-color);
 }
 
 .dark-mode .wallet-lookup .card {

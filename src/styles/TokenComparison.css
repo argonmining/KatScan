@@ -122,7 +122,6 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
-.dark-mode .token-comparison h1,
 .dark-mode .token-comparison .card-title {
     color: var(--primary-color);
 }

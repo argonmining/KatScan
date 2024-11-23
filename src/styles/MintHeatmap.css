@@ -6,12 +6,6 @@
   flex-direction: column;
 }
 
-.mint-heatmap h1 {
-  margin-bottom: 20px;
-  color: #333;
-  font-weight: bold;
-}
-
 .mint-heatmap .form-group {
   margin-bottom: 20px;
 }
@@ -44,11 +38,6 @@
 
 body {
   font-family: 'Roboto', sans-serif;
-}
-
-.mint-heatmap h1 {
-  font-weight: 700;
-  color: #333;
 }
 
 .chart-container {
@@ -117,10 +106,6 @@ body {
 
 .dark-mode .mint-heatmap {
   background-color: var(--dark-bg-color);
-}
-
-.dark-mode .mint-heatmap h1 {
-  color: var(--dark-text-color);
 }
 
 .dark-mode .mint-heatmap .form-group {

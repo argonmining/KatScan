@@ -96,11 +96,6 @@
         padding: 10px;
     }
 
-    .top-krc20-holders-wrapper h1 {
-        font-size: 1.5rem;
-        margin-bottom: 15px;
-    }
-
     .mobile-holders-list {
         overflow-y: auto;
         max-height: calc(100vh - 100px);
@@ -150,10 +145,6 @@
 
 .dark-mode .top-krc20-holders-wrapper {
     background-color: var(--dark-bg-color);
-}
-
-.dark-mode .top-krc20-holders-wrapper h1 {
-    color: var(--primary-color);
 }
 
 .dark-mode .table {

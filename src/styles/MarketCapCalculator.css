@@ -12,12 +12,6 @@
     padding: 30px;
 }
 
-.market-cap-calculator h1 {
-    color: var(--primary-color);
-    font-weight: bold;
-    margin-bottom: 30px;
-}
-
 .market-cap-calculator .form-group {
     margin-bottom: 25px;
 }
