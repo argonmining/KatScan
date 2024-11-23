@@ -1,13 +1,12 @@
-import React, {FC, FormEvent, useEffect, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {Link, useNavigate, useParams} from 'react-router-dom';
-import {Alert, Button, Col, Container, Form, InputGroup, Row} from 'react-bootstrap';
-import {FaArrowRight, FaExternalLinkAlt, FaSearch} from 'react-icons/fa';
+import {Alert, Col, Container, Row} from 'react-bootstrap';
+import {FaArrowRight, FaExternalLinkAlt} from 'react-icons/fa';
 import '../styles/TransactionLookup.css';
-import {Page, simpleRequest} from "nacho-component-library";
+import {JsonLd, LoadingSpinner, NormalCard, Page, SEO, Input, simpleRequest} from "nacho-component-library";
 import {OpTransactionData} from "../interfaces/OpTransactionData";
 import {Transaction} from "../interfaces/Transaction";
 import {ResultResponse} from "../interfaces/ApiResponseTypes";
-import {SEO, JsonLd, LoadingSpinner, NormalCard} from "nacho-component-library";
 import {TransactionDetails} from "../components/transactionLookup/TransactionDetails";
 import {formatKaspa, formatKRC20Amount} from "../services/Helper";
 
@@ -34,11 +33,11 @@ const jsonData = {
 
 const TransactionLookup: FC = () => {
 
-    const [transactionHash, setTransactionHash] = useState('');
+    const {hashRev} = useParams();
+    const [transactionHash, setTransactionHash] = useState(hashRev ?? '');
     const [transactionData, setTransactionData] = useState<TransactionData | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const {hashRev} = useParams();
     const navigate = useNavigate();
 
     const fetchTransactionData = async (hash: string): Promise<void> => {
@@ -72,8 +71,7 @@ const TransactionLookup: FC = () => {
         }
     }, [hashRev]);
 
-    const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
-        e.preventDefault();
+    const handleSubmit = (transactionHash: string): void => {
         if (transactionHash) {
             navigate(`/transaction-lookup/${transactionHash}`);
         }
@@ -99,19 +97,11 @@ const TransactionLookup: FC = () => {
                     data={jsonData}
                 />
 
-                <Form onSubmit={handleSubmit}>
-                    <InputGroup className="mb-3">
-                        <Form.Control
-                            type="text"
-                            placeholder="Enter transaction hash"
-                            value={transactionHash}
-                            onChange={(e) => setTransactionHash(e.target.value)}
-                        />
-                        <Button variant="primary" type="submit">
-                            <FaSearch/> Search
-                        </Button>
-                    </InputGroup>
-                </Form>
+                <Input customClass={'mb-3'}
+                       onSubmit={handleSubmit}
+                       placeholder={'Enter transaction hash'}
+                       value={transactionHash}
+                       onChangeCallback={setTransactionHash}/>
 
                 {loading && <LoadingSpinner/>}
                 {error && <Alert variant="danger">{error}</Alert>}

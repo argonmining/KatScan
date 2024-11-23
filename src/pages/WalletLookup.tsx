@@ -1,7 +1,7 @@
-import React, {FC, FormEvent, useCallback, useEffect, useRef, useState} from 'react';
+import React, {FC, useCallback, useEffect, useRef, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
-import {Alert, Button, Container, Form, InputGroup, Table} from 'react-bootstrap';
-import {FaCopy, FaSearch} from 'react-icons/fa';
+import {Alert, Container, Table} from 'react-bootstrap';
+import {FaCopy} from 'react-icons/fa';
 import 'styles/WalletLookup.css';
 import {censorTicker} from '../utils/censorTicker';
 import {TokenListResponse} from "../interfaces/ApiResponseTypes";
@@ -17,6 +17,7 @@ import {
     NormalCard,
     Page,
     SEO,
+    Input,
     simpleRequest,
     useMobile
 } from "nacho-component-library";
@@ -34,7 +35,7 @@ const WalletLookup: FC = () => {
     const navigate = useNavigate();
     const {isMobile} = useMobile()
 
-    const [address, setAddress] = useState('');
+    const [address, setAddress] = useState(walletAddress ?? '');
     const [walletData, setWalletData] = useState<InternalWalletData | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -174,15 +175,10 @@ const WalletLookup: FC = () => {
 
     }, [walletAddress])
 
-    const handleSubmit = (e: FormEvent) => {
-        e.preventDefault();
-        if (address) {
-            navigate(`/wallet/${address}`);
+    const handleSubmit = (e: string | undefined) => {
+        if (e) {
+            navigate(`/wallet/${e}`);
         }
-    };
-
-    const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setAddress(e.target.value);
     };
 
     const copyToClipboard = (text: string): void => {
@@ -210,19 +206,12 @@ const WalletLookup: FC = () => {
                         "url": "https://katscan.xyz/wallet"
                     }}
                 />
-                <Form onSubmit={handleSubmit}>
-                    <InputGroup className="mb-3">
-                        <Form.Control
-                            type="text"
-                            placeholder="Enter wallet address"
-                            value={address}
-                            onChange={handleAddressChange}
-                        />
-                        <Button variant="primary" type="submit">
-                            <FaSearch/> Search
-                        </Button>
-                    </InputGroup>
-                </Form>
+
+                <Input customClass={'mb-3'}
+                       onSubmit={handleSubmit}
+                       value={address}
+                       placeholder={'Enter wallet address'}
+                       onChangeCallback={setAddress}/>
 
                 {loading && <LoadingSpinner/>}
                 {error && <Alert variant="danger">{error}</Alert>}

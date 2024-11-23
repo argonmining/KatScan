@@ -1,12 +1,11 @@
 import React, {FC, useEffect, useMemo, useRef, useState} from 'react';
 import {Link} from 'react-router-dom';
-import {Dropdown, Form, InputGroup, Table} from 'react-bootstrap';
-import {FaSearch} from 'react-icons/fa';
+import {Dropdown, Table} from 'react-bootstrap';
 import {getKRC20TokenListSequential} from '../services/dataService';
 import 'styles/TokenOverview.css';
 import {censorTicker} from '../utils/censorTicker';
 import {TokenData} from "../interfaces/TokenData";
-import {SEO, JsonLd, LoadingSpinner, SmallThumbnail} from "nacho-component-library";
+import {Input, JsonLd, LoadingSpinner, SEO, SmallThumbnail} from "nacho-component-library";
 import {iconBaseUrl} from "../utils/StaticVariables";
 
 const ITEMS_PER_PAGE = 50;
@@ -46,7 +45,7 @@ const TokenOverview: FC = () => {
                 setLoading(true);
                 loadingRef.current = cursor;
                 const data = await getKRC20TokenListSequential(ITEMS_PER_PAGE, sortField, sortDirection, cursor);
-                if (!isMounted || loadingRef.current !== cursor) {
+                if (loadingRef.current !== cursor) {
                     return;
                 }
                 setTokens(current => ([...current, ...data.result]));
@@ -218,17 +217,10 @@ const TokenOverview: FC = () => {
         <div className="token-overview">
             <div className="token-overview-header">
                 <h2>All KRC-20 Tokens</h2>
-                <Form.Group className="search-form">
-                    <InputGroup>
-                        <InputGroup.Text><FaSearch/></InputGroup.Text>
-                        <Form.Control
-                            type="text"
-                            placeholder="Search by ticker..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                        />
-                    </InputGroup>
-                </Form.Group>
+                <Input customClass={'search-form'}
+                       placeholder={'Search by ticker...'}
+                       onChangeCallback={setSearchTerm}
+                       onSubmit={setSearchTerm}/>
             </div>
             <div className="table-wrapper">
                 <Table>

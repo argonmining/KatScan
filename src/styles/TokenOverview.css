@@ -25,19 +25,10 @@
 .search-form {
     flex-grow: 1;
     margin-left: 20px; /* Add some space between title and search bar */
-}
 
-.search-form .input-group {
-    width: 70%;
-}
-
-.search-form .form-control {
-    height: 50px; /* Increase height for better visibility */
-    font-size: 1.1rem; /* Slightly larger font */
-}
-
-.search-form .input-group-text {
-    font-size: 1.1rem; /* Match font size with input */
+    .input-group {
+        width: 70%;
+    }
 }
 
 .table-wrapper {
@@ -46,7 +37,6 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     padding-bottom: 25px;
-    overflow-x: auto;
 }
 
 table {
@@ -96,9 +86,9 @@ tr:hover {
 
 .progress .progress-bar {
     background-image: linear-gradient(
-        to right,
-        var(--tertiary-primary-color),
-        var(--primary-color)
+            to right,
+            var(--tertiary-primary-color),
+            var(--primary-color)
     );
     border-radius: 4px;
     transition: width 0.6s ease;
@@ -190,12 +180,6 @@ a:hover {
     color: var(--dark-text-color);
 }
 
-.dark-mode .search-form .form-control {
-    background-color: var(--dark-card-bg);
-    color: var(--dark-text-color);
-    border-color: var(--dark-border-color);
-}
-
 .dark-mode .table-wrapper {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
@@ -224,9 +208,9 @@ a:hover {
 
 .dark-mode .progress .progress-bar {
     background-image: linear-gradient(
-        to right,
-        var(--dark-tertiary-color),
-        var(--dark-primary-color)
+            to right,
+            var(--dark-tertiary-color),
+            var(--dark-primary-color)
     );
 }
 
@@ -298,10 +282,12 @@ th.sticky-column {
         margin-bottom: 20px;
     }
 
+    /*todo remove*/
     .search-form {
         width: 100%;
         margin-left: 0;
     }
+
     .search-form .input-group {
         width: 100%;
         margin-top: 10px;
