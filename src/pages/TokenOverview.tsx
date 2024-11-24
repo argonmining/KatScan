@@ -7,6 +7,7 @@ import {censorTicker} from '../utils/censorTicker';
 import {TokenData} from "../interfaces/TokenData";
 import {Input, JsonLd, LoadingSpinner, SEO, SmallThumbnail} from "nacho-component-library";
 import {iconBaseUrl} from "../utils/StaticVariables";
+import {TokenActions} from "../components/TokenActions";
 
 const ITEMS_PER_PAGE = 50;
 
@@ -45,7 +46,7 @@ const TokenOverview: FC = () => {
                 setLoading(true);
                 loadingRef.current = cursor;
                 const data = await getKRC20TokenListSequential(ITEMS_PER_PAGE, sortField, sortDirection, cursor);
-                if (!isMounted || loadingRef.current !== cursor) {
+                if (loadingRef.current !== cursor) {
                     return;
                 }
                 setTokens(current => ([...current, ...data.result]));
@@ -227,6 +228,7 @@ const TokenOverview: FC = () => {
                     <thead>
                     <tr>
                         <th style={{width: '50px'}}/>
+                        <th style={{width: '30px'}}/>
                         <th className="sticky-column"
                             onClick={() => handleSort('tick')}>Ticker {sortField === 'tick' && (sortDirection === 'asc' ? '▲' : '▼')}</th>
                         <th className="text-center">
@@ -280,6 +282,9 @@ const TokenOverview: FC = () => {
                                                             loading="lazy"/>
                                         </Link>
                                     </div>
+                                </td>
+                                <td>
+                                    <TokenActions ticker={token.tick}/>
                                 </td>
                                 <td className="sticky-column">
                                     <Link to={`/tokens/${token.tick}`} className="token-ticker">
