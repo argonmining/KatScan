@@ -1,15 +1,14 @@
 import React, {FC, useCallback, useRef} from 'react'
 import {MobileTransactionTable} from "../../tables/MobileTransactionTable";
-import {formatNumber, shortenString} from "../../../services/Helper";
+import {formatNumber, openTransaction, shortenString} from "../../../services/Helper";
 import {Table} from "react-bootstrap";
 import {useMobile} from "nacho-component-library";
-import {TransactionStore} from "./useTransactions";
+import {TransactionStore} from "./hooks/useTransactions";
 
 export const TransactionOverview: FC<TransactionStore> = (
     {
         transactions,
         loadingTransactions,
-        transactionPage,
         loadMore,
         hasMoreTransactions
     }
@@ -31,17 +30,13 @@ export const TransactionOverview: FC<TransactionStore> = (
             }
         });
         if (node) transactionObserver.current.observe(node);
-    }, [loadingTransactions, hasMoreTransactions, transactionPage, loadMore]);
-
-    const openExplorer = (transactionId: string) => {
-        window.open(`https://explorer.kaspa.org/txs/${transactionId}`, '_blank', 'noopener,noreferrer');
-    };
+    }, [loadingTransactions, hasMoreTransactions, loadMore]);
 
     return <div className="table-wrapper">
         {isMobile ? (
             <MobileTransactionTable
                 transactions={transactions}
-                openExplorer={openExplorer}
+                openExplorer={openTransaction}
                 formatNumber={formatNumber}
                 shortenString={shortenString}
             />
@@ -59,7 +54,7 @@ export const TransactionOverview: FC<TransactionStore> = (
                     <tr
                         key={tx.transaction_id}
                         ref={index === transactions.length - 1 ? lastTransactionElementRef : null}
-                        onClick={() => openExplorer(tx.transaction_id)}
+                        onClick={() => openTransaction(tx.transaction_id)}
                         className="clickable-row"
                     >
                         <td>{tx.transaction_id}</td>

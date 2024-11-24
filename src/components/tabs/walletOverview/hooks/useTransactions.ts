@@ -1,6 +1,6 @@
 import {useCallback, useEffect, useMemo, useState} from 'react'
 import {simpleRequest} from "nacho-component-library";
-import {Transaction} from "../../../interfaces/Transaction";
+import {Transaction} from "../../../../interfaces/Transaction";
 
 export type TransactionStore = {
     transactions: Transaction[]
@@ -22,32 +22,31 @@ export const useTransactions = (walletAddress: string): TransactionStore => {
             const result = await simpleRequest<Transaction[]>(`https://api.kaspa.org/addresses/${addr}/full-transactions?limit=20&offset=${page * 20}&resolve_previous_outpoints=light`);
             setTransactionPage(page + 1);
             setHasMoreTransactions(result.length === 20);
-            setLoadingTransactions(false);
             return result
         } catch (err) {
             console.error('Failed to fetch transactions:', err);
             return []
+        } finally {
+            setLoadingTransactions(false);
         }
     }, []);
 
     useEffect(() => {
-        if (walletAddress === undefined) {
+        if (!walletAddress) {
             return
         }
-        fetchTransactions(walletAddress, 0)
-            .then(newTransactions => {
-                setTransactions(newTransactions);
-            })
+        void fetchTransactions(walletAddress, 0)
+            .then(setTransactions)
     }, [walletAddress, fetchTransactions])
 
     const loadMore = useCallback(() => {
         if (hasMoreTransactions) {
-            fetchTransactions(walletAddress, transactionPage)
+            void fetchTransactions(walletAddress, transactionPage)
                 .then(result => {
                     setTransactions(current => ([...current, ...result]))
                 })
         }
-    }, [fetchTransactions, loadingTransactions, hasMoreTransactions, transactionPage, walletAddress])
+    }, [fetchTransactions, hasMoreTransactions, transactionPage, walletAddress])
 
     return useMemo((): TransactionStore => {
         return {
@@ -57,9 +56,11 @@ export const useTransactions = (walletAddress: string): TransactionStore => {
             loadMore,
             hasMoreTransactions
         }
-    }, [transactions,
+    }, [
+        transactions,
         transactionPage,
         loadingTransactions,
         loadMore,
-        hasMoreTransactions])
+        hasMoreTransactions
+    ])
 }

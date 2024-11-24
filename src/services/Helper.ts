@@ -41,10 +41,6 @@ export const formatDateTime = (timestamp: string): string => {
     return date.toLocaleString('en-US', {timeZoneName: 'short'});
 }
 
-export const openExplorer = (hash: string): void => {
-    window.open(`https://explorer.kaspa.org/txs/${hash}`, '_blank', 'noopener,noreferrer');
-}
-
 export const copyToClipboard = (text: string): void => {
     void navigator.clipboard.writeText(text);
     // TODO: Add a toast notification here
@@ -57,3 +53,7 @@ export const formatKaspa = (amount: string): string => {
 export const formatKRC20Amount = (amount: string, decimals: number, tick: string): string => {
     return `${parseRawNumber(amount, decimals).toFixed(decimals)} ${tick}`;
 }
+
+export const openTransaction = (transactionId: string): void => {
+    window.open(`https://explorer.kaspa.org/txs/${transactionId}`, '_blank', 'noopener,noreferrer');
+};
