@@ -6,21 +6,21 @@ import 'styles/WalletLookup.css';
 import {censorTicker} from '../utils/censorTicker';
 import {TokenListResponse} from "../interfaces/ApiResponseTypes";
 import {Utxos, WalletBalance, WalletToken, WalletTotal} from "../interfaces/WalletData";
-import {Transaction} from "../interfaces/Transaction";
-import {MobileTransactionTable} from "../components/tables/MobileTransactionTable";
 import {MobileUTXOTable} from "../components/tables/MobileUTXOTable";
 import {formatNumber, shortenString} from "../services/Helper";
 import {
     CustomTabs,
+    Input,
     JsonLd,
     LoadingSpinner,
     NormalCard,
     Page,
     SEO,
-    Input,
     simpleRequest,
     useMobile
 } from "nacho-component-library";
+import {TransactionOverview} from "../components/tabs/walletOverview/TransactionsOverview";
+import {useTransactions} from "../components/tabs/walletOverview/useTransactions";
 
 type InternalWalletData = {
     address: string
@@ -36,34 +36,17 @@ const WalletLookup: FC = () => {
     const {isMobile} = useMobile()
 
     const [address, setAddress] = useState(walletAddress ?? '');
+    const transactionData = useTransactions(address)
+
     const [walletData, setWalletData] = useState<InternalWalletData | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [transactions, setTransactions] = useState<Transaction[]>([]);
     const [utxos, setUtxos] = useState<Utxos[]>([]);
-    const [transactionPage, setTransactionPage] = useState(0);
     const [utxoPage, setUtxoPage] = useState(0);
-    const [hasMoreTransactions, setHasMoreTransactions] = useState(true);
     const [hasMoreUtxos, setHasMoreUtxos] = useState(true);
-    const [loadingTransactions, setLoadingTransactions] = useState(false);
     const [loadingUtxos, setLoadingUtxos] = useState(false);
 
-    const transactionObserver = useRef<IntersectionObserver>();
     const utxoObserver = useRef<IntersectionObserver>();
-
-    const fetchTransactions = async (addr: string, page: number) => {
-        setLoadingTransactions(true);
-        try {
-            const response = await simpleRequest<Transaction[]>(`https://api.kaspa.org/addresses/${addr}/full-transactions?limit=20&offset=${page * 20}&resolve_previous_outpoints=light`);
-            setTransactions(prev => ([...prev, ...response]));
-            setHasMoreTransactions(response.length === 20);
-            setTransactionPage(page);
-        } catch (err) {
-            console.error('Failed to fetch transactions:', err);
-        } finally {
-            setLoadingTransactions(false);
-        }
-    };
 
     const fetchUtxos = async (addr: string, page: number) => {
         setLoadingUtxos(true);
@@ -93,20 +76,6 @@ const WalletLookup: FC = () => {
         }
     };
 
-    const lastTransactionElementRef = useCallback((node: HTMLTableRowElement) => {
-        if (loadingTransactions || walletData === null) {
-            return
-        }
-        if (transactionObserver.current) {
-            transactionObserver.current.disconnect()
-        }
-        transactionObserver.current = new IntersectionObserver(entries => {
-            if (entries[0].isIntersecting && hasMoreTransactions) {
-                void fetchTransactions(walletData.address, transactionPage + 1);
-            }
-        });
-        if (node) transactionObserver.current.observe(node);
-    }, [loadingTransactions, hasMoreTransactions, walletData, transactionPage]);
 
     const lastUtxoElementRef = useCallback((node: HTMLTableRowElement) => {
         if (loadingUtxos || walletData === null) {
@@ -155,15 +124,11 @@ const WalletLookup: FC = () => {
                 });
 
                 // Reset pagination
-                setTransactionPage(0);
                 setUtxoPage(0);
-                setTransactions([]);
                 setUtxos([]);
-                setHasMoreTransactions(true);
-                setHasMoreUtxos(true);
 
+                setHasMoreUtxos(true);
                 // Fetch initial transactions and UTXOs
-                await fetchTransactions(walletAddress, 0);
                 await fetchUtxos(walletAddress, 0);
             })
             .catch(() => {
@@ -179,10 +144,6 @@ const WalletLookup: FC = () => {
         if (e) {
             navigate(`/wallet/${e}`);
         }
-    };
-
-    const copyToClipboard = (text: string): void => {
-        void navigator.clipboard.writeText(text);
     };
 
     const openExplorer = (transactionId: string) => {
@@ -218,22 +179,7 @@ const WalletLookup: FC = () => {
 
                 {walletData && (
                     <div className="wallet-details">
-                        <div className="wallet-overview">
-                            <NormalCard title={'Wallet Overview'}>
-                                <div className={'grid'}>
-                                    <strong>Address:</strong>
-                                    <div>
-                                        {walletData.address}
-                                        <FaCopy className="clickable"
-                                                onClick={() => copyToClipboard(walletData.address)}/>
-                                    </div>
-
-                                    <strong>Kaspa Balance:</strong>
-                                    <div>{formatNumber(walletData.kaspaBalance / 1e8)} KAS</div>
-                                    <strong>Transaction Count:</strong> {walletData.transactionCount}
-                                </div>
-                            </NormalCard>
-                        </div>
+                        <WalletCard walletData={walletData}/>
                         <CustomTabs titles={['KRC20 Tokens', 'Recent Transactions', 'UTXOs']}>
                             <div className="table-wrapper">
                                 <Table striped bordered hover>
@@ -245,7 +191,7 @@ const WalletLookup: FC = () => {
                                     </thead>
                                     <tbody>
                                     {walletData.krc20Balances.map((token) => (
-                                        <tr key={token.contract}>
+                                        <tr key={token.tick}>
                                             <td>{censorTicker(token.tick)}</td>
                                             <td>{formatNumber(token.balance)}</td>
                                         </tr>
@@ -254,43 +200,9 @@ const WalletLookup: FC = () => {
                                 </Table>
                             </div>
 
-                            <div className="table-wrapper">
-                                {isMobile ? (
-                                    <MobileTransactionTable
-                                        transactions={transactions}
-                                        openExplorer={openExplorer}
-                                        formatNumber={formatNumber}
-                                        shortenString={shortenString}
-                                    />
-                                ) : (
-                                    <Table striped bordered hover>
-                                        <thead>
-                                        <tr>
-                                            <th>Transaction ID</th>
-                                            <th>Amount (KAS)</th>
-                                            <th>Block Time</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        {transactions.map((tx, index) => (
-                                            <tr
-                                                key={tx.transaction_id}
-                                                ref={index === transactions.length - 1 ? lastTransactionElementRef : null}
-                                                onClick={() => openExplorer(tx.transaction_id)}
-                                                className="clickable-row"
-                                            >
-                                                <td>{tx.transaction_id}</td>
-                                                <td>{formatNumber(tx.outputs.reduce((sum, output) => sum + parseInt(output.amount), 0) / 1e8)}</td>
-                                                <td>{new Date(tx.block_time).toLocaleString()}</td>
-                                            </tr>
-                                        ))}
-                                        </tbody>
-                                    </Table>
-                                )}
-                                {loadingTransactions &&
-                                    <div className="loading-message">Loading more transactions...</div>}
-                            </div>
+                            <TransactionOverview {...transactionData}/>
 
+                            {/*todo*/}
                             <div className="table-wrapper">
                                 {isMobile ? (
                                     <MobileUTXOTable
@@ -341,3 +253,34 @@ const WalletLookup: FC = () => {
 };
 
 export default WalletLookup;
+
+type WalletCardProps = {
+    walletData: InternalWalletData
+}
+const WalletCard: FC<WalletCardProps> = (
+    {
+        walletData
+    }
+) => {
+
+    const copyToClipboard = (text: string): void => {
+        void navigator.clipboard.writeText(text);
+    };
+
+    return <div className="wallet-overview">
+        <NormalCard title={'Wallet Overview'}>
+            <div className={'grid'}>
+                <strong>Address:</strong>
+                <div>
+                    {walletData.address}
+                    <FaCopy className="clickable"
+                            onClick={() => copyToClipboard(walletData.address)}/>
+                </div>
+
+                <strong>Kaspa Balance:</strong>
+                <div>{formatNumber(walletData.kaspaBalance / 1e8)} KAS</div>
+                <strong>Transaction Count:</strong> {walletData.transactionCount}
+            </div>
+        </NormalCard>
+    </div>
+}
