@@ -1,6 +1,9 @@
 // Helper function for number formatting
 export const formatNumber = (number: number | string, maxDigits = 5): string => {
     const internalNumber = typeof number === 'string' ? parsingNumber(number) : number
+    if (internalNumber === 0){
+        return '0'
+    }
     return new Intl.NumberFormat('en-US', {
         minimumFractionDigits: 0,
         maximumFractionDigits: maxDigits,
@@ -33,16 +36,15 @@ const parsingNumber = (value: string): number => {
 }
 
 export const parseRawNumber = (rawNumber: string | number, decimals: number): number => {
+    if (!rawNumber){
+        return 0
+    }
     return Number(rawNumber) / Math.pow(10, decimals);
 }
 
 export const formatDateTime = (timestamp: string): string => {
     const date = new Date(parseInt(timestamp));
     return date.toLocaleString('en-US', {timeZoneName: 'short'});
-}
-
-export const openExplorer = (hash: string): void => {
-    window.open(`https://explorer.kaspa.org/txs/${hash}`, '_blank', 'noopener,noreferrer');
 }
 
 export const copyToClipboard = (text: string): void => {
@@ -55,5 +57,12 @@ export const formatKaspa = (amount: string): string => {
 }
 
 export const formatKRC20Amount = (amount: string, decimals: number, tick: string): string => {
+    if (!amount || amount === '0'){
+        return '0'
+    }
     return `${parseRawNumber(amount, decimals).toFixed(decimals)} ${tick}`;
 }
+
+export const openTransaction = (transactionId: string): void => {
+    window.open(`https://explorer.kaspa.org/txs/${transactionId}`, '_blank', 'noopener,noreferrer');
+};

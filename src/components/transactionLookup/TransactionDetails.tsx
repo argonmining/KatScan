@@ -2,7 +2,7 @@ import React, {FC} from "react";
 import {Badge, Card, Col, Row} from "react-bootstrap";
 import {FaCopy, FaExternalLinkAlt} from "react-icons/fa";
 import {TransactionData} from "../../pages/TransactionLookup";
-import {copyToClipboard, formatDateTime, formatKaspa, openExplorer} from "../../services/Helper";
+import {copyToClipboard, formatDateTime, formatKaspa, openTransaction} from "../../services/Helper";
 import {Link} from "react-router-dom";
 import {ExpandableDiv} from "nacho-component-library";
 
@@ -23,7 +23,7 @@ export const TransactionDetails: FC<TransactionDetails> = (
                     <Row className="mb-2">
                         <Col sm={4}><strong>Transaction ID</strong></Col>
                         <Col sm={8}>
-                <span className="clickable" onClick={() => openExplorer(data.transaction_id)}>
+                <span className="clickable" onClick={() => openTransaction(data.transaction_id)}>
                   {data.transaction_id} <FaExternalLinkAlt/>
                 </span>
                             <FaCopy className="ms-2 clickable"
