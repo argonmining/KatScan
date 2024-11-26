@@ -1,12 +1,15 @@
-import React, {FC, useEffect, useMemo, useRef, useState} from 'react';
-import {Link} from 'react-router-dom';
-import {Dropdown, Table} from 'react-bootstrap';
+import React, {FC, ReactElement, useEffect, useMemo, useRef, useState} from 'react';
 import {getKRC20TokenListSequential} from '../services/dataService';
 import 'styles/TokenOverview.css';
-import {censorTicker} from '../utils/censorTicker';
 import {TokenData} from "../interfaces/TokenData";
-import {Input, JsonLd, LoadingSpinner, SEO, SmallThumbnail} from "nacho-component-library";
+import {Input, JsonLd, SEO, SmallThumbnail} from "nacho-component-library";
+import {List} from "../components/List";
+import {Link} from "react-router-dom";
 import {iconBaseUrl} from "../utils/StaticVariables";
+import {TokenActions} from "../components/TokenActions";
+import {censorTicker} from "../utils/censorTicker";
+import {generateUniqueID} from "web-vitals/dist/modules/lib/generateUniqueID";
+import {Dropdown} from "react-bootstrap";
 
 const ITEMS_PER_PAGE = 50;
 
@@ -17,9 +20,12 @@ const jsonLdData = {
     "description": "Overview of all KRC-20 tokens on the Kaspa blockchain.",
     "url": "https://katscan.xyz/tokens",
 };
+type HeaderType = (keyof TokenData | 'image' | 'action' | 'mintState' | 'mintProgress')
+
+const header: HeaderType[] = ['image', 'action', 'tick', 'mintState', 'state', 'max', 'pre', 'minted', 'mintProgress', 'mtsAdd']
 
 const TokenOverview: FC = () => {
-    const [tokens, setTokens] = useState<TokenData[]>([]);
+    const [tokens, setTokens] = useState<(TokenData & { id: string })[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [sortField, setSortField] = useState<keyof TokenData | ''>('');
@@ -45,10 +51,11 @@ const TokenOverview: FC = () => {
                 setLoading(true);
                 loadingRef.current = cursor;
                 const data = await getKRC20TokenListSequential(ITEMS_PER_PAGE, sortField, sortDirection, cursor);
-                if (!isMounted || loadingRef.current !== cursor) {
+                if (loadingRef.current !== cursor) {
                     return;
                 }
-                setTokens(current => ([...current, ...data.result]));
+                const tempRes = data.result.map(single => ({...single, id: generateUniqueID()}))
+                setTokens(current => ([...current, ...tempRes]));
 
                 if (data.cursor === undefined) {
                     setIsFinished(true);
@@ -213,6 +220,119 @@ const TokenOverview: FC = () => {
 
     if (error) return <div className="token-overview error">Error: {error}</div>;
 
+    const getElement = (header: string, token: TokenData): ReactElement => {
+        const headerInternal = header as HeaderType
+        switch (headerInternal) {
+            case "image":
+                return <div style={{width: '30px', overflow: 'hidden'}}>
+                    <Link to={`/tokens/${token.tick}`} className="token-ticker">
+                        <SmallThumbnail src={`${iconBaseUrl}${token.tick}.jpg`}
+                                        alt={token.tick}
+                                        loading="lazy"/>
+                    </Link>
+                </div>
+            case "action":
+                return <TokenActions/>
+            case "tick":
+                return <Link to={`/tokens/${token.tick}`} className="token-ticker">
+                    {censorTicker(token.tick)}
+                </Link>
+            case "mintState":
+                return <span className={getBadgeClass(token.pre)}>
+                     {token.pre === '0' ? 'Fair Mint' : 'Pre-Mint'}
+                            </span>
+
+            case "state":
+                return <>{formatState(token.state)}</>
+            case 'max':
+                return <>{formatNumberWithWords(token.max, token.dec)}</>
+            case 'pre':
+                return <>{formatPreMinted(token.pre, token.max, token.dec)}</>
+            case 'minted':
+                return <>{formatNumberWithWords(token.minted, token.dec)}
+                    {' '}
+                    <small className="text-muted">
+                        {formatPercentage(calculateValue(token.minted, token.dec), calculateValue(token.max, token.dec))}
+                    </small>
+                </>
+            case 'mintProgress':
+                return <div className="progress">
+                    <div
+                        className="progress-bar"
+                        style={{width: `${calculatePercentage(calculateValue(token.minted, token.dec), calculateValue(token.max, token.dec))}%`}}
+                    ></div>
+                </div>
+            case 'mtsAdd':
+                return <div>{formatDateTime(token.mtsAdd)}</div>
+            default:
+                return <div>{token[header as keyof TokenData]}</div>
+        }
+    }
+    const getHeader = (value: string): ReactElement | null => {
+        const h = value as HeaderType
+        switch (h) {
+            case 'image':
+            case "action":
+                return null
+            case 'tick':
+                return <div className="sticky-column cursor"
+                            onClick={() => handleSort('tick')}>
+                    Ticker {sortField === 'tick' && (sortDirection === 'asc' ? '▲' : '▼')}
+                </div>
+            case 'mintState':
+                return <Dropdown show={showLaunchTypeDropdown}
+                                 onToggle={() => setShowLaunchTypeDropdown(!showLaunchTypeDropdown)}>
+                    <Dropdown.Toggle as="div" className="dropdown-header">
+                        Launch Type
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu>
+                        <Dropdown.Item onClick={() => handleLaunchTypeSelect("")}>All</Dropdown.Item>
+                        <Dropdown.Item onClick={() => handleLaunchTypeSelect("Fair Mint")}>Fair
+                            Mint</Dropdown.Item>
+                        <Dropdown.Item
+                            onClick={() => handleLaunchTypeSelect("Pre-Mint")}>Pre-Mint</Dropdown.Item>
+                    </Dropdown.Menu>
+                </Dropdown>
+            case 'state':
+                return <Dropdown show={showStatusDropdown}
+                                 onToggle={() => setShowStatusDropdown(!showStatusDropdown)}>
+                    <Dropdown.Toggle as="div" className="dropdown-header">
+                        Status
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu>
+                        <Dropdown.Item onClick={() => handleStatusSelect("")}>All</Dropdown.Item>
+                        <Dropdown.Item
+                            onClick={() => handleStatusSelect("Complete")}>Complete</Dropdown.Item>
+                        <Dropdown.Item onClick={() => handleStatusSelect("Minting")}>Minting</Dropdown.Item>
+                    </Dropdown.Menu>
+                </Dropdown>
+            case 'max':
+                return <div onClick={() => handleSort('max')}
+                            className={'cursor'}>
+                    Max Supply {sortField === 'max' && (sortDirection === 'asc' ? '▲' : '▼')}
+                </div>
+            case 'pre':
+                return <div onClick={() => handleSort('pre')}
+                            className={'cursor'}>
+                    Pre-Minted {sortField === 'pre' && (sortDirection === 'asc' ? '▲' : '▼')}
+                </div>
+            case 'minted':
+                return <div onClick={() => handleSort('minted')}
+                            className={'cursor'}>
+                    Total Minted {sortField === 'minted' && (sortDirection === 'asc' ? '▲' : '▼')}
+                </div>
+            case 'mintProgress':
+                return <div className="text-center">Minting Progress</div>
+            case 'mtsAdd':
+                return <div onClick={() => handleSort('mtsAdd')}
+                            className={'cursor'}>
+                    Deployed On {sortField === 'mtsAdd' && (sortDirection === 'asc' ? '▲' : '▼')}
+                </div>
+            default:
+                return <div>{value}</div>
+        }
+    }
+
     return (
         <div className="token-overview">
             <div className="token-overview-header">
@@ -222,112 +342,14 @@ const TokenOverview: FC = () => {
                        onChangeCallback={setSearchTerm}
                        onSubmit={setSearchTerm}/>
             </div>
-            <div className="table-wrapper">
-                <Table>
-                    <thead>
-                    <tr>
-                        <th style={{width: '50px'}}/>
-                        <th className="sticky-column"
-                            onClick={() => handleSort('tick')}>Ticker {sortField === 'tick' && (sortDirection === 'asc' ? '▲' : '▼')}</th>
-                        <th className="text-center">
-                            <Dropdown show={showLaunchTypeDropdown}
-                                      onToggle={() => setShowLaunchTypeDropdown(!showLaunchTypeDropdown)}>
-                                <Dropdown.Toggle as="div" className="dropdown-header">
-                                    Launch Type
-                                </Dropdown.Toggle>
-                                <Dropdown.Menu>
-                                    <Dropdown.Item onClick={() => handleLaunchTypeSelect("")}>All</Dropdown.Item>
-                                    <Dropdown.Item onClick={() => handleLaunchTypeSelect("Fair Mint")}>Fair
-                                        Mint</Dropdown.Item>
-                                    <Dropdown.Item
-                                        onClick={() => handleLaunchTypeSelect("Pre-Mint")}>Pre-Mint</Dropdown.Item>
-                                </Dropdown.Menu>
-                            </Dropdown>
-                        </th>
-                        <th>
-                            <Dropdown show={showStatusDropdown}
-                                      onToggle={() => setShowStatusDropdown(!showStatusDropdown)}>
-                                <Dropdown.Toggle as="div" className="dropdown-header">
-                                    Status
-                                </Dropdown.Toggle>
-                                <Dropdown.Menu>
-                                    <Dropdown.Item onClick={() => handleStatusSelect("")}>All</Dropdown.Item>
-                                    <Dropdown.Item
-                                        onClick={() => handleStatusSelect("Complete")}>Complete</Dropdown.Item>
-                                    <Dropdown.Item onClick={() => handleStatusSelect("Minting")}>Minting</Dropdown.Item>
-                                </Dropdown.Menu>
-                            </Dropdown>
-                        </th>
-                        <th onClick={() => handleSort('max')}>Max
-                            Supply {sortField === 'max' && (sortDirection === 'asc' ? '▲' : '▼')}</th>
-                        <th onClick={() => handleSort('pre')}>Pre-Minted {sortField === 'pre' && (sortDirection === 'asc' ? '▲' : '▼')}</th>
-                        <th onClick={() => handleSort('minted')}>Total
-                            Minted {sortField === 'minted' && (sortDirection === 'asc' ? '▲' : '▼')}</th>
-                        <th className="text-center">Minting Progress</th>
-                        <th onClick={() => handleSort('mtsAdd')} className="text-right">Deployed
-                            On {sortField === 'mtsAdd' && (sortDirection === 'asc' ? '▲' : '▼')}</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {filteredAndSortedTokens.length > 0 ? (
-                        filteredAndSortedTokens.map((token) => (
-                            <tr key={token.tick}>
-                                <td>
-                                    <div style={{width: '30px', overflow: 'hidden'}}>
-                                        <Link to={`/tokens/${token.tick}`} className="token-ticker">
-                                            <SmallThumbnail src={`${iconBaseUrl}${token.tick}.jpg`}
-                                                            alt={token.tick}
-                                                            loading="lazy"/>
-                                        </Link>
-                                    </div>
-                                </td>
-                                <td className="sticky-column">
-                                    <Link to={`/tokens/${token.tick}`} className="token-ticker">
-                                        {censorTicker(token.tick)}
-                                    </Link>
-                                </td>
-                                <td className="text-center">
-                    <span className={getBadgeClass(token.pre)}>
-                      {token.pre === '0' ? 'Fair Mint' : 'Pre-Mint'}
-                    </span>
-                                </td>
-                                <td>{formatState(token.state)}</td>
-                                <td>{formatNumberWithWords(token.max, token.dec)}</td>
-                                <td>
-                                    {formatPreMinted(token.pre, token.max, token.dec)}
-                                </td>
-                                <td>
-                                    {formatNumberWithWords(token.minted, token.dec)}
-                                    {' '}
-                                    <small
-                                        className="text-muted">{formatPercentage(calculateValue(token.minted, token.dec), calculateValue(token.max, token.dec))}</small>
-                                </td>
-                                <td className="text-center">
-                                    <div className="progress">
-                                        <div
-                                            className="progress-bar"
-                                            style={{width: `${calculatePercentage(calculateValue(token.minted, token.dec), calculateValue(token.max, token.dec))}%`}}
-                                        ></div>
-                                    </div>
-                                </td>
-                                <td className="text-right">{formatDateTime(token.mtsAdd)}</td>
-                            </tr>
-                        ))
-                    ) : !loading && (
-                        <tr>
-                            <td colSpan={9} className="text-center">
-                                {'No tokens to display'}
-                            </td>
-                        </tr>
-                    )}
-                    {loading && <tr>
-                        <td colSpan={9} className="text-center">
-                            {<LoadingSpinner/>}
-                        </td>
-                    </tr>}
-                    </tbody>
-                </Table>
-            </div>
+            <List headerElements={header}
+                  items={filteredAndSortedTokens}
+                  itemHeight={40}
+                  getHeader={getHeader}
+                  getElement={getElement}
+                  isLoading={loading}
+                  cssGrid={true}
+            />
             <JsonLd data={jsonLdData}/>
             <SEO
                 title="Token Overview"

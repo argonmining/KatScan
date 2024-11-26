@@ -5,6 +5,17 @@
     height: 100vh;
     display: flex;
     flex-direction: column;
+
+    .list {
+        .list-item, .list-header {
+            grid-template-columns: 50px 50px minmax(100px, 1fr) minmax(100px, 1fr) minmax(100px, 1fr) minmax(100px, 1.5fr) minmax(100px, 1.5fr) minmax(100px, 1.5fr) minmax(100px, 1fr) minmax(100px, 1.5fr);
+        }
+        .list-item {
+            .action {
+                overflow: unset !important;
+            }
+        }
+    }
 }
 
 .token-overview-header {
@@ -79,6 +90,7 @@ tr:hover {
 
 .progress {
     height: 8px;
+    width: 100%;
     background-color: var(--tertiary-primary-color);
     border-radius: 4px;
     overflow: hidden;
@@ -234,23 +246,23 @@ a:hover {
     color: var(--dark-muted-color);
 }
 
-.sticky-column {
-    position: sticky;
-    left: 0;
-    background-color: inherit;
-}
+/*.sticky-column {*/
+/*    position: sticky;*/
+/*    left: 0;*/
+/*    !*background-color: inherit;*!*/
+/*}*/
 
-th.sticky-column {
-    z-index: 3;
-}
+/*th.sticky-column {*/
+/*    z-index: 3;*/
+/*}*/
 
-.dark-mode .sticky-column {
-    background-color: var(--dark-card-bg);
-}
+/*.dark-mode .sticky-column {*/
+/*    background-color: var(--dark-card-bg);*/
+/*}*/
 
-.dark-mode th.sticky-column {
-    background-color: var(--dark-header-bg) !important;
-}
+/*.dark-mode th.sticky-column {*/
+/*    background-color: var(--dark-header-bg) !important;*/
+/*}*/
 
 /* Dark mode dropdown header styles */
 .dark-mode .dropdown-header {
