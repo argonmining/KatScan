@@ -1,17 +1,10 @@
 .transaction-lookup {
-    margin: 0 auto;
-    padding: 20px;
+    height:100%
 }
 
 .transaction-details {
-    max-height: calc(100vh - 200px);
+    max-height: calc(100% - 70px);
     overflow-y: auto;
-    padding-right: 15px;
-}
-
-.transaction-lookup h1 {
-    color: var(--primary-color);
-    margin-bottom: 20px;
 }
 
 .transaction-lookup .form-control {
@@ -104,10 +97,6 @@
 
 .dark-mode .transaction-lookup {
     background-color: var(--dark-bg-color);
-}
-
-.dark-mode .transaction-lookup h1 {
-    color: var(--dark-primary-color);
 }
 
 .dark-mode .transaction-lookup .form-control {

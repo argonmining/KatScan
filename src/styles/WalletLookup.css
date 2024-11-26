@@ -3,10 +3,14 @@
 .wallet-lookup {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 20px;
-    height: calc(100vh - 40px); /* Adjust based on your layout */
+    height: 100%; /* Adjust based on your layout */
     display: flex;
     flex-direction: column;
+    /*todo table wrapper global remove*/
+    .table-wrapper{
+        height:100%;
+        padding: unset;
+    }
 }
 
 .wallet-details {
@@ -28,45 +32,10 @@
     }
 }
 
-.tab-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-}
-
-.tab-pane {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-}
-
 .table-wrapper {
     flex: 1;
     overflow-x: auto;
     overflow-y: auto;
-}
-
-.wallet-lookup h1 {
-    color: var(--primary-color);
-    margin-bottom: 20px;
-}
-
-.wallet-lookup .form-control {
-    height: 50px;
-    font-size: 1.1rem;
-}
-
-.wallet-lookup .btn-primary {
-    height: 50px;
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
-}
-
-.wallet-lookup .btn-primary:hover {
-    background-color: var(--secondary-color);
-    border-color: var(--secondary-color);
 }
 
 .wallet-lookup .card {
@@ -74,18 +43,7 @@
 }
 
 .wallet-lookup .table-wrapper {
-    height: calc(100vh - 440px); /* Adjust this value as needed */
     overflow-y: auto;
-}
-
-.wallet-lookup .table-wrapper::-webkit-scrollbar {
-    width: 0;
-    background: transparent;
-}
-
-.wallet-lookup .table-wrapper {
-    scrollbar-width: none;
-    -ms-overflow-style: none;
 }
 
 .wallet-lookup .table {
@@ -132,30 +90,6 @@
 
 .dark-mode .wallet-lookup {
     background-color: var(--dark-bg-color);
-}
-
-.dark-mode .wallet-lookup h1 {
-    color: var(--dark-primary-color);
-}
-
-.dark-mode .wallet-lookup .form-control {
-    background-color: var(--dark-card-bg);
-    color: var(--dark-text-color);
-    border-color: var(--dark-border-color);
-
-    &::placeholder {
-        color: var(--dark-text-color);
-    }
-}
-
-.dark-mode .wallet-lookup .btn-primary {
-    background-color: var(--dark-primary-color);
-    border-color: var(--dark-primary-color);
-}
-
-.dark-mode .wallet-lookup .btn-primary:hover {
-    background-color: var(--dark-secondary-color);
-    border-color: var(--dark-secondary-color);
 }
 
 .dark-mode .wallet-lookup .card {

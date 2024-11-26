@@ -1,16 +1,9 @@
 .mint-heatmap {
-  padding: 20px;
   background-color: #f8f9fa;
-  height: calc(100vh - 60px);
+  height: 100%;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-}
-
-.mint-heatmap h1 {
-  margin-bottom: 20px;
-  color: #333;
-  font-weight: bold;
 }
 
 .mint-heatmap .form-group {
@@ -45,11 +38,6 @@
 
 body {
   font-family: 'Roboto', sans-serif;
-}
-
-.mint-heatmap h1 {
-  font-weight: 700;
-  color: #333;
 }
 
 .chart-container {
@@ -118,10 +106,6 @@ body {
 
 .dark-mode .mint-heatmap {
   background-color: var(--dark-bg-color);
-}
-
-.dark-mode .mint-heatmap h1 {
-  color: var(--dark-text-color);
 }
 
 .dark-mode .mint-heatmap .form-group {

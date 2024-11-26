@@ -3,7 +3,7 @@ import {Col, Container, Form, Row} from 'react-bootstrap';
 import {Legend, ResponsiveContainer, Tooltip, Treemap} from 'recharts';
 import 'styles/MintHeatmap.css';
 import {censorTicker} from '../utils/censorTicker';
-import {LoadingSpinner, SEO, JsonLd, sendRequest} from "nacho-component-library/dist";
+import {LoadingSpinner, SEO, JsonLd, sendRequest, Page} from "nacho-component-library";
 import {MintData} from "../interfaces/MintData";
 
 const timeframes = [
@@ -19,7 +19,16 @@ type InternalMintData = {
     children: { name: string, size: number, actualSize: number }[]
 }
 
-type TreemapContentType = { root: Record<string, string | []>, depth: number, x: number, y: number, width: number, height: number, index: number, name: string }
+type TreemapContentType = {
+    root: Record<string, string | []>,
+    depth: number,
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+    index: number,
+    name: string
+}
 type TooltipType = { active: boolean, payload: { payload: { name: string, actualSize: number } }[] }
 
 // todo refactor
@@ -124,7 +133,7 @@ const MintHeatmap: FC = () => {
 
 
     // todo refactor after ts
-    const CustomTreemapContent = ({root, x, y, width, height, index, name}: TreemapContentType ) => {
+    const CustomTreemapContent = ({root, x, y, width, height, index, name}: TreemapContentType) => {
         const fontSize = Math.min(width / 6, height / 4, 16);
         const shortName = name && name.length > 6 ? `${name.slice(0, 5)}...` : name;
 
@@ -186,81 +195,80 @@ const MintHeatmap: FC = () => {
     );
 
     return (
-        <Container fluid className="mint-heatmap">
-            <SEO
-                title="Mint Heatmap"
-                description="Visualize KRC-20 token minting activity on the Kaspa blockchain with an interactive heatmap."
-                keywords="KRC-20, Kaspa, mint heatmap, token activity, visualization"
-            />
-            <JsonLd
-                data={{
-                    "@context": "https://schema.org",
-                    "@type": "WebApplication",
-                    "name": "KatScan Mint Heatmap",
-                    "description": "Visualize KRC-20 token minting activity on the Kaspa blockchain with an interactive heatmap.",
-                    "url": "https://katscan.xyz/mint-heatmap"
-                }}
-            />
-            <h1 style={{ color: `var(--primary-color)` }}>
-                Token Mint Heatmap
-            </h1>
-            {/* Remove the following Alert component */}
-            {/* <Alert variant="warning">
+        <Page header={'Token Mint Heatmap'}>
+            <Container fluid className="mint-heatmap">
+                <SEO
+                    title="Mint Heatmap"
+                    description="Visualize KRC-20 token minting activity on the Kaspa blockchain with an interactive heatmap."
+                    keywords="KRC-20, Kaspa, mint heatmap, token activity, visualization"
+                />
+                <JsonLd
+                    data={{
+                        "@context": "https://schema.org",
+                        "@type": "WebApplication",
+                        "name": "KatScan Mint Heatmap",
+                        "description": "Visualize KRC-20 token minting activity on the Kaspa blockchain with an interactive heatmap.",
+                        "url": "https://katscan.xyz/mint-heatmap"
+                    }}
+                />
+                {/* Remove the following Alert component */}
+                {/* <Alert variant="warning">
                 Note: The data displayed on this page may not be accurate due to an ongoing backend service issue.
             </Alert> */}
-            <Row className="mb-3">
-                <Col md={4}>
-                    <Form.Group>
-                        <Form.Label>Timeframe</Form.Label>
-                        <Form.Control
-                            as="select"
-                            value={timeframe}
-                            onChange={(e) => setTimeframe(e.target.value)}
-                        >
-                            <option value="">Select a timeframe</option>
-                            {timeframes.map((tf) => (
-                                <option key={tf.value} value={tf.value}>
-                                    {tf.label}
-                                </option>
-                            ))}
-                        </Form.Control>
-                    </Form.Group>
-                </Col>
-                <Col md={8}>
-                    {totalMints > 0 && (
-                        <p className="total-mints">Total Mints: {totalMints.toLocaleString()}</p>
-                    )}
-                </Col>
-            </Row>
-            {!timeframe && <p>Please select a timeframe to view the mint heatmap.</p>}
-            {error && <p className="text-danger">{error}</p>}
-            {loading && <LoadingSpinner useFlexHeight={true}/>}
-            {timeframe && mintData.length > 0 && (
-                <div className="chart-container">
-                    <ResponsiveContainer width="100%" height="100%">
-                        <Treemap
-                            data={mintData}
-                            dataKey="size"
-                            aspectRatio={4 / 3}
-                            stroke="#fff"
-                            // eslint-disable-next-line
-                            //@ts-ignore
-                            content={<CustomTreemapContent/>}
-                            animationDuration={500}
-                            animationEasing="ease-in-out"
-                        >
-                            {/* eslint-disable-next-line*/}
-                            {/*@ts-ignore*/}
-                            <Tooltip content={<CustomTooltip/>}/>
-                            <Legend content={<CustomLegend/>}/>
-                        </Treemap>
-                    </ResponsiveContainer>
-                </div>
-            )}
-            {timeframe && mintData.length === 0 && (
-                <p>No mint data available for the selected timeframe.</p>
-            )}
-        </Container>
+                <Row className="mb-3">
+                    <Col md={4}>
+                        <Form.Group>
+                            <Form.Label>Timeframe</Form.Label>
+                            <Form.Control
+                                as="select"
+                                value={timeframe}
+                                onChange={(e) => setTimeframe(e.target.value)}
+                            >
+                                <option value="">Select a timeframe</option>
+                                {timeframes.map((tf) => (
+                                    <option key={tf.value} value={tf.value}>
+                                        {tf.label}
+                                    </option>
+                                ))}
+                            </Form.Control>
+                        </Form.Group>
+                    </Col>
+                    <Col md={8}>
+                        {totalMints > 0 && (
+                            <p className="total-mints">Total Mints: {totalMints.toLocaleString()}</p>
+                        )}
+                    </Col>
+                </Row>
+                {!timeframe && <p>Please select a timeframe to view the mint heatmap.</p>}
+                {error && <p className="text-danger">{error}</p>}
+                {loading && <LoadingSpinner useFlexHeight={true}/>}
+                {timeframe && mintData.length > 0 && (
+                    <div className="chart-container">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <Treemap
+                                data={mintData}
+                                dataKey="size"
+                                aspectRatio={4 / 3}
+                                stroke="#fff"
+                                // eslint-disable-next-line
+                                //@ts-ignore
+                                content={<CustomTreemapContent/>}
+                                animationDuration={500}
+                                animationEasing="ease-in-out"
+                            >
+                                {/* eslint-disable-next-line*/}
+                                {/*@ts-ignore*/}
+                                <Tooltip content={<CustomTooltip/>}/>
+                                <Legend content={<CustomLegend/>}/>
+                            </Treemap>
+                        </ResponsiveContainer>
+                    </div>
+                )}
+                {timeframe && mintData.length === 0 && (
+                    <p>No mint data available for the selected timeframe.</p>
+                )}
+            </Container>
+        </Page>
     );
 };
 

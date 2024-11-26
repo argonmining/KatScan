@@ -1,7 +1,7 @@
 import React, {FC} from "react";
 
 import nacho from '../assets/underMaintenance.png'
-import {Image} from "nacho-component-library/dist";
+import {Image} from "nacho-component-library";
 
 export const UnderMaintenance: FC = () => {
     return <div style={{

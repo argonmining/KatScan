@@ -1,5 +1,4 @@
 .token-comparison {
-    padding: 30px;
     box-sizing: border-box;
     overflow-x: hidden;
     height: 100%;
@@ -123,7 +122,6 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
-.dark-mode .token-comparison h1,
 .dark-mode .token-comparison .card-title {
     color: var(--primary-color);
 }

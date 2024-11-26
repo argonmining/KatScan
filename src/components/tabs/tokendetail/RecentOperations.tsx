@@ -2,7 +2,7 @@ import React, {Dispatch, FC, SetStateAction, useCallback, useEffect, useRef, use
 import {MobileOperationsTable} from "../../tables/MobileOperationsTable";
 import {formatDateTime, formatNumber, parseRawNumber} from "../../../services/Helper";
 import {Alert, Table} from "react-bootstrap";
-import {LinkWithTooltip, useMobile} from "nacho-component-library/dist";
+import {LinkWithTooltip, useMobile} from "nacho-component-library";
 import {OpTransactionData} from "../../../interfaces/OpTransactionData";
 import {TokenSearchResult} from "../../../interfaces/TokenData";
 import {getTokenOperations} from "../../../services/dataService";
@@ -76,7 +76,7 @@ export const RecentOperations: FC<Props> = (
     }, [loadingMore, operationsCursor, fetchOperations]);
 
     return <>
-        <div className="detail-table-container">
+        <div className="detail-table-container" style={{height:'100%'}}>
             {isMobile ? (
                 <MobileOperationsTable
                     data={operations}

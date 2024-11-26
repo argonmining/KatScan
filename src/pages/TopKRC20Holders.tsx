@@ -6,7 +6,7 @@ import {censorTicker} from '../utils/censorTicker';
 import {useMediaQuery} from 'react-responsive';
 import {TopHolder} from "../interfaces/TokenData";
 import {MobileTopKRC20Holders} from "../components/mobileComponents/MobileTopKRC20Holders";
-import {SEO,JsonLd, ExpandAbleList, simpleRequest} from "nacho-component-library/dist";
+import {SEO, JsonLd, ExpandAbleList, simpleRequest, Page} from "nacho-component-library";
 
 const API_BASE_URL = 'https://katapi.nachowyborski.xyz/api/topHolders';
 
@@ -94,8 +94,8 @@ const TopKRC20Holders: FC = () => {
     }
 
     return (
+        <Page header={'Top KRC20 Token Holders'}>
         <div className="top-krc20-holders-wrapper">
-            <h1>Top KRC20 Token Holders</h1>
             <SEO
                 title="Top KRC-20 Token Holders"
                 description="Explore the top holders of KRC-20 tokens on the Kaspa blockchain, ranked by unique token holdings."
@@ -121,6 +121,7 @@ const TopKRC20Holders: FC = () => {
                     </div>
                 )}
         </div>
+        </Page>
     );
 };
 

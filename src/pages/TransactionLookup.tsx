@@ -1,13 +1,12 @@
-import React, {FC, FormEvent, useEffect, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {Link, useNavigate, useParams} from 'react-router-dom';
-import {Alert, Button, Col, Container, Form, InputGroup, Row} from 'react-bootstrap';
-import {FaArrowRight, FaExternalLinkAlt, FaSearch} from 'react-icons/fa';
+import {Alert, Col, Container, Row} from 'react-bootstrap';
+import {FaArrowRight, FaExternalLinkAlt} from 'react-icons/fa';
 import '../styles/TransactionLookup.css';
-import {simpleRequest} from "nacho-component-library/dist";
+import {JsonLd, LoadingSpinner, NormalCard, Page, SEO, Input, simpleRequest} from "nacho-component-library";
 import {OpTransactionData} from "../interfaces/OpTransactionData";
 import {Transaction} from "../interfaces/Transaction";
 import {ResultResponse} from "../interfaces/ApiResponseTypes";
-import {SEO, JsonLd, LoadingSpinner, NormalCard} from "nacho-component-library/dist";
 import {TransactionDetails} from "../components/transactionLookup/TransactionDetails";
 import {formatKaspa, formatKRC20Amount} from "../services/Helper";
 
@@ -24,13 +23,21 @@ export type TransactionData = {
     }
 }
 
+const jsonData = {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "KatScan Transaction Lookup",
+    "description": "Explore detailed information about KRC-20 token transactions on the Kaspa blockchain.",
+    "url": "https://katscan.xyz/transaction-lookup"
+}
+
 const TransactionLookup: FC = () => {
 
-    const [transactionHash, setTransactionHash] = useState('');
+    const {hashRev} = useParams();
+    const [transactionHash, setTransactionHash] = useState(hashRev ?? '');
     const [transactionData, setTransactionData] = useState<TransactionData | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const {hashRev} = useParams();
     const navigate = useNavigate();
 
     const fetchTransactionData = async (hash: string): Promise<void> => {
@@ -64,8 +71,7 @@ const TransactionLookup: FC = () => {
         }
     }, [hashRev]);
 
-    const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
-        e.preventDefault();
+    const handleSubmit = (transactionHash: string): void => {
         if (transactionHash) {
             navigate(`/transaction-lookup/${transactionHash}`);
         }
@@ -80,100 +86,88 @@ const TransactionLookup: FC = () => {
     };
 
     return (
-        <Container className="transaction-lookup">
-            <SEO
-                title="Transaction Lookup"
-                description="Explore detailed information about KRC-20 token transactions on the Kaspa blockchain."
-                keywords="KRC-20, Kaspa, transaction lookup, blockchain explorer, token transfers"
-            />
-            <JsonLd
-                data={{
-                    "@context": "https://schema.org",
-                    "@type": "WebApplication",
-                    "name": "KatScan Transaction Lookup",
-                    "description": "Explore detailed information about KRC-20 token transactions on the Kaspa blockchain.",
-                    "url": "https://katscan.xyz/transaction-lookup"
-                }}
-            />
-            <h1>Transaction Lookup</h1>
-            <Form onSubmit={handleSubmit}>
-                <InputGroup className="mb-3">
-                    <Form.Control
-                        type="text"
-                        placeholder="Enter transaction hash"
-                        value={transactionHash}
-                        onChange={(e) => setTransactionHash(e.target.value)}
-                    />
-                    <Button variant="primary" type="submit">
-                        <FaSearch/> Search
-                    </Button>
-                </InputGroup>
-            </Form>
+        <Page header={'Transaction Lookup'}>
+            <Container className="transaction-lookup">
+                <SEO
+                    title="Transaction Lookup"
+                    description="Explore detailed information about KRC-20 token transactions on the Kaspa blockchain."
+                    keywords="KRC-20, Kaspa, transaction lookup, blockchain explorer, token transfers"
+                />
+                <JsonLd
+                    data={jsonData}
+                />
 
-            {loading && <LoadingSpinner/>}
-            {error && <Alert variant="danger">{error}</Alert>}
+                <Input customClass={'mb-3'}
+                       onSubmit={handleSubmit}
+                       placeholder={'Enter transaction hash'}
+                       value={transactionHash}
+                       onChangeCallback={setTransactionHash}/>
 
-            {transactionData && (
-                <div className="transaction-details">
-                    <NormalCard title={'KRC-20 Operation Overview'} titleProps={{as: 'h5'}}>
-                        <Row className="mb-2">
-                            <Col sm={4}><strong>Operation</strong></Col>
-                            <Col sm={8}>{capitalizeFirstLetter(transactionData.krc20Data.op)}</Col>
-                        </Row>
-                        <Row className="mb-2">
-                            <Col sm={4}><strong>Token</strong></Col>
-                            <Col sm={8}>{transactionData.krc20Data.tick}</Col>
-                        </Row>
-                        <Row className="mb-2">
-                            <Col sm={4}><strong>Amount</strong></Col>
-                            <Col
-                                sm={8}>{formatKRC20Amount(transactionData.krc20Data.amt, 8, transactionData.krc20Data.tick)}</Col>
-                        </Row>
-                        <Row className="mb-2">
-                            <Col sm={4}><strong>P2SH Address</strong></Col>
-                            <Col sm={8}>
+                {loading && <LoadingSpinner/>}
+                {error && <Alert variant="danger">{error}</Alert>}
+
+                {transactionData && (
+                    <div className="transaction-details">
+                        <NormalCard title={'KRC-20 Operation Overview'} titleProps={{as: 'h5'}}>
+                            <Row className="mb-2">
+                                <Col sm={4}><strong>Operation</strong></Col>
+                                <Col sm={8}>{capitalizeFirstLetter(transactionData.krc20Data.op)}</Col>
+                            </Row>
+                            <Row className="mb-2">
+                                <Col sm={4}><strong>Token</strong></Col>
+                                <Col sm={8}>{transactionData.krc20Data.tick}</Col>
+                            </Row>
+                            <Row className="mb-2">
+                                <Col sm={4}><strong>Amount</strong></Col>
+                                <Col
+                                    sm={8}>{formatKRC20Amount(transactionData.krc20Data.amt, 8, transactionData.krc20Data.tick)}</Col>
+                            </Row>
+                            <Row className="mb-2">
+                                <Col sm={4}><strong>P2SH Address</strong></Col>
+                                <Col sm={8}>
                   <span className="clickable-address"
                         onClick={() => openExplorerForP2SH(transactionData.commitData.outputs[0].script_public_key_address)}>
                     {transactionData.commitData.outputs[0].script_public_key_address}
                       <FaExternalLinkAlt className="ms-2"/>
                   </span>
-                            </Col>
-                        </Row>
-                        <Row className="mb-2">
-                            <Col sm={4}><strong>Wallet Address</strong></Col>
-                            <Col sm={8}>
-                                <Link to={`/wallet/${transactionData.krc20Data.to}`}
-                                      className={'clickable-address'}>
-                                    {transactionData.krc20Data.to}
-                                </Link>
-                            </Col>
-                        </Row>
-                        <Row className="mb-2">
-                            <Col sm={4}><strong>Transaction Fee</strong></Col>
-                            <Col sm={8}>{formatKaspa(transactionData.krc20Data.feeRev)}</Col>
-                        </Row>
-                        <Row>
-                            <Col sm={4}><strong>Operation Score</strong></Col>
-                            <Col sm={8}>{transactionData.krc20Data.opScore}</Col>
-                        </Row>
-                    </NormalCard>
+                                </Col>
+                            </Row>
+                            <Row className="mb-2">
+                                <Col sm={4}><strong>Wallet Address</strong></Col>
+                                <Col sm={8}>
+                                    <Link to={`/wallet/${transactionData.krc20Data.to}`}
+                                          className={'clickable-address'}>
+                                        {transactionData.krc20Data.to}
+                                    </Link>
+                                </Col>
+                            </Row>
+                            <Row className="mb-2">
+                                <Col sm={4}><strong>Transaction Fee</strong></Col>
+                                <Col sm={8}>{formatKaspa(transactionData.krc20Data.feeRev)}</Col>
+                            </Row>
+                            <Row>
+                                <Col sm={4}><strong>Operation Score</strong></Col>
+                                <Col sm={8}>{transactionData.krc20Data.opScore}</Col>
+                            </Row>
+                        </NormalCard>
 
-                    <div className="transaction-flow mb-4">
-                        <div className="commit-transaction">
-                            <h6>Commit Transaction</h6>
-                            <p>{transactionData.commitData.transaction_id}</p>
+                        <div className="transaction-flow mb-4">
+                            <div className="commit-transaction">
+                                <h6>Commit Transaction</h6>
+                                <p>{transactionData.commitData.transaction_id}</p>
+                            </div>
+                            <FaArrowRight className="flow-arrow"/>
+                            <div className="reveal-transaction">
+                                <h6>Reveal Transaction</h6>
+                                <p>{transactionData.revealData.transaction_id}</p>
+                            </div>
                         </div>
-                        <FaArrowRight className="flow-arrow"/>
-                        <div className="reveal-transaction">
-                            <h6>Reveal Transaction</h6>
-                            <p>{transactionData.revealData.transaction_id}</p>
-                        </div>
+                        <TransactionDetails data={transactionData.commitData}
+                                            title={"Commit Transaction Details"}/>
                     </div>
-                    <TransactionDetails data={transactionData.commitData}
-                                        title={"Commit Transaction Details"}/>
-                </div>
-            )}
-        </Container>
+                )}
+            </Container>
+        </Page>
     );
 };
 

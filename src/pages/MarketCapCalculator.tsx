@@ -15,10 +15,10 @@ import {getDetailedTokenInfo, getKRC20TokenList} from '../services/dataService';
 import {CryptoSearch, getCryptoData, searchCryptos} from '../services/coingeckoService';
 import 'styles/MarketCapCalculator.css';
 import {censorTicker} from '../utils/censorTicker';
-import {JsonLd, SEO, LoadingSpinner} from "nacho-component-library/dist";
 import {TokenData, TokenSearchResult} from "../interfaces/TokenData";
 import {CoinbaseInfo} from "../interfaces/CoinbaseInfo";
 import {formatInteger, formatNumber} from "../services/Helper";
+import {JsonLd, SEO, NormalCard, LoadingSpinner, Page} from "nacho-component-library";
 
 type CalculationResult = {
     krc20Token: {
@@ -155,12 +155,12 @@ const MarketCapCalculator: FC = () => {
     };
 
     return (
+        <Page header={'MarketCap Calculator'}>
         <Container fluid className="market-cap-calculator">
             <SEO title="Market Cap Calculator"
-                description="Calculate and compare market caps of KRC-20 tokens on the Kaspa network."
-                keywords="KRC-20, Kaspa, market cap, calculator, cryptocurrency" />
-            <JsonLd data={jsonData} />
-            <h1 className="mb-4">MarketCap Calculator</h1>
+                 description="Calculate and compare market caps of KRC-20 tokens on the Kaspa network."
+                 keywords="KRC-20, Kaspa, market cap, calculator, cryptocurrency"/>
+            <JsonLd data={jsonData}/>
             <Row className="justify-content-center">
                 <Col md={10} lg={8}>
                     <Row className="mb-4">
@@ -272,9 +272,10 @@ const MarketCapCalculator: FC = () => {
                                     </Card>
                                 </Col>
                             </Row>
-                            <Card className="mt-4 hypothetical-price-card">
+                            <NormalCard title={`Hypothetical ${censorTicker(calculationResult.krc20Token.tick)} Price`}
+                                        titleProps={{className: "mt-4 text-center fw-bold"}}>
                                 <Card.Body className="text-center">
-                                    <h5>Hypothetical {censorTicker(calculationResult.krc20Token.tick)} Price</h5>
+                                    <h5></h5>
                                     <p className="lead mb-3">
                                         {`If ${censorTicker(calculationResult.krc20Token.tick)} had ${calculationResult.crypto.symbol.toUpperCase()}'s
                                         market cap:`}
@@ -289,12 +290,13 @@ const MarketCapCalculator: FC = () => {
                                         should not be considered as financial advice.
                                     </p>
                                 </Card.Body>
-                            </Card>
+                            </NormalCard>
                         </div>
                     )}
                 </Col>
             </Row>
         </Container>
+        </Page>
     );
 };
 

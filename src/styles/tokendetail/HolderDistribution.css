@@ -1,5 +1,8 @@
 
-.mobile-holder-distribution {
+.holder-distribution {
+    height: 100%;
     overflow-x: auto;
-    margin-top: 40px;
+    .div-chart {
+        height: 100%;
+    }
 }

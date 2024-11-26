@@ -1,17 +1,17 @@
-import React, { FC, ReactNode, useState } from 'react'
-import { Button, Container, Modal, Nav, Navbar } from 'react-bootstrap'
-import { Link, NavLink } from 'react-router-dom'
+import React, {forwardRef, ReactNode, useState} from 'react'
+import {Button, Container, Modal, Nav, Navbar} from 'react-bootstrap'
+import {Link, NavLink} from 'react-router-dom'
 import {
     FaBars,
     FaChartLine,
     FaCoins,
+    FaColumns,
     FaExchangeAlt,
     FaFireAlt,
+    FaRobot,
     FaSearch,
     FaUsers,
     FaWallet,
-    FaColumns,
-    FaRobot,
 } from 'react-icons/fa'
 import logo from '../assets/logo.png'
 import qrCode from '../assets/qr.png'
@@ -24,7 +24,7 @@ type Props = {
     isMobile: boolean
 }
 
-const Sidebar: FC<Props> = ({ darkMode, toggleDarkMode, isMobile }) => {
+const Sidebar= forwardRef<HTMLDivElement, Props>(({ darkMode, toggleDarkMode, isMobile }, ref) => {
     /*const [collapsed, setCollapsed] = useState(false)*/
     const [collapsed] = useState(false)
     const [showDonateModal, setShowDonateModal] = useState(false)
@@ -62,6 +62,7 @@ const Sidebar: FC<Props> = ({ darkMode, toggleDarkMode, isMobile }) => {
             {isMobile ? (
                 // Mobile Navbar
                 <Navbar
+                    ref={ref}
                     expand="lg"
                     bg={darkMode ? 'dark' : 'light'}
                     variant={darkMode ? 'dark' : 'light'}
@@ -164,7 +165,8 @@ const Sidebar: FC<Props> = ({ darkMode, toggleDarkMode, isMobile }) => {
                 </Navbar>
             ) : (
                 // Desktop Sidebar
-                <div
+                <div id={'navbar'}
+                     ref={ref}
                     className={`sidebar ${
                         collapsed ? 'collapsed' : ''
                     } d-none d-lg-block`}
@@ -325,6 +327,7 @@ const Sidebar: FC<Props> = ({ darkMode, toggleDarkMode, isMobile }) => {
             </Modal>
         </>
     )
-}
+})
 
+Sidebar.displayName = 'Sidebar'
 export default Sidebar

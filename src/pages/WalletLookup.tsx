@@ -1,7 +1,7 @@
-import React, {FC, FormEvent, useCallback, useEffect, useRef, useState} from 'react';
+import React, {FC, useCallback, useEffect, useRef, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
-import {Alert, Button, Container, Form, InputGroup, Tab, Table, Tabs} from 'react-bootstrap';
-import {FaCopy, FaSearch} from 'react-icons/fa';
+import {Alert, Container, Table} from 'react-bootstrap';
+import {FaCopy} from 'react-icons/fa';
 import 'styles/WalletLookup.css';
 import {censorTicker} from '../utils/censorTicker';
 import {TokenListResponse} from "../interfaces/ApiResponseTypes";
@@ -10,7 +10,17 @@ import {Transaction} from "../interfaces/Transaction";
 import {MobileTransactionTable} from "../components/tables/MobileTransactionTable";
 import {MobileUTXOTable} from "../components/tables/MobileUTXOTable";
 import {formatNumber, shortenString} from "../services/Helper";
-import {NormalCard, JsonLd, LoadingSpinner, SEO, simpleRequest, useMobile} from "nacho-component-library/dist";
+import {
+    CustomTabs,
+    JsonLd,
+    LoadingSpinner,
+    NormalCard,
+    Page,
+    SEO,
+    Input,
+    simpleRequest,
+    useMobile
+} from "nacho-component-library";
 
 type InternalWalletData = {
     address: string
@@ -25,7 +35,7 @@ const WalletLookup: FC = () => {
     const navigate = useNavigate();
     const {isMobile} = useMobile()
 
-    const [address, setAddress] = useState('');
+    const [address, setAddress] = useState(walletAddress ?? '');
     const [walletData, setWalletData] = useState<InternalWalletData | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -165,15 +175,10 @@ const WalletLookup: FC = () => {
 
     }, [walletAddress])
 
-    const handleSubmit = (e: FormEvent) => {
-        e.preventDefault();
-        if (address) {
-            navigate(`/wallet/${address}`);
+    const handleSubmit = (e: string | undefined) => {
+        if (e) {
+            navigate(`/wallet/${e}`);
         }
-    };
-
-    const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setAddress(e.target.value);
     };
 
     const copyToClipboard = (text: string): void => {
@@ -185,59 +190,51 @@ const WalletLookup: FC = () => {
     };
 
     return (
-        <Container className='wallet-lookup'>
-            <SEO
-                title="Wallet Lookup"
-                description="Look up KRC-20 token balances and transaction history for any wallet address on the Kaspa blockchain."
-                keywords="KRC-20, Kaspa, wallet lookup, token balances, transaction history"
-            />
-            <JsonLd
-                data={{
-                    "@context": "https://schema.org",
-                    "@type": "WebApplication",
-                    "name": "KatScan Wallet Lookup",
-                    "description": "Look up KRC-20 token balances and transaction history for any wallet address on the Kaspa blockchain.",
-                    "url": "https://katscan.xyz/wallet"
-                }}
-            />
-            <h1>Wallet Lookup</h1>
-            <Form onSubmit={handleSubmit}>
-                <InputGroup className="mb-3">
-                    <Form.Control
-                        type="text"
-                        placeholder="Enter wallet address"
-                        value={address}
-                        onChange={handleAddressChange}
-                    />
-                    <Button variant="primary" type="submit">
-                        <FaSearch/> Search
-                    </Button>
-                </InputGroup>
-            </Form>
+        <Page header={'Wallet Lookup'}>
+            <Container className='wallet-lookup'>
+                <SEO
+                    title="Wallet Lookup"
+                    description="Look up KRC-20 token balances and transaction history for any wallet address on the Kaspa blockchain."
+                    keywords="KRC-20, Kaspa, wallet lookup, token balances, transaction history"
+                />
+                <JsonLd
+                    data={{
+                        "@context": "https://schema.org",
+                        "@type": "WebApplication",
+                        "name": "KatScan Wallet Lookup",
+                        "description": "Look up KRC-20 token balances and transaction history for any wallet address on the Kaspa blockchain.",
+                        "url": "https://katscan.xyz/wallet"
+                    }}
+                />
 
-            {loading && <LoadingSpinner/>}
-            {error && <Alert variant="danger">{error}</Alert>}
+                <Input customClass={'mb-3'}
+                       onSubmit={handleSubmit}
+                       value={address}
+                       placeholder={'Enter wallet address'}
+                       onChangeCallback={setAddress}/>
 
-            {walletData && (
-                <div className="wallet-details">
-                    <div className="wallet-overview">
-                        <NormalCard title={'Wallet Overview'}>
-                            <div className={'grid'}>
-                                <strong>Address:</strong>
-                                <div>
-                                    {walletData.address}
-                                    <FaCopy className="clickable" onClick={() => copyToClipboard(walletData.address)}/>
+                {loading && <LoadingSpinner/>}
+                {error && <Alert variant="danger">{error}</Alert>}
+
+                {walletData && (
+                    <div className="wallet-details">
+                        <div className="wallet-overview">
+                            <NormalCard title={'Wallet Overview'}>
+                                <div className={'grid'}>
+                                    <strong>Address:</strong>
+                                    <div>
+                                        {walletData.address}
+                                        <FaCopy className="clickable"
+                                                onClick={() => copyToClipboard(walletData.address)}/>
+                                    </div>
+
+                                    <strong>Kaspa Balance:</strong>
+                                    <div>{formatNumber(walletData.kaspaBalance / 1e8)} KAS</div>
+                                    <strong>Transaction Count:</strong> {walletData.transactionCount}
                                 </div>
-
-                                <strong>Kaspa Balance:</strong>
-                                <div>{formatNumber(walletData.kaspaBalance / 1e8)} KAS</div>
-                                <strong>Transaction Count:</strong> {walletData.transactionCount}
-                            </div>
-                        </NormalCard>
-                    </div>
-
-                    <Tabs defaultActiveKey="krc20" className="mb-3">
-                        <Tab eventKey="krc20" title="KRC20 Tokens">
+                            </NormalCard>
+                        </div>
+                        <CustomTabs titles={['KRC20 Tokens', 'Recent Transactions', 'UTXOs']}>
                             <div className="table-wrapper">
                                 <Table striped bordered hover>
                                     <thead>
@@ -256,9 +253,7 @@ const WalletLookup: FC = () => {
                                     </tbody>
                                 </Table>
                             </div>
-                        </Tab>
 
-                        <Tab eventKey="transactions" title="Recent Transactions">
                             <div className="table-wrapper">
                                 {isMobile ? (
                                     <MobileTransactionTable
@@ -295,9 +290,7 @@ const WalletLookup: FC = () => {
                                 {loadingTransactions &&
                                     <div className="loading-message">Loading more transactions...</div>}
                             </div>
-                        </Tab>
 
-                        <Tab eventKey="utxos" title="UTXOs">
                             <div className="table-wrapper">
                                 {isMobile ? (
                                     <MobileUTXOTable
@@ -339,11 +332,11 @@ const WalletLookup: FC = () => {
                                 )}
                                 {loadingUtxos && <div className="loading-message">Loading more UTXOs...</div>}
                             </div>
-                        </Tab>
-                    </Tabs>
-                </div>
-            )}
-        </Container>
+                        </CustomTabs>
+                    </div>
+                )}
+            </Container>
+        </Page>
     );
 };
 

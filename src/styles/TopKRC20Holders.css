@@ -1,15 +1,8 @@
 .top-krc20-holders-wrapper {
     display: flex;
     flex-direction: column;
-    height: 100vh !important; /* Full viewport height */
-    padding: 20px;
+    height: 100%;
     overflow: hidden !important;
-}
-
-.top-krc20-holders-wrapper h1 {
-    font-family: var(--header-font);
-    color: var(--primary-color);
-    margin-bottom: 20px;
 }
 
 .table {
@@ -98,19 +91,9 @@
     color: var(--primary-color);
 }
 
-.top-krc20-holders-wrapper::-webkit-scrollbar {
-    width: 0; /* Remove scrollbar space */
-    background: transparent; /* Optional: just make scrollbar invisible */
-}
-
 @media (max-width: 768px) {
     .top-krc20-holders-wrapper {
         padding: 10px;
-    }
-
-    .top-krc20-holders-wrapper h1 {
-        font-size: 1.5rem;
-        margin-bottom: 15px;
     }
 
     .mobile-holders-list {
@@ -162,10 +145,6 @@
 
 .dark-mode .top-krc20-holders-wrapper {
     background-color: var(--dark-bg-color);
-}
-
-.dark-mode .top-krc20-holders-wrapper h1 {
-    color: var(--primary-color);
 }
 
 .dark-mode .table {
