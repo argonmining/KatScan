@@ -2,14 +2,7 @@ import React, {FC} from 'react'
 import {DropDownButton} from "./DropDownButton";
 import {Dropdown} from "react-bootstrap";
 
-type Props = {
-    ticker: string
-}
-export const TokenActions: FC<Props> = (
-    {
-        ticker
-    }
-) => {
+export const TokenActions:FC = () => {
 
     const openBot = () => {
         window.open(`https://t.me/kspr_home_bot?start=nacho`, '_blank')

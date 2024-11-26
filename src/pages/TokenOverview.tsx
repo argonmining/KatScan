@@ -232,7 +232,7 @@ const TokenOverview: FC = () => {
                     </Link>
                 </div>
             case "action":
-                return <TokenActions ticker={token.tick}/>
+                return <TokenActions />
             case "tick":
                 return <Link to={`/tokens/${token.tick}`} className="token-ticker">
                     {censorTicker(token.tick)}
