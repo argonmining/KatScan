@@ -11,13 +11,11 @@ export const TokenActions: FC<Props> = (
     }
 ) => {
 
-    const internal = () => {
-        console.log("click")
+    const openBot = () => {
+        window.open(`https://t.me/kspr_home_bot?start=nacho`, '_blank')
     }
     return <DropDownButton>
-        <Dropdown.Item onClick={internal}>Jaa</Dropdown.Item>
-        <Dropdown.Item onClick={internal}>All</Dropdown.Item>
-        <Dropdown.Item onClick={internal}>All</Dropdown.Item>
+        <Dropdown.Item onClick={openBot}>KSPR Bot</Dropdown.Item>
     </DropDownButton>
 
 }
