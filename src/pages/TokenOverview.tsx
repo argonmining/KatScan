@@ -232,7 +232,7 @@ const TokenOverview: FC = () => {
                     </Link>
                 </div>
             case "action":
-                return <TokenActions />
+                return <TokenActions/>
             case "tick":
                 return <Link to={`/tokens/${token.tick}`} className="token-ticker">
                     {censorTicker(token.tick)}
@@ -275,7 +275,7 @@ const TokenOverview: FC = () => {
             case "action":
                 return null
             case 'tick':
-                return <div className="sticky-column"
+                return <div className="sticky-column cursor"
                             onClick={() => handleSort('tick')}>
                     Ticker {sortField === 'tick' && (sortDirection === 'asc' ? '▲' : '▼')}
                 </div>
@@ -307,21 +307,25 @@ const TokenOverview: FC = () => {
                     </Dropdown.Menu>
                 </Dropdown>
             case 'max':
-                return <div onClick={() => handleSort('max')}>
+                return <div onClick={() => handleSort('max')}
+                            className={'cursor'}>
                     Max Supply {sortField === 'max' && (sortDirection === 'asc' ? '▲' : '▼')}
                 </div>
             case 'pre':
-                return <div onClick={() => handleSort('pre')}>
+                return <div onClick={() => handleSort('pre')}
+                            className={'cursor'}>
                     Pre-Minted {sortField === 'pre' && (sortDirection === 'asc' ? '▲' : '▼')}
                 </div>
             case 'minted':
-                return <div onClick={() => handleSort('minted')}>
+                return <div onClick={() => handleSort('minted')}
+                            className={'cursor'}>
                     Total Minted {sortField === 'minted' && (sortDirection === 'asc' ? '▲' : '▼')}
                 </div>
             case 'mintProgress':
                 return <div className="text-center">Minting Progress</div>
             case 'mtsAdd':
-                return <div onClick={() => handleSort('mtsAdd')}>
+                return <div onClick={() => handleSort('mtsAdd')}
+                            className={'cursor'}>
                     Deployed On {sortField === 'mtsAdd' && (sortDirection === 'asc' ? '▲' : '▼')}
                 </div>
             default:
