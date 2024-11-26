@@ -1,6 +1,9 @@
 // Helper function for number formatting
 export const formatNumber = (number: number | string, maxDigits = 5): string => {
     const internalNumber = typeof number === 'string' ? parsingNumber(number) : number
+    if (internalNumber === 0){
+        return '0'
+    }
     return new Intl.NumberFormat('en-US', {
         minimumFractionDigits: 0,
         maximumFractionDigits: maxDigits,
@@ -33,6 +36,9 @@ const parsingNumber = (value: string): number => {
 }
 
 export const parseRawNumber = (rawNumber: string | number, decimals: number): number => {
+    if (!rawNumber){
+        return 0
+    }
     return Number(rawNumber) / Math.pow(10, decimals);
 }
 
@@ -51,6 +57,9 @@ export const formatKaspa = (amount: string): string => {
 }
 
 export const formatKRC20Amount = (amount: string, decimals: number, tick: string): string => {
+    if (!amount || amount === '0'){
+        return '0'
+    }
     return `${parseRawNumber(amount, decimals).toFixed(decimals)} ${tick}`;
 }
 
