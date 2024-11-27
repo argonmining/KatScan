@@ -35,6 +35,7 @@
             background-color: var(--bs-table-bg);
             border-bottom: 1px solid lightgray;
             min-width: fit-content;
+            color: white;
 
             .list-column {
                 padding: 0 5px;

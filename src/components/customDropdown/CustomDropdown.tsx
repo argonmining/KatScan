@@ -1,6 +1,7 @@
 import React, {FC, PropsWithChildren, ReactElement, useRef, useState} from "react";
 import {Dropdown} from "react-bootstrap";
 import {createPortal} from "react-dom";
+import './CustomDropdown.css'
 
 type Props = {
     title: string | ReactElement
@@ -18,12 +19,12 @@ export const CustomDropdown: FC<PropsWithChildren<Props>> = (
     const container = document.getElementById('portal-container')
     const dRef = useRef<HTMLDivElement | null>(null)
 
-    if (container === null){
+    if (container === null) {
         return null
     }
 
     return <Dropdown show={showLaunchTypeDropdown}
-                     className={className}
+                     className={`custom-dropdown ${className ?? ''}`}
                      ref={dRef}
                      onToggle={() => setShowLaunchTypeDropdown(!showLaunchTypeDropdown)}>
         <Dropdown.Toggle as="div" className="dropdown-header">
@@ -36,7 +37,7 @@ export const CustomDropdown: FC<PropsWithChildren<Props>> = (
                     left: dRef.current?.clientLeft,
                     top: dRef.current?.clientTop
                 }}
-                className={className}>
+                     className={`custom-dropdown ${className ?? ''}`}>
                     <Dropdown.Menu>
                         {children}
                     </Dropdown.Menu>

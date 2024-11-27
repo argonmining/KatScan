@@ -266,63 +266,8 @@ a:hover {
     );
 }
 
-.dark-mode .token-ticker {
-    color: var(--dark-text-color);
-}
-
-.dark-mode .table {
-    background-color: var(--dark-card-bg);
-}
-
-.dark-mode .table tbody tr {
-    background-color: var(--dark-card-bg);
-}
-
-.dark-mode .table tbody tr:nth-of-type(odd) {
-    background-color: var(--dark-stripe-bg);
-}
-
 .dark-mode .form-control::placeholder {
     color: var(--dark-muted-color);
-}
-
-/*.sticky-column {*/
-/*    position: sticky;*/
-/*    left: 0;*/
-/*    !*background-color: inherit;*!*/
-/*}*/
-
-/*th.sticky-column {*/
-/*    z-index: 3;*/
-/*}*/
-
-/*.dark-mode .sticky-column {*/
-/*    background-color: var(--dark-card-bg);*/
-/*}*/
-
-/*.dark-mode th.sticky-column {*/
-/*    background-color: var(--dark-header-bg) !important;*/
-/*}*/
-
-/* Dark mode dropdown header styles */
-
-.dark-mode .dropdown-header {
-    background-color: var(--dark-header-bg) !important;
-    color: var(--dark-text-color) !important;
-    border-bottom-color: var(--dark-border-color);
-}
-
-.dark-mode .dropdown-menu {
-    background-color: var(--dark-header-bg);
-    color: var(--dark-text-color);
-}
-
-.dark-mode .dropdown-item {
-    color: var(--dark-text-color);
-}
-
-.dark-mode .dropdown-item:hover {
-    background-color: var(--dark-secondary-color);
 }
 
 /* Mobile View  */
