@@ -35,7 +35,7 @@
             background-color: var(--bs-table-bg);
             border-bottom: 1px solid lightgray;
             min-width: fit-content;
-            color: white;
+            color: var(--secondary-primary-color);
 
             .list-column {
                 padding: 0 5px;
@@ -67,6 +67,7 @@
         .list-item {
             background-color: var(--dark-card-bg);
             border-bottom: 1px solid var(--dark-border-color);
+            color: white;
 
             .list-column {
                 background-color: var(--dark-card-bg);
