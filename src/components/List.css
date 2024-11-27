@@ -4,18 +4,24 @@
     font-family: var(--body-font);
 
     .list-header {
-        color: white ;
+        color: white;
         display: grid;
         align-items: center;
         min-height: 40px;
-        border-radius: 10px 10px 0 0 ;
+        border-radius: 10px 10px 0 0;
         background-color: var(--primary-color);
-        overflow: auto;
+        overflow-x: auto;
 
         .header-item {
+            display: flex;
+            align-items: center;
             width: 100%;
+            height: 100%;
             padding: 0 10px;
+            background-color: var(--primary-color);
+            position: relative;
         }
+
         .cursor {
             cursor: pointer;
         }
@@ -29,14 +35,16 @@
             background-color: var(--bs-table-bg);
             border-bottom: 1px solid lightgray;
             min-width: fit-content;
+
             .list-column {
-                padding: 12px 10px;
+                padding: 0 5px;
                 display: flex;
                 align-items: center;
                 justify-content: start;
                 width: 100%;
                 overflow: hidden;
                 text-wrap: nowrap;
+                background-color: var(--bs-table-bg);
             }
         }
     }
@@ -44,14 +52,24 @@
 
 .dark-mode .list {
     color: var(--dark-text-color);
+
     .list-header {
         background-color: var(--dark-header-bg);
         border-bottom-color: var(--dark-border-color);
+
+        .header-item {
+            background-color: var(--dark-header-bg);
+        }
     }
+
     .list-body {
         .list-item {
             background-color: var(--dark-card-bg);
             border-bottom: 1px solid var(--dark-border-color);
+
+            .list-column {
+                background-color: var(--dark-card-bg);
+            }
         }
     }
 

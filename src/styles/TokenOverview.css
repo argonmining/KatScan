@@ -8,11 +8,52 @@
 
     .list {
         .list-item, .list-header {
-            grid-template-columns: 50px 50px minmax(100px, 1fr) minmax(100px, 1fr) minmax(100px, 1fr) minmax(100px, 1.5fr) minmax(100px, 1.5fr) minmax(100px, 1.5fr) minmax(100px, 1fr) minmax(100px, 1.5fr);
-        }
-        .list-item {
+            grid-template-columns: 40px 40px minmax(100px, 1fr) minmax(100px, 1fr) minmax(100px, 1fr) minmax(100px, 1.5fr) minmax(100px, 1.5fr) minmax(100px, 1.5fr) minmax(100px, 1fr) minmax(100px, 1.5fr);
+
+            .item-column {
+                z-index: 1;
+            }
+
+            .tick, .action, .image {
+                position: sticky;
+                z-index: 1;
+            }
+
+            .tick {
+                left: 80px;
+            }
+
             .action {
-                overflow: unset !important;
+                left: 40px;
+            }
+
+            .image {
+                left: 0;
+            }
+        }
+
+        .list-item {
+            .list-column {
+                padding: 0 10px !important;
+            }
+
+            .tick, .action, .image {
+                position: sticky;
+                padding: 0 5px !important;
+                z-index: 1;
+            }
+
+            .tick {
+                left: 80px;
+            }
+
+
+            .action {
+                left: 40px;
+            }
+
+            .image {
+                left: 0;
             }
         }
     }
@@ -159,7 +200,6 @@ a:hover {
 .dropdown-header {
     display: inline-block;
     cursor: pointer;
-    padding: 15px 10px;
     background-color: var(--primary-color) !important;
     color: white !important;
     font-family: var(--sub-header-font);
@@ -265,6 +305,7 @@ a:hover {
 /*}*/
 
 /* Dark mode dropdown header styles */
+
 .dark-mode .dropdown-header {
     background-color: var(--dark-header-bg) !important;
     color: var(--dark-text-color) !important;
