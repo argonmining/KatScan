@@ -2,20 +2,28 @@
     height: 100%;
     width: 100%;
     font-family: var(--body-font);
+    border-radius: 10px 10px 0 0;
+    box-shadow: 0 -1px 10px 0 #00000087;
 
     .list-header {
-        color: white ;
+        color: white;
         display: grid;
         align-items: center;
         min-height: 40px;
-        border-radius: 10px 10px 0 0 ;
+        border-radius: 10px 10px 0 0;
         background-color: var(--primary-color);
-        overflow: auto;
+        overflow-x: auto;
 
         .header-item {
+            display: flex;
+            align-items: center;
             width: 100%;
+            height: 100%;
             padding: 0 10px;
+            background-color: var(--primary-color);
+            position: relative;
         }
+
         .cursor {
             cursor: pointer;
         }
@@ -26,17 +34,20 @@
         position: relative;
 
         .list-item {
-            background-color: var(--bs-table-bg);
+            background-color: white;
             border-bottom: 1px solid lightgray;
             min-width: fit-content;
+            color: var(--secondary-primary-color);
+
             .list-column {
-                padding: 12px 10px;
+                padding: 0 5px;
                 display: flex;
                 align-items: center;
                 justify-content: start;
                 width: 100%;
                 overflow: hidden;
                 text-wrap: nowrap;
+                background-color: white;
             }
         }
     }
@@ -44,14 +55,25 @@
 
 .dark-mode .list {
     color: var(--dark-text-color);
+
     .list-header {
         background-color: var(--dark-header-bg);
         border-bottom-color: var(--dark-border-color);
+
+        .header-item {
+            background-color: var(--dark-header-bg);
+        }
     }
+
     .list-body {
         .list-item {
             background-color: var(--dark-card-bg);
             border-bottom: 1px solid var(--dark-border-color);
+            color: white;
+
+            .list-column {
+                background-color: var(--dark-card-bg);
+            }
         }
     }
 

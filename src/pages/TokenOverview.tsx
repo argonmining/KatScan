@@ -2,14 +2,16 @@ import React, {FC, ReactElement, useEffect, useMemo, useRef, useState} from 'rea
 import {getKRC20TokenListSequential} from '../services/dataService';
 import 'styles/TokenOverview.css';
 import {TokenData} from "../interfaces/TokenData";
-import {Input, JsonLd, SEO, SmallThumbnail} from "nacho-component-library";
-import {List} from "../components/List";
+import {Input, JsonLd, SEO, SmallThumbnail, useMobile} from "nacho-component-library";
+import {List} from "../components/list/List";
 import {Link} from "react-router-dom";
 import {iconBaseUrl} from "../utils/StaticVariables";
 import {TokenActions} from "../components/TokenActions";
 import {censorTicker} from "../utils/censorTicker";
 import {generateUniqueID} from "web-vitals/dist/modules/lib/generateUniqueID";
 import {Dropdown} from "react-bootstrap";
+import {CustomDropdown} from "../components/customDropdown/CustomDropdown";
+import {formatNumber} from "../services/Helper";
 
 const ITEMS_PER_PAGE = 50;
 
@@ -25,6 +27,7 @@ type HeaderType = (keyof TokenData | 'image' | 'action' | 'mintState' | 'mintPro
 const header: HeaderType[] = ['image', 'action', 'tick', 'mintState', 'state', 'max', 'pre', 'minted', 'mintProgress', 'mtsAdd']
 
 const TokenOverview: FC = () => {
+    const {isMobile} = useMobile()
     const [tokens, setTokens] = useState<(TokenData & { id: string })[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -33,8 +36,6 @@ const TokenOverview: FC = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [launchTypeFilter, setLaunchTypeFilter] = useState('');
     const [statusFilter, setStatusFilter] = useState('');
-    const [showLaunchTypeDropdown, setShowLaunchTypeDropdown] = useState(false);
-    const [showStatusDropdown, setShowStatusDropdown] = useState(false);
     const [cursor, setCursor] = useState<null | number>(null)
     const [isFinished, setIsFinished] = useState<boolean>(false)
     const loadingRef = useRef<number | null>()
@@ -97,13 +98,11 @@ const TokenOverview: FC = () => {
 
     const handleLaunchTypeSelect = (eventKey: string): void => {
         setLaunchTypeFilter(eventKey);
-        setShowLaunchTypeDropdown(false);
         resetAll()
     };
 
     const handleStatusSelect = (eventKey: string): void => {
         setStatusFilter(eventKey);
-        setShowStatusDropdown(false);
     };
 
     const calculateValue = (value: number, decimals: number): number => {
@@ -158,13 +157,6 @@ const TokenOverview: FC = () => {
         return result;
     }, [tokens, searchTerm, sortField, sortDirection, launchTypeFilter, statusFilter]);
 
-    const formatNumber = (value: number, decimals = 2): string => {
-        return new Intl.NumberFormat('en-US', {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: decimals,
-        }).format(value);
-    };
-
     const formatState = (state: string): string => {
         return state === 'finished' ? 'Complete' : 'Minting';
     };
@@ -212,7 +204,7 @@ const TokenOverview: FC = () => {
 
     const formatNumberWithWords = (value: number, decimals: number): string => {
         const integerPart = Math.floor(value / Math.pow(10, decimals));
-        if (integerPart.toString().length >= 14) {
+        if (integerPart.toString().length >= (isMobile ? 5 : 14)) {
             return formatLargeNumber(integerPart);
         }
         return formatNumber(value / Math.pow(10, decimals));
@@ -280,32 +272,20 @@ const TokenOverview: FC = () => {
                     Ticker {sortField === 'tick' && (sortDirection === 'asc' ? '▲' : '▼')}
                 </div>
             case 'mintState':
-                return <Dropdown show={showLaunchTypeDropdown}
-                                 onToggle={() => setShowLaunchTypeDropdown(!showLaunchTypeDropdown)}>
-                    <Dropdown.Toggle as="div" className="dropdown-header">
-                        Launch Type
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu>
-                        <Dropdown.Item onClick={() => handleLaunchTypeSelect("")}>All</Dropdown.Item>
-                        <Dropdown.Item onClick={() => handleLaunchTypeSelect("Fair Mint")}>Fair
-                            Mint</Dropdown.Item>
-                        <Dropdown.Item
-                            onClick={() => handleLaunchTypeSelect("Pre-Mint")}>Pre-Mint</Dropdown.Item>
-                    </Dropdown.Menu>
-                </Dropdown>
+                return <CustomDropdown title={'Launch Type'}>
+                    <Dropdown.Item onClick={() => handleLaunchTypeSelect("")}>All</Dropdown.Item>
+                    <Dropdown.Item onClick={() => handleLaunchTypeSelect("Fair Mint")}>Fair
+                        Mint</Dropdown.Item>
+                    <Dropdown.Item
+                        onClick={() => handleLaunchTypeSelect("Pre-Mint")}>Pre-Mint</Dropdown.Item>
+                </CustomDropdown>
             case 'state':
-                return <Dropdown show={showStatusDropdown}
-                                 onToggle={() => setShowStatusDropdown(!showStatusDropdown)}>
-                    <Dropdown.Toggle as="div" className="dropdown-header">
-                        Status
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu>
-                        <Dropdown.Item onClick={() => handleStatusSelect("")}>All</Dropdown.Item>
-                        <Dropdown.Item
-                            onClick={() => handleStatusSelect("Complete")}>Complete</Dropdown.Item>
-                        <Dropdown.Item onClick={() => handleStatusSelect("Minting")}>Minting</Dropdown.Item>
-                    </Dropdown.Menu>
-                </Dropdown>
+                return <CustomDropdown title={'Status'}>
+                    <Dropdown.Item onClick={() => handleStatusSelect("")}>All</Dropdown.Item>
+                    <Dropdown.Item
+                        onClick={() => handleStatusSelect("Complete")}>Complete</Dropdown.Item>
+                    <Dropdown.Item onClick={() => handleStatusSelect("Minting")}>Minting</Dropdown.Item>
+                </CustomDropdown>
             case 'max':
                 return <div onClick={() => handleSort('max')}
                             className={'cursor'}>

@@ -54,13 +54,23 @@ export const List = <T extends Record<string, unknown> & { id: string }>(
         return headerElements.map(() => '1fr').join(" ")
     }, [cssGrid, gridTemplate, headerElements])
 
-    const handleScroll = (e: UIEvent<HTMLDivElement>): void => setScrollTop(e.currentTarget?.scrollTop)
+    const handleScroll = (e: UIEvent<HTMLDivElement>): void => {
+        if (e.currentTarget?.scrollTop !== 0) {
+            setScrollTop(e.currentTarget?.scrollTop)
+        }
+        if (e.currentTarget?.scrollLeft !== 0) {
+            headerRef.current?.scrollTo(e.currentTarget?.scrollLeft, 0)
+        }
+    }
+    const handleScrollHeader = (e: UIEvent<HTMLDivElement>): void => {
+        containerRef.current?.scrollTo(e.currentTarget?.scrollLeft, scrollTop)
+    }
 
     const getHeaderInternal = useCallback((value: string): ReactElement => {
         if (getHeader) {
-            return <div key={value} className={'header-item'}>{getHeader(value)}</div>
+            return <div key={value} className={`header-item ${value}`}>{getHeader(value)}</div>
         }
-        return <div key={value} className={'header-item'}>{value}</div>
+        return <div key={value} className={`header-item ${value}`}>{value}</div>
 
     }, [getHeader])
     const Row = (index: number, item: T): ReactElement => {
@@ -87,7 +97,8 @@ export const List = <T extends Record<string, unknown> & { id: string }>(
     }
 
     return <div className={'list'}>
-        <div ref={headerRef} className={'list-header'} style={{gridTemplateColumns: gridTemplateInternal}}>
+        <div ref={headerRef} onScroll={handleScrollHeader} className={'list-header'}
+             style={{gridTemplateColumns: gridTemplateInternal}}>
             {headerElements.map(getHeaderInternal)}
         </div>
         <div onScroll={handleScroll}

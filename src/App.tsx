@@ -29,6 +29,7 @@ const App: FC = () => {
     return (
         <Router>
             <div className="App">
+                <div id={'portal-container'}/>
                 <Sidebar ref={elementRef}
                     darkMode={isDarkMode}
                     toggleDarkMode={toggleDarkMode}
