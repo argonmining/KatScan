@@ -1,7 +1,7 @@
 import React, {FC, PropsWithChildren} from 'react'
 import {HiDotsHorizontal} from "react-icons/hi";
+import {CustomDropdown} from "nacho-component-library";
 import './DrowDownButton.css'
-import {CustomDropdown} from "./customDropdown/CustomDropdown";
 
 export const DropDownButton: FC<PropsWithChildren> = (
     {

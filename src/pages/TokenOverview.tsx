@@ -2,15 +2,13 @@ import React, {FC, ReactElement, useEffect, useMemo, useRef, useState} from 'rea
 import {getKRC20TokenListSequential} from '../services/dataService';
 import 'styles/TokenOverview.css';
 import {TokenData} from "../interfaces/TokenData";
-import {Input, JsonLd, SEO, SmallThumbnail, useMobile} from "nacho-component-library";
-import {List} from "../components/list/List";
+import {Input, JsonLd, SEO, SmallThumbnail, CustomDropdown, List, useMobile} from "nacho-component-library";
 import {Link} from "react-router-dom";
 import {iconBaseUrl} from "../utils/StaticVariables";
 import {TokenActions} from "../components/TokenActions";
 import {censorTicker} from "../utils/censorTicker";
 import {generateUniqueID} from "web-vitals/dist/modules/lib/generateUniqueID";
 import {Dropdown} from "react-bootstrap";
-import {CustomDropdown} from "../components/customDropdown/CustomDropdown";
 import {formatNumber} from "../services/Helper";
 
 const ITEMS_PER_PAGE = 50;
