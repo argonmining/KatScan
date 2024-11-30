@@ -1,14 +1,28 @@
 import React, {FC} from 'react'
-import {DropDownButton} from "./DropDownButton";
-import {Dropdown} from "react-bootstrap";
+import {TokenData} from "../interfaces/TokenData";
+import {FaExchangeAlt} from "react-icons/fa";
+import {IconDropdownButton, CustomDropdownItem} from "nacho-component-library";
 
-export const TokenActions:FC = () => {
+type Props = {
+    tokenDetail: TokenData
+}
+export const TokenActions: FC<Props> = (
+    {
+        tokenDetail
+    }
+) => {
+    const mintedOut = tokenDetail.max - tokenDetail.minted === 0
 
     const openBot = () => {
         window.open(`https://t.me/kspr_home_bot?start=nacho`, '_blank')
     }
-    return <DropDownButton>
-        <Dropdown.Item onClick={openBot}>KSPR Bot</Dropdown.Item>
-    </DropDownButton>
+    return <IconDropdownButton title={<FaExchangeAlt/>}>
+        <CustomDropdownItem onClick={openBot}>
+            {`Trade ${tokenDetail.tick.toUpperCase()} on KSPR Bot`}
+        </CustomDropdownItem>
+        {!mintedOut && <CustomDropdownItem onClick={openBot}>
+            {`Mint ${tokenDetail.tick.toUpperCase()} on KSPR Bot`}
+        </CustomDropdownItem>}
+    </IconDropdownButton>
 
 }

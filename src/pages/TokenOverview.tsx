@@ -171,10 +171,13 @@ const TokenOverview: FC = () => {
         });
     };
 
-    const formatPercentage = (value: number, max: number): string => {
+    const formatPercentage = (value: number, max: number, without?: boolean): string => {
         const percentage = (value / max) * 100;
         const formattedPercentage = percentage < 1 && percentage > 0 ? '<1' : Math.round(percentage);
-        return `(${formattedPercentage}%)`;
+        if (without){
+            return `${formattedPercentage}%`
+        }
+        return `(${formattedPercentage}%)`
     };
 
     const getBadgeClass = (preMint: string): string => {
@@ -222,7 +225,7 @@ const TokenOverview: FC = () => {
                     </Link>
                 </div>
             case "action":
-                return <TokenActions/>
+                return <TokenActions tokenDetail={token}/>
             case "tick":
                 return <Link to={`/tokens/${token.tick}`} className="token-ticker">
                     {censorTicker(token.tick)}
@@ -240,18 +243,18 @@ const TokenOverview: FC = () => {
                 return <>{formatPreMinted(token.pre, token.max, token.dec)}</>
             case 'minted':
                 return <>{formatNumberWithWords(token.minted, token.dec)}
-                    {' '}
-                    <small className="text-muted">
-                        {formatPercentage(calculateValue(token.minted, token.dec), calculateValue(token.max, token.dec))}
-                    </small>
                 </>
             case 'mintProgress':
-                return <div className="progress">
-                    <div
-                        className="progress-bar"
-                        style={{width: `${calculatePercentage(calculateValue(token.minted, token.dec), calculateValue(token.max, token.dec))}%`}}
-                    ></div>
-                </div>
+                return <>
+                    <small className="text-muted">
+                        {formatPercentage(calculateValue(token.minted, token.dec), calculateValue(token.max, token.dec), true)}
+                    </small>
+                    <div className="progress">
+                        <div className="progress-bar"
+                             style={{width: `${calculatePercentage(calculateValue(token.minted, token.dec), calculateValue(token.max, token.dec))}%`}}
+                        ></div>
+                    </div>
+                </>
             case 'mtsAdd':
                 return <div>{formatDateTime(token.mtsAdd)}</div>
             default:
