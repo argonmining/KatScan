@@ -10,7 +10,7 @@ export type UTXOStore = {
     hasMoreUtxos: boolean
 }
 
-export const useUTXOs = (walletAddress: string): UTXOStore => {
+export const useUTXOs = (addressValid: boolean, walletAddress: string | undefined): UTXOStore => {
 
     const [utxos, setUtxos] = useState<Utxos[]>([]);
     const [utxoPage, setUtxoPage] = useState(0);
@@ -50,14 +50,17 @@ export const useUTXOs = (walletAddress: string): UTXOStore => {
     }, [])
 
     useEffect(() => {
-        if (!walletAddress) {
+        if (!walletAddress || !addressValid) {
             return
         }
         void fetchUtxos(walletAddress, 0)
             .then(setUtxos)
-    }, [fetchUtxos, walletAddress]);
+    }, [addressValid, fetchUtxos, walletAddress]);
 
     const loadMore = useCallback(() => {
+        if (!walletAddress) {
+            return
+        }
         if (hasMoreUtxos) {
             void fetchUtxos(walletAddress, utxoPage)
                 .then(optimiseData)

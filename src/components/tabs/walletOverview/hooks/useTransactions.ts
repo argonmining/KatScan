@@ -9,7 +9,7 @@ export type TransactionStore = {
     loadMore: () => void
     hasMoreTransactions: boolean
 }
-export const useTransactions = (walletAddress: string): TransactionStore => {
+export const useTransactions = (addressValid: boolean, walletAddress: string | undefined): TransactionStore => {
 
     const [transactions, setTransactions] = useState<Transaction[]>([]);
     const [transactionPage, setTransactionPage] = useState(0);
@@ -32,14 +32,17 @@ export const useTransactions = (walletAddress: string): TransactionStore => {
     }, []);
 
     useEffect(() => {
-        if (!walletAddress) {
+        if (!walletAddress || !addressValid) {
             return
         }
         void fetchTransactions(walletAddress, 0)
             .then(setTransactions)
-    }, [walletAddress, fetchTransactions])
+    }, [walletAddress, fetchTransactions, addressValid])
 
     const loadMore = useCallback(() => {
+        if (!walletAddress){
+            return
+        }
         if (hasMoreTransactions) {
             void fetchTransactions(walletAddress, transactionPage)
                 .then(result => {
