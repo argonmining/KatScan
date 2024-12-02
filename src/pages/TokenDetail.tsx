@@ -14,6 +14,7 @@ import {OpTransactionData} from "../interfaces/OpTransactionData";
 import {TokenListResponse} from "../interfaces/ApiResponseTypes";
 import {Page, CustomTabs, JsonLd, LoadingSpinner, SEO, simpleRequest, useMobile} from "nacho-component-library";
 import {TokenDetailsTokenInfo} from "../components/TokenDetailsTokenInfo";
+import {addAlert} from "../components/alerts/Alerts";
 
 export type Socials = { type: string, url: string }
 
@@ -24,7 +25,6 @@ const TokenDetail: FC = () => {
         const {tokenId} = useParams();
         const [tokenData, setTokenData] = useState<TokenSearchResult | null>(null);
         const [loading, setLoading] = useState(true);
-        const [error, setError] = useState<string | null>(null);
         const {isMobile} = useMobile()
         // const [mintActivity, setMintActivity] = useState<MintOvertimeType[]>([]);
         const [operations, setOperations] = useState<OpTransactionData[]>([]);
@@ -41,7 +41,6 @@ const TokenDetail: FC = () => {
             }
 
             setLoading(true);
-            setError(null);
             Promise.all([
                 getTokenDetails(tokenId),
                 simpleRequest<Record<string, unknown>>(`https://api-v2-do.kas.fyi/token/krc20/${tokenId}/info?includeCharts=false`)
@@ -55,14 +54,13 @@ const TokenDetail: FC = () => {
                 })
                 .catch(err => {
                     console.error('Failed to fetch token details:', err);
-                    setError('Failed to fetch token details');
+                    addAlert('error', 'Failed to fetch token details');
                 })
                 .finally(() => setLoading(false));
 
         }, [tokenId]);
 
         if (loading) return <LoadingSpinner/>
-        if (error) return <Alert variant="danger">{error}</Alert>;
         if (!tokenData) return <Alert variant="warning">No data available</Alert>;
 
         const jsonLdData = {

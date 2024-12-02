@@ -10,6 +10,7 @@ import {censorTicker} from "../utils/censorTicker";
 import {generateUniqueID} from "web-vitals/dist/modules/lib/generateUniqueID";
 import {Dropdown} from "react-bootstrap";
 import {formatNumber} from "../services/Helper";
+import {addAlert} from "../components/alerts/Alerts";
 
 const ITEMS_PER_PAGE = 50;
 
@@ -28,7 +29,6 @@ const TokenOverview: FC = () => {
     const {isMobile} = useMobile()
     const [tokens, setTokens] = useState<(TokenData & { id: string })[]>([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
     const [sortField, setSortField] = useState<keyof TokenData | ''>('');
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
     const [searchTerm, setSearchTerm] = useState('');
@@ -65,7 +65,7 @@ const TokenOverview: FC = () => {
             } catch (err) {
                 console.error('Error in TokenOverview:', err);
                 if (isMounted) {
-                    setError(`Failed to fetch tokens: ${(err as Record<string, string>).message}`);
+                    addAlert('error',`Failed to fetch tokens: ${(err as Record<string, string>).message}`);
                     setLoading(false);
                 }
             }
@@ -210,8 +210,6 @@ const TokenOverview: FC = () => {
         }
         return formatNumber(value / Math.pow(10, decimals));
     };
-
-    if (error) return <div className="token-overview error">Error: {error}</div>;
 
     const getElement = (header: string, token: TokenData): ReactElement => {
         const headerInternal = header as HeaderType

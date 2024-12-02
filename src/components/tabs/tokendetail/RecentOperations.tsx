@@ -1,11 +1,12 @@
 import React, {Dispatch, FC, SetStateAction, useCallback, useEffect, useRef, useState} from "react";
 import {MobileOperationsTable} from "../../tables/MobileOperationsTable";
 import {formatDateTime, formatNumber, parseRawNumber} from "../../../services/Helper";
-import {Alert, Table} from "react-bootstrap";
+import {Table} from "react-bootstrap";
 import {LinkWithTooltip, useMobile} from "nacho-component-library";
 import {OpTransactionData} from "../../../interfaces/OpTransactionData";
 import {TokenSearchResult} from "../../../interfaces/TokenData";
 import {getTokenOperations} from "../../../services/dataService";
+import {addAlert} from "../../alerts/Alerts";
 
 type Props = {
     tokenData: TokenSearchResult
@@ -29,7 +30,6 @@ export const RecentOperations: FC<Props> = (
     const {isMobile} = useMobile()
 
     const [loadingMore, setLoadingMore] = useState(false);
-    const [operationsError, setOperationsError] = useState<string | null>(null);
     const observer = useRef<IntersectionObserver>();
 
     useEffect(() => {
@@ -44,7 +44,7 @@ export const RecentOperations: FC<Props> = (
             })
             .catch(err => {
                 console.error('Failed to fetch operations:', err);
-                setOperationsError('Failed to fetch operation details');
+                addAlert('error', 'Failed to fetch operation details');
             })
     }, [operations.length, setOperations, setOperationsCursor, tokenId])
 
@@ -52,13 +52,12 @@ export const RecentOperations: FC<Props> = (
         if (loadingMore || !operationsCursor || tokenId === undefined) return;
         try {
             setLoadingMore(true);
-            setOperationsError(null);
             const data = await getTokenOperations(tokenId, 50, operationsCursor);
             setOperations(prevOps => [...prevOps, ...data.result]);
             setOperationsCursor(data.next);
         } catch (err) {
             console.error('Failed to fetch operations:', err);
-            setOperationsError('Failed to load more operations. Please try again.');
+            addAlert('error', 'Failed to load more operations. Please try again.');
         } finally {
             setLoadingMore(false);
         }
@@ -76,7 +75,7 @@ export const RecentOperations: FC<Props> = (
     }, [loadingMore, operationsCursor, fetchOperations]);
 
     return <>
-        <div className="detail-table-container" style={{height:'100%'}}>
+        <div className="detail-table-container" style={{height: '100%'}}>
             {isMobile ? (
                 <MobileOperationsTable
                     data={operations}
@@ -125,7 +124,6 @@ export const RecentOperations: FC<Props> = (
             )}
         </div>
         {loadingMore && <div>Loading more operations...</div>}
-        {operationsError && <Alert variant="danger">{operationsError}</Alert>}
         {!operationsCursor && !loadingMore && <div>No more operations to load.</div>}
     </>
 }

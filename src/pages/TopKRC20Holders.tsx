@@ -1,12 +1,13 @@
 import React, {FC, ReactElement, useEffect, useState} from 'react';
-import {Alert, Table} from 'react-bootstrap';
+import {Table} from 'react-bootstrap';
 import {Link} from 'react-router-dom';
 import 'styles/TopKRC20Holders.css';
 import {censorTicker} from '../utils/censorTicker';
 import {useMediaQuery} from 'react-responsive';
 import {TopHolder} from "../interfaces/TokenData";
 import {MobileTopKRC20Holders} from "../components/mobileComponents/MobileTopKRC20Holders";
-import {SEO, JsonLd, ExpandAbleList, simpleRequest, Page} from "nacho-component-library";
+import {ExpandAbleList, JsonLd, Page, SEO, simpleRequest} from "nacho-component-library";
+import {addAlert} from "../components/alerts/Alerts";
 
 const API_BASE_URL = 'https://katapi.nachowyborski.xyz/api/topHolders';
 
@@ -22,7 +23,6 @@ const headEntries = ['Rank', 'Address', 'Unique Tokens', 'Expand']
 const TopKRC20Holders: FC = () => {
     const [topHolders, setTopHolders] = useState<InternalTopHolder[]>([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
     const isMobile = useMediaQuery({maxWidth: 768});
 
     useEffect(() => {
@@ -48,17 +48,13 @@ const TopKRC20Holders: FC = () => {
                 setLoading(false);
             } catch (err) {
                 console.error('Error fetching top holders:', err);
-                setError('Failed to fetch top holders data. Please try again later.');
+                addAlert('error', 'Failed to fetch top holders data. Please try again later.');
                 setLoading(false);
             }
         };
 
         void fetchTopHolders();
     }, []);
-
-    if (error) {
-        return <Alert variant="danger">{error}</Alert>;
-    }
 
     const getRow = (holder: InternalTopHolder, index: number): ReactElement => {
         return <>
@@ -95,32 +91,32 @@ const TopKRC20Holders: FC = () => {
 
     return (
         <Page header={'Top KRC20 Token Holders'}>
-        <div className="top-krc20-holders-wrapper">
-            <SEO
-                title="Top KRC-20 Token Holders"
-                description="Explore the top holders of KRC-20 tokens on the Kaspa blockchain, ranked by unique token holdings."
-                keywords="KRC-20, Kaspa, top holders, token distribution, whale analysis"
-            />
-            <JsonLd
-                data={{
-                    "@context": "https://schema.org",
-                    "@type": "WebApplication",
-                    "name": "KatScan Top KRC-20 Token Holders",
-                    "description": "Explore the top holders of KRC-20 tokens on the Kaspa blockchain, ranked by unique token holdings.",
-                    "url": "https://katscan.xyz/top-holders"
-                }}
-            />
-            {isMobile ? <MobileTopKRC20Holders holders={topHolders}/>
-                : (
-                    <div className="table-container">
-                        <ExpandAbleList headEntries={headEntries}
-                                        isLoading={loading}
-                                        entries={topHolders}
-                                        getRowData={getRow}
-                                        getExpandData={getExpandRow}/>
-                    </div>
-                )}
-        </div>
+            <div className="top-krc20-holders-wrapper">
+                <SEO
+                    title="Top KRC-20 Token Holders"
+                    description="Explore the top holders of KRC-20 tokens on the Kaspa blockchain, ranked by unique token holdings."
+                    keywords="KRC-20, Kaspa, top holders, token distribution, whale analysis"
+                />
+                <JsonLd
+                    data={{
+                        "@context": "https://schema.org",
+                        "@type": "WebApplication",
+                        "name": "KatScan Top KRC-20 Token Holders",
+                        "description": "Explore the top holders of KRC-20 tokens on the Kaspa blockchain, ranked by unique token holdings.",
+                        "url": "https://katscan.xyz/top-holders"
+                    }}
+                />
+                {isMobile ? <MobileTopKRC20Holders holders={topHolders}/>
+                    : (
+                        <div className="table-container">
+                            <ExpandAbleList headEntries={headEntries}
+                                            isLoading={loading}
+                                            entries={topHolders}
+                                            getRowData={getRow}
+                                            getExpandData={getExpandRow}/>
+                        </div>
+                    )}
+            </div>
         </Page>
     );
 };

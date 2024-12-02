@@ -5,6 +5,7 @@ import 'styles/MintHeatmap.css';
 import {censorTicker} from '../utils/censorTicker';
 import {LoadingSpinner, SEO, JsonLd, sendRequest, Page} from "nacho-component-library";
 import {MintData} from "../interfaces/MintData";
+import {addAlert} from "../components/alerts/Alerts";
 
 const timeframes = [
     {value: 'day', label: 'Last 24 Hours'},
@@ -35,7 +36,6 @@ type TooltipType = { active: boolean, payload: { payload: { name: string, actual
 const MintHeatmap: FC = () => {
     const [mintData, setMintData] = useState<InternalMintData[]>([]);
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
     const [timeframe, setTimeframe] = useState('week');
     const [totalMints, setTotalMints] = useState(0);
 
@@ -60,7 +60,6 @@ const MintHeatmap: FC = () => {
     const fetchMintData = useCallback(async (): Promise<void> => {
         if (!timeframe) return;
         setLoading(true);
-        setError(null);
         const startDate = getStartDate(timeframe);
         const endDate = new Date();
 
@@ -99,7 +98,7 @@ const MintHeatmap: FC = () => {
             }
         } catch (error) {
             console.error('Error fetching mint data:', error);
-            setError('Failed to fetch mint data. Please try again later.');
+            addAlert('error', 'Failed to fetch mint data. Please try again later.');
             setMintData([{
                 name: 'tokens',
                 children: [{name: 'Error', size: 1, actualSize: 0}]
@@ -240,7 +239,6 @@ const MintHeatmap: FC = () => {
                     </Col>
                 </Row>
                 {!timeframe && <p>Please select a timeframe to view the mint heatmap.</p>}
-                {error && <p className="text-danger">{error}</p>}
                 {loading && <LoadingSpinner useFlexHeight={true}/>}
                 {timeframe && mintData.length > 0 && (
                     <div className="chart-container">

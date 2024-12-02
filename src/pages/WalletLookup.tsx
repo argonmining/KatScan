@@ -77,14 +77,14 @@ const WalletLookup: FC = () => {
                         });
                     })
                     .catch(() => {
-                        addAlert({type: 'error', message: 'Failed to fetch wallet data. Please try again.'})
+                        addAlert('error', 'Failed to fetch wallet data. Please try again.')
                     })
                     .finally(() => {
                         setLoading(false);
                     })
             })
             .catch(() => {
-                addAlert({type: 'error', message: 'Failed to fetch wallet data. Is the wallet address correct?'})
+                addAlert('error', 'Failed to fetch wallet data. Is the wallet address correct?')
                 setLoading(false);
                 setAddressValid(false)
             })

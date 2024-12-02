@@ -20,6 +20,7 @@ import {FaChartBar, FaChartPie, FaUsers} from 'react-icons/fa'; // Import icons
 import {censorTicker} from '../utils/censorTicker';
 import {SEO, JsonLd, LoadingSpinner, Page} from "nacho-component-library";
 import {TokenData, TokenSearchResult} from "../interfaces/TokenData";
+import {addAlert} from "../components/alerts/Alerts";
 
 ChartJS.register(
     CategoryScale,
@@ -53,7 +54,6 @@ const TokenComparison: FC = () => {
     const [selectedTokens, setSelectedTokens] = useState([null, null]);
     const [tokenDetails, setTokenDetails] = useState<TokenInternal[]>([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
 
     const supplyChartRef = useRef(null);
     const holdersChartRef = useRef(null);
@@ -96,7 +96,7 @@ const TokenComparison: FC = () => {
 
     const onError = useCallback((err) => {
         console.error('Error in fetchTokenList:', err);
-        setError(`Failed to fetch token list: ${(err as Record<string, string>).message}`);
+        addAlert('error', `Failed to fetch token list: ${(err as Record<string, string>).message}`);
         setLoading(false);
     }, [])
 
@@ -122,7 +122,6 @@ const TokenComparison: FC = () => {
         const fetchTokenDetails = async () => {
             if (selectedTokens[0] && selectedTokens[1]) {
                 setLoading(true);
-                setError(null);
                 try {
                     const details = await Promise.all(selectedTokens.map(token => getTokenDetails(token.value)));
                     console.log('Raw token details:', details);
@@ -134,7 +133,7 @@ const TokenComparison: FC = () => {
                     setTokenDetails(processedDetails);
                 } catch (err) {
                     console.error('Error fetching token details:', err);
-                    setError(`Failed to fetch token details: ${(err as Record<string, string>).message}`);
+                    addAlert('error', `Failed to fetch token details: ${(err as Record<string, string>).message}`);
                     setTokenDetails([]);
                 }
                 setLoading(false);

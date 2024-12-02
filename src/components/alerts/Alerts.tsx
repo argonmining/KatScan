@@ -5,6 +5,7 @@ import {TextContainer} from "../TextContainer";
 import {Image} from "nacho-component-library";
 import error from "../../assets/nacho-error.jpg";
 import success from "../../assets/nacho-success.jpg";
+
 interface Alert {
     message: string
     type: 'error' | 'warning' | 'success'
@@ -15,8 +16,8 @@ interface AlertEvent extends CustomEvent {
     detail: Alert
 }
 
-export const addAlert = (entry: Alert): void => {
-    document.dispatchEvent(new CustomEvent('alertprovider', {detail: entry}))
+export const addAlert = (type: Alert['type'], message: Alert['message']): void => {
+    document.dispatchEvent(new CustomEvent('alertprovider', {detail: {type, message}}))
 }
 export const Alerts: FC = () => {
 
