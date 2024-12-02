@@ -2,7 +2,7 @@ import React, {FC, ReactElement, useEffect, useMemo, useRef, useState} from 'rea
 import {getKRC20TokenListSequential} from '../services/dataService';
 import 'styles/TokenOverview.css';
 import {TokenData} from "../interfaces/TokenData";
-import {CustomDropdown, Input, JsonLd, Page, SEO, List, SmallThumbnail, useMobile} from "nacho-component-library";
+import {CustomDropdown, Input, JsonLd, List, Page, SEO, SmallThumbnail, useMobile} from "nacho-component-library";
 import {Link} from "react-router-dom";
 import {iconBaseUrl} from "../utils/StaticVariables";
 import {TokenActions} from "../components/TokenActions";
@@ -315,7 +315,7 @@ const TokenOverview: FC = () => {
     }
 
     return (<Page header={'All KRC-20 Tokens'}
-                    additionalHeaderComponent={
+                  additionalHeaderComponent={
                       <Input customClass={'token-overview-search-form'}
                              placeholder={'Search by ticker...'}
                              onChangeCallback={setSearchTerm}
