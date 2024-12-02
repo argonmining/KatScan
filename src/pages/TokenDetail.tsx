@@ -75,9 +75,9 @@ const TokenDetail: FC = () => {
 
         return (
             <Page header={`Token Details: ${censorTicker(tokenData.tick)}`}
-                  additionalHeaderInfo={
-                      <span className="creation-date">Deployed on {formatDateTime(tokenData.mtsAdd.toString())}</span>
-                  }>
+                  additionalHeaderComponent={<span className="creation-date">
+                    Deployed on {formatDateTime(tokenData.mtsAdd.toString())}
+                </span>}>
                 <div className="token-detail">
                     <JsonLd data={jsonLdData}/>
                     <SEO

@@ -2,7 +2,7 @@ import React, {FC, ReactElement, useEffect, useMemo, useRef, useState} from 'rea
 import {getKRC20TokenListSequential} from '../services/dataService';
 import 'styles/TokenOverview.css';
 import {TokenData} from "../interfaces/TokenData";
-import {Input, JsonLd, SEO, SmallThumbnail, CustomDropdown, List, useMobile} from "nacho-component-library";
+import {CustomDropdown, Input, JsonLd, Page, SEO, List, SmallThumbnail, useMobile} from "nacho-component-library";
 import {Link} from "react-router-dom";
 import {iconBaseUrl} from "../utils/StaticVariables";
 import {TokenActions} from "../components/TokenActions";
@@ -174,7 +174,7 @@ const TokenOverview: FC = () => {
     const formatPercentage = (value: number, max: number, without?: boolean): string => {
         const percentage = (value / max) * 100;
         const formattedPercentage = percentage < 1 && percentage > 0 ? '<1' : Math.round(percentage);
-        if (without){
+        if (without) {
             return `${formattedPercentage}%`
         }
         return `(${formattedPercentage}%)`
@@ -314,30 +314,31 @@ const TokenOverview: FC = () => {
         }
     }
 
-    return (
-        <div className="token-overview">
-            <div className="token-overview-header">
-                <h2>All KRC-20 Tokens</h2>
-                <Input customClass={'search-form'}
-                       placeholder={'Search by ticker...'}
-                       onChangeCallback={setSearchTerm}
-                       onSubmit={setSearchTerm}/>
+    return (<Page header={'All KRC-20 Tokens'}
+                    additionalHeaderComponent={
+                      <Input customClass={'token-overview-search-form'}
+                             placeholder={'Search by ticker...'}
+                             onChangeCallback={setSearchTerm}
+                             onSubmit={setSearchTerm}/>
+                  }>
+            <div className="token-overview">
+
+                <List headerElements={header}
+                      items={filteredAndSortedTokens}
+                      itemHeight={40}
+                      getHeader={getHeader}
+                      getElement={getElement}
+                      isLoading={loading}
+                      cssGrid={true}
+                />
+                <JsonLd data={jsonLdData}/>
+                <SEO
+                    title="Token Overview"
+                    description="Explore and analyze all KRC-20 tokens on the Kaspa blockchain."
+                    keywords="KRC-20, Kaspa, token overview, cryptocurrency, blockchain"
+                />
             </div>
-            <List headerElements={header}
-                  items={filteredAndSortedTokens}
-                  itemHeight={40}
-                  getHeader={getHeader}
-                  getElement={getElement}
-                  isLoading={loading}
-                  cssGrid={true}
-            />
-            <JsonLd data={jsonLdData}/>
-            <SEO
-                title="Token Overview"
-                description="Explore and analyze all KRC-20 tokens on the Kaspa blockchain."
-                keywords="KRC-20, Kaspa, token overview, cryptocurrency, blockchain"
-            />
-        </div>
+        </Page>
     );
 };
 
