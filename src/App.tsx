@@ -5,6 +5,7 @@ import './styles/App.css'
 import './styles/globals.css'
 import './styles/darkMode.css'
 import {LoadingSpinner, useDarkMode, useMobile, usePageResize} from 'nacho-component-library'
+import {Alerts} from "./components/alerts/Alerts";
 
 /**
  * Lazy loading the pages to improve initial loading time in prod
@@ -30,6 +31,7 @@ const App: FC = () => {
         <Router>
             <div className="App">
                 <div id={'portal-container'}/>
+                <Alerts/>
                 <Sidebar ref={elementRef}
                     darkMode={isDarkMode}
                     toggleDarkMode={toggleDarkMode}

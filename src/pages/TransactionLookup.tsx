@@ -1,14 +1,15 @@
 import React, {FC, useEffect, useState} from 'react';
 import {Link, useNavigate, useParams} from 'react-router-dom';
-import {Alert, Col, Container, Row} from 'react-bootstrap';
+import {Col, Container, Row} from 'react-bootstrap';
 import {FaArrowRight, FaExternalLinkAlt} from 'react-icons/fa';
 import '../styles/TransactionLookup.css';
-import {JsonLd, LoadingSpinner, NormalCard, Page, SEO, Input, simpleRequest} from "nacho-component-library";
+import {Input, JsonLd, LoadingSpinner, NormalCard, Page, SEO, simpleRequest} from "nacho-component-library";
 import {OpTransactionData} from "../interfaces/OpTransactionData";
 import {Transaction} from "../interfaces/Transaction";
 import {ResultResponse} from "../interfaces/ApiResponseTypes";
 import {TransactionDetails} from "../components/transactionLookup/TransactionDetails";
 import {formatKaspa, formatKRC20Amount} from "../services/Helper";
+import {addAlert} from "../components/alerts/Alerts";
 
 export type TransactionData = {
     krc20Data: OpTransactionData
@@ -37,32 +38,31 @@ const TransactionLookup: FC = () => {
     const [transactionHash, setTransactionHash] = useState(hashRev ?? '');
     const [transactionData, setTransactionData] = useState<TransactionData | null>(null);
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
 
     const fetchTransactionData = async (hash: string): Promise<void> => {
-        if (!hash) return;
-        setLoading(true);
-        setError(null);
-        try {
-            const [krc20Response, revealData] = await Promise.all([
-                simpleRequest<ResultResponse<OpTransactionData[]>>(`https://api.kasplex.org/v1/krc20/op/${hash}`),
-                simpleRequest<Transaction>(`https://api.kaspa.org/transactions/${hash}`)
-            ]);
+            if (!hash) return;
+            setLoading(true);
+            try {
+                const [krc20Response, revealData] = await Promise.all([
+                    simpleRequest<ResultResponse<OpTransactionData[]>>(`https://api.kasplex.org/v1/krc20/op/${hash}`),
+                    simpleRequest<Transaction>(`https://api.kaspa.org/transactions/${hash}`)
+                ]);
 
-            const krc20Data = krc20Response.result[0];
+                const krc20Data = krc20Response.result[0];
 
-            const commitHash = revealData.inputs?.[0].previous_outpoint_hash;
-            const commitData = await simpleRequest<TransactionData['commitData']>(`https://api.kaspa.org/transactions/${commitHash ?? ''}`);
+                const commitHash = revealData.inputs?.[0].previous_outpoint_hash;
+                const commitData = await simpleRequest<TransactionData['commitData']>(`https://api.kaspa.org/transactions/${commitHash ?? ''}`);
 
-            setTransactionData({krc20Data, revealData, commitData});
-        } catch (err) {
-            console.error('Failed to fetch transaction data:', err);
-            setError('Failed to fetch transaction data. Please check the transaction hash and try again.');
-        } finally {
-            setLoading(false);
+                setTransactionData({krc20Data, revealData, commitData});
+            } catch (err) {
+                console.error('Failed to fetch transaction data:', err);
+                addAlert('error', 'Failed to fetch transaction data. Please check the transaction hash and try again.');
+            } finally {
+                setLoading(false);
+            }
         }
-    };
+    ;
 
     useEffect(() => {
         if (hashRev) {
@@ -104,7 +104,6 @@ const TransactionLookup: FC = () => {
                        onChangeCallback={setTransactionHash}/>
 
                 {loading && <LoadingSpinner/>}
-                {error && <Alert variant="danger">{error}</Alert>}
 
                 {transactionData && (
                     <div className="transaction-details">

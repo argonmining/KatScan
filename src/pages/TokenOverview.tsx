@@ -2,16 +2,15 @@ import React, {FC, ReactElement, useEffect, useMemo, useRef, useState} from 'rea
 import {getKRC20TokenListSequential} from '../services/dataService';
 import 'styles/TokenOverview.css';
 import {TokenData} from "../interfaces/TokenData";
-import {Input, JsonLd, SEO, SmallThumbnail, useMobile} from "nacho-component-library";
-import {List} from "../components/list/List";
+import {CustomDropdown, Input, JsonLd, List, Page, SEO, SmallThumbnail, useMobile} from "nacho-component-library";
 import {Link} from "react-router-dom";
 import {iconBaseUrl} from "../utils/StaticVariables";
 import {TokenActions} from "../components/TokenActions";
 import {censorTicker} from "../utils/censorTicker";
 import {generateUniqueID} from "web-vitals/dist/modules/lib/generateUniqueID";
 import {Dropdown} from "react-bootstrap";
-import {CustomDropdown} from "../components/customDropdown/CustomDropdown";
 import {formatNumber} from "../services/Helper";
+import {addAlert} from "../components/alerts/Alerts";
 
 const ITEMS_PER_PAGE = 50;
 
@@ -30,7 +29,6 @@ const TokenOverview: FC = () => {
     const {isMobile} = useMobile()
     const [tokens, setTokens] = useState<(TokenData & { id: string })[]>([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
     const [sortField, setSortField] = useState<keyof TokenData | ''>('');
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
     const [searchTerm, setSearchTerm] = useState('');
@@ -67,7 +65,7 @@ const TokenOverview: FC = () => {
             } catch (err) {
                 console.error('Error in TokenOverview:', err);
                 if (isMounted) {
-                    setError(`Failed to fetch tokens: ${(err as Record<string, string>).message}`);
+                    addAlert('error',`Failed to fetch tokens: ${(err as Record<string, string>).message}`);
                     setLoading(false);
                 }
             }
@@ -173,10 +171,13 @@ const TokenOverview: FC = () => {
         });
     };
 
-    const formatPercentage = (value: number, max: number): string => {
+    const formatPercentage = (value: number, max: number, without?: boolean): string => {
         const percentage = (value / max) * 100;
         const formattedPercentage = percentage < 1 && percentage > 0 ? '<1' : Math.round(percentage);
-        return `(${formattedPercentage}%)`;
+        if (without) {
+            return `${formattedPercentage}%`
+        }
+        return `(${formattedPercentage}%)`
     };
 
     const getBadgeClass = (preMint: string): string => {
@@ -210,8 +211,6 @@ const TokenOverview: FC = () => {
         return formatNumber(value / Math.pow(10, decimals));
     };
 
-    if (error) return <div className="token-overview error">Error: {error}</div>;
-
     const getElement = (header: string, token: TokenData): ReactElement => {
         const headerInternal = header as HeaderType
         switch (headerInternal) {
@@ -224,7 +223,7 @@ const TokenOverview: FC = () => {
                     </Link>
                 </div>
             case "action":
-                return <TokenActions/>
+                return <TokenActions tokenDetail={token}/>
             case "tick":
                 return <Link to={`/tokens/${token.tick}`} className="token-ticker">
                     {censorTicker(token.tick)}
@@ -242,18 +241,18 @@ const TokenOverview: FC = () => {
                 return <>{formatPreMinted(token.pre, token.max, token.dec)}</>
             case 'minted':
                 return <>{formatNumberWithWords(token.minted, token.dec)}
-                    {' '}
-                    <small className="text-muted">
-                        {formatPercentage(calculateValue(token.minted, token.dec), calculateValue(token.max, token.dec))}
-                    </small>
                 </>
             case 'mintProgress':
-                return <div className="progress">
-                    <div
-                        className="progress-bar"
-                        style={{width: `${calculatePercentage(calculateValue(token.minted, token.dec), calculateValue(token.max, token.dec))}%`}}
-                    ></div>
-                </div>
+                return <>
+                    <small className="text-muted">
+                        {formatPercentage(calculateValue(token.minted, token.dec), calculateValue(token.max, token.dec), true)}
+                    </small>
+                    <div className="progress">
+                        <div className="progress-bar"
+                             style={{width: `${calculatePercentage(calculateValue(token.minted, token.dec), calculateValue(token.max, token.dec))}%`}}
+                        ></div>
+                    </div>
+                </>
             case 'mtsAdd':
                 return <div>{formatDateTime(token.mtsAdd)}</div>
             default:
@@ -313,30 +312,31 @@ const TokenOverview: FC = () => {
         }
     }
 
-    return (
-        <div className="token-overview">
-            <div className="token-overview-header">
-                <h2>All KRC-20 Tokens</h2>
-                <Input customClass={'search-form'}
-                       placeholder={'Search by ticker...'}
-                       onChangeCallback={setSearchTerm}
-                       onSubmit={setSearchTerm}/>
+    return (<Page header={'All KRC-20 Tokens'}
+                  additionalHeaderComponent={
+                      <Input customClass={'token-overview-search-form'}
+                             placeholder={'Search by ticker...'}
+                             onChangeCallback={setSearchTerm}
+                             onSubmit={setSearchTerm}/>
+                  }>
+            <div className="token-overview">
+
+                <List headerElements={header}
+                      items={filteredAndSortedTokens}
+                      itemHeight={40}
+                      getHeader={getHeader}
+                      getElement={getElement}
+                      isLoading={loading}
+                      cssGrid={true}
+                />
+                <JsonLd data={jsonLdData}/>
+                <SEO
+                    title="Token Overview"
+                    description="Explore and analyze all KRC-20 tokens on the Kaspa blockchain."
+                    keywords="KRC-20, Kaspa, token overview, cryptocurrency, blockchain"
+                />
             </div>
-            <List headerElements={header}
-                  items={filteredAndSortedTokens}
-                  itemHeight={40}
-                  getHeader={getHeader}
-                  getElement={getElement}
-                  isLoading={loading}
-                  cssGrid={true}
-            />
-            <JsonLd data={jsonLdData}/>
-            <SEO
-                title="Token Overview"
-                description="Explore and analyze all KRC-20 tokens on the Kaspa blockchain."
-                keywords="KRC-20, Kaspa, token overview, cryptocurrency, blockchain"
-            />
-        </div>
+        </Page>
     );
 };
 

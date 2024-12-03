@@ -1,10 +1,8 @@
 @import './globals.css';
 
 .token-overview {
-    padding: 20px;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
+    height: 100%;
+    width: 100%;
 
     .list {
 
@@ -61,32 +59,10 @@
             .image {
                 left: 0;
             }
-        }
-    }
 
-    .token-overview-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-    }
-
-    .token-overview-header h1 {
-        font-family: var(--header-font);
-        color: var(--primary-color);
-        margin: 0;
-        white-space: nowrap;
-        margin-right: 20px;
-        /* Add some space between title and search bar */
-    }
-
-    .search-form {
-        flex-grow: 1;
-        margin-left: 20px;
-        /* Add some space between title and search bar */
-
-        .input-group {
-            width: 70%;
+            .mintProgress {
+                flex-direction: column;
+            }
         }
     }
 
@@ -100,8 +76,8 @@
 
     .progress .progress-bar {
         background-image: linear-gradient(to right,
-                var(--tertiary-primary-color),
-                var(--primary-color));
+        var(--tertiary-primary-color),
+        var(--primary-color));
         border-radius: 4px;
         transition: width 0.6s ease;
     }
@@ -156,14 +132,8 @@
     }
 }
 
-/* Dark mode styles */
-
-.dark-mode .token-overview {
-    background-color: var(--dark-bg-color);
-}
-
-.dark-mode .token-overview-header h2 {
-    color: var(--dark-text-color);
+.token-overview-search-form {
+    width: 50%;
 }
 
 .dark-mode .progress {
@@ -172,25 +142,15 @@
 
 .dark-mode .progress .progress-bar {
     background-image: linear-gradient(to right,
-            var(--dark-tertiary-color),
-            var(--dark-primary-color));
+    var(--dark-tertiary-color),
+    var(--dark-primary-color));
 }
 
 .dark-mode .form-control::placeholder {
     color: var(--dark-muted-color);
 }
 
-/* Mobile View  */
-@media (max-width: 991px) {
-
-    /*!*todo remove*!*/
-    .search-form {
-        width: 100%;
-        margin-left: 0;
-    }
-
-    .search-form .input-group {
-        width: 100%;
-        margin-top: 10px;
-    }
+.mobile-view .token-overview-search-form {
+    width: 90% !important;
 }
+

@@ -1,6 +1,6 @@
 import React, {FC, useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
-import {Alert, Container, Table} from 'react-bootstrap';
+import {Container, Table} from 'react-bootstrap';
 import {FaCopy} from 'react-icons/fa';
 import 'styles/WalletLookup.css';
 import {censorTicker} from '../utils/censorTicker';
@@ -22,6 +22,7 @@ import {TransactionOverview} from "../components/tabs/walletOverview/Transaction
 import {useTransactions} from "../components/tabs/walletOverview/hooks/useTransactions";
 import {useUTXOs} from "../components/tabs/walletOverview/hooks/useUTXOs";
 import {UTXOOverview} from "../components/tabs/walletOverview/UTXOOverview";
+import {addAlert} from "../components/alerts/Alerts";
 
 type InternalWalletData = {
     address: string
@@ -39,46 +40,53 @@ const WalletLookup: FC = () => {
     const {isMobile} = useMobile()
 
     const [address, setAddress] = useState(walletAddress ?? '');
-    const transactionData = useTransactions(address)
-    const utxoData = useUTXOs(address)
+    const [addressValid, setAddressValid] = useState(false)
+    const transactionData = useTransactions(addressValid, walletAddress)
+    const utxoData = useUTXOs(addressValid, walletAddress)
 
     const [walletData, setWalletData] = useState<InternalWalletData | null>(null);
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
-
 
     useEffect(() => {
         if (!walletAddress) {
             return
         }
-        setAddress(walletAddress);
-        setLoading(true);
-        setError(null);
 
-        Promise.all([
-            simpleRequest<TokenListResponse<WalletToken[]>>(`https://api.kasplex.org/v1/krc20/address/${walletAddress}/tokenlist`),
-            simpleRequest<WalletBalance>(`https://api.kaspa.org/addresses/${walletAddress}/balance`),
-            simpleRequest<WalletTotal>(`https://api.kaspa.org/addresses/${walletAddress}/transactions-count`)
-        ])
-            .then(([krc20Response, balanceResponse, transactionCountResponse]): void => {
+        simpleRequest<WalletBalance>(`https://api.kaspa.org/addresses/${walletAddress}/balance`)
+            .then(balanceResponse => {
+                setLoading(true);
+                //wallet address is valid
+                setAddress(walletAddress);
+                setAddressValid(true)
+                Promise.all([
+                    simpleRequest<TokenListResponse<WalletToken[]>>(`https://api.kasplex.org/v1/krc20/address/${walletAddress}/tokenlist`),
+                    simpleRequest<WalletTotal>(`https://api.kaspa.org/addresses/${walletAddress}/transactions-count`)
+                ])
+                    .then(([krc20Response, transactionCountResponse]): void => {
 
-                const krc20Balances: WalletToken[] = krc20Response.result.map(token => ({
-                    ...token,
-                    balance: token.balance / Math.pow(10, token.dec),
-                }));
+                        const krc20Balances: WalletToken[] = krc20Response.result.map(token => ({
+                            ...token,
+                            balance: token.balance / Math.pow(10, token.dec),
+                        }));
 
-                setWalletData({
-                    address: walletAddress,
-                    krc20Balances,
-                    kaspaBalance: balanceResponse.balance,
-                    transactionCount: transactionCountResponse.total,
-                });
+                        setWalletData({
+                            address: walletAddress,
+                            krc20Balances,
+                            kaspaBalance: balanceResponse.balance,
+                            transactionCount: transactionCountResponse.total,
+                        });
+                    })
+                    .catch(() => {
+                        addAlert('error', 'Failed to fetch wallet data. Please try again.')
+                    })
+                    .finally(() => {
+                        setLoading(false);
+                    })
             })
             .catch(() => {
-                setError('Failed to fetch wallet data. Please try again.');
-            })
-            .finally(() => {
+                addAlert('error', 'Failed to fetch wallet data. Is the wallet address correct?')
                 setLoading(false);
+                setAddressValid(false)
             })
 
     }, [walletAddress])
@@ -114,7 +122,6 @@ const WalletLookup: FC = () => {
                        onChangeCallback={setAddress}/>
 
                 {loading && <LoadingSpinner/>}
-                {error && <Alert variant="danger">{error}</Alert>}
 
                 {walletData && (
                     <div className="wallet-details">
