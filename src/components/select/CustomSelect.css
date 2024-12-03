@@ -1,0 +1,92 @@
+.custom-search-select {
+
+    .custom-dropdown-header {
+        background-color: unset;
+        position: relative;
+    }
+
+    .search-input {
+        width: 100%;
+        background-color: unset;
+        color: var(--secondary-primary-color);
+    }
+
+    .search-input {
+        padding: 8px;
+        /*margin: 10px;*/
+        outline: none;
+        border: 1px solid var(--tertiary-primary-color);
+        border-radius: 5px;
+    }
+
+    .search-input:focus, .search-input:active, .search-input:hover {
+        border: 1px solid var(--primary-color);
+    }
+
+    .search-icon-wrapper {
+        display: flex;
+        flex-direction: row;
+        position: absolute;
+        align-items: center;
+        justify-content: center;
+        z-index: 1;
+        height: 100%;
+        bottom: 0;
+        right: 0;
+        color: lightgrey;
+        .search-arrow-wrapper, .search-reset-wrapper {
+            height: 100%;
+            aspect-ratio: 1/1;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .search-arrow-wrapper{
+            border-left: 1px solid lightgrey;
+        }
+    }
+}
+
+.select-custom-dropdown {
+    .custom-dropdown-menu {
+        max-height: 400px;
+        overflow: auto;
+        background-color: var(--sidebar-bg);
+
+        .custom-dropdown-item {
+            color: var(--secondary-primary-color);
+        }
+        .no-data {
+            width: 100%;
+            text-align: center;
+            padding: 10px;
+        }
+    }
+}
+
+.dark-mode .select-custom-dropdown {
+    .custom-dropdown-menu {
+        .custom-dropdown-item {
+            color: white;
+        }
+
+        .custom-dropdown-item:hover {
+            background-color: var(--dark-nav-hover-bg);
+            color: var(--dark-primary-color);
+        }
+    }
+}
+
+
+.dark-mode .custom-search-select {
+    .search-input {
+        color: var(--dark-text-color);
+    }
+}
+
+.mobile-view .select-custom-dropdown {
+    .custom-dropdown-menu {
+        max-height: 300px;
+    }
+}

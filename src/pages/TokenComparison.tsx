@@ -1,6 +1,6 @@
 /* eslint-disable */
 // @ts-nocheck
-import React, {FC, useCallback, useEffect, useRef, useState} from 'react';
+import React, {FC, useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {Badge, Card, Col, Form, ProgressBar, Row} from 'react-bootstrap';
 import {Bar} from 'react-chartjs-2';
 import {
@@ -13,14 +13,15 @@ import {
     Title,
     Tooltip
 } from 'chart.js';
-import Select from 'react-select';
-import {getKRC20TokenList, getTokenDetails} from '../services/dataService';
+import {getTokenDetails} from '../services/dataService';
 import 'styles/TokenComparison.css';
 import {FaChartBar, FaChartPie, FaUsers} from 'react-icons/fa'; // Import icons
 import {censorTicker} from '../utils/censorTicker';
-import {SEO, JsonLd, LoadingSpinner, Page} from "nacho-component-library";
+import {JsonLd, LoadingSpinner, Page, SEO} from "nacho-component-library";
 import {TokenData, TokenSearchResult} from "../interfaces/TokenData";
 import {addAlert} from "../components/alerts/Alerts";
+import {useFetchAllToken} from "../hooks/useFetchAllToken";
+import {CustomSelect, Selection} from "../components/select/CustomSelect";
 
 ChartJS.register(
     CategoryScale,
@@ -50,11 +51,10 @@ const HOLDER_GROUP_COLORS = {
 };
 //todo refactor
 const TokenComparison: FC = () => {
-    const [allTokens, setAllTokens] = useState<TokenData[]>([]);
     const [selectedTokens, setSelectedTokens] = useState([null, null]);
     const [tokenDetails, setTokenDetails] = useState<TokenInternal[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<boolean>(false);
+    const [compoareLoading, setCompareLoading] = useState(false)
+    const {tokens, loading, error} = useFetchAllToken()
 
     const supplyChartRef = useRef(null);
     const holdersChartRef = useRef(null);
@@ -95,35 +95,10 @@ const TokenComparison: FC = () => {
         };
     }, [calculateValue]);
 
-    const onError = useCallback((err) => {
-        console.error('Error in fetchTokenList:', err);
-        setError(true)
-        addAlert('error', `Failed to fetch token list: ${(err as Record<string, string>).message}. Please try selecting the tokens again or contact support if the issue persists.`);
-        setLoading(false);
-    }, [])
-
-    useEffect(() => {
-        const fetchTokenList = async () => {
-            try {
-                setLoading(true);
-                const data = await getKRC20TokenList(1000);
-                if (!data || !data.result) {
-                    onError({message: 'Invalid data structure received from API'})
-                }
-                setAllTokens(data.result);
-                setLoading(false);
-            } catch (err) {
-                onError(err)
-            }
-        };
-
-        void fetchTokenList();
-    }, [onError]);
-
     useEffect(() => {
         const fetchTokenDetails = async () => {
             if (selectedTokens[0] && selectedTokens[1]) {
-                setLoading(true);
+                setCompareLoading(true);
                 try {
                     const details = await Promise.all(selectedTokens.map(token => getTokenDetails(token.value)));
                     console.log('Raw token details:', details);
@@ -138,7 +113,7 @@ const TokenComparison: FC = () => {
                     addAlert('error', `Failed to fetch token details: ${(err as Record<string, string>).message}`);
                     setTokenDetails([]);
                 }
-                setLoading(false);
+                setCompareLoading(false);
             }
         };
 
@@ -433,6 +408,10 @@ const TokenComparison: FC = () => {
         };
     }, []);
 
+    const searchValues = useMemo((): Selection[] =>
+            tokens.map(token => ({value: token.tick, label: censorTicker(token.tick)}))
+        , [tokens])
+
     return (
         <Page header={'Compare KRC20 Tokens'}>
             <div className="token-comparison">
@@ -454,28 +433,20 @@ const TokenComparison: FC = () => {
                     <Col md={6}>
                         <Form.Group>
                             <Form.Label>Select Token 1</Form.Label>
-                            <Select
-                                options={allTokens.map(token => ({value: token.tick, label: censorTicker(token.tick)}))}
-                                onChange={(option) => handleTokenSelect(option, 0)}
-                                isClearable
-                                placeholder="Search for a token..."
-                            />
+                            <CustomSelect placeholder={"Search for a token..."} data={searchValues} hasSearch={true}
+                                          onSelect={(option) => handleTokenSelect(option, 0)}/>
                         </Form.Group>
                     </Col>
                     <Col md={6}>
                         <Form.Group>
                             <Form.Label>Select Token 2</Form.Label>
-                            <Select
-                                options={allTokens.map(token => ({value: token.tick, label: censorTicker(token.tick)}))}
-                                onChange={(option) => handleTokenSelect(option, 1)}
-                                isClearable
-                                placeholder="Search for a token..."
-                            />
+                            <CustomSelect placeholder={"Search for a token..."} data={searchValues} hasSearch={true}
+                                          onSelect={(option) => handleTokenSelect(option, 1)}/>
                         </Form.Group>
                     </Col>
                 </Row>
                 {loading && <LoadingSpinner useFlexHeight={true}/>}
-                {!loading && !error && tokenDetails[0] && tokenDetails[1] && renderComparison()}
+                {!compoareLoading && !error && tokenDetails[0] && tokenDetails[1] && renderComparison()}
             </div>
         </Page>
     );

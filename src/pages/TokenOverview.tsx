@@ -1,5 +1,4 @@
-import React, {FC, ReactElement, useEffect, useMemo, useRef, useState} from 'react';
-import {getKRC20TokenListSequential} from '../services/dataService';
+import React, {FC, ReactElement, useMemo, useState} from 'react';
 import 'styles/TokenOverview.css';
 import {TokenData} from "../interfaces/TokenData";
 import {
@@ -17,11 +16,9 @@ import {Link} from "react-router-dom";
 import {iconBaseUrl} from "../utils/StaticVariables";
 import {TokenActions} from "../components/TokenActions";
 import {censorTicker} from "../utils/censorTicker";
-import {generateUniqueID} from "web-vitals/dist/modules/lib/generateUniqueID";
 import {formatNumber} from "../services/Helper";
-import {addAlert} from "../components/alerts/Alerts";
+import {useFetchAllToken} from "../hooks/useFetchAllToken";
 
-const ITEMS_PER_PAGE = 50;
 
 const jsonLdData = {
     "@context": "https://schema.org",
@@ -36,62 +33,12 @@ const header: HeaderType[] = ['image', 'action', 'tick', 'mintState', 'state', '
 
 const TokenOverview: FC = () => {
     const {isMobile} = useMobile()
-    const [tokens, setTokens] = useState<(TokenData & { id: string })[]>([]);
-    const [loading, setLoading] = useState(true);
     const [sortField, setSortField] = useState<keyof TokenData | ''>('');
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
     const [searchTerm, setSearchTerm] = useState('');
     const [launchTypeFilter, setLaunchTypeFilter] = useState('');
     const [statusFilter, setStatusFilter] = useState('');
-    const [cursor, setCursor] = useState<null | number>(null)
-    const [isFinished, setIsFinished] = useState<boolean>(false)
-    const loadingRef = useRef<number | null>()
-
-    useEffect(() => {
-        let isMounted = true;
-
-        if (isFinished || loadingRef.current === cursor) {
-            return;
-        }
-
-        const fetchAllTokens = async (): Promise<void> => {
-            try {
-                setLoading(true);
-                loadingRef.current = cursor;
-                const data = await getKRC20TokenListSequential(ITEMS_PER_PAGE, sortField, sortDirection, cursor);
-                if (loadingRef.current !== cursor) {
-                    return;
-                }
-                const tempRes = data.result.map(single => ({...single, id: generateUniqueID()}))
-                setTokens(current => ([...current, ...tempRes]));
-
-                if (data.cursor === undefined) {
-                    setIsFinished(true);
-                    setLoading(false);
-                    return;
-                }
-                setCursor(data.cursor);
-            } catch (err) {
-                console.error('Error in TokenOverview:', err);
-                if (isMounted) {
-                    addAlert('error',`Failed to fetch tokens: ${(err as Record<string, string>).message}`);
-                    setLoading(false);
-                }
-            }
-        };
-        void fetchAllTokens();
-
-        return () => {
-            isMounted = false;
-        };
-    }, [sortField, sortDirection, cursor, isFinished]);
-
-    const resetAll = () => {
-        setTokens([])
-        setCursor(null)
-        setIsFinished(false)
-        loadingRef.current = undefined
-    }
+    const {tokens, loading, resetAll} = useFetchAllToken(sortField, sortDirection)
 
     const handleSort = (field: keyof TokenData): void => {
         if (field === sortField) {
@@ -100,7 +47,7 @@ const TokenOverview: FC = () => {
             setSortField(field);
             setSortDirection('asc');
         }
-        resetAll()
+        void resetAll()
     };
 
     const handleLaunchTypeSelect = (eventKey: string): void => {
