@@ -2,13 +2,22 @@ import React, {FC, ReactElement, useEffect, useMemo, useRef, useState} from 'rea
 import {getKRC20TokenListSequential} from '../services/dataService';
 import 'styles/TokenOverview.css';
 import {TokenData} from "../interfaces/TokenData";
-import {CustomDropdown, Input, JsonLd, List, Page, SEO, SmallThumbnail, useMobile} from "nacho-component-library";
+import {
+    CustomDropdown,
+    CustomDropdownItem,
+    Input,
+    JsonLd,
+    List,
+    Page,
+    SEO,
+    SmallThumbnail,
+    useMobile
+} from "nacho-component-library";
 import {Link} from "react-router-dom";
 import {iconBaseUrl} from "../utils/StaticVariables";
 import {TokenActions} from "../components/TokenActions";
 import {censorTicker} from "../utils/censorTicker";
 import {generateUniqueID} from "web-vitals/dist/modules/lib/generateUniqueID";
-import {Dropdown} from "react-bootstrap";
 import {formatNumber} from "../services/Helper";
 import {addAlert} from "../components/alerts/Alerts";
 
@@ -272,18 +281,18 @@ const TokenOverview: FC = () => {
                 </div>
             case 'mintState':
                 return <CustomDropdown title={'Launch Type'}>
-                    <Dropdown.Item onClick={() => handleLaunchTypeSelect("")}>All</Dropdown.Item>
-                    <Dropdown.Item onClick={() => handleLaunchTypeSelect("Fair Mint")}>Fair
-                        Mint</Dropdown.Item>
-                    <Dropdown.Item
-                        onClick={() => handleLaunchTypeSelect("Pre-Mint")}>Pre-Mint</Dropdown.Item>
+                    <CustomDropdownItem onClick={() => handleLaunchTypeSelect("")}>All</CustomDropdownItem>
+                    <CustomDropdownItem onClick={() => handleLaunchTypeSelect("Fair Mint")}>Fair
+                        Mint</CustomDropdownItem>
+                    <CustomDropdownItem
+                        onClick={() => handleLaunchTypeSelect("Pre-Mint")}>Pre-Mint</CustomDropdownItem>
                 </CustomDropdown>
             case 'state':
                 return <CustomDropdown title={'Status'}>
-                    <Dropdown.Item onClick={() => handleStatusSelect("")}>All</Dropdown.Item>
-                    <Dropdown.Item
-                        onClick={() => handleStatusSelect("Complete")}>Complete</Dropdown.Item>
-                    <Dropdown.Item onClick={() => handleStatusSelect("Minting")}>Minting</Dropdown.Item>
+                    <CustomDropdownItem onClick={() => handleStatusSelect("")}>All</CustomDropdownItem>
+                    <CustomDropdownItem
+                        onClick={() => handleStatusSelect("Complete")}>Complete</CustomDropdownItem>
+                    <CustomDropdownItem onClick={() => handleStatusSelect("Minting")}>Minting</CustomDropdownItem>
                 </CustomDropdown>
             case 'max':
                 return <div onClick={() => handleSort('max')}

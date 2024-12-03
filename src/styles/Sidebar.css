@@ -385,6 +385,7 @@
     height: 30px;
 }
 
+/*todo move styling*/
 .dark-mode .modal-content {
     background-color: var(--dark-bg-color);
     color: var(--dark-text-color);
@@ -437,15 +438,43 @@
     padding: 5px;
 }
 
-.dark-mode .donate-modal {
-    background-color: #000000a3;
-    .modal-content {
-        box-shadow: 0 0 5px whitesmoke;
+.mobile-view .navbar {
+    .navbar-nav {
+        background-color: rgba(var(--bs-light-rgb),var(--bs-bg-opacity));
+        width: 100%;
+        z-index: 10;
+        position: absolute;
+        left: 0;
+        box-shadow: 1px 10px 10px 1px #6f6f6fb0;
+        border-top: 1px solid lightgrey;
+        .nav-link {
+            padding: 10px;
+            border-bottom: 1px solid lightgrey;
+        }
 
-        .modal-header {
-            .btn-close {
-                color: white !important;
+        .donation-text {
+            cursor: pointer;
+            padding: 10px;
+            text-align: center;
+            &:hover{
+
             }
+        }
+    }
+}
+
+.dark-mode .navbar {
+    .navbar-nav {
+        background-color: rgba(var(--bs-dark-rgb), var(--bs-bg-opacity));
+        box-shadow: 1px 10px 10px 1px black;
+        border-color: var(--dark-border-color);
+
+        .nav-link {
+            border-color: var(--dark-border-color);
+        }
+        .navbar-link:hover{
+            background-color: var(--dark-nav-hover-bg);
+            color: var(--dark-primary-color);
         }
     }
 }

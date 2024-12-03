@@ -16,7 +16,7 @@ import {
 import logo from '../assets/logo.png'
 import yourAdHere from '../assets/youradhere.png'
 import 'styles/Sidebar.css'
-import {DonationModal} from "./DonationModal";
+import {DonationModal} from "./donationModal/DonationModal";
 
 type Props = {
     darkMode: boolean
@@ -146,15 +146,12 @@ const Sidebar = forwardRef<HTMLDivElement, Props>(({darkMode, toggleDarkMode, is
                                 >
                                     <FaChartLine/> MarketCap Calc
                                 </NavLink>
-                                {/*
-                                <NavLink
-                                    to="#"
-                                    className="nav-link"
-                                    onClick={handleDonateClick}
-                                >
-                                    <FaHeart /> Donate
-                                </NavLink>
-                                */}
+
+                                <span onClick={handleDonateClick} className={'donation-text'}>
+                                    Made with ❤️ by the
+                                    <br/>
+                                    Nacho the 𐤊at Community
+                                </span>
                             </Nav>
                         </Navbar.Collapse>
                     </Container>

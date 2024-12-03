@@ -1,9 +1,10 @@
 import React, {FC} from "react";
 import {Button, Modal} from "react-bootstrap";
-import communityQR from "../assets/communityQR.png";
-import devQR from "../assets/devQr.png";
+import communityQR from "../../assets/communityQR.png";
+import devQR from "../../assets/devQr.png";
 import {CustomTabs, useDarkMode} from "nacho-component-library";
-import {copyToClipboard} from "../services/Helper";
+import {copyToClipboard} from "../../services/Helper";
+import './DonationModal.css'
 
 type Props = {
     show: boolean
@@ -26,7 +27,7 @@ export const DonationModal: FC<Props> = (
         centered
         className={'donate-modal'}
     >
-        <Modal.Header closeButton>
+        <Modal.Header closeButton data-bs-theme={isDarkMode ? 'dark' : 'light'}>
             <Modal.Title>Donate</Modal.Title>
         </Modal.Header>
         <CustomTabs titles={['Community', 'Dev Coffee tip']}>
