@@ -19,7 +19,6 @@ import {censorTicker} from "../utils/censorTicker";
 import {formatNumber} from "../services/Helper";
 import {useFetchAllToken} from "../hooks/useFetchAllToken";
 
-
 const jsonLdData = {
     "@context": "https://schema.org",
     "@type": "WebPage",
@@ -227,7 +226,7 @@ const TokenOverview: FC = () => {
                     Ticker {sortField === 'tick' && (sortDirection === 'asc' ? '▲' : '▼')}
                 </div>
             case 'mintState':
-                return <CustomDropdown title={'Launch Type'}>
+                return <CustomDropdown title={'Launch Type'} theme={'header'}>
                     <CustomDropdownItem onClick={() => handleLaunchTypeSelect("")}>All</CustomDropdownItem>
                     <CustomDropdownItem onClick={() => handleLaunchTypeSelect("Fair Mint")}>Fair
                         Mint</CustomDropdownItem>
@@ -235,7 +234,7 @@ const TokenOverview: FC = () => {
                         onClick={() => handleLaunchTypeSelect("Pre-Mint")}>Pre-Mint</CustomDropdownItem>
                 </CustomDropdown>
             case 'state':
-                return <CustomDropdown title={'Status'}>
+                return <CustomDropdown title={'Status'} theme={'header'}>
                     <CustomDropdownItem onClick={() => handleStatusSelect("")}>All</CustomDropdownItem>
                     <CustomDropdownItem
                         onClick={() => handleStatusSelect("Complete")}>Complete</CustomDropdownItem>

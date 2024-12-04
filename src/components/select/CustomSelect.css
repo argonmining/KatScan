@@ -34,6 +34,7 @@
         bottom: 0;
         right: 0;
         color: lightgrey;
+
         .search-arrow-wrapper, .search-reset-wrapper {
             height: 100%;
             aspect-ratio: 1/1;
@@ -42,7 +43,8 @@
             align-items: center;
             justify-content: center;
         }
-        .search-arrow-wrapper{
+
+        .search-arrow-wrapper {
             border-left: 1px solid lightgrey;
         }
     }
@@ -52,28 +54,21 @@
     .custom-dropdown-menu {
         max-height: 400px;
         overflow: auto;
-        background-color: var(--sidebar-bg);
 
-        .custom-dropdown-item {
-            color: var(--secondary-primary-color);
-        }
         .no-data {
             width: 100%;
             text-align: center;
             padding: 10px;
+            color: var(--secondary-primary-color);
         }
     }
 }
 
 .dark-mode .select-custom-dropdown {
     .custom-dropdown-menu {
-        .custom-dropdown-item {
-            color: white;
-        }
 
-        .custom-dropdown-item:hover {
-            background-color: var(--dark-nav-hover-bg);
-            color: var(--dark-primary-color);
+        .no-data {
+            color: var(--dark-text-color);
         }
     }
 }
