@@ -4,7 +4,7 @@ import Sidebar from './components/Sidebar'
 import './styles/App.css'
 import './styles/globals.css'
 import './styles/darkMode.css'
-import {LoadingSpinner, useDarkMode, useMobile, usePageResize} from 'nacho-component-library'
+import {LoadingSpinner, usePageResize} from 'nacho-component-library'
 import {Alerts} from "./components/alerts/Alerts";
 
 /**
@@ -23,8 +23,6 @@ const StructuredData = lazy(() => import('./pages/StructuredData'))
 
 const App: FC = () => {
     const elementRef = useRef<HTMLDivElement | null>(null)
-    const {isMobile} = useMobile()
-    const {isDarkMode, toggleDarkMode} = useDarkMode()
     const styling = usePageResize(elementRef, 'mainContent')
 
     return (
@@ -32,11 +30,7 @@ const App: FC = () => {
             <div className="App">
                 <div id={'portal-container'}/>
                 <Alerts/>
-                <Sidebar ref={elementRef}
-                    darkMode={isDarkMode}
-                    toggleDarkMode={toggleDarkMode}
-                    isMobile={isMobile}
-                />
+                <Sidebar ref={elementRef} />
                 <div className="main-content" style={styling}>
                     <Suspense fallback={<LoadingSpinner/>}>
                         <Routes>

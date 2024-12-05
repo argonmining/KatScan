@@ -17,18 +17,15 @@ import logo from '../assets/logo.png'
 import yourAdHere from '../assets/youradhere.png'
 import 'styles/Sidebar.css'
 import {DonationModal} from "./donationModal/DonationModal";
+import {ThemeToggle, useDarkMode, useMobile} from "nacho-component-library";
 
-type Props = {
-    darkMode: boolean
-    toggleDarkMode: () => void
-    isMobile: boolean
-}
-
-const Sidebar = forwardRef<HTMLDivElement, Props>(({darkMode, toggleDarkMode, isMobile}, ref) => {
+const Sidebar = forwardRef<HTMLDivElement>((_, ref) => {
     /*const [collapsed, setCollapsed] = useState(false)*/
     const [collapsed] = useState(false)
     const [showDonateModal, setShowDonateModal] = useState(false)
     const [expanded, setExpanded] = useState(false)
+    const {isDarkMode} = useDarkMode()
+    const {isMobile} = useMobile()
 
     /*const toggleSidebar = () => {
         setCollapsed(!collapsed)
@@ -60,8 +57,8 @@ const Sidebar = forwardRef<HTMLDivElement, Props>(({darkMode, toggleDarkMode, is
                 <Navbar
                     ref={ref}
                     expand="lg"
-                    bg={darkMode ? 'dark' : 'light'}
-                    variant={darkMode ? 'dark' : 'light'}
+                    bg={isDarkMode ? 'dark' : 'light'}
+                    variant={isDarkMode ? 'dark' : 'light'}
                     expanded={expanded}
                     className="d-lg-none"
                 >
@@ -75,20 +72,7 @@ const Sidebar = forwardRef<HTMLDivElement, Props>(({darkMode, toggleDarkMode, is
                             />
                             <span>KatScan</span>
                         </Navbar.Brand>
-
-                        <div className="dark-mode-toggle">
-                            <span className="dark-mode-label">
-                                {darkMode ? 'Dark' : 'Light'}
-                            </span>
-                            <label className="switch">
-                                <input
-                                    type="checkbox"
-                                    checked={darkMode}
-                                    onChange={toggleDarkMode}
-                                />
-                                <span className="slider"></span>
-                            </label>
-                        </div>
+                        <ThemeToggle/>
                         <Navbar.Toggle
                             aria-controls="basic-navbar-nav"
                             onClick={() => setExpanded(!expanded)}
@@ -258,19 +242,7 @@ const Sidebar = forwardRef<HTMLDivElement, Props>(({darkMode, toggleDarkMode, is
                             <FaHeart /> {!collapsed && <span>Donate</span>}
                         </NavLink>
                         */}
-                        <div className="dark-mode-toggle sidebar-dark-mode-toggle">
-                            <span className="dark-mode-label">
-                                {darkMode ? 'Dark' : 'Light'}
-                            </span>
-                            <label className="switch">
-                                <input
-                                    type="checkbox"
-                                    checked={darkMode}
-                                    onChange={toggleDarkMode}
-                                />
-                                <span className="slider"></span>
-                            </label>
-                        </div>
+                        <ThemeToggle/>
                         <div className="sidebar-footer">
                             {!collapsed && (
                                 <p onClick={handleDonateClick} style={{cursor: 'pointer'}}>
@@ -284,7 +256,7 @@ const Sidebar = forwardRef<HTMLDivElement, Props>(({darkMode, toggleDarkMode, is
                 </div>
             )}
             {/* Donate Modal */}
-            <DonationModal show={showDonateModal} close={() => setShowDonateModal(false)}/>
+            {showDonateModal && <DonationModal show={showDonateModal} close={() => setShowDonateModal(false)}/>}
         </>
     )
 })
