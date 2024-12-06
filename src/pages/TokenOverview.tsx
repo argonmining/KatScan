@@ -166,59 +166,68 @@ const TokenOverview: FC = () => {
         return formatNumber(value / Math.pow(10, decimals));
     };
 
-    const getElement = (header: string, token: TokenData): ReactElement | null => {
-        const headerInternal = header as HeaderType
+    const getElement = (header: string, token: TokenData & { id: string }): ReactElement => {
+        console.log(token); // Log the entire token object
+        const headerInternal = header as HeaderType;
         switch (headerInternal) {
             case "image":
                 if (!token.logo) {
-                    return <div></div>
+                    return <div></div>; // Return an empty div instead of null
                 }
-                return <div style={{width: '30px', overflow: 'hidden'}}>
-                    <Link to={`/tokens/${token.tick}`} className="token-ticker">
-                        <SmallThumbnail 
-                            src={`${katscanBaseUrl}/api${(token.logo).replace(/\.[^/.]+$/, '')}`} 
-                            alt={token.tick} 
-                            loading="lazy" 
-                        />
-                    </Link>
-                </div>
-            case "action":
-                return <TokenActions tokenDetail={token}/>
-            case "tick":
-                return <Link to={`/tokens/${token.tick}`} className="token-ticker">
-                    {censorTicker(token.tick)}
-                </Link>
-            case "mintState":
-                return <span className={getBadgeClass(token.pre)}>
-                     {token.pre === '0' ? 'Fair Mint' : 'Pre-Mint'}
-                            </span>
-
-            case "state":
-                return <>{formatState(token.state)}</>
-            case 'max':
-                return <>{formatNumberWithWords(token.max, token.dec)}</>
-            case 'pre':
-                return <>{formatPreMinted(token.pre, token.max, token.dec)}</>
-            case 'minted':
-                return <>{formatNumberWithWords(token.minted, token.dec)}
-                </>
-            case 'mintProgress':
-                return <>
-                    <small className="text-muted">
-                        {formatPercentage(calculateValue(token.minted, token.dec), calculateValue(token.max, token.dec), true)}
-                    </small>
-                    <div className="progress">
-                        <div className="progress-bar"
-                             style={{width: `${calculatePercentage(calculateValue(token.minted, token.dec), calculateValue(token.max, token.dec))}%`}}
-                        ></div>
+                return (
+                    <div style={{ width: '30px', overflow: 'hidden' }}>
+                        <Link to={`/tokens/${token.tick}`} className="token-ticker">
+                            <SmallThumbnail
+                                src={`${katscanBaseUrl}/api${token.logo.replace(/\.[^/.]+$/, '')}`}
+                                alt={token.tick}
+                                loading="lazy"
+                            />
+                        </Link>
                     </div>
-                </>
+                );
+            case "action":
+                return <TokenActions tokenDetail={token} />;
+            case "tick":
+                return (
+                    <Link to={`/tokens/${token.tick}`} className="token-ticker">
+                        {censorTicker(token.tick)}
+                    </Link>
+                );
+            case "mintState":
+                return (
+                    <span className={getBadgeClass(token.pre)}>
+                        {token.pre === '0' ? 'Fair Mint' : 'Pre-Mint'}
+                    </span>
+                );
+            case "state":
+                return <>{formatState(token.state)}</>;
+            case 'max':
+                return <>{formatNumberWithWords(token.max, token.dec)}</>;
+            case 'pre':
+                return <>{formatPreMinted(token.pre, token.max, token.dec)}</>;
+            case 'minted':
+                return <>{formatNumberWithWords(token.minted, token.dec)}</>;
+            case 'mintProgress':
+                return (
+                    <>
+                        <small className="text-muted">
+                            {formatPercentage(calculateValue(token.minted, token.dec), calculateValue(token.max, token.dec), true)}
+                        </small>
+                        <div className="progress">
+                            <div
+                                className="progress-bar"
+                                style={{ width: `${calculatePercentage(calculateValue(token.minted, token.dec), calculateValue(token.max, token.dec))}%` }}
+                            ></div>
+                        </div>
+                    </>
+                );
             case 'mtsAdd':
-                return <div>{formatDateTime(token.mtsAdd)}</div>
+                return <div>{formatDateTime(token.mtsAdd)}</div>;
             default:
-                return <div>{token[header as keyof TokenData]}</div>
+                return <div>{token[header as keyof TokenData]}</div>; // Ensure a ReactElement is always returned
         }
-    }
+    };
+
     const getHeader = (value: string): ReactElement | null => {
         const h = value as HeaderType
         switch (h) {

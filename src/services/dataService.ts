@@ -23,12 +23,12 @@ export const getKRC20TokenList = async (limit = 100, sortField = 'holderTotal', 
     let allTokens: TokenData[] = [];
     let cursor = null;
 
-    //todo + todo data check
     do {
         const params: Record<string, string | number> = {
             limit,
-            ...(sortField && {sort: `${sortField}:${sortDirection}`}),
-            ...(cursor && {next: cursor})
+            sortBy: sortField,
+            sortOrder: sortDirection,
+            ...(cursor && {cursor: cursor})
         };
 
         try {
@@ -54,8 +54,8 @@ export const getKRC20TokenListSequential = async (limit = 100, sortField = 'hold
 }> => {
     const params: Record<string, string | number> = {
         limit,
-        ...(sortField && {sortBy: sortField}),
-        ...(sortDirection && {sortOrder: sortDirection}),
+        sortBy: sortField || 'holderTotal',
+        sortOrder: sortDirection || 'desc',
         ...(cursor && {cursor: cursor})
     };
 
