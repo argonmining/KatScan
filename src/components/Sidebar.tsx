@@ -14,7 +14,7 @@ import {
     FaWallet,
 } from 'react-icons/fa'
 import logo from '../assets/logo.png'
-import yourAdHere from '../assets/youradhere.png'
+import yourAdHere from '../assets/kpawAd.png'
 import 'styles/Sidebar.css'
 import {DonationModal} from "./donationModal/DonationModal";
 import {ThemeToggle, useDarkMode, useMobile} from "nacho-component-library";
@@ -143,10 +143,9 @@ const Sidebar = forwardRef<HTMLDivElement>((_, ref) => {
             ) : (
                 // Desktop Sidebar
                 <div id={'navbar'}
-                     ref={ref}
-                     className={`sidebar ${
-                         collapsed ? 'collapsed' : ''
-                     } d-none d-lg-block`}
+                    ref={ref}
+                    className={`sidebar ${collapsed ? 'collapsed' : ''
+                        } d-none d-lg-block`}
                 >
                     <div className="sidebar-content">
                         <div className="sidebar-header">
@@ -167,7 +166,7 @@ const Sidebar = forwardRef<HTMLDivElement>((_, ref) => {
                                     to="/transaction-lookup"
                                     className="nav-link"
                                 >
-                                    <FaSearch/>{' '}
+                                    <FaSearch />{' '}
                                     {!collapsed && (
                                         <span>Search Transactions</span>
                                     )}
@@ -226,10 +225,10 @@ const Sidebar = forwardRef<HTMLDivElement>((_, ref) => {
                                 </NavLink>
                             </NavSection>
                             <div className="ad-container">
-                                <a href="https://nachowyborski.xyz" target="_blank" rel="noopener noreferrer">
+                                <a href="https://www.kaspaw.io/" target="_blank" rel="noopener noreferrer">
                                     <img src={yourAdHere as string}
-                                         alt="Advertise Your Project Here"
-                                         className="ad-image"/>
+                                        alt="KPAW Advert"
+                                        className="ad-image" />
                                 </a>
                             </div>
                         </Nav>
