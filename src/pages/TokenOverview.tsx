@@ -175,7 +175,7 @@ const TokenOverview: FC = () => {
                 }
                 return <div style={{width: '30px', overflow: 'hidden'}}>
                     <Link to={`/tokens/${token.tick}`} className="token-ticker">
-                        <SmallThumbnail src={`${katscanBaseUrl}${token.logo}.jpg`}
+                        <SmallThumbnail src={`${katscanBaseUrl}${token.logo}`}
                                         alt={token.tick}
                                         loading="lazy"/>
                     </Link>
