@@ -1,18 +1,23 @@
-import React, {FC, ReactElement, useEffect, useMemo, useRef, useState} from 'react';
-import {getKRC20TokenListSequential} from '../services/dataService';
+import React, {FC, ReactElement, useMemo, useState} from 'react';
 import 'styles/TokenOverview.css';
 import {TokenData} from "../interfaces/TokenData";
-import {CustomDropdown, Input, JsonLd, List, Page, SEO, SmallThumbnail, useMobile} from "nacho-component-library";
+import {
+    CustomDropdown,
+    CustomDropdownItem,
+    Input,
+    JsonLd,
+    List,
+    Page,
+    SEO,
+    SmallThumbnail,
+    useMobile
+} from "nacho-component-library";
 import {Link} from "react-router-dom";
 import {iconBaseUrl} from "../utils/StaticVariables";
 import {TokenActions} from "../components/TokenActions";
 import {censorTicker} from "../utils/censorTicker";
-import {generateUniqueID} from "web-vitals/dist/modules/lib/generateUniqueID";
-import {Dropdown} from "react-bootstrap";
 import {formatNumber} from "../services/Helper";
-import {addAlert} from "../components/alerts/Alerts";
-
-const ITEMS_PER_PAGE = 50;
+import {useFetchAllToken} from "../hooks/useFetchAllToken";
 
 const jsonLdData = {
     "@context": "https://schema.org",
@@ -27,62 +32,12 @@ const header: HeaderType[] = ['image', 'action', 'tick', 'mintState', 'state', '
 
 const TokenOverview: FC = () => {
     const {isMobile} = useMobile()
-    const [tokens, setTokens] = useState<(TokenData & { id: string })[]>([]);
-    const [loading, setLoading] = useState(true);
     const [sortField, setSortField] = useState<keyof TokenData | ''>('');
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
     const [searchTerm, setSearchTerm] = useState('');
     const [launchTypeFilter, setLaunchTypeFilter] = useState('');
     const [statusFilter, setStatusFilter] = useState('');
-    const [cursor, setCursor] = useState<null | number>(null)
-    const [isFinished, setIsFinished] = useState<boolean>(false)
-    const loadingRef = useRef<number | null>()
-
-    useEffect(() => {
-        let isMounted = true;
-
-        if (isFinished || loadingRef.current === cursor) {
-            return;
-        }
-
-        const fetchAllTokens = async (): Promise<void> => {
-            try {
-                setLoading(true);
-                loadingRef.current = cursor;
-                const data = await getKRC20TokenListSequential(ITEMS_PER_PAGE, sortField, sortDirection, cursor);
-                if (loadingRef.current !== cursor) {
-                    return;
-                }
-                const tempRes = data.result.map(single => ({...single, id: generateUniqueID()}))
-                setTokens(current => ([...current, ...tempRes]));
-
-                if (data.cursor === undefined) {
-                    setIsFinished(true);
-                    setLoading(false);
-                    return;
-                }
-                setCursor(data.cursor);
-            } catch (err) {
-                console.error('Error in TokenOverview:', err);
-                if (isMounted) {
-                    addAlert('error',`Failed to fetch tokens: ${(err as Record<string, string>).message}`);
-                    setLoading(false);
-                }
-            }
-        };
-        void fetchAllTokens();
-
-        return () => {
-            isMounted = false;
-        };
-    }, [sortField, sortDirection, cursor, isFinished]);
-
-    const resetAll = () => {
-        setTokens([])
-        setCursor(null)
-        setIsFinished(false)
-        loadingRef.current = undefined
-    }
+    const {tokens, loading, resetAll} = useFetchAllToken(sortField, sortDirection)
 
     const handleSort = (field: keyof TokenData): void => {
         if (field === sortField) {
@@ -91,7 +46,7 @@ const TokenOverview: FC = () => {
             setSortField(field);
             setSortDirection('asc');
         }
-        resetAll()
+        void resetAll()
     };
 
     const handleLaunchTypeSelect = (eventKey: string): void => {
@@ -271,19 +226,19 @@ const TokenOverview: FC = () => {
                     Ticker {sortField === 'tick' && (sortDirection === 'asc' ? '▲' : '▼')}
                 </div>
             case 'mintState':
-                return <CustomDropdown title={'Launch Type'}>
-                    <Dropdown.Item onClick={() => handleLaunchTypeSelect("")}>All</Dropdown.Item>
-                    <Dropdown.Item onClick={() => handleLaunchTypeSelect("Fair Mint")}>Fair
-                        Mint</Dropdown.Item>
-                    <Dropdown.Item
-                        onClick={() => handleLaunchTypeSelect("Pre-Mint")}>Pre-Mint</Dropdown.Item>
+                return <CustomDropdown title={'Launch Type'} theme={'header'}>
+                    <CustomDropdownItem onClick={() => handleLaunchTypeSelect("")}>All</CustomDropdownItem>
+                    <CustomDropdownItem onClick={() => handleLaunchTypeSelect("Fair Mint")}>Fair
+                        Mint</CustomDropdownItem>
+                    <CustomDropdownItem
+                        onClick={() => handleLaunchTypeSelect("Pre-Mint")}>Pre-Mint</CustomDropdownItem>
                 </CustomDropdown>
             case 'state':
-                return <CustomDropdown title={'Status'}>
-                    <Dropdown.Item onClick={() => handleStatusSelect("")}>All</Dropdown.Item>
-                    <Dropdown.Item
-                        onClick={() => handleStatusSelect("Complete")}>Complete</Dropdown.Item>
-                    <Dropdown.Item onClick={() => handleStatusSelect("Minting")}>Minting</Dropdown.Item>
+                return <CustomDropdown title={'Status'} theme={'header'}>
+                    <CustomDropdownItem onClick={() => handleStatusSelect("")}>All</CustomDropdownItem>
+                    <CustomDropdownItem
+                        onClick={() => handleStatusSelect("Complete")}>Complete</CustomDropdownItem>
+                    <CustomDropdownItem onClick={() => handleStatusSelect("Minting")}>Minting</CustomDropdownItem>
                 </CustomDropdown>
             case 'max':
                 return <div onClick={() => handleSort('max')}

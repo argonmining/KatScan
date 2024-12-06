@@ -1,0 +1,25 @@
+.donate-modal{
+    .modal.header{
+        .close {
+            color: #fff;
+            opacity: 1;
+        }
+    }
+    .address-text{
+        overflow-wrap: break-word;
+    }
+}
+
+.dark-mode .donate-modal {
+    background-color: #000000a3;
+
+    .modal-content {
+        box-shadow: 0 0 1px whitesmoke;
+
+        .modal-header {
+            .btn-close {
+                color: white !important;
+            }
+        }
+    }
+}

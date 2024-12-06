@@ -1,3 +1,5 @@
+import {addAlert} from "../components/alerts/Alerts";
+
 // Helper function for number formatting
 export const formatNumber = (number: number | string, maxDigits = 5): string => {
     const internalNumber = typeof number === 'string' ? parsingNumber(number) : number
@@ -49,7 +51,7 @@ export const formatDateTime = (timestamp: string): string => {
 
 export const copyToClipboard = (text: string): void => {
     void navigator.clipboard.writeText(text);
-    // TODO: Add a toast notification here
+    addAlert('success', 'Text copied')
 }
 
 export const formatKaspa = (amount: string): string => {
