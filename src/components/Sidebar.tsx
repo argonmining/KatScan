@@ -14,7 +14,7 @@ import {
     FaWallet,
 } from 'react-icons/fa'
 import logo from '../assets/logo.png'
-import yourAdHere from '../assets/youradhere.png'
+import yourAdHere from '../assets/kpawAd.png'
 import 'styles/Sidebar.css'
 import {DonationModal} from "./DonationModal";
 
@@ -247,7 +247,7 @@ const Sidebar = forwardRef<HTMLDivElement, Props>(({darkMode, toggleDarkMode, is
                             <div className="ad-container">
                                 <a href="https://nachowyborski.xyz" target="_blank" rel="noopener noreferrer">
                                     <img src={yourAdHere as string}
-                                         alt="Advertise Your Project Here"
+                                         alt="KPAW Advert"
                                          className="ad-image"/>
                                 </a>
                             </div>
