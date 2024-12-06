@@ -166,7 +166,7 @@ const TokenOverview: FC = () => {
         return formatNumber(value / Math.pow(10, decimals));
     };
 
-    const getElement = (header: string, token: TokenData): ReactElement => {
+    const getElement = (header: string, token: TokenData): ReactElement | null => {
         const headerInternal = header as HeaderType
         switch (headerInternal) {
             case "image":
@@ -176,7 +176,7 @@ const TokenOverview: FC = () => {
                 return <div style={{width: '30px', overflow: 'hidden'}}>
                     <Link to={`/tokens/${token.tick}`} className="token-ticker">
                         <SmallThumbnail 
-                            src={`${katscanBaseUrl as string}/api${(token.logo as string).replace(/\.[^/.]+$/, '')}`} 
+                            src={`${katscanBaseUrl}/api${(token.logo).replace(/\.[^/.]+$/, '')}`} 
                             alt={token.tick} 
                             loading="lazy" 
                         />
