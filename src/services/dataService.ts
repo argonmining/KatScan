@@ -17,7 +17,7 @@ export const getTokenDetails = async (tick: string): Promise<TokenSearchResult> 
 };
 
 // New function to fetch KRC-20 token list
-export const getKRC20TokenList = async (limit = 50, sortField = '', sortDirection = 'asc'): Promise<{
+export const getKRC20TokenList = async (limit = 100, sortField = 'holderTotal', sortDirection = 'desc'): Promise<{
     result: TokenData[]
 }> => {
     let allTokens: TokenData[] = [];
@@ -49,7 +49,7 @@ export const getKRC20TokenList = async (limit = 50, sortField = '', sortDirectio
 };
 
 // New function to fetch KRC-20 token list
-export const getKRC20TokenListSequential = async (limit = 50, sortField = '', sortDirection = 'asc', cursor: string | null): Promise<{
+export const getKRC20TokenListSequential = async (limit = 100, sortField = 'holderTotal', sortDirection = 'desc', cursor: string | null): Promise<{
     result: TokenData[], cursor: string
 }> => {
     const params: Record<string, string | number> = {
