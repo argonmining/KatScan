@@ -1,6 +1,6 @@
-import React, {forwardRef, ReactNode, useState} from 'react'
-import {Container, Nav, Navbar} from 'react-bootstrap'
-import {Link, NavLink} from 'react-router-dom'
+import React, { forwardRef, ReactNode, useState } from 'react'
+import { Container, Nav, Navbar } from 'react-bootstrap'
+import { Link, NavLink } from 'react-router-dom'
 import {
     FaBars,
     FaChartLine,
@@ -16,7 +16,7 @@ import {
 import logo from '../assets/logo.png'
 import yourAdHere from '../assets/kpawAd.png'
 import 'styles/Sidebar.css'
-import {DonationModal} from "./DonationModal";
+import { DonationModal } from "./DonationModal";
 
 type Props = {
     darkMode: boolean
@@ -24,7 +24,7 @@ type Props = {
     isMobile: boolean
 }
 
-const Sidebar = forwardRef<HTMLDivElement, Props>(({darkMode, toggleDarkMode, isMobile}, ref) => {
+const Sidebar = forwardRef<HTMLDivElement, Props>(({ darkMode, toggleDarkMode, isMobile }, ref) => {
     /*const [collapsed, setCollapsed] = useState(false)*/
     const [collapsed] = useState(false)
     const [showDonateModal, setShowDonateModal] = useState(false)
@@ -39,9 +39,9 @@ const Sidebar = forwardRef<HTMLDivElement, Props>(({darkMode, toggleDarkMode, is
     }
 
     const NavSection = ({
-                            title,
-                            children,
-                        }: {
+        title,
+        children,
+    }: {
         title: string
         children: ReactNode
     }) => (
@@ -93,7 +93,7 @@ const Sidebar = forwardRef<HTMLDivElement, Props>(({darkMode, toggleDarkMode, is
                             aria-controls="basic-navbar-nav"
                             onClick={() => setExpanded(!expanded)}
                         >
-                            <FaBars/>
+                            <FaBars />
                         </Navbar.Toggle>
                         <Navbar.Collapse id="basic-navbar-nav">
                             <Nav className="me-auto">
@@ -102,49 +102,49 @@ const Sidebar = forwardRef<HTMLDivElement, Props>(({darkMode, toggleDarkMode, is
                                     className="nav-link"
                                     onClick={() => setExpanded(false)}
                                 >
-                                    <FaSearch/> Search Transactions
+                                    <FaSearch /> Search Transactions
                                 </NavLink>
                                 <NavLink
                                     to="/wallet"
                                     className="nav-link"
                                     onClick={() => setExpanded(false)}
                                 >
-                                    <FaWallet/> Search Addresses
+                                    <FaWallet /> Search Addresses
                                 </NavLink>
                                 <NavLink
                                     to="/top-holders"
                                     className="nav-link"
                                     onClick={() => setExpanded(false)}
                                 >
-                                    <FaUsers/> Top Holders
+                                    <FaUsers /> Top Holders
                                 </NavLink>
                                 <NavLink
                                     to="/tokens"
                                     className="nav-link"
                                     onClick={() => setExpanded(false)}
                                 >
-                                    <FaCoins/> All Tokens
+                                    <FaCoins /> All Tokens
                                 </NavLink>
                                 <NavLink
                                     to="/compare"
                                     className="nav-link"
                                     onClick={() => setExpanded(false)}
                                 >
-                                    <FaColumns/> Side by Side
+                                    <FaColumns /> Side by Side
                                 </NavLink>
                                 <NavLink
                                     to="/mint-heatmap"
                                     className="nav-link"
                                     onClick={() => setExpanded(false)}
                                 >
-                                    <FaFireAlt/> Mint Heatmap
+                                    <FaFireAlt /> Mint Heatmap
                                 </NavLink>
                                 <NavLink
                                     to="/marketcap-calc"
                                     className="nav-link"
                                     onClick={() => setExpanded(false)}
                                 >
-                                    <FaChartLine/> MarketCap Calc
+                                    <FaChartLine /> MarketCap Calc
                                 </NavLink>
                                 {/*
                                 <NavLink
@@ -162,10 +162,9 @@ const Sidebar = forwardRef<HTMLDivElement, Props>(({darkMode, toggleDarkMode, is
             ) : (
                 // Desktop Sidebar
                 <div id={'navbar'}
-                     ref={ref}
-                     className={`sidebar ${
-                         collapsed ? 'collapsed' : ''
-                     } d-none d-lg-block`}
+                    ref={ref}
+                    className={`sidebar ${collapsed ? 'collapsed' : ''
+                        } d-none d-lg-block`}
                 >
                     <div className="sidebar-content">
                         <div className="sidebar-header">
@@ -186,43 +185,43 @@ const Sidebar = forwardRef<HTMLDivElement, Props>(({darkMode, toggleDarkMode, is
                                     to="/transaction-lookup"
                                     className="nav-link"
                                 >
-                                    <FaSearch/>{' '}
+                                    <FaSearch />{' '}
                                     {!collapsed && (
                                         <span>Search Transactions</span>
                                     )}
                                 </NavLink>
                                 <NavLink to="/wallet" className="nav-link">
-                                    <FaWallet/>{' '}
+                                    <FaWallet />{' '}
                                     {!collapsed && (
                                         <span>Search Addresses</span>
                                     )}
                                 </NavLink>
                                 <NavLink to="/top-holders" className="nav-link">
-                                    <FaUsers/>{' '}
+                                    <FaUsers />{' '}
                                     {!collapsed && <span>Top Holders</span>}
                                 </NavLink>
                             </NavSection>
                             <NavSection title="KRC-20 Tokens">
                                 <NavLink to="/tokens" className="nav-link">
-                                    <FaCoins/>{' '}
+                                    <FaCoins />{' '}
                                     {!collapsed && <span>All Tokens</span>}
                                 </NavLink>
                                 <NavLink to="/compare" className="nav-link">
-                                    <FaExchangeAlt/>{' '}
+                                    <FaExchangeAlt />{' '}
                                     {!collapsed && <span>Side by Side</span>}
                                 </NavLink>
                                 <NavLink
                                     to="/mint-heatmap"
                                     className="nav-link"
                                 >
-                                    <FaFireAlt/>{' '}
+                                    <FaFireAlt />{' '}
                                     {!collapsed && <span>Mint Heatmap</span>}
                                 </NavLink>
                                 <NavLink
                                     to="/marketcap-calc"
                                     className="nav-link"
                                 >
-                                    <FaChartLine/>{' '}
+                                    <FaChartLine />{' '}
                                     {!collapsed && <span>MarketCap Calc</span>}
                                 </NavLink>
                             </NavSection>
@@ -233,7 +232,7 @@ const Sidebar = forwardRef<HTMLDivElement, Props>(({darkMode, toggleDarkMode, is
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >
-                                    <FaExchangeAlt/> {!collapsed && <span>Trade on KSPR</span>}
+                                    <FaExchangeAlt /> {!collapsed && <span>Trade on KSPR</span>}
                                 </NavLink>
                                 <NavLink
                                     to="https://t.me/kspr_home_bot?start=nacho"
@@ -241,14 +240,14 @@ const Sidebar = forwardRef<HTMLDivElement, Props>(({darkMode, toggleDarkMode, is
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >
-                                    <FaRobot/> {!collapsed && <span>Mint & Deploy</span>}
+                                    <FaRobot /> {!collapsed && <span>Mint & Deploy</span>}
                                 </NavLink>
                             </NavSection>
                             <div className="ad-container">
-                                <a href="https://nachowyborski.xyz" target="_blank" rel="noopener noreferrer">
+                                <a href="https://www.kaspaw.io/" target="_blank" rel="noopener noreferrer">
                                     <img src={yourAdHere as string}
-                                         alt="KPAW Advert"
-                                         className="ad-image"/>
+                                        alt="KPAW Advert"
+                                        className="ad-image" />
                                 </a>
                             </div>
                         </Nav>
@@ -276,9 +275,9 @@ const Sidebar = forwardRef<HTMLDivElement, Props>(({darkMode, toggleDarkMode, is
                         </div>
                         <div className="sidebar-footer">
                             {!collapsed && (
-                                <p onClick={handleDonateClick} style={{cursor: 'pointer'}}>
+                                <p onClick={handleDonateClick} style={{ cursor: 'pointer' }}>
                                     Made with ❤️ by the
-                                    <br/>
+                                    <br />
                                     Nacho the 𐤊at Community
                                 </p>
                             )}
@@ -287,7 +286,7 @@ const Sidebar = forwardRef<HTMLDivElement, Props>(({darkMode, toggleDarkMode, is
                 </div>
             )}
             {/* Donate Modal */}
-            <DonationModal show={showDonateModal} close={() => setShowDonateModal(false)}/>
+            <DonationModal show={showDonateModal} close={() => setShowDonateModal(false)} />
         </>
     )
 })
