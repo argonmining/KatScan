@@ -171,13 +171,15 @@ const TokenOverview: FC = () => {
         switch (headerInternal) {
             case "image":
                 if (!token.logo) {
-                    return null
+                    return <div></div>
                 }
                 return <div style={{width: '30px', overflow: 'hidden'}}>
                     <Link to={`/tokens/${token.tick}`} className="token-ticker">
-                        <SmallThumbnail src={`${katscanBaseUrl}${token.logo}`}
-                                        alt={token.tick}
-                                        loading="lazy"/>
+                        <SmallThumbnail 
+                            src={`${katscanBaseUrl}/api${(token.logo as string).replace(/\.[^/.]+$/, '')}`} 
+                            alt={token.tick} 
+                            loading="lazy" 
+                        />
                     </Link>
                 </div>
             case "action":
