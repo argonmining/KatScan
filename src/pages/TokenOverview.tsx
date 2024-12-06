@@ -13,7 +13,7 @@ import {
     useMobile
 } from "nacho-component-library";
 import {Link} from "react-router-dom";
-import {iconBaseUrl} from "../utils/StaticVariables";
+import {katscanBaseUrl} from "../utils/StaticVariables";
 import {TokenActions} from "../components/TokenActions";
 import {censorTicker} from "../utils/censorTicker";
 import {formatNumber} from "../services/Helper";
@@ -166,13 +166,16 @@ const TokenOverview: FC = () => {
         return formatNumber(value / Math.pow(10, decimals));
     };
 
-    const getElement = (header: string, token: TokenData): ReactElement => {
+    const getElement = (header: string, token: TokenData): ReactElement | null => {
         const headerInternal = header as HeaderType
         switch (headerInternal) {
             case "image":
+                if (!token.logo) {
+                    return null
+                }
                 return <div style={{width: '30px', overflow: 'hidden'}}>
                     <Link to={`/tokens/${token.tick}`} className="token-ticker">
-                        <SmallThumbnail src={`${iconBaseUrl}${token.tick}.jpg`}
+                        <SmallThumbnail src={`${katscanBaseUrl}${token.logo}.jpg`}
                                         alt={token.tick}
                                         loading="lazy"/>
                     </Link>
