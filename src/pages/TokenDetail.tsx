@@ -99,7 +99,7 @@ const TokenDetail: FC = () => {
                                                   operations={operations}
                                                   operationsCursor={operationsCursor}
                                                   setOperationsCursor={setOperationsCursor}/>
-                                <HolderDistribution tokenData={tokenData}/>
+                                <HolderDistribution tokenData={holderData || tokenData}/>
                             </CustomTabs>
                         </CustomTabs>
                         : <>
@@ -112,7 +112,7 @@ const TokenDetail: FC = () => {
                                                   operations={operations}
                                                   operationsCursor={operationsCursor}
                                                   setOperationsCursor={setOperationsCursor}/>
-                                <HolderDistribution tokenData={tokenData}/>
+                                <HolderDistribution tokenData={holderData || tokenData}/>
                                 {/*{!isMobile && <MintActivity tokenData={tokenData} mintActivityData={mintActivity}*/}
                                 {/*                            setMintActivityData={setMintActivity}/>}*/}
                             </CustomTabs>
