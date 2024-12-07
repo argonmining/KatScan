@@ -4,7 +4,7 @@ import {getKRC20TokenListSequential} from "../services/dataService";
 import {generateUniqueID} from "web-vitals/dist/modules/lib/generateUniqueID";
 import {addAlert} from "../components/alerts/Alerts";
 
-const ITEMS_PER_PAGE = 50;
+const ITEMS_PER_PAGE = 100;
 
 export const useFetchAllToken = (sortField?: string, sortDirection?: string): {
     tokens: (TokenData & { id: string })[],
@@ -15,10 +15,10 @@ export const useFetchAllToken = (sortField?: string, sortDirection?: string): {
     const [tokens, setTokens] = useState<(TokenData & { id: string })[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<boolean>(false);
-    const [cursor, setCursor] = useState<null | number>(null)
+    const [cursor, setCursor] = useState<null | string>(null)
     const [isFinished, setIsFinished] = useState<boolean>(false)
 
-    const loadingRef = useRef<number | null>()
+    const loadingRef = useRef<string | null>()
 
     const resetAll = useCallback(() => {
         setTokens([])
@@ -40,13 +40,14 @@ export const useFetchAllToken = (sortField?: string, sortDirection?: string): {
                 setLoading(true);
                 loadingRef.current = cursor;
                 const data = await getKRC20TokenListSequential(ITEMS_PER_PAGE, sortField, sortDirection, cursor);
+                console.log(data)
                 if (loadingRef.current !== cursor) {
                     return;
                 }
                 const tempRes = data.result.map(single => ({...single, id: generateUniqueID()}))
                 setTokens(current => ([...current, ...tempRes]));
 
-                if (data.cursor === undefined) {
+                if (data.cursor === null) {
                     setIsFinished(true);
                     setLoading(false);
                     return;

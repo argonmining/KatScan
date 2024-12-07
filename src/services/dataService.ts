@@ -1,15 +1,15 @@
 import {TokenData, TokenSearchResult} from "../interfaces/TokenData";
 import {sendRequest, simpleRequest} from "nacho-component-library";
-import {TokenListResponse, ResultResponse} from "../interfaces/ApiResponseTypes";
+import {KatscanTokenListResponse, ResultResponse, TokenListResponse} from "../interfaces/ApiResponseTypes";
 import {OpTransactionData} from "../interfaces/OpTransactionData";
+import {katscanBaseUrl} from "../utils/StaticVariables";
 
 const BASE_URL = 'https://api.kasplex.org/v1';
 
 // Simulating an API call to fetch token details
 export const getTokenDetails = async (tick: string): Promise<TokenSearchResult> => {
     try {
-        const response = await simpleRequest<ResultResponse<TokenSearchResult[]>>(`${BASE_URL}/krc20/token/${tick}`);
-        return response.result[0];
+        return await simpleRequest<TokenSearchResult>(`${katscanBaseUrl}/api/token/${tick}`)
     } catch (error) {
         console.error('Error fetching token details:', error);
         throw error;
@@ -17,31 +17,31 @@ export const getTokenDetails = async (tick: string): Promise<TokenSearchResult> 
 };
 
 // New function to fetch KRC-20 token list
-export const getKRC20TokenList = async (limit = 50, sortField = '', sortDirection = 'asc'): Promise<{
+export const getKRC20TokenList = async (limit = 100, sortField = 'holderTotal', sortDirection = 'desc'): Promise<{
     result: TokenData[]
 }> => {
     let allTokens: TokenData[] = [];
     let cursor = null;
 
-    //todo + todo data check
     do {
         const params: Record<string, string | number> = {
             limit,
-            ...(sortField && {sort: `${sortField}:${sortDirection}`}),
-            ...(cursor && {next: cursor})
+            sortBy: sortField,
+            sortOrder: sortDirection,
+            ...(cursor && {cursor: cursor})
         };
 
         try {
-            const response = await sendRequest<TokenListResponse<TokenData[]>>({
+            const response = await sendRequest<KatscanTokenListResponse<TokenData[]>>({
                 method: 'GET',
-                url: `${BASE_URL}/krc20/tokenlist`,
+                url: 'https://katapi.nachowyborski.xyz/api/tokenlist',
                 params
             });
             allTokens = [...allTokens, ...response.result];
-            cursor = response.next;
+            cursor = response.nextCursor;
         } catch (error) {
             console.error('Error fetching KRC20 token list:', error);
-            throw new Error(`Failed to fetch token list: ${(error as Record<string,string>).message}`);
+            throw new Error(`Failed to fetch token list: ${(error as Record<string, string>).message}`);
         }
     } while (cursor);
 
@@ -49,22 +49,23 @@ export const getKRC20TokenList = async (limit = 50, sortField = '', sortDirectio
 };
 
 // New function to fetch KRC-20 token list
-export const getKRC20TokenListSequential = async (limit = 50, sortField = '', sortDirection = 'asc', cursor: number | null): Promise<{
-    result: TokenData[], cursor: number
+export const getKRC20TokenListSequential = async (limit = 100, sortField = 'holderTotal', sortDirection = 'desc', cursor: string | null): Promise<{
+    result: TokenData[], cursor: string
 }> => {
     const params: Record<string, string | number> = {
         limit,
-        ...(sortField && {sort: `${sortField}:${sortDirection}`}),
-        ...(cursor && {next: cursor})
+        sortBy: sortField || 'holderTotal',
+        sortOrder: sortDirection || 'desc',
+        ...(cursor && {cursor: cursor})
     };
 
     try {
-        const response = await sendRequest<TokenListResponse<TokenData[]>>({
+        const response = await sendRequest<KatscanTokenListResponse<TokenData>>({
             method: 'GET',
-            url: `${BASE_URL}/krc20/tokenlist`,
+            url: 'https://katapi.nachowyborski.xyz/api/tokenlist',
             params
         });
-        return {result: response.result, cursor: response.next}
+        return {result: response.tokens, cursor: response.nextCursor}
         // cursor = response.next;
     } catch (error) {
         console.error('Error fetching KRC20 token list:', error);

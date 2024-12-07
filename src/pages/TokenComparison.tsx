@@ -17,10 +17,9 @@ import {getTokenDetails} from '../services/dataService';
 import 'styles/TokenComparison.css';
 import {FaChartBar, FaChartPie, FaUsers} from 'react-icons/fa'; // Import icons
 import {censorTicker} from '../utils/censorTicker';
-import {JsonLd, LoadingSpinner, Page, SEO} from "nacho-component-library";
+import {JsonLd, LoadingSpinner, Page, SEO, simpleRequest} from "nacho-component-library";
 import {TokenData, TokenSearchResult} from "../interfaces/TokenData";
 import {addAlert} from "../components/alerts/Alerts";
-import {useFetchAllToken} from "../hooks/useFetchAllToken";
 import {CustomSelect, Selection} from "../components/select/CustomSelect";
 
 ChartJS.register(
@@ -51,13 +50,22 @@ const HOLDER_GROUP_COLORS = {
 };
 //todo refactor
 const TokenComparison: FC = () => {
-    const [selectedTokens, setSelectedTokens] = useState([null, null]);
+    const [selectedTokens, setSelectedTokens] = useState<[Selection, Selection] | [null, null]>([null, null]);
     const [tokenDetails, setTokenDetails] = useState<TokenInternal[]>([]);
     const [compoareLoading, setCompareLoading] = useState(false)
-    const {tokens, loading, error} = useFetchAllToken()
+    const [tokenTicks, setTokenTicks] = useState<string[]>([])
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState(false)
 
     const supplyChartRef = useRef(null);
     const holdersChartRef = useRef(null);
+
+    useEffect(() => {
+        simpleRequest<TokenData['tick'][]>('https://katapi.nachowyborski.xyz/api/tickers')
+            .then(setTokenTicks)
+            .catch(() => setError(true))
+            .finally(() => setLoading(false))
+    }, []);
 
     const calculateValue = useCallback((value: number, decimals: number) => {
         if (value === undefined || decimals === undefined) {
@@ -96,25 +104,26 @@ const TokenComparison: FC = () => {
     }, [calculateValue]);
 
     useEffect(() => {
+        if (!selectedTokens[0] || !selectedTokens[1]) {
+            return
+        }
         const fetchTokenDetails = async () => {
-            if (selectedTokens[0] && selectedTokens[1]) {
-                setCompareLoading(true);
-                try {
-                    const details = await Promise.all(selectedTokens.map(token => getTokenDetails(token.value)));
-                    console.log('Raw token details:', details);
-                    const processedDetails: TokenInternal[] = details.map(token => ({
-                        ...token,
-                        ...calculateHolderPercentages(token)
-                    }));
-                    console.log('Processed token details:', processedDetails);
-                    setTokenDetails(processedDetails);
-                } catch (err) {
-                    console.error('Error fetching token details:', err);
-                    addAlert('error', `Failed to fetch token details: ${(err as Record<string, string>).message}`);
-                    setTokenDetails([]);
-                }
-                setCompareLoading(false);
+            setCompareLoading(true);
+            try {
+                const details = await Promise.all(selectedTokens.map(token => getTokenDetails(token.value)));
+                console.log('Raw token details:', details);
+                const processedDetails: TokenInternal[] = details.map(token => ({
+                    ...token,
+                    ...calculateHolderPercentages(token)
+                }));
+                console.log('Processed token details:', processedDetails);
+                setTokenDetails(processedDetails);
+            } catch (err) {
+                console.error('Error fetching token details:', err);
+                addAlert('error', `Failed to fetch token details: ${(err as Record<string, string>).message}`);
+                setTokenDetails([]);
             }
+            setCompareLoading(false);
         };
 
         void fetchTokenDetails();
@@ -409,8 +418,8 @@ const TokenComparison: FC = () => {
     }, []);
 
     const searchValues = useMemo((): Selection[] =>
-            tokens.map(token => ({value: token.tick, label: censorTicker(token.tick)}))
-        , [tokens])
+            tokenTicks.map(token => ({value: token, label: censorTicker(token)}))
+        , [tokenTicks])
 
     return (
         <Page header={'Compare KRC20 Tokens'}>

@@ -11,6 +11,7 @@ export type TokenData = {
     state: string
     hashRev: string
     mtsAdd: number
+    logo: string
 }
 
 export type TokenSearchResult = TokenData & {

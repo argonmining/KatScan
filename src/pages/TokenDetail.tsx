@@ -1,7 +1,7 @@
 import React, {FC, useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
 import {Alert} from 'react-bootstrap';
-import {getTokenDetails} from '../services/dataService';
+import {getTokenDetails, getDetailedTokenInfo} from '../services/dataService';
 import 'styles/TokenDetail.css';
 import {censorTicker} from '../utils/censorTicker';
 import {TokenSearchResult} from "../interfaces/TokenData";
@@ -24,6 +24,7 @@ const mobileTabs = ['General Info', 'Additional Info']
 const TokenDetail: FC = () => {
         const {tokenId} = useParams();
         const [tokenData, setTokenData] = useState<TokenSearchResult | null>(null);
+        const [holderData, setHolderData] = useState<TokenSearchResult | null>(null);
         const [loading, setLoading] = useState(true);
         const {isMobile} = useMobile()
         // const [mintActivity, setMintActivity] = useState<MintOvertimeType[]>([]);
@@ -43,13 +44,15 @@ const TokenDetail: FC = () => {
             setLoading(true);
             Promise.all([
                 getTokenDetails(tokenId),
+                getDetailedTokenInfo(tokenId),
                 simpleRequest<Record<string, unknown>>(`https://api-v2-do.kas.fyi/token/krc20/${tokenId}/info?includeCharts=false`)
             ])
-                .then(([data, tokenInfo]) => {
+                .then(([data, detailedData, tokenInfo]) => {
                     if (!data) {
                         throw new Error('No data returned from API');
                     }
                     setTokenData(data);
+                    setHolderData(detailedData);
                     setSocials((tokenInfo?.socialLinks ?? []) as Socials[])
                 })
                 .catch(err => {
@@ -89,27 +92,27 @@ const TokenDetail: FC = () => {
                         <CustomTabs titles={mobileTabs}>
                             <TokenDetailsTokenInfo tokenData={tokenData} socials={socials}/>
                             <CustomTabs titles={titles}>
-                                <TopHolder tokenData={tokenData}/>
+                                <TopHolder tokenData={holderData || tokenData}/>
                                 <RecentOperations tokenData={tokenData}
                                                   tokenId={tokenId}
                                                   setOperations={setOperations}
                                                   operations={operations}
                                                   operationsCursor={operationsCursor}
                                                   setOperationsCursor={setOperationsCursor}/>
-                                <HolderDistribution tokenData={tokenData}/>
+                                <HolderDistribution tokenData={holderData || tokenData}/>
                             </CustomTabs>
                         </CustomTabs>
                         : <>
                             <TokenDetailsTokenInfo tokenData={tokenData} socials={socials}/>
                             <CustomTabs titles={titles}>
-                                <TopHolder tokenData={tokenData}/>
+                                <TopHolder tokenData={holderData || tokenData}/>
                                 <RecentOperations tokenData={tokenData}
                                                   tokenId={tokenId}
                                                   setOperations={setOperations}
                                                   operations={operations}
                                                   operationsCursor={operationsCursor}
                                                   setOperationsCursor={setOperationsCursor}/>
-                                <HolderDistribution tokenData={tokenData}/>
+                                <HolderDistribution tokenData={holderData || tokenData}/>
                                 {/*{!isMobile && <MintActivity tokenData={tokenData} mintActivityData={mintActivity}*/}
                                 {/*                            setMintActivityData={setMintActivity}/>}*/}
                             </CustomTabs>
