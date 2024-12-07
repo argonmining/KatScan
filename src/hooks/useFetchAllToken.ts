@@ -4,7 +4,7 @@ import {getKRC20TokenListSequential} from "../services/dataService";
 import {generateUniqueID} from "web-vitals/dist/modules/lib/generateUniqueID";
 import {addAlert} from "../components/alerts/Alerts";
 
-const ITEMS_PER_PAGE = 200;
+const ITEMS_PER_PAGE = 100;
 
 export const useFetchAllToken = (sortField?: string, sortDirection?: string): {
     tokens: (TokenData & { id: string })[],
