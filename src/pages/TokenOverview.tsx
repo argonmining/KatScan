@@ -33,7 +33,7 @@ const header: HeaderType[] = ['image', 'action', 'tick', 'mintState', 'state', '
 const TokenOverview: FC = () => {
     const {isMobile} = useMobile()
     const [sortField, setSortField] = useState<keyof TokenData | ''>('');
-    const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+    const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
     const [searchTerm, setSearchTerm] = useState('');
     const [launchTypeFilter, setLaunchTypeFilter] = useState('');
     const [statusFilter, setStatusFilter] = useState('');
