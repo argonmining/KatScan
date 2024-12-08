@@ -1,7 +1,7 @@
 import {useEffect, useMemo, useRef, useState} from "react";
 import {sendRequest} from "nacho-component-library";
 import {addAlert} from "../components/alerts/Alerts";
-import {emptyArray} from "../utils/StaticVariables";
+import {emptyArray, katscanApiUrl} from "../utils/StaticVariables";
 import {generateUniqueID} from "web-vitals/dist/modules/lib/generateUniqueID";
 import {KatscanResponse} from "../interfaces/ApiResponseTypes";
 
@@ -76,7 +76,7 @@ export function useFetch<T>(
 
         void sendRequest<KatscanResponse<T>>({
             method,
-            url: url.includes('http') ? url : `${process.env.REACT_APP_BASE_API_URL}${url}`,
+            url: url.includes('http') ? url : `${katscanApiUrl}${url}`,
             body,
             params: internalParams
         })
