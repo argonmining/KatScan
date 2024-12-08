@@ -1,7 +1,7 @@
 export const iconBaseUrl = "https://krc20-assets.kas.fyi/icons/"
-export const katscanBaseUrl = process.env.REACT_APP_BASE_URL ?? ''
-export const katscanApiUrl = process.env.REACT_APP_BASE_API_URL ?? ''
-export const katscanStaticUrl = `${process.env.REACT_APP_BASE_URL ?? ''}/static`
+export const katscanBaseUrl = process.env.REACT_APP_BASE_URL ?? 'https://katapi.nachowyborski.xyz'
+export const katscanApiUrl = process.env.REACT_APP_BASE_API_URL ?? 'https://katapi.nachowyborski.xyz/api'
+export const katscanStaticUrl = `${process.env.REACT_APP_BASE_URL ?? 'https://katapi.nachowyborski.xyz'}`
 
 export const emptyArray = []
 export const emptyObject = {}
