@@ -17,10 +17,12 @@ import {getTokenDetails} from '../services/dataService';
 import 'styles/TokenComparison.css';
 import {FaChartBar, FaChartPie, FaUsers} from 'react-icons/fa'; // Import icons
 import {censorTicker} from '../utils/censorTicker';
-import {JsonLd, LoadingSpinner, Page, SEO, simpleRequest} from "nacho-component-library";
+import {JsonLd, LoadingSpinner, Page, SEO} from "nacho-component-library";
 import {TokenData, TokenSearchResult} from "../interfaces/TokenData";
 import {addAlert} from "../components/alerts/Alerts";
 import {CustomSelect, Selection} from "../components/select/CustomSelect";
+import {useFetch} from "../hooks/useFetch";
+import {emptyArray} from "../utils/StaticVariables";
 
 ChartJS.register(
     CategoryScale,
@@ -53,19 +55,13 @@ const TokenComparison: FC = () => {
     const [selectedTokens, setSelectedTokens] = useState<[Selection, Selection] | [null, null]>([null, null]);
     const [tokenDetails, setTokenDetails] = useState<TokenInternal[]>([]);
     const [compoareLoading, setCompareLoading] = useState(false)
-    const [tokenTicks, setTokenTicks] = useState<string[]>([])
-    const [loading, setLoading] = useState(true)
-    const [error, setError] = useState(false)
+    const {data, loading, error} = useFetch<TokenData['tick'][]>({
+        url: '/token/tickers',
+        defaultValue: emptyArray
+    })
 
     const supplyChartRef = useRef(null);
     const holdersChartRef = useRef(null);
-
-    useEffect(() => {
-        simpleRequest<TokenData['tick'][]>('https://katapi.nachowyborski.xyz/api/tickers')
-            .then(setTokenTicks)
-            .catch(() => setError(true))
-            .finally(() => setLoading(false))
-    }, []);
 
     const calculateValue = useCallback((value: number, decimals: number) => {
         if (value === undefined || decimals === undefined) {
@@ -110,11 +106,11 @@ const TokenComparison: FC = () => {
         const fetchTokenDetails = async () => {
             setCompareLoading(true);
             try {
-                const details = await Promise.all(selectedTokens.map(token => getTokenDetails(token.value)));
+                const details = await Promise.all(selectedTokens.map(token => getTokenDetails(token.value as string)));
                 console.log('Raw token details:', details);
                 const processedDetails: TokenInternal[] = details.map(token => ({
-                    ...token,
-                    ...calculateHolderPercentages(token)
+                    ...token.result,
+                    ...calculateHolderPercentages(token.result)
                 }));
                 console.log('Processed token details:', processedDetails);
                 setTokenDetails(processedDetails);
@@ -146,8 +142,6 @@ const TokenComparison: FC = () => {
         }
 
         const [token1, token2] = tokenDetails;
-        console.log('Token 1:', token1);
-        console.log('Token 2:', token2);
 
         const calculateValue = (value, decimals) => {
             if (value === undefined || decimals === undefined) return 0;
@@ -418,8 +412,8 @@ const TokenComparison: FC = () => {
     }, []);
 
     const searchValues = useMemo((): Selection[] =>
-            tokenTicks.map(token => ({value: token, label: censorTicker(token)}))
-        , [tokenTicks])
+            data.map(token => ({value: token, label: censorTicker(token)}))
+        , [data])
 
     return (
         <Page header={'Compare KRC20 Tokens'}>

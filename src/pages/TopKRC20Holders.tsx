@@ -8,8 +8,9 @@ import {TopHolder} from "../interfaces/TokenData";
 import {MobileTopKRC20Holders} from "../components/mobileComponents/MobileTopKRC20Holders";
 import {ExpandAbleList, JsonLd, Page, SEO, simpleRequest} from "nacho-component-library";
 import {addAlert} from "../components/alerts/Alerts";
+import {katscanApiUrl} from "../utils/StaticVariables";
 
-const API_BASE_URL = 'https://katapi.nachowyborski.xyz/api/topHolders';
+const API_BASE_URL =  `${katscanApiUrl}/holders/topHolders`
 
 type InternalTopHolder = {
     address: string

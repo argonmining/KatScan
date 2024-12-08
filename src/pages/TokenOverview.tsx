@@ -13,11 +13,12 @@ import {
     useMobile
 } from "nacho-component-library";
 import {Link} from "react-router-dom";
-import {katscanBaseUrl} from "../utils/StaticVariables";
+import {katscanStaticUrl} from "../utils/StaticVariables";
 import {TokenActions} from "../components/TokenActions";
 import {censorTicker} from "../utils/censorTicker";
 import {formatNumber} from "../services/Helper";
-import {useFetchAllToken} from "../hooks/useFetchAllToken";
+import {useFetch} from "../hooks/useFetch";
+import {cloneDeep} from "lodash";
 
 const jsonLdData = {
     "@context": "https://schema.org",
@@ -30,6 +31,8 @@ type HeaderType = (keyof TokenData | 'image' | 'action' | 'mintState' | 'mintPro
 
 const header: HeaderType[] = ['image', 'action', 'tick', 'mintState', 'state', 'max', 'pre', 'minted', 'mintProgress', 'mtsAdd']
 
+const params = {limit: 4000}
+
 const TokenOverview: FC = () => {
     const {isMobile} = useMobile()
     const [sortField, setSortField] = useState<keyof TokenData | ''>('');
@@ -37,7 +40,11 @@ const TokenOverview: FC = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [launchTypeFilter, setLaunchTypeFilter] = useState('');
     const [statusFilter, setStatusFilter] = useState('');
-    const {tokens, loading, resetAll} = useFetchAllToken(sortField, sortDirection)
+
+    const {data, loading} = useFetch<TokenData[]>({
+        url: '/token/tokenlist',
+        params
+    })
 
     const handleSort = (field: keyof TokenData): void => {
         if (field === sortField) {
@@ -46,12 +53,10 @@ const TokenOverview: FC = () => {
             setSortField(field);
             setSortDirection('asc');
         }
-        void resetAll()
     };
 
     const handleLaunchTypeSelect = (eventKey: string): void => {
         setLaunchTypeFilter(eventKey);
-        resetAll()
     };
 
     const handleStatusSelect = (eventKey: string): void => {
@@ -67,7 +72,10 @@ const TokenOverview: FC = () => {
     };
 
     const filteredAndSortedTokens = useMemo(() => {
-        let result = tokens;
+        if (data.length === 0) {
+            return []
+        }
+        let result = cloneDeep(data);
 
         // Filter by search term
         if (searchTerm) {
@@ -91,7 +99,7 @@ const TokenOverview: FC = () => {
         }
 
         // Sort
-        if (sortField) {
+        if (sortField !== '') {
             result.sort((a, b) => {
                 if (sortField === 'minted') {
                     const aPercentage = calculatePercentage(calculateValue(a.minted, a.dec), calculateValue(a.max, a.dec));
@@ -108,7 +116,7 @@ const TokenOverview: FC = () => {
         }
 
         return result;
-    }, [tokens, searchTerm, sortField, sortDirection, launchTypeFilter, statusFilter]);
+    }, [data, launchTypeFilter, searchTerm, sortDirection, sortField, statusFilter]);
 
     const formatState = (state: string): string => {
         return state === 'finished' ? 'Complete' : 'Minting';
@@ -166,19 +174,19 @@ const TokenOverview: FC = () => {
         return formatNumber(value / Math.pow(10, decimals));
     };
 
-    const getElement = (header: string, token: TokenData & { id: string }): ReactElement => {
-        console.log(token); // Log the entire token object
+    const getElement = (header: string, token: TokenData & { id?: string }): ReactElement | null => {
+
         const headerInternal = header as HeaderType;
         switch (headerInternal) {
             case "image":
                 if (!token.logo) {
-                    return <div></div>; // Return an empty div instead of null
+                    return null; // Return an empty div instead of null
                 }
                 return (
-                    <div style={{ width: '30px', overflow: 'hidden' }}>
+                    <div style={{width: '30px', overflow: 'hidden'}}>
                         <Link to={`/tokens/${token.tick}`} className="token-ticker">
                             <SmallThumbnail
-                                src={`${katscanBaseUrl}/api${token.logo.replace(/\.[^/.]+$/, '')}`}
+                                src={`${katscanStaticUrl}${token.logo}`}
                                 alt={token.tick}
                                 loading="lazy"
                             />
@@ -186,7 +194,7 @@ const TokenOverview: FC = () => {
                     </div>
                 );
             case "action":
-                return <TokenActions tokenDetail={token} />;
+                return <TokenActions tokenDetail={token}/>;
             case "tick":
                 return (
                     <Link to={`/tokens/${token.tick}`} className="token-ticker">
@@ -216,7 +224,7 @@ const TokenOverview: FC = () => {
                         <div className="progress">
                             <div
                                 className="progress-bar"
-                                style={{ width: `${calculatePercentage(calculateValue(token.minted, token.dec), calculateValue(token.max, token.dec))}%` }}
+                                style={{width: `${calculatePercentage(calculateValue(token.minted, token.dec), calculateValue(token.max, token.dec))}%`}}
                             ></div>
                         </div>
                     </>
@@ -297,6 +305,7 @@ const TokenOverview: FC = () => {
                       getElement={getElement}
                       isLoading={loading}
                       cssGrid={true}
+                      alternateIdKey={'tick'}
                 />
                 <JsonLd data={jsonLdData}/>
                 <SEO

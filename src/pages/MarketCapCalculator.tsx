@@ -11,15 +11,17 @@ import {
     faInfoCircle,
     faUsers
 } from '@fortawesome/free-solid-svg-icons';
-import {getDetailedTokenInfo, getKRC20TokenList} from '../services/dataService';
+import {getDetailedTokenInfo} from '../services/dataService';
 import {CryptoSearch, getCryptoData, searchCryptos} from '../services/coingeckoService';
 import 'styles/MarketCapCalculator.css';
 import {censorTicker} from '../utils/censorTicker';
 import {TokenData, TokenSearchResult} from "../interfaces/TokenData";
 import {CoinbaseInfo} from "../interfaces/CoinbaseInfo";
 import {formatInteger, formatNumber} from "../services/Helper";
-import {JsonLd, SEO, NormalCard, LoadingSpinner, Page} from "nacho-component-library";
+import {JsonLd, LoadingSpinner, NormalCard, Page, SEO} from "nacho-component-library";
 import {addAlert} from "../components/alerts/Alerts";
+import {useFetch} from "../hooks/useFetch";
+import {CustomSelect, Selection} from "../components/select/CustomSelect";
 
 type CalculationResult = {
     krc20Token: {
@@ -38,7 +40,8 @@ type CalculationResult = {
 type InternalKRC20 = {
     value: string
     label: string
-} & TokenData
+    tick: string
+}
 
 const jsonData = {
     "@context": "https://schema.org",
@@ -50,32 +53,26 @@ const jsonData = {
 const MarketCapCalculator: FC = () => {
 
     const [krc20List, setKrc20List] = useState<InternalKRC20[]>([]);
-    const [selectedKrc20Token, setSelectedKrc20Token] = useState<{ value: string, tick: string } | null>(null);
+    const [selectedKrc20Token, setSelectedKrc20Token] = useState<Selection | null>(null);
     const [selectedCrypto, setSelectedCrypto] = useState<CryptoSearch | null>(null);
     const [calculationResult, setCalculationResult] = useState<CalculationResult | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [detailedTokenInfo, setDetailedTokenInfo] = useState<TokenSearchResult | null>(null);
+    const {data} = useFetch<TokenData['tick'][]>({
+        url: '/token/tickers'
+    })
 
     const navigate = useNavigate();
-
     useEffect(() => {
-        const fetchKRC20Tokens = async () => {
-            try {
-                const data = await getKRC20TokenList();
-                const formattedList = data.result.map(token => ({
-                    value: token.tick,
-                    label: censorTicker(token.tick),
-                    ...token
-                }));
-                setKrc20List(formattedList);
-            } catch (error) {
-                console.error('Error fetching KRC20 tokens:', error);
-            }
-        };
-
-        void fetchKRC20Tokens();
-    }, []);
-
+        if (!data || data.length === 0) {
+            return
+        }
+        setKrc20List(data.map(token => ({
+            value: token,
+            label: censorTicker(token),
+            tick: token
+        })))
+    }, [data]);
 
     const handleCryptoSearch = async (inputValue: string): Promise<CryptoSearch[]> => {
         if (inputValue.length > 1) {
@@ -90,17 +87,19 @@ const MarketCapCalculator: FC = () => {
     };
 
     useEffect(() => {
-        if (selectedKrc20Token) {
-            const fetchDetailedTokenInfo = async (tick: string) => {
-                try {
-                    const data = await getDetailedTokenInfo(tick);
-                    setDetailedTokenInfo(data);
-                } catch (error) {
-                    console.error('Error fetching detailed token info:', error);
-                }
-            }
-            void fetchDetailedTokenInfo(selectedKrc20Token.tick);
+        if (!selectedKrc20Token) {
+            return
         }
+        const fetchDetailedTokenInfo = async (tick: string) => {
+            try {
+                const data = await getDetailedTokenInfo(tick);
+                setDetailedTokenInfo(data);
+            } catch (error) {
+                console.error('Error fetching detailed token info:', error);
+            }
+        }
+        void fetchDetailedTokenInfo(selectedKrc20Token.value as string);
+
     }, [selectedKrc20Token]);
 
     useEffect(() => {
@@ -166,15 +165,10 @@ const MarketCapCalculator: FC = () => {
                             <Col md={6}>
                                 <Form.Group>
                                     <Form.Label>Select KRC20 Token</Form.Label>
-                                    <AsyncSelect
-                                        cacheOptions
-                                        defaultOptions={krc20List}
-                                        loadOptions={(inputValue) => Promise.resolve(krc20List.filter(option =>
-                                            option.label.toLowerCase().includes(inputValue.toLowerCase())
-                                        ))}
-                                        onChange={setSelectedKrc20Token}
-                                        placeholder="Select KRC20 Token"
-                                    />
+                                    <CustomSelect placeholder={"Select KRC20 Token"}
+                                                  data={krc20List}
+                                                  hasSearch={true}
+                                                  onSelect={setSelectedKrc20Token}/>
                                 </Form.Group>
                             </Col>
                             <Col md={6}>

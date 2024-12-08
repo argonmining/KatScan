@@ -29,7 +29,7 @@ export const MintActivity: FC<Props> = (
             return
         }
 
-        simpleRequest<MintOvertimeType[]>(`https://katapi.nachowyborski.xyz/api/mintsovertime?tick=${tokenData.tick.toUpperCase()}`)
+        simpleRequest<MintOvertimeType[]>(`https://katapi.nachowyborski.xyz/api/minting/mintsovertime?tick=${tokenData.tick.toUpperCase()}`)
             .then(data => {
                 if (data.length === 0) {
                     return

@@ -40,29 +40,36 @@ const TransactionLookup: FC = () => {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
-    const fetchTransactionData = async (hash: string): Promise<void> => {
-            if (!hash) return;
-            setLoading(true);
-            try {
-                const [krc20Response, revealData] = await Promise.all([
-                    simpleRequest<ResultResponse<OpTransactionData[]>>(`https://api.kasplex.org/v1/krc20/op/${hash}`),
-                    simpleRequest<Transaction>(`https://api.kaspa.org/transactions/${hash}`)
-                ]);
+    const fetchTransactionData = (hash: string): void => {
+        if (!hash) return;
+        setLoading(true);
+        try {
+            void simpleRequest<ResultResponse<OpTransactionData[]>>(`https://api.kasplex.org/v1/krc20/op/${hash}`)
+                .then(async (krc20Response) => {
+                    const revealData = await simpleRequest<Transaction>(`https://api.kaspa.org/transactions/${hash}`)
 
-                const krc20Data = krc20Response.result[0];
+                    if (!revealData) {
+                        return
+                    }
 
-                const commitHash = revealData.inputs?.[0].previous_outpoint_hash;
-                const commitData = await simpleRequest<TransactionData['commitData']>(`https://api.kaspa.org/transactions/${commitHash ?? ''}`);
+                    const krc20Data = krc20Response.result[0];
 
-                setTransactionData({krc20Data, revealData, commitData});
-            } catch (err) {
-                console.error('Failed to fetch transaction data:', err);
-                addAlert('error', 'Failed to fetch transaction data. Please check the transaction hash and try again.');
-            } finally {
-                setLoading(false);
-            }
+                    const commitHash = revealData.inputs?.[0].previous_outpoint_hash;
+                    const commitData = await simpleRequest<TransactionData['commitData']>(`https://api.kaspa.org/transactions/${commitHash ?? ''}`);
+
+                    setTransactionData({krc20Data, revealData, commitData});
+                }).catch(e => {
+                    console.log(e)
+                    addAlert('error', "Looks like we don't found the transaction, we're working on it!")
+                });
+        } catch (err) {
+            console.error('Failed to fetch transaction data:', err);
+            addAlert('error', 'Failed to fetch transaction data. Please check the transaction hash and try again.');
+        } finally {
+            setLoading(false);
         }
-    ;
+    }
+
 
     useEffect(() => {
         if (hashRev) {

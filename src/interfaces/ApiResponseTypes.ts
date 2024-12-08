@@ -11,3 +11,7 @@ export type KatscanTokenListResponse<T> = ResultResponse<T> & {
     tokens: T[]
     nextCursor: string
 }
+export type KatscanResponse<T> = {
+    result: T
+    cursor?: string
+}
