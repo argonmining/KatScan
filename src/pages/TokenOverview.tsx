@@ -13,11 +13,12 @@ import {
     useMobile
 } from "nacho-component-library";
 import {Link} from "react-router-dom";
-import {katscanBaseUrl} from "../utils/StaticVariables";
+import {katscanStaticUrl} from "../utils/StaticVariables";
 import {TokenActions} from "../components/TokenActions";
 import {censorTicker} from "../utils/censorTicker";
 import {formatNumber} from "../services/Helper";
 import {useFetch} from "../hooks/useFetch";
+import {cloneDeep} from "lodash";
 
 const jsonLdData = {
     "@context": "https://schema.org",
@@ -71,7 +72,10 @@ const TokenOverview: FC = () => {
     };
 
     const filteredAndSortedTokens = useMemo(() => {
-        let result = data;
+        if (data.length === 0) {
+            return []
+        }
+        let result = cloneDeep(data);
 
         // Filter by search term
         if (searchTerm) {
@@ -95,7 +99,7 @@ const TokenOverview: FC = () => {
         }
 
         // Sort
-        if (sortField) {
+        if (sortField !== '') {
             result.sort((a, b) => {
                 if (sortField === 'minted') {
                     const aPercentage = calculatePercentage(calculateValue(a.minted, a.dec), calculateValue(a.max, a.dec));
@@ -170,19 +174,19 @@ const TokenOverview: FC = () => {
         return formatNumber(value / Math.pow(10, decimals));
     };
 
-    const getElement = (header: string, token: TokenData & { id?: string }): ReactElement => {
-        console.log(token); // Log the entire token object
+    const getElement = (header: string, token: TokenData & { id?: string }): ReactElement | null => {
+
         const headerInternal = header as HeaderType;
         switch (headerInternal) {
             case "image":
                 if (!token.logo) {
-                    return <div></div>; // Return an empty div instead of null
+                    return null; // Return an empty div instead of null
                 }
                 return (
                     <div style={{width: '30px', overflow: 'hidden'}}>
                         <Link to={`/tokens/${token.tick}`} className="token-ticker">
                             <SmallThumbnail
-                                src={`${katscanBaseUrl}${token.logo}`}
+                                src={`${katscanStaticUrl}${token.logo}`}
                                 alt={token.tick}
                                 loading="lazy"
                             />

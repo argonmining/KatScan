@@ -3,9 +3,10 @@ import {Col, Container, Form, Row} from 'react-bootstrap';
 import {Legend, ResponsiveContainer, Tooltip, Treemap} from 'recharts';
 import 'styles/MintHeatmap.css';
 import {censorTicker} from '../utils/censorTicker';
-import {LoadingSpinner, SEO, JsonLd, sendRequest, Page} from "nacho-component-library";
+import {JsonLd, LoadingSpinner, Page, sendRequest, SEO} from "nacho-component-library";
 import {MintData} from "../interfaces/MintData";
 import {addAlert} from "../components/alerts/Alerts";
+import {katscanApiUrl} from "../utils/StaticVariables";
 
 const timeframes = [
     {value: 'day', label: 'Last 24 Hours'},
@@ -66,7 +67,7 @@ const MintHeatmap: FC = () => {
         try {
             const response = await sendRequest<MintData[]>({
                 method: 'GET',
-                url: 'https://katapi.nachowyborski.xyz/api/mint-totals',
+                url: `${katscanApiUrl}/minting/mint-totals`,
                 params: {
                     startDate: startDate.toISOString(),
                     endDate: endDate.toISOString()
