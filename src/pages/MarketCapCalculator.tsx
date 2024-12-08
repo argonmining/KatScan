@@ -58,7 +58,7 @@ const MarketCapCalculator: FC = () => {
     const [calculationResult, setCalculationResult] = useState<CalculationResult | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [detailedTokenInfo, setDetailedTokenInfo] = useState<TokenSearchResult | null>(null);
-    const {data, loading} = useFetch<TokenData['tick'][]>({
+    const {data} = useFetch<TokenData['tick'][]>({
         url: '/token/tickers'
     })
 

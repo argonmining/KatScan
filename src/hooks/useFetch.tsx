@@ -93,6 +93,7 @@ export function useFetch<T>(
                 setLoading(false)
             })
             .catch((e) => {
+                console.log(e)
                 setError(true)
                 if (errorMessage) {
                     addAlert('error', errorMessage)
