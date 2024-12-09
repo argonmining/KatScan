@@ -13,7 +13,7 @@ import {
     useMobile
 } from "nacho-component-library";
 import {Link} from "react-router-dom";
-import {katscanStaticUrl} from "../utils/StaticVariables";
+import {katscanApiUrl} from "../utils/StaticVariables";
 import {TokenActions} from "../components/TokenActions";
 import {censorTicker} from "../utils/censorTicker";
 import {formatNumber} from "../services/Helper";
@@ -186,7 +186,7 @@ const TokenOverview: FC = () => {
                     <div style={{width: '30px', overflow: 'hidden'}}>
                         <Link to={`/tokens/${token.tick}`} className="token-ticker">
                             <SmallThumbnail
-                                src={`${katscanStaticUrl}${token.logo}`}
+                                src={`${katscanApiUrl}/logos/${token.tick.toUpperCase()}`}
                                 alt={token.tick}
                                 loading="lazy"
                             />
