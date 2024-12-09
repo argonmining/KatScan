@@ -10,7 +10,7 @@ export type TokenData = {
     opScoreMod: string
     state: string
     hashRev: string
-    mtsAdd: number
+    mtsAdd: string
     logo: string
 }
 

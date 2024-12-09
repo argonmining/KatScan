@@ -230,7 +230,7 @@ const TokenOverview: FC = () => {
                     </>
                 );
             case 'mtsAdd':
-                return <div>{formatDateTime(token.mtsAdd)}</div>;
+                return <div>{formatDateTime(Number(token.mtsAdd))}</div>;
             default:
                 return <div>{token[header as keyof TokenData]}</div>; // Ensure a ReactElement is always returned
         }
