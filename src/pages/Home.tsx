@@ -42,7 +42,7 @@ export const Home: FC = () => {
         // Fetch recent tokens
         simpleRequest<TokenListResponse<TokenData[]>>(`${API_BASE_URL}/krc20/tokenlist`)
             .then(data => {
-                const sortedTokens = data.result.sort((a, b) => b.mtsAdd - a.mtsAdd);
+                const sortedTokens = data.result.sort((a, b) => Number(b.mtsAdd) - Number(a.mtsAdd));
                 setRecentTokens(sortedTokens.slice(0, 6));
             })
             .catch(error => console.error('Error fetching recent tokens:', error));
