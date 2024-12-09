@@ -1,15 +1,20 @@
 import {TokenData, TokenSearchResult} from "../interfaces/TokenData";
 import {sendRequest, simpleRequest} from "nacho-component-library";
-import {KatscanTokenListResponse, ResultResponse, TokenListResponse} from "../interfaces/ApiResponseTypes";
+import {
+    KatscanResponse,
+    KatscanTokenListResponse,
+    ResultResponse,
+    TokenListResponse
+} from "../interfaces/ApiResponseTypes";
 import {OpTransactionData} from "../interfaces/OpTransactionData";
-import {katscanBaseUrl} from "../utils/StaticVariables";
+import {katscanApiUrl, katscanBaseUrl} from "../utils/StaticVariables";
 
 const BASE_URL = 'https://api.kasplex.org/v1';
 
 // Simulating an API call to fetch token details
-export const getTokenDetails = async (tick: string): Promise<TokenSearchResult> => {
+export const getTokenDetails = async (tick: string): Promise<KatscanResponse<TokenSearchResult>> => {
     try {
-        return await simpleRequest<TokenSearchResult>(`${katscanBaseUrl}/api/token/${tick}`)
+        return await simpleRequest<KatscanResponse<TokenSearchResult>>(`${katscanBaseUrl}/api/token/${tick}`)
     } catch (error) {
         console.error('Error fetching token details:', error);
         throw error;
@@ -34,7 +39,7 @@ export const getKRC20TokenList = async (limit = 100, sortField = 'holderTotal', 
         try {
             const response = await sendRequest<KatscanTokenListResponse<TokenData[]>>({
                 method: 'GET',
-                url: 'https://katapi.nachowyborski.xyz/api/tokenlist',
+                url: `${katscanApiUrl}/token/tokenlist`,
                 params
             });
             allTokens = [...allTokens, ...response.result];
@@ -62,7 +67,7 @@ export const getKRC20TokenListSequential = async (limit = 100, sortField = 'hold
     try {
         const response = await sendRequest<KatscanTokenListResponse<TokenData>>({
             method: 'GET',
-            url: 'https://katapi.nachowyborski.xyz/api/tokenlist',
+            url: `${katscanApiUrl}/token/tokenlist`,
             params
         });
         return {result: response.tokens, cursor: response.nextCursor}
