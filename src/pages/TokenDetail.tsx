@@ -42,25 +42,29 @@ const TokenDetail: FC = () => {
             }
 
             setLoading(true);
-            Promise.all([
-                getTokenDetails(tokenId),
-                getDetailedTokenInfo(tokenId),
-                simpleRequest<Record<string, unknown>>(`https://api-v2-do.kas.fyi/token/krc20/${tokenId}/info?includeCharts=false`)
-            ])
-                .then(([data, detailedData, tokenInfo]) => {
-                    if (!data) {
-                        throw new Error('No data returned from API');
-                    }
-                    setTokenData(data);
-                    setHolderData(detailedData);
-                    setSocials((tokenInfo?.socialLinks ?? []) as Socials[])
-                })
-                .catch(err => {
-                    console.error('Failed to fetch token details:', err);
-                    addAlert('error', 'Failed to fetch token details');
-                })
-                .finally(() => setLoading(false));
-
+            void getTokenDetails(tokenId).then((data) => {
+                Promise.all([
+                    getDetailedTokenInfo(tokenId),
+                    simpleRequest<Record<string, unknown>>(`https://api-v2-do.kas.fyi/token/krc20/${tokenId}/info?includeCharts=false`)
+                ])
+                    .then(([detailedData, tokenInfo]) => {
+                        if (!data) {
+                            throw new Error('No data returned from API');
+                        }
+                        setTokenData(data.result);
+                        setHolderData(detailedData);
+                        setSocials((tokenInfo?.socialLinks ?? []) as Socials[])
+                    })
+                    .catch(err => {
+                        console.error('Failed to fetch token details:', err);
+                        addAlert('error', 'Failed to fetch token details');
+                    })
+                    .finally(() => setLoading(false));
+            }).catch(err => {
+                console.error('Failed to fetch token details:', err);
+                addAlert('error', 'Failed to fetch token details, is the TICK correct?');
+                setLoading(false)
+            })
         }, [tokenId]);
 
         if (loading) return <LoadingSpinner/>
