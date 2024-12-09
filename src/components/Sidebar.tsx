@@ -1,4 +1,4 @@
-import React, {forwardRef, ReactNode, useState} from 'react'
+import React, {forwardRef, useState} from 'react'
 import {Container, Nav, Navbar} from 'react-bootstrap'
 import {Link, NavLink} from 'react-router-dom'
 import {
@@ -17,42 +17,23 @@ import logo from '../assets/logo.png'
 import yourAdHere from '../assets/kpawAd.png'
 import 'styles/Sidebar.css'
 import {DonationModal} from "./donationModal/DonationModal";
-import {ThemeToggle, useDarkMode, useMobile} from "nacho-component-library";
+import {ControlledExpandableDiv, ThemeToggle, useDarkMode, useMobile} from "nacho-component-library";
 
 const Sidebar = forwardRef<HTMLDivElement>((_, ref) => {
-    /*const [collapsed, setCollapsed] = useState(false)*/
     const [collapsed] = useState(false)
     const [showDonateModal, setShowDonateModal] = useState(false)
     const [expanded, setExpanded] = useState(false)
     const {isDarkMode} = useDarkMode()
     const {isMobile} = useMobile()
-
-    /*const toggleSidebar = () => {
-        setCollapsed(!collapsed)
-    }*/
+    const [openCategory, setOpenCategory] = useState<string | undefined>('KRC-20-Explorer')
 
     const handleDonateClick = () => {
         setShowDonateModal(true)
     }
 
-    const NavSection = ({
-                            title,
-                            children,
-                        }: {
-        title: string
-        children: ReactNode
-    }) => (
-        <div className="nav-section">
-            {!collapsed && (
-                <h6 className="nav-section-title sub-header">{title}</h6>
-            )}
-            {children}
-        </div>
-    )
-
     return (
         <>
-            {isMobile ? (
+            {isMobile &&
                 // Mobile Navbar
                 <Navbar
                     ref={ref}
@@ -139,13 +120,14 @@ const Sidebar = forwardRef<HTMLDivElement>((_, ref) => {
                             </Nav>
                         </Navbar.Collapse>
                     </Container>
-                </Navbar>
-            ) : (
+                </Navbar>}
+
+            {!isMobile && (
                 // Desktop Sidebar
                 <div id={'navbar'}
-                    ref={ref}
-                    className={`sidebar ${collapsed ? 'collapsed' : ''
-                        } d-none d-lg-block`}
+                     ref={ref}
+                     className={`sidebar ${collapsed ? 'collapsed' : ''
+                     } d-none d-lg-block`}
                 >
                     <div className="sidebar-content">
                         <div className="sidebar-header">
@@ -161,12 +143,15 @@ const Sidebar = forwardRef<HTMLDivElement>((_, ref) => {
                             </Link>
                         </div>
                         <Nav className="flex-column">
-                            <NavSection title="KRC-20 Explorer">
+                            <ControlledExpandableDiv id={'KRC-20-Explorer'}
+                                                     title={'KRC-20 Explorer'}
+                                                     changeExtended={(id) => setOpenCategory(id)}
+                                                     isExtended={openCategory === 'KRC-20-Explorer'}>
                                 <NavLink
                                     to="/transaction-lookup"
                                     className="nav-link"
                                 >
-                                    <FaSearch />{' '}
+                                    <FaSearch/>{' '}
                                     {!collapsed && (
                                         <span>Search Transactions</span>
                                     )}
@@ -181,8 +166,11 @@ const Sidebar = forwardRef<HTMLDivElement>((_, ref) => {
                                     <FaUsers/>{' '}
                                     {!collapsed && <span>Top Holders</span>}
                                 </NavLink>
-                            </NavSection>
-                            <NavSection title="KRC-20 Tokens">
+                            </ControlledExpandableDiv>
+                            <ControlledExpandableDiv id={'KRC-20-Tokens'}
+                                                     title={'KRC-20 Tokens'}
+                                                     changeExtended={(id) => setOpenCategory(id)}
+                                                     isExtended={openCategory === 'KRC-20-Tokens'}>
                                 <NavLink to="/tokens" className="nav-link">
                                     <FaCoins/>{' '}
                                     {!collapsed && <span>All Tokens</span>}
@@ -205,8 +193,12 @@ const Sidebar = forwardRef<HTMLDivElement>((_, ref) => {
                                     <FaChartLine/>{' '}
                                     {!collapsed && <span>MarketCap Calc</span>}
                                 </NavLink>
-                            </NavSection>
-                            <NavSection title="KRC-20 Tools">
+                                {/*</NavSection>*/}
+                            </ControlledExpandableDiv>
+                            <ControlledExpandableDiv id={'KRC-20-Tools'}
+                                                     title={'KRC-20 Tools'}
+                                                     changeExtended={(id) => setOpenCategory(id)}
+                                                     isExtended={openCategory === 'KRC-20-Tools'}>
                                 <NavLink
                                     to="https://t.me/kspr_home_bot?start=nacho"
                                     className="nav-link"
@@ -223,24 +215,15 @@ const Sidebar = forwardRef<HTMLDivElement>((_, ref) => {
                                 >
                                     <FaRobot/> {!collapsed && <span>Mint & Deploy</span>}
                                 </NavLink>
-                            </NavSection>
+                            </ControlledExpandableDiv>
                             <div className="ad-container">
                                 <a href="https://www.kaspaw.io/" target="_blank" rel="noopener noreferrer">
                                     <img src={yourAdHere as string}
-                                        alt="KPAW Advert"
-                                        className="ad-image" />
+                                         alt="KPAW Advert"
+                                         className="ad-image"/>
                                 </a>
                             </div>
                         </Nav>
-                        {/*
-                        <NavLink
-                            to="#"
-                            className="donate-link"
-                            onClick={handleDonateClick}
-                        >
-                            <FaHeart /> {!collapsed && <span>Donate</span>}
-                        </NavLink>
-                        */}
                         <ThemeToggle/>
                         <div className="sidebar-footer">
                             {!collapsed && (
