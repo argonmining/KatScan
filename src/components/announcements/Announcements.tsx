@@ -8,8 +8,8 @@ import './Announcements.css'
 export const Announcements: FC = () => {
     const {isDarkMode} = useDarkMode()
     const [show, setShow] = useState(false)
-
-
+    const [internalIds, setInternalIds] = useState<number[]>([])
+    const [internalData, setInternalData] = useState<Announcement[] | undefined>()
     const {data} = useFetch<Announcement[]>({
         url: '/announcements/all'
     })
@@ -18,16 +18,22 @@ export const Announcements: FC = () => {
         if (!data) {
             return
         }
-        setShow(true)
+        const ids: number[] = JSON.parse(localStorage.getItem('announcementIds') ?? '[]')
+        const filtered = data.filter(single => !ids.includes(single.id))
+        if (filtered.length !== 0) {
+            setInternalData(filtered)
+            setInternalIds(([...ids, ...filtered.map(single => single.id)]))
+            setShow(true)
+        }
     }, [data]);
 
-    if (!data) {
+    if (!internalData) {
         return null
     }
 
     const onHide = () => {
+        localStorage.setItem('announcementIds', JSON.stringify(internalIds))
         setShow(false)
-        console.log('hide')
     }
     return <Modal
         show={show}
@@ -42,7 +48,7 @@ export const Announcements: FC = () => {
                   interval={null}
                   controls={true}
                   indicators={true}>
-            {data.map(single =>
+            {internalData.map(single =>
                 <Carousel.Item key={single.id}>
                     <Announcement key={single.id} id={single.id}
                                   title={single.title}
