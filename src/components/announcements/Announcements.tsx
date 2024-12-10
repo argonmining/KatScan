@@ -15,19 +15,21 @@ export const Announcements: FC = () => {
     })
 
     useEffect(() => {
-        if (!data) {
+        if (!data || data.length === 0) {
             return
         }
-        const ids: number[] = JSON.parse(localStorage.getItem('announcementIds') ?? '[]')
+        let ids = JSON.parse(localStorage.getItem('announcementIds') ?? '[]') as number[]
         const filtered = data.filter(single => !ids.includes(single.id))
+        //set to the announcements in the db
+        ids = data.map(single=>single.id)
         if (filtered.length !== 0) {
             setInternalData(filtered)
-            setInternalIds(([...ids, ...filtered.map(single => single.id)]))
+            setInternalIds((ids))
             setShow(true)
         }
     }, [data]);
 
-    if (!internalData) {
+    if (!internalData || internalData.length === 0) {
         return null
     }
 
