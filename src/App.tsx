@@ -6,6 +6,7 @@ import './styles/globals.css'
 import './styles/darkMode.css'
 import {LoadingSpinner, usePageResize} from 'nacho-component-library'
 import {Alerts} from "./components/alerts/Alerts";
+import {Announcements} from "./components/announcements/Announcements";
 
 /**
  * Lazy loading the pages to improve initial loading time in prod
@@ -30,6 +31,7 @@ const App: FC = () => {
             <div className="App">
                 <div id={'portal-container'}/>
                 <Alerts/>
+                <Announcements/>
                 <Sidebar ref={elementRef} />
                 <div className="main-content" style={styling}>
                     <Suspense fallback={<LoadingSpinner/>}>

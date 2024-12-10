@@ -55,8 +55,19 @@ export function useFetch<T>(
     const [error, setError] = useState(false)
     const loadingRef = useRef<string>()
 
-    useEffect(() => {
+    const internalUrl = useMemo(() => {
         if (!url) {
+            return
+        }
+        if (url.includes('http') || !url.startsWith('/')) {
+            // url is not a subpath, we use the given url
+            return url
+        }
+        return `${katscanApiUrl}${url}`
+    }, [url])
+
+    useEffect(() => {
+        if (!internalUrl) {
             return
         }
         const unique = loadingRef.current = generateUniqueID()
@@ -76,7 +87,7 @@ export function useFetch<T>(
 
         void sendRequest<KatscanResponse<T>>({
             method,
-            url: url.includes('http') ? url : `${katscanApiUrl}${url}`,
+            url: internalUrl,
             body,
             params: internalParams
         })
@@ -100,7 +111,7 @@ export function useFetch<T>(
                 }
                 setLoading(false)
             })
-    }, [body, errorMessage, method, params, successMessage, url])
+    }, [body, errorMessage, internalUrl, method, params, successMessage])
 
     return useMemo(() => ({
         data,
