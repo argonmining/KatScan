@@ -9,6 +9,10 @@
 
             .carousel-control-next, .carousel-control-prev{
                 width: 10%;
+                filter: invert(100%);
+            }
+            .carousel-indicators{
+                filter: invert(100%);
             }
 
             .carousel-inner {
@@ -58,6 +62,11 @@
 }
 
 .dark-mode .announcements-modal {
+    .carousel{
+        .carousel-control-next-icon, .carousel-control-prev-icon, .carousel-indicators{
+            filter: inherit;
+        }
+    }
 
     .announcement {
         .title {
