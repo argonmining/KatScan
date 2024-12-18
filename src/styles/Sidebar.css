@@ -440,12 +440,13 @@
 
 
 .sidebar-content {
-    .flex-column{
+    .flex-column {
         position: relative;
         height: inherit;
         min-height: 710px;
         padding-top: 16px;
     }
+
     .expandable-div {
         & span:first-child {
             font-family: var(--sub-header-font);
@@ -453,14 +454,26 @@
             text-transform: uppercase;
             opacity: 0.8;
         }
+
+        .expandable-div-header {
+            border: none;
+            background-color: var(--primary-color);
+
+            & svg {
+                color: white
+            }
+        }
+
         .expandable-div-body {
             padding: unset !important;
+
             &.extended {
                 padding: 10px 0 !important;
                 margin-bottom: 16px;
             }
         }
     }
+
     .ad-container {
         position: absolute;
         bottom: 0;
@@ -490,6 +503,14 @@
             &:hover {
 
             }
+        }
+    }
+}
+
+.dark-mode .sidebar-content {
+    .expandable-div {
+        .expandable-div-header {
+            background-color: #2b2b2b;
         }
     }
 }
