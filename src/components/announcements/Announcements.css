@@ -5,6 +5,11 @@
 
         .carousel {
             height: 100%;
+            overflow: hidden;
+
+            .carousel-control-next, .carousel-control-prev{
+                width: 10%;
+            }
 
             .carousel-inner {
                 height: 100%;
@@ -23,14 +28,30 @@
             position: relative;
             padding-top: 10px;
 
+            .title {
+                text-align: center;
+            }
+
             .text {
+                max-height: 150px;
+                overflow: scroll;
                 padding: 0 30px;
             }
 
-            & img {
-                max-width: 600px;
+            .image-wrapper {
                 position: absolute;
                 bottom: 0;
+                display: flex;
+                justify-content: center;
+
+                & img {
+                    max-width: 600px;
+                    max-height: 350px;
+                }
+            }
+
+            .hover:hover {
+                cursor: pointer;
             }
         }
     }
@@ -80,10 +101,8 @@
             }
 
             & img {
-                max-width: 70%;
-                max-height: 70%;
-                position: absolute;
-                bottom: 0;
+                max-width: 80%;
+                max-height: 35vh;
             }
         }
     }

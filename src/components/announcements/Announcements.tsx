@@ -4,6 +4,7 @@ import {Carousel, Modal} from "react-bootstrap";
 import {Image, useDarkMode} from "nacho-component-library";
 import {katscanStaticUrl} from "../../utils/StaticVariables";
 import './Announcements.css'
+import {openLink} from "../../services/Helper";
 
 export const Announcements: FC = () => {
     const {isDarkMode} = useDarkMode()
@@ -21,7 +22,7 @@ export const Announcements: FC = () => {
         let ids = JSON.parse(localStorage.getItem('announcementIds') ?? '[]') as number[]
         const filtered = data.filter(single => !ids.includes(single.id))
         //set to the announcements in the db
-        ids = data.map(single=>single.id)
+        ids = data.map(single => single.id)
         if (filtered.length !== 0) {
             setInternalData(filtered)
             setInternalIds((ids))
@@ -52,10 +53,8 @@ export const Announcements: FC = () => {
                   indicators={true}>
             {internalData.map(single =>
                 <Carousel.Item key={single.id}>
-                    <Announcement key={single.id} id={single.id}
-                                  title={single.title}
-                                  imageUrl={single.imageUrl}
-                                  text={single.text}/>
+                    <Announcement key={single.id}
+                                  {...single} />
                 </Carousel.Item>
             )}
         </Carousel>
@@ -67,13 +66,19 @@ const Announcement: FC<Announcement> = (
     {
         title,
         text,
-        imageUrl
+        imageUrl,
+        link
     }
 ) => {
 
     return <div className={'announcement'}>
         <h3 className={'title'}>{title}</h3>
         <p className={'text'}>{text}</p>
-        {imageUrl && <Image src={`${katscanStaticUrl}${imageUrl}`} alt={title}/>}
+        {imageUrl &&
+            <div className={`image-wrapper ${link ? 'hover' : ''}`}
+                 onClick={link ? () => openLink(link) : undefined}>
+                <Image src={`${katscanStaticUrl}${imageUrl}`} alt={title}/>
+            </div>
+        }
     </div>
 }

@@ -68,3 +68,7 @@ export const formatKRC20Amount = (amount: string, decimals: number, tick: string
 export const openTransaction = (transactionId: string): void => {
     window.open(`https://explorer.kaspa.org/txs/${transactionId}`, '_blank', 'noopener,noreferrer');
 };
+
+export const openLink = (url: string): void => {
+    window.open(url, '_blank', 'noopener,noreferrer');
+};
