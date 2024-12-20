@@ -4,6 +4,7 @@ import {addAlert} from "../components/alerts/Alerts";
 import {emptyArray, katscanApiUrl} from "../utils/StaticVariables";
 import {generateUniqueID} from "web-vitals/dist/modules/lib/generateUniqueID";
 import {KatscanResponse} from "../interfaces/ApiResponseTypes";
+import {sortComparison} from "../services/Helper";
 
 type Props = {
     url: string
@@ -11,6 +12,8 @@ type Props = {
     errorMessage?: string
     successMessage?: string
     params?: Record<string, string | number>
+    avoidLoading?: boolean
+    sort?: [string, 'asc' | 'desc']
 }
 type GETFetch = Props & {
     method?: 'GET'
@@ -46,7 +49,9 @@ export function useFetch<T>(
         successMessage,
         method = 'GET',
         params,
-        body
+        body,
+        avoidLoading,
+        sort
     }: UseFetch
 ): Return<T> {
     const [data, setData] = useState<T>(defaultValue as T)
@@ -67,7 +72,7 @@ export function useFetch<T>(
     }, [url])
 
     useEffect(() => {
-        if (!internalUrl) {
+        if (!internalUrl || avoidLoading) {
             return
         }
         const unique = loadingRef.current = generateUniqueID()
@@ -96,7 +101,15 @@ export function useFetch<T>(
                     //return, the response is not valid because a new request was made
                     return
                 }
-                setData(result.result)
+                if (sort && Array.isArray(result.result)) {
+                    if (typeof result.result[0] === 'object') {
+                        setData(result.result.sort((a: Record<string, string | number>, b: Record<string, string | number>) => sortComparison(a[sort[0]], b[sort[0]], sort[1])))
+                    } else {
+                        setData(result.result.sort((a, b) => sortComparison(a, b, sort[1])))
+                    }
+                } else {
+                    setData(result.result)
+                }
                 setCursor(result.cursor)
                 if (successMessage) {
                     addAlert('success', successMessage)
@@ -111,7 +124,7 @@ export function useFetch<T>(
                 }
                 setLoading(false)
             })
-    }, [body, errorMessage, internalUrl, method, params, successMessage])
+    }, [avoidLoading, body, errorMessage, internalUrl, method, params, sort, successMessage])
 
     return useMemo(() => ({
         data,

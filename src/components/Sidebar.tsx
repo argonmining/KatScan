@@ -12,6 +12,7 @@ import {
     FaSearch,
     FaUsers,
     FaWallet,
+    FaBullhorn
 } from 'react-icons/fa'
 import logo from '../assets/logo.png'
 import yourAdHere from '../assets/kpawAd.png'
@@ -110,6 +111,13 @@ const Sidebar = forwardRef<HTMLDivElement>((_, ref) => {
                                     onClick={() => setExpanded(false)}
                                 >
                                     <FaChartLine/> MarketCap Calc
+                                </NavLink>
+                                <NavLink
+                                    to="/announcements"
+                                    className="nav-link"
+                                    onClick={() => setExpanded(false)}
+                                >
+                                    <FaBullhorn/> Announcements
                                 </NavLink>
 
                                 <span onClick={handleDonateClick} className={'donation-text'}>
@@ -214,6 +222,12 @@ const Sidebar = forwardRef<HTMLDivElement>((_, ref) => {
                                     rel="noopener noreferrer"
                                 >
                                     <FaRobot/> {!collapsed && <span>Mint & Deploy</span>}
+                                </NavLink>
+                                <NavLink
+                                    to="/announcements"
+                                    className="nav-link"
+                                >
+                                    <FaBullhorn/> {!collapsed && <span>Announcements</span>}
                                 </NavLink>
                             </ControlledExpandableDiv>
                             <div className="ad-container">

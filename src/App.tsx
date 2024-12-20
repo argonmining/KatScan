@@ -21,6 +21,7 @@ const MintHeatmap = lazy(() => import('./pages/MintHeatmap'))
 const MarketCapCalculator = lazy(() =>import('./pages/MarketCapCalculator'))
 const TopKRC20Holders = lazy(() => import('./pages/TopKRC20Holders'))
 const StructuredData = lazy(() => import('./pages/StructuredData'))
+const AnnouncementsPage = lazy(() => import('./pages/AnnouncementsPage'))
 
 const App: FC = () => {
     const elementRef = useRef<HTMLDivElement | null>(null)
@@ -66,6 +67,10 @@ const App: FC = () => {
                             <Route
                                 path="/top-holders"
                                 element={<TopKRC20Holders/>}
+                            />
+                            <Route
+                                path="/announcements"
+                                element={<AnnouncementsPage/>}
                             />
                             <Route
                                 path="*"

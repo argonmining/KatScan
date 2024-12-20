@@ -6,13 +6,23 @@ import {katscanStaticUrl} from "../../utils/StaticVariables";
 import './Announcements.css'
 import {openLink} from "../../services/Helper";
 
-export const Announcements: FC = () => {
+type Props = {
+    announcement?: Announcement
+    onClose?: ()=> void
+}
+export const Announcements: FC<Props> = (
+    {
+        announcement,
+        onClose
+    }
+) => {
     const {isDarkMode} = useDarkMode()
     const [show, setShow] = useState(false)
     const [internalIds, setInternalIds] = useState<number[]>([])
     const [internalData, setInternalData] = useState<Announcement[] | undefined>()
     const {data} = useFetch<Announcement[]>({
-        url: '/announcements/all'
+        url: '/announcements/all',
+        avoidLoading: announcement !== undefined
     })
 
     useEffect(() => {
@@ -30,6 +40,14 @@ export const Announcements: FC = () => {
         }
     }, [data]);
 
+    useEffect(() => {
+        if (!announcement){
+            return
+        }
+        setInternalData([announcement])
+        setShow(true)
+    }, [announcement]);
+
     if (!internalData || internalData.length === 0) {
         return null
     }
@@ -40,7 +58,7 @@ export const Announcements: FC = () => {
     }
     return <Modal
         show={show}
-        onHide={onHide}
+        onHide={onClose ?? onHide}
         centered
         className={'announcements-modal modal-lg'}
     >
