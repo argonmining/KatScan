@@ -8,7 +8,7 @@ import {openLink} from "../../services/Helper";
 
 type Props = {
     announcement?: Announcement
-    onClose?: ()=> void
+    onClose?: () => void
 }
 export const Announcements: FC<Props> = (
     {
@@ -41,7 +41,7 @@ export const Announcements: FC<Props> = (
     }, [data]);
 
     useEffect(() => {
-        if (!announcement){
+        if (!announcement) {
             return
         }
         setInternalData([announcement])
@@ -67,7 +67,7 @@ export const Announcements: FC<Props> = (
         </Modal.Header>
         <Carousel slide={true}
                   interval={null}
-                  controls={true}
+                  controls={internalData.length > 1}
                   indicators={true}>
             {internalData.map(single =>
                 <Carousel.Item key={single.id}>

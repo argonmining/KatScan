@@ -19,6 +19,7 @@ import yourAdHere from '../assets/kpawAd.png'
 import 'styles/Sidebar.css'
 import {DonationModal} from "./donationModal/DonationModal";
 import {ControlledExpandableDiv, ThemeToggle, useDarkMode, useMobile} from "nacho-component-library";
+import {FaFileLines} from "react-icons/fa6";
 
 const Sidebar = forwardRef<HTMLDivElement>((_, ref) => {
     const [collapsed] = useState(false)
@@ -118,6 +119,13 @@ const Sidebar = forwardRef<HTMLDivElement>((_, ref) => {
                                     onClick={() => setExpanded(false)}
                                 >
                                     <FaBullhorn/> Announcements
+                                </NavLink>
+                                <NavLink
+                                    to="/whitelist"
+                                    className="nav-link"
+                                    onClick={() => setExpanded(false)}
+                                >
+                                    <FaBullhorn/> Whitelist
                                 </NavLink>
 
                                 <span onClick={handleDonateClick} className={'donation-text'}>
@@ -228,6 +236,12 @@ const Sidebar = forwardRef<HTMLDivElement>((_, ref) => {
                                     className="nav-link"
                                 >
                                     <FaBullhorn/> {!collapsed && <span>Announcements</span>}
+                                </NavLink>
+                                <NavLink
+                                    to="/whitelist"
+                                    className="nav-link"
+                                >
+                                    <FaFileLines/> {!collapsed && <span>Whitelist</span>}
                                 </NavLink>
                             </ControlledExpandableDiv>
                             <div className="ad-container">
