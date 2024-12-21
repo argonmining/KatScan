@@ -1,9 +1,7 @@
 import React, {FC, useMemo, useState} from "react";
 import {useFetch} from "../hooks/useFetch";
-import {CustomTabs, Input, List, Page} from "nacho-component-library";
+import {Input, List, Page} from "nacho-component-library";
 import 'styles/WhitelistPage.css'
-
-const titles = ['Donators', 'Contributors']
 
 type WhitelistData = {
     address: string
@@ -19,10 +17,7 @@ const WhitelistPage: FC = () => {
                             onChangeCallback={setSearchTerm}
                             onSubmit={setSearchTerm}/>
                  }>
-        <CustomTabs titles={titles}>
-            <DonatorsList searchTerm={searchTerm}/>
-            <ContributorsList searchTerm={searchTerm}/>
-        </CustomTabs>
+        <Whitelist searchTerm={searchTerm}/>
     </Page>
 
 }
@@ -32,14 +27,14 @@ const donHeaders = ['address']
 type ListProps = {
     searchTerm: string
 }
-const DonatorsList: FC<ListProps> = (
+const Whitelist: FC<ListProps> = (
     {
         searchTerm
     }
 ) => {
 
     const {data, loading} = useFetch<WhitelistData[]>({
-        url: '/whitelist/donators'
+        url: '/whitelist'
     })
 
     const internalData = useMemo(() => {
@@ -57,29 +52,4 @@ const DonatorsList: FC<ListProps> = (
                  showHeader={false}/>
 }
 
-const conHeader = ['address']
-const ContributorsList: FC<ListProps> = (
-    {
-        searchTerm
-    }
-) => {
-
-    const {data, loading} = useFetch<WhitelistData[]>({
-        url: '/whitelist/contributors'
-    })
-
-    const internalData = useMemo(() => {
-        if (searchTerm === '') {
-            return data
-        }
-        return data.filter(single => single.address.includes(searchTerm))
-    }, [data, searchTerm])
-
-    return <List headerElements={conHeader}
-                 items={internalData}
-                 minItemHeight={50}
-                 noDataText={'No Data available'}
-                 isLoading={loading}
-                 showHeader={false}/>
-}
 export default WhitelistPage
