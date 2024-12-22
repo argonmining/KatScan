@@ -13,7 +13,7 @@ import {
     useMobile
 } from "nacho-component-library";
 import {Link} from "react-router-dom";
-import {katscanApiUrl, katscanStaticUrl} from "../utils/StaticVariables";
+import {katscanStaticUrl} from "../utils/StaticVariables";
 import {TokenActions} from "../components/TokenActions";
 import {censorTicker} from "../utils/censorTicker";
 import {formatNumber} from "../services/Helper";
