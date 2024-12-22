@@ -88,7 +88,6 @@ const Announcement: FC<Announcement> = (
         link
     }
 ) => {
-//todo rollback to camelcase
     return <div className={'announcement'}>
         <h3 className={'title'}>{title}</h3>
         <p className={'text'}>{text}</p>
