@@ -3,6 +3,6 @@ type Announcement = {
     title: string
     text?: string
     timestamp?: string
-    imageUrl?: string
+    imageurl?: string
     link?: string
 }

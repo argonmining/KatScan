@@ -84,18 +84,18 @@ const Announcement: FC<Announcement> = (
     {
         title,
         text,
-        imageUrl,
+        imageurl,
         link
     }
 ) => {
-
+//todo rollback to camelcase
     return <div className={'announcement'}>
         <h3 className={'title'}>{title}</h3>
         <p className={'text'}>{text}</p>
-        {imageUrl &&
+        {imageurl &&
             <div className={`image-wrapper ${link ? 'hover' : ''}`}
                  onClick={link ? () => openLink(link) : undefined}>
-                <Image src={`${katscanStaticUrl}${imageUrl}`} alt={title}/>
+                <Image src={`${katscanStaticUrl}${imageurl}`} alt={title}/>
             </div>
         }
     </div>

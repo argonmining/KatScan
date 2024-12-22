@@ -13,7 +13,7 @@ import {
     useMobile
 } from "nacho-component-library";
 import {Link} from "react-router-dom";
-import {katscanApiUrl} from "../utils/StaticVariables";
+import {katscanApiUrl, katscanStaticUrl} from "../utils/StaticVariables";
 import {TokenActions} from "../components/TokenActions";
 import {censorTicker} from "../utils/censorTicker";
 import {formatNumber} from "../services/Helper";
@@ -179,14 +179,14 @@ const TokenOverview: FC = () => {
         const headerInternal = header as HeaderType;
         switch (headerInternal) {
             case "image":
-                if (!token.logo) {
-                    return null; // Return an empty div instead of null
-                }
+                // if (!token.logo) {
+                //     return null; // Return an empty div instead of null
+                // }
                 return (
                     <div style={{width: '30px', overflow: 'hidden'}}>
                         <Link to={`/tokens/${token.tick}`} className="token-ticker">
                             <SmallThumbnail
-                                src={`${katscanApiUrl}/logos/${token.tick.toUpperCase()}`}
+                                src={`${katscanStaticUrl}/krc20-logos/${token.tick.toUpperCase()}.jpg`}
                                 alt={token.tick}
                                 loading="lazy"
                             />
