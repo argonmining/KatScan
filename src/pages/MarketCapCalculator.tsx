@@ -25,7 +25,7 @@ import {CustomSelect, Selection} from "../components/select/CustomSelect";
 
 type CalculationResult = {
     krc20Token: {
-        holderTotal: string
+        holderTotal: number
     } & TokenSearchResult,
     crypto: {
         maxSupply: CoinbaseInfo['market_data']['max_supply'],
@@ -108,7 +108,7 @@ const MarketCapCalculator: FC = () => {
             const load = async () => {
                 try {
                     const cryptoData = await getCryptoData(selectedCrypto.value);
-                    const krc20Supply = parseFloat(String(detailedTokenInfo.max)) / Math.pow(10, parseInt(String(detailedTokenInfo.dec) || '0'));
+                    const krc20Supply = detailedTokenInfo.max / Math.pow(10, detailedTokenInfo.dec);
                     const cryptoMarketCap = cryptoData.market_data.market_cap.usd;
                     const calculatedPrice = cryptoMarketCap / krc20Supply;
 

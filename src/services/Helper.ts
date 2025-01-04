@@ -44,8 +44,12 @@ export const parseRawNumber = (rawNumber: string | number, decimals: number): nu
     return Number(rawNumber) / Math.pow(10, decimals);
 }
 
-export const formatDateTime = (timestamp: string): string => {
-    const date = new Date(parseInt(timestamp));
+export const formatDateTime = (timestamp: string | number): string => {
+    let internalTimestamp = timestamp;
+    if (typeof timestamp === 'string') {
+        internalTimestamp = parseInt(timestamp)
+    }
+    const date = new Date(internalTimestamp);
     return date.toLocaleString('en-US', {timeZoneName: 'short'});
 }
 
@@ -58,8 +62,8 @@ export const formatKaspa = (amount: string): string => {
     return (parseFloat(amount) / 100000000).toFixed(8) + " KAS";
 }
 
-export const formatKRC20Amount = (amount: string, decimals: number, tick: string): string => {
-    if (!amount || amount === '0') {
+export const formatKRC20Amount = (amount: number, decimals: number, tick: string): string => {
+    if (!amount || amount === 0) {
         return '0'
     }
     return `${parseRawNumber(amount, decimals).toFixed(decimals)} ${tick}`;

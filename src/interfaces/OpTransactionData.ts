@@ -2,7 +2,7 @@ export interface OpTransactionData {
     p: string
     op: string
     tick: string
-    amt: string
+    amt: number
     from: string
     to: string
     opScore: string
@@ -12,6 +12,6 @@ export interface OpTransactionData {
     opAccept: string
     opError: string
     checkpoint: string
-    mtsAdd: string
-    mtsMod: string
+    mtsAdd: number
+    mtsMod: number
 }

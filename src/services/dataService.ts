@@ -7,14 +7,14 @@ import {
     TokenListResponse
 } from "../interfaces/ApiResponseTypes";
 import {OpTransactionData} from "../interfaces/OpTransactionData";
-import {katscanApiUrl, katscanBaseUrl} from "../utils/StaticVariables";
+import {katscanApiUrl} from "../utils/StaticVariables";
 
 const BASE_URL = 'https://api.kasplex.org/v1';
 
 // Simulating an API call to fetch token details
 export const getTokenDetails = async (tick: string): Promise<KatscanResponse<TokenSearchResult>> => {
     try {
-        return await simpleRequest<KatscanResponse<TokenSearchResult>>(`${katscanBaseUrl}/api/token/${tick}`)
+        return await simpleRequest<KatscanResponse<TokenSearchResult>>(`${katscanApiUrl}/token/detail/${tick}`)
     } catch (error) {
         console.error('Error fetching token details:', error);
         throw error;

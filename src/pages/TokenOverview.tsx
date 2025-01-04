@@ -87,7 +87,7 @@ const TokenOverview: FC = () => {
         // Filter by launch type
         if (launchTypeFilter) {
             result = result.filter(token =>
-                (token.pre === '0' ? 'Fair Mint' : 'Pre-Mint') === launchTypeFilter
+                (token.pre === 0 ? 'Fair Mint' : 'Pre-Mint') === launchTypeFilter
             );
         }
 
@@ -143,12 +143,12 @@ const TokenOverview: FC = () => {
         return `(${formattedPercentage}%)`
     };
 
-    const getBadgeClass = (preMint: string): string => {
-        return preMint === '0' ? 'badge badge-fair-mint' : 'badge badge-pre-mint';
+    const getBadgeClass = (preMint: number): string => {
+        return preMint === 0 ? 'badge badge-fair-mint' : 'badge badge-pre-mint';
     };
 
-    const formatPreMinted = (preMinted: string, max: number, decimals: number): string => {
-        const value = calculateValue(parseInt(preMinted), decimals);
+    const formatPreMinted = (preMinted: number, max: number, decimals: number): string => {
+        const value = calculateValue(preMinted, decimals);
         if (value === 0) return "None";
         return `${formatNumber(value)} ${formatPercentage(value, calculateValue(max, decimals))}`;
     };
@@ -179,14 +179,14 @@ const TokenOverview: FC = () => {
         const headerInternal = header as HeaderType;
         switch (headerInternal) {
             case "image":
-                // if (!token.logo) {
-                //     return null; // Return an empty div instead of null
-                // }
+                if (!token.logo) {
+                    return null; // Return an empty div instead of null
+                }
                 return (
                     <div style={{width: '30px', overflow: 'hidden'}}>
                         <Link to={`/tokens/${token.tick}`} className="token-ticker">
                             <SmallThumbnail
-                                src={`${katscanStaticUrl}/krc20-logos/${token.tick.toUpperCase()}.jpg`}
+                                src={`${katscanStaticUrl}${token.logo}`}
                                 alt={token.tick}
                                 loading="lazy"
                             />
@@ -204,7 +204,7 @@ const TokenOverview: FC = () => {
             case "mintState":
                 return (
                     <span className={getBadgeClass(token.pre)}>
-                        {token.pre === '0' ? 'Fair Mint' : 'Pre-Mint'}
+                        {token.pre === 0 ? 'Fair Mint' : 'Pre-Mint'}
                     </span>
                 );
             case "state":

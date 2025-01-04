@@ -6,11 +6,8 @@ import {censorTicker} from '../utils/censorTicker';
 import {useMediaQuery} from 'react-responsive';
 import {TopHolder} from "../interfaces/TokenData";
 import {MobileTopKRC20Holders} from "../components/mobileComponents/MobileTopKRC20Holders";
-import {ExpandAbleList, JsonLd, Page, SEO, simpleRequest} from "nacho-component-library";
-import {addAlert} from "../components/alerts/Alerts";
-import {katscanApiUrl} from "../utils/StaticVariables";
-
-const API_BASE_URL =  `${katscanApiUrl}/holders/topHolders`
+import {ExpandAbleList, JsonLd, Page, SEO} from "nacho-component-library";
+import {useFetch} from "../hooks/useFetch";
 
 type InternalTopHolder = {
     address: string
@@ -21,41 +18,34 @@ type InternalTopHolder = {
 //Outside of the component because its static
 const headEntries = ['Rank', 'Address', 'Unique Tokens', 'Expand']
 
+//todo rebuild with list
 const TopKRC20Holders: FC = () => {
     const [topHolders, setTopHolders] = useState<InternalTopHolder[]>([]);
-    const [loading, setLoading] = useState(true);
+    // const [loading, setLoading] = useState(true);
     const isMobile = useMediaQuery({maxWidth: 768});
+    const {data, loading} = useFetch<TopHolder[]>({
+        url: '/holders/topHolders',
+        errorMessage: 'Failed to fetch top holders data. Please try again later.'
+    })
 
     useEffect(() => {
-        const fetchTopHolders = async () => {
-            try {
-                setLoading(true);
-                const holders = await simpleRequest<TopHolder[]>(API_BASE_URL);
+        if (data.length == 0) {
+            return
+        }
 
-                const formattedHolders = holders.map(holder => ({
-                    address: holder.address,
-                    tokens: holder.balances.map(balance => ({
-                        tick: balance.tick,
-                        amount: parseFloat(balance.balance) / Math.pow(10, 8), // Assume 8 decimals for each token
-                        decimals: 8 // Assume 8 decimals for each token
-                    })),
-                    uniqueTokens: holder.balances.length,
-                }));
+        const formattedHolders = data.map(holder => ({
+            address: holder.address,
+            tokens: holder.balances.map(balance => ({
+                tick: balance.tick,
+                amount: balance.amount,
+                decimals: 8 // Assume 8 decimals for each token
+            })),
+            uniqueTokens: holder.tokenCount,
+        }));
+        //no sort needed, data comes sorted
+        setTopHolders(formattedHolders);
 
-                // Sort by uniqueTokens, highest to lowest
-                formattedHolders.sort((a, b) => b.uniqueTokens - a.uniqueTokens);
-
-                setTopHolders(formattedHolders);
-                setLoading(false);
-            } catch (err) {
-                console.error('Error fetching top holders:', err);
-                addAlert('error', 'Failed to fetch top holders data. Please try again later.');
-                setLoading(false);
-            }
-        };
-
-        void fetchTopHolders();
-    }, []);
+    }, [data]);
 
     const getRow = (holder: InternalTopHolder, index: number): ReactElement => {
         return <>

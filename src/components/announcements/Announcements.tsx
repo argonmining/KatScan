@@ -21,7 +21,7 @@ export const Announcements: FC<Props> = (
     const [internalIds, setInternalIds] = useState<number[]>([])
     const [internalData, setInternalData] = useState<Announcement[] | undefined>()
     const {data} = useFetch<Announcement[]>({
-        url: '/announcements/all',
+        url: '/announcements',
         avoidLoading: announcement !== undefined
     })
 
