@@ -51,7 +51,7 @@ const WalletLookup: FC = () => {
 
     useEffect(() => {
         if (!walletAddress) {
-            return
+            return;
         }
 
         simpleRequest<WalletBalance>(`https://api.kaspa.org/addresses/${walletAddress}/balance`)
@@ -59,13 +59,12 @@ const WalletLookup: FC = () => {
                 setLoading(true);
                 //wallet address is valid
                 setAddress(walletAddress);
-                setAddressValid(true)
+                setAddressValid(true);
                 Promise.all([
                     simpleRequest<TokenListResponse<WalletToken[]>>(`https://api.kasplex.org/v1/krc20/address/${walletAddress}/tokenlist`),
                     simpleRequest<WalletTotal>(`https://api.kaspa.org/addresses/${walletAddress}/transactions-count`)
                 ])
                     .then(([krc20Response, transactionCountResponse]): void => {
-
                         const krc20Balances: WalletToken[] = krc20Response.result.map(token => ({
                             ...token,
                             balance: token.balance / Math.pow(10, token.dec),
@@ -79,28 +78,34 @@ const WalletLookup: FC = () => {
                         });
                     })
                     .catch(() => {
-                        addAlert('error', 'Failed to fetch wallet data. Please try again.')
+                        addAlert('error', 'Failed to fetch wallet data. Please try again.');
                     })
                     .finally(() => {
                         setLoading(false);
-                    })
+                    });
             })
             .catch(() => {
-                addAlert('error', 'Failed to fetch wallet data. Is the wallet address correct?')
+                addAlert('error', 'Failed to fetch wallet data. Is the wallet address correct?');
                 setLoading(false);
-                setAddressValid(false)
-            })
-
-        knsService.getAssetsByOwner(walletAddress)
-            .then(response => {
-                if (response.success) {
-                    setKnsAssets(response.data.assets);
-                }
-            })
-            .catch(error => {
-                console.error('Failed to fetch KNS assets:', error);
+                setAddressValid(false);
             });
-    }, [walletAddress])
+
+        // Only fetch KNS assets for testnet addresses
+        if (walletAddress.startsWith('kaspatest:')) {
+            knsService.getAssetsByOwner(walletAddress)
+                .then(response => {
+                    if (response.success) {
+                        setKnsAssets(response.data.assets);
+                    }
+                })
+                .catch(error => {
+                    console.error('Failed to fetch KNS assets:', error);
+                });
+        } else {
+            // Clear any existing KNS assets if not a testnet address
+            setKnsAssets([]);
+        }
+    }, [walletAddress]);
 
     const handleSubmit = (e: string | undefined) => {
         if (e) {
@@ -143,7 +148,10 @@ const WalletLookup: FC = () => {
                                     <TokenBalance walletData={walletData}/>
                                     <TransactionOverview {...transactionData}/>
                                     <UTXOOverview {...utxoData}/>
-                                    <KNSAssetsTab assets={knsAssets}/>
+                                    <KNSAssetsTab 
+                                        assets={knsAssets}
+                                        walletAddress={walletData.address}
+                                    />
                                 </CustomTabs>
                             </CustomTabs>
                             : <>
@@ -152,7 +160,10 @@ const WalletLookup: FC = () => {
                                     <TokenBalance walletData={walletData}/>
                                     <TransactionOverview {...transactionData}/>
                                     <UTXOOverview {...utxoData}/>
-                                    <KNSAssetsTab assets={knsAssets}/>
+                                    <KNSAssetsTab 
+                                        assets={knsAssets}
+                                        walletAddress={walletData.address}
+                                    />
                                 </CustomTabs>
                             </>
                         }
@@ -245,30 +256,41 @@ const TestnetNotice: FC = () => (
     </div>
 );
 
-const KNSAssetsTab: FC<{ assets: KNSAsset[] }> = ({ assets }) => {
+type KNSAssetsTabProps = { 
+    assets: KNSAsset[];
+    walletAddress: string;
+}
+
+const KNSAssetsTab: FC<KNSAssetsTabProps> = ({ assets, walletAddress }) => {
     return (
         <div className="table-wrapper">
             <TestnetNotice />
-            <Table striped bordered hover>
-                <thead>
-                    <tr>
-                        <th>Asset</th>
-                        <th>Type</th>
-                        <th>Verified</th>
-                        <th>Created</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {assets.map((asset) => (
-                        <tr key={asset.id}>
-                            <td>{asset.asset}</td>
-                            <td>{asset.isDomain ? 'Domain' : 'Asset'}</td>
-                            <td>{asset.isVerifiedDomain ? 'Yes' : 'No'}</td>
-                            <td>{new Date(asset.creationBlockTime).toLocaleDateString()}</td>
+            {!walletAddress.startsWith('kaspatest:') ? (
+                <div style={{ textAlign: 'center', padding: '20px' }}>
+                    KNS assets are only available for Testnet addresses (kaspatest:)
+                </div>
+            ) : (
+                <Table striped bordered hover>
+                    <thead>
+                        <tr>
+                            <th>Asset</th>
+                            <th>Type</th>
+                            <th>Verified</th>
+                            <th>Created</th>
                         </tr>
-                    ))}
-                </tbody>
-            </Table>
+                    </thead>
+                    <tbody>
+                        {assets.map((asset) => (
+                            <tr key={asset.id}>
+                                <td>{asset.asset}</td>
+                                <td>{asset.isDomain ? 'Domain' : 'Asset'}</td>
+                                <td>{asset.isVerifiedDomain ? 'Yes' : 'No'}</td>
+                                <td>{new Date(asset.creationBlockTime).toLocaleDateString()}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </Table>
+            )}
         </div>
     );
 };
