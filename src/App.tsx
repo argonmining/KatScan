@@ -6,6 +6,7 @@ import './styles/globals.css'
 import './styles/darkMode.css'
 import {LoadingSpinner, usePageResize} from 'nacho-component-library'
 import {Alerts} from "./components/alerts/Alerts";
+import KNSLookup from './pages/KNSLookup';
 
 /**
  * Lazy loading the pages to improve initial loading time in prod
@@ -64,6 +65,14 @@ const App: FC = () => {
                             <Route
                                 path="/top-holders"
                                 element={<TopKRC20Holders/>}
+                            />
+                            <Route
+                                path="/kns"
+                                element={<KNSLookup/>}
+                            />
+                            <Route
+                                path="/kns/:domain"
+                                element={<KNSLookup/>}
                             />
                             <Route
                                 path="*"

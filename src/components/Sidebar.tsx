@@ -96,6 +96,13 @@ const Sidebar = forwardRef<HTMLDivElement>((_, ref) => {
                                     <FaWallet/> Search Addresses
                                 </NavLink>
                                 <NavLink
+                                    to="/kns"
+                                    className="nav-link"
+                                    onClick={() => setExpanded(false)}
+                                >
+                                    <FaSearch/> Search KNS
+                                </NavLink>
+                                <NavLink
                                     to="/top-holders"
                                     className="nav-link"
                                     onClick={() => setExpanded(false)}
@@ -176,6 +183,10 @@ const Sidebar = forwardRef<HTMLDivElement>((_, ref) => {
                                     {!collapsed && (
                                         <span>Search Addresses</span>
                                     )}
+                                </NavLink>
+                                <NavLink to="/kns" className="nav-link">
+                                    <FaSearch/>{' '}
+                                    {!collapsed && <span>Search KNS</span>}
                                 </NavLink>
                                 <NavLink to="/top-holders" className="nav-link">
                                     <FaUsers/>{' '}
