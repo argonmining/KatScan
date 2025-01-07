@@ -100,7 +100,7 @@ const Sidebar = forwardRef<HTMLDivElement>((_, ref) => {
                                     className="nav-link"
                                     onClick={() => setExpanded(false)}
                                 >
-                                    <FaSearch/> Search KNS
+                                    <FaSearch/> Search KNS Assets
                                 </NavLink>
                                 <NavLink
                                     to="/top-holders"
