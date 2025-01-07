@@ -186,7 +186,7 @@ const Sidebar = forwardRef<HTMLDivElement>((_, ref) => {
                                 </NavLink>
                                 <NavLink to="/kns" className="nav-link">
                                     <FaSearch/>{' '}
-                                    {!collapsed && <span>Search KNS</span>}
+                                    {!collapsed && <span>Search KNS Assets</span>}
                                 </NavLink>
                                 <NavLink to="/top-holders" className="nav-link">
                                     <FaUsers/>{' '}
