@@ -43,7 +43,7 @@ export const knsService = {
    */
   async getDomainOwner(domain: string): Promise<KNSDomainOwnerResponse> {
     try {
-      const response = await fetch(`${KNS_API_BASE}/domain/${encodeURIComponent(domain)}/owner`);
+      const response = await fetch(`${KNS_API_BASE}/${domain}/owner`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
