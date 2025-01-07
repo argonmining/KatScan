@@ -54,55 +54,70 @@ const WalletLookup: FC = () => {
             return;
         }
 
-        simpleRequest<WalletBalance>(`https://api.kaspa.org/addresses/${walletAddress}/balance`)
-            .then(balanceResponse => {
-                setLoading(true);
-                //wallet address is valid
-                setAddress(walletAddress);
-                setAddressValid(true);
-                Promise.all([
-                    simpleRequest<TokenListResponse<WalletToken[]>>(`https://api.kasplex.org/v1/krc20/address/${walletAddress}/tokenlist`),
-                    simpleRequest<WalletTotal>(`https://api.kaspa.org/addresses/${walletAddress}/transactions-count`)
-                ])
-                    .then(([krc20Response, transactionCountResponse]): void => {
-                        const krc20Balances: WalletToken[] = krc20Response.result.map(token => ({
-                            ...token,
-                            balance: token.balance / Math.pow(10, token.dec),
-                        }));
+        setAddress(walletAddress);
 
-                        setWalletData({
-                            address: walletAddress,
-                            krc20Balances,
-                            kaspaBalance: balanceResponse.balance,
-                            transactionCount: transactionCountResponse.total,
-                        });
-                    })
-                    .catch(() => {
-                        addAlert('error', 'Failed to fetch wallet data. Please try again.');
-                    })
-                    .finally(() => {
-                        setLoading(false);
-                    });
-            })
-            .catch(() => {
-                addAlert('error', 'Failed to fetch wallet data. Is the wallet address correct?');
-                setLoading(false);
-                setAddressValid(false);
-            });
-
-        // Only fetch KNS assets for testnet addresses
         if (walletAddress.startsWith('kaspatest:')) {
+            // For testnet addresses, only fetch KNS data and set empty wallet data
+            setLoading(true);
             knsService.getAssetsByOwner(walletAddress)
                 .then(response => {
                     if (response.success) {
                         setKnsAssets(response.data.assets);
                     }
+                    // Set empty wallet data for testnet addresses
+                    setWalletData({
+                        address: walletAddress,
+                        krc20Balances: [],
+                        kaspaBalance: 0,
+                        transactionCount: 0,
+                    });
+                    setAddressValid(true);
                 })
                 .catch(error => {
                     console.error('Failed to fetch KNS assets:', error);
+                    addAlert('error', 'Failed to fetch KNS data. Please try again.');
+                    setAddressValid(false);
+                })
+                .finally(() => {
+                    setLoading(false);
                 });
         } else {
-            // Clear any existing KNS assets if not a testnet address
+            // For mainnet addresses, fetch regular wallet data
+            setLoading(true);
+            simpleRequest<WalletBalance>(`https://api.kaspa.org/addresses/${walletAddress}/balance`)
+                .then(balanceResponse => {
+                    setAddressValid(true);
+                    Promise.all([
+                        simpleRequest<TokenListResponse<WalletToken[]>>(`https://api.kasplex.org/v1/krc20/address/${walletAddress}/tokenlist`),
+                        simpleRequest<WalletTotal>(`https://api.kaspa.org/addresses/${walletAddress}/transactions-count`)
+                    ])
+                        .then(([krc20Response, transactionCountResponse]): void => {
+                            const krc20Balances: WalletToken[] = krc20Response.result.map(token => ({
+                                ...token,
+                                balance: token.balance / Math.pow(10, token.dec),
+                            }));
+
+                            setWalletData({
+                                address: walletAddress,
+                                krc20Balances,
+                                kaspaBalance: balanceResponse.balance,
+                                transactionCount: transactionCountResponse.total,
+                            });
+                        })
+                        .catch(() => {
+                            addAlert('error', 'Failed to fetch wallet data. Please try again.');
+                        })
+                        .finally(() => {
+                            setLoading(false);
+                        });
+                })
+                .catch(() => {
+                    addAlert('error', 'Failed to fetch wallet data. Is the wallet address correct?');
+                    setLoading(false);
+                    setAddressValid(false);
+                });
+
+            // Clear any existing KNS assets for mainnet addresses
             setKnsAssets([]);
         }
     }, [walletAddress]);
