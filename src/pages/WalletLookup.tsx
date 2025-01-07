@@ -221,9 +221,34 @@ export const TokenBalance: FC<TokenBalanceType> = (
     </div>
 }
 
+const TestnetNotice: FC = () => (
+    <div style={{
+        backgroundColor: 'rgba(255, 193, 7, 0.1)',
+        border: '1px solid #ffc107',
+        borderRadius: '4px',
+        padding: '8px 16px',
+        marginBottom: '16px',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '8px'
+    }}>
+        <span style={{
+            backgroundColor: '#ffc107',
+            padding: '2px 8px',
+            borderRadius: '4px',
+            fontSize: '12px',
+            fontWeight: 'bold'
+        }}>
+            TESTNET-10
+        </span>
+        <span>This feature is currently running on Kaspa Testnet-10</span>
+    </div>
+);
+
 const KNSAssetsTab: FC<{ assets: KNSAsset[] }> = ({ assets }) => {
     return (
         <div className="table-wrapper">
+            <TestnetNotice />
             <Table striped bordered hover>
                 <thead>
                     <tr>

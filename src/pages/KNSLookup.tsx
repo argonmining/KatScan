@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, Link } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
 import { FaCopy } from 'react-icons/fa';
 import {
@@ -14,6 +14,30 @@ import { copyToClipboard } from "../services/Helper";
 import { knsService } from "../services/knsService";
 import { addAlert } from "../components/alerts/Alerts";
 import 'styles/WalletLookup.css';
+
+const TestnetNotice: FC = () => (
+    <div style={{
+        backgroundColor: 'rgba(255, 193, 7, 0.1)',
+        border: '1px solid #ffc107',
+        borderRadius: '4px',
+        padding: '8px 16px',
+        marginBottom: '16px',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '8px'
+    }}>
+        <span style={{
+            backgroundColor: '#ffc107',
+            padding: '2px 8px',
+            borderRadius: '4px',
+            fontSize: '12px',
+            fontWeight: 'bold'
+        }}>
+            TESTNET-10
+        </span>
+        <span>This feature is currently running on Kaspa Testnet-10</span>
+    </div>
+);
 
 const KNSLookup: FC = () => {
     const { domain } = useParams();
@@ -69,6 +93,7 @@ const KNSLookup: FC = () => {
                     placeholder={'Enter KNS domain (e.g., example.kas)'}
                     onChangeCallback={setSearchDomain}
                 />
+                <TestnetNotice />
 
                 {loading && <LoadingSpinner />}
 
@@ -80,8 +105,13 @@ const KNSLookup: FC = () => {
                                 <div>{domainData.domain}</div>
 
                                 <strong>Owner:</strong>
-                                <div>
-                                    {domainData.owner}
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                    <Link 
+                                        to={`/wallet/${domainData.owner}`}
+                                        style={{ color: 'inherit', textDecoration: 'underline' }}
+                                    >
+                                        {domainData.owner}
+                                    </Link>
                                     <FaCopy
                                         className="clickable"
                                         onClick={() => copyToClipboard(domainData.owner)}
@@ -89,7 +119,7 @@ const KNSLookup: FC = () => {
                                 </div>
 
                                 <strong>Asset ID:</strong>
-                                <div>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                     {domainData.assetId}
                                     <FaCopy
                                         className="clickable"
