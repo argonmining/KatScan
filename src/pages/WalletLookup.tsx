@@ -23,6 +23,7 @@ import {useTransactions} from "../components/tabs/walletOverview/hooks/useTransa
 import {useUTXOs} from "../components/tabs/walletOverview/hooks/useUTXOs";
 import {UTXOOverview} from "../components/tabs/walletOverview/UTXOOverview";
 import {addAlert} from "../components/alerts/Alerts";
+import { knsService, KNSAsset } from "../services/knsService";
 
 type InternalWalletData = {
     address: string
@@ -46,6 +47,7 @@ const WalletLookup: FC = () => {
 
     const [walletData, setWalletData] = useState<InternalWalletData | null>(null);
     const [loading, setLoading] = useState(false);
+    const [knsAssets, setKnsAssets] = useState<KNSAsset[]>([]);
 
     useEffect(() => {
         if (!walletAddress) {
@@ -89,6 +91,15 @@ const WalletLookup: FC = () => {
                 setAddressValid(false)
             })
 
+        knsService.getAssetsByOwner(walletAddress)
+            .then(response => {
+                if (response.success) {
+                    setKnsAssets(response.data.assets);
+                }
+            })
+            .catch(error => {
+                console.error('Failed to fetch KNS assets:', error);
+            });
     }, [walletAddress])
 
     const handleSubmit = (e: string | undefined) => {
@@ -128,18 +139,20 @@ const WalletLookup: FC = () => {
                         {isMobile
                             ? <CustomTabs titles={mobileTabs}>
                                 <WalletCard walletData={walletData}/>
-                                <CustomTabs titles={['KRC20 Tokens', 'Recent Transactions', 'UTXOs']}>
+                                <CustomTabs titles={['KRC20 Tokens', 'Recent Transactions', 'UTXOs', 'KNS Assets']}>
                                     <TokenBalance walletData={walletData}/>
                                     <TransactionOverview {...transactionData}/>
                                     <UTXOOverview {...utxoData}/>
+                                    <KNSAssetsTab assets={knsAssets}/>
                                 </CustomTabs>
                             </CustomTabs>
                             : <>
                                 <WalletCard walletData={walletData}/>
-                                <CustomTabs titles={['KRC20 Tokens', 'Recent Transactions', 'UTXOs']}>
+                                <CustomTabs titles={['KRC20 Tokens', 'Recent Transactions', 'UTXOs', 'KNS Assets']}>
                                     <TokenBalance walletData={walletData}/>
                                     <TransactionOverview {...transactionData}/>
                                     <UTXOOverview {...utxoData}/>
+                                    <KNSAssetsTab assets={knsAssets}/>
                                 </CustomTabs>
                             </>
                         }
@@ -207,3 +220,30 @@ export const TokenBalance: FC<TokenBalanceType> = (
         </Table>
     </div>
 }
+
+const KNSAssetsTab: FC<{ assets: KNSAsset[] }> = ({ assets }) => {
+    return (
+        <div className="table-wrapper">
+            <Table striped bordered hover>
+                <thead>
+                    <tr>
+                        <th>Asset</th>
+                        <th>Type</th>
+                        <th>Verified</th>
+                        <th>Created</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {assets.map((asset) => (
+                        <tr key={asset.id}>
+                            <td>{asset.asset}</td>
+                            <td>{asset.isDomain ? 'Domain' : 'Asset'}</td>
+                            <td>{asset.isVerifiedDomain ? 'Yes' : 'No'}</td>
+                            <td>{new Date(asset.creationBlockTime).toLocaleDateString()}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </Table>
+        </div>
+    );
+};
