@@ -159,26 +159,26 @@ const WalletLookup: FC = () => {
                         {isMobile
                             ? <CustomTabs titles={mobileTabs}>
                                 <WalletCard walletData={walletData}/>
-                                <CustomTabs titles={['KRC20 Tokens', 'Recent Transactions', 'UTXOs', 'KNS Assets']}>
+                                <CustomTabs titles={['KRC20 Tokens', 'KNS Assets', 'Recent Transactions', 'UTXOs']}>
                                     <TokenBalance walletData={walletData}/>
-                                    <TransactionOverview {...transactionData}/>
-                                    <UTXOOverview {...utxoData}/>
                                     <KNSAssetsTab 
                                         assets={knsAssets}
                                         walletAddress={walletData.address}
                                     />
+                                    <TransactionOverview {...transactionData}/>
+                                    <UTXOOverview {...utxoData}/>
                                 </CustomTabs>
                             </CustomTabs>
                             : <>
                                 <WalletCard walletData={walletData}/>
-                                <CustomTabs titles={['KRC20 Tokens', 'Recent Transactions', 'UTXOs', 'KNS Assets']}>
+                                <CustomTabs titles={['KRC20 Tokens', 'KNS Assets', 'Recent Transactions', 'UTXOs']}>
                                     <TokenBalance walletData={walletData}/>
-                                    <TransactionOverview {...transactionData}/>
-                                    <UTXOOverview {...utxoData}/>
                                     <KNSAssetsTab 
                                         assets={knsAssets}
                                         walletAddress={walletData.address}
                                     />
+                                    <TransactionOverview {...transactionData}/>
+                                    <UTXOOverview {...utxoData}/>
                                 </CustomTabs>
                             </>
                         }
