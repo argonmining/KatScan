@@ -31,8 +31,6 @@ type HeaderType = (keyof TokenData | 'image' | 'action' | 'mintState' | 'mintPro
 
 const header: HeaderType[] = ['image', 'action', 'tick', 'mintState', 'state', 'max', 'pre', 'minted', 'mintProgress', 'mtsAdd']
 
-const params = {limit: 4000}
-
 const TokenOverview: FC = () => {
     const {isMobile} = useMobile()
     const [sortField, setSortField] = useState<keyof TokenData | ''>('');
@@ -42,8 +40,7 @@ const TokenOverview: FC = () => {
     const [statusFilter, setStatusFilter] = useState('');
 
     const {data, loading} = useFetch<TokenData[]>({
-        url: '/token/tokenlist',
-        params
+        url: '/token/tokenlist'
     })
 
     const handleSort = (field: keyof TokenData): void => {
