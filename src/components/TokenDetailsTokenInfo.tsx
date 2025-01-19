@@ -1,15 +1,15 @@
 import React, {FC} from "react";
 import {Card} from "react-bootstrap";
 import {SmallThumbnail, Thumbnail} from "nacho-component-library";
-import {iconBaseUrl} from "../utils/StaticVariables";
+import {iconBaseUrl, katscanStaticUrl} from "../utils/StaticVariables";
 import {formatNumber, parseRawNumber} from "../services/Helper";
 import {Link} from "react-router-dom";
-import {TokenSearchResult} from "../interfaces/TokenData";
+import {TokenData} from "../interfaces/TokenData";
 import {Socials} from "../pages/TokenDetail";
 
 interface Props {
-    tokenData: TokenSearchResult
-    socials: Socials[]
+    tokenData: TokenData
+    socials: Socials
 }
 
 export const TokenDetailsTokenInfo: FC<Props> = (
@@ -22,13 +22,15 @@ export const TokenDetailsTokenInfo: FC<Props> = (
     const getIcon = (type: string) => {
         switch (type) {
             case 'twitter':
-                return <SmallThumbnail src={"https://kas.fyi/media/svg/brand-logos/twitter.svg"} alt={'twitter'}/>
+                return <SmallThumbnail src={`${katscanStaticUrl}/twitter.svg`} alt={'twitter'}/>
             case 'discord':
-                return <SmallThumbnail src={"https://kas.fyi/media/svg/brand-logos/discord.svg"} alt={'discord'}/>
+                return <SmallThumbnail src={`${katscanStaticUrl}/discord.svg`} alt={'discord'}/>
             case 'telegram':
-                return <SmallThumbnail src={"https://kas.fyi/media/svg/brand-logos/telegram.svg"} alt={'telegram'}/>
+                return <SmallThumbnail src={`${katscanStaticUrl}/telegram.svg`} alt={'telegram'}/>
             default:
-                return <SmallThumbnail src={`${iconBaseUrl}${tokenData.tick}.jpg`} alt={'website'}/>
+                return <SmallThumbnail
+                    src={`${katscanStaticUrl}${tokenData.logo.replace("krc20-logos", 'krc20-thumbnails')}`}
+                    alt={'website'}/>
         }
     }
 
@@ -68,9 +70,9 @@ export const TokenDetailsTokenInfo: FC<Props> = (
                 <div className="token-info-socials">
                     <span className="token-info-label">Socials</span>
                     <div className={'token-info-socials-wrapper'}>
-                        {socials.map(single =>
-                            <Link key={single.type} to={single.url}>
-                                {getIcon(single.type)}
+                        {Object.entries(socials).map(([type, url]) =>
+                            <Link key={type} to={url}>
+                                {getIcon(type)}
                             </Link>
                         )}
                     </div>

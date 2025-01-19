@@ -12,18 +12,16 @@ export type TokenData = {
     hashRev: string
     mtsAdd: number
     logo: string
-}
-
-export type TokenSearchResult = TokenData & {
     holderTotal: number
     transferTotal: number
     mintTotal: number
-    holder: Holder[]
+    socials: string | null
 }
 
-type Holder = {
+
+export type TokenHolder = {
     address: string
-    amount: number
+    balance: number
 }
 
 export type TopHolder = {

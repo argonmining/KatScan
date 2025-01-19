@@ -1,16 +1,18 @@
 import React, {FC, useMemo} from "react";
 import {parseRawNumber} from "../../../services/Helper";
-import {TokenSearchResult} from "../../../interfaces/TokenData";
+import {TokenData, TokenHolder} from "../../../interfaces/TokenData";
 import 'styles/tokendetail/HolderDistribution.css'
 import {DivChart} from "nacho-component-library";
 
 type Props = {
-    tokenData: TokenSearchResult | null
+    tokenData: TokenData | null
+    tokenHolder: TokenHolder[]
 }
 
 export const HolderDistribution: FC<Props> = (
     {
-        tokenData
+        tokenData,
+        tokenHolder
     }
 ) => {
     const holderDistribution = useMemo(() => {
@@ -18,7 +20,7 @@ export const HolderDistribution: FC<Props> = (
             return []
         }
 
-        if (tokenData.holder.length === 0) {
+        if (tokenHolder.length === 0) {
             return [
                 {
                     label: 'Other Holders',
@@ -26,7 +28,7 @@ export const HolderDistribution: FC<Props> = (
                 }
             ];
         }
-        const holders = tokenData.holder
+        const holders = tokenHolder
         const decimals = tokenData.dec
         const maxSupply = tokenData.max
 
@@ -40,7 +42,7 @@ export const HolderDistribution: FC<Props> = (
 
         holders.slice(0, 50).forEach((holder, index) => {
             const groupIndex = Math.floor(index / 10);
-            groups[groupIndex].total += parseRawNumber(holder.amount.toString(), decimals);
+            groups[groupIndex].total += parseRawNumber(holder.balance, decimals);
         });
 
         const top50Total = groups.reduce((sum, group) => sum + group.total, 0);
@@ -56,7 +58,7 @@ export const HolderDistribution: FC<Props> = (
                 percentage: (otherHoldersTotal / parseRawNumber(maxSupply.toString(), decimals)) * 100,
             }
         ];
-    }, [tokenData]);
+    }, [tokenData, tokenHolder]);
 
     return <div className="holder-distribution">
         <DivChart data={holderDistribution} groupLabel={'Holder Group'}/>

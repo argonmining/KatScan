@@ -1,12 +1,12 @@
 import React, {FC} from "react";
-import {TokenSearchResult} from "../../interfaces/TokenData";
+import {TokenData, TokenHolder} from "../../interfaces/TokenData";
 import {LinkWithTooltip} from "nacho-component-library";
 import {formatNumber, parseRawNumber, shortenString} from "../../services/Helper";
 import 'styles/components/MobileTable.css'
 
 type MobileHolderTable = {
-    data: TokenSearchResult['holder'];
-    tokenData: TokenSearchResult;
+    data: TokenHolder[];
+    tokenData: TokenData;
 }
 
 export const MobileHolderTable: FC<MobileHolderTable> = (
@@ -33,11 +33,11 @@ export const MobileHolderTable: FC<MobileHolderTable> = (
                         </LinkWithTooltip>
                     </div>
                     <div className="mobile-table-cell">
-                        <strong>Amount:</strong> {formatNumber(parseRawNumber(item.amount, tokenData.dec), tokenData.dec)}
+                        <strong>Amount:</strong> {formatNumber(parseRawNumber(item.balance, tokenData.dec), tokenData.dec)}
                     </div>
                     <div className="mobile-table-cell">
                         <strong>% of Total Supply:</strong>
-                        {((parseRawNumber(item.amount, tokenData.dec) / parseRawNumber(tokenData.max, tokenData.dec)) * 100).toFixed(2)}%
+                        {((parseRawNumber(item.balance, tokenData.dec) / parseRawNumber(tokenData.max, tokenData.dec)) * 100).toFixed(2)}%
                     </div>
                 </>
             </div>

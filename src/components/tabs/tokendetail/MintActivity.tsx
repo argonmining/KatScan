@@ -1,6 +1,6 @@
 import React, {Dispatch, FC, SetStateAction, useEffect} from "react";
 
-import {TokenSearchResult} from "../../../interfaces/TokenData";
+import {TokenData} from "../../../interfaces/TokenData";
 import Chart from "react-apexcharts";
 import {ApexOptions} from "apexcharts";
 import {simpleRequest} from "nacho-component-library";
@@ -11,7 +11,7 @@ export type MintOvertimeType = {
 }
 
 type Props = {
-    tokenData: TokenSearchResult
+    tokenData: TokenData
     mintActivityData: MintOvertimeType[]
     setMintActivityData: Dispatch<SetStateAction<MintOvertimeType[]>>
 }

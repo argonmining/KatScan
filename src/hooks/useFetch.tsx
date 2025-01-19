@@ -8,7 +8,7 @@ import {sortComparison} from "../services/Helper";
 
 type Props = {
     url: string
-    defaultValue?: never[] | Record<string, unknown>
+    defaultValue?: never[] | Record<string, unknown> | null
     errorMessage?: string
     successMessage?: string
     params?: Record<string, string | number>
@@ -73,6 +73,9 @@ export function useFetch<T>(
 
     useEffect(() => {
         if (!internalUrl || avoidLoading) {
+            if (avoidLoading){
+                setLoading(false)
+            }
             return
         }
         const unique = loadingRef.current = generateUniqueID()

@@ -108,8 +108,12 @@ const TokenOverview: FC = () => {
                     if (aPercentage > bPercentage) return sortDirection === 'asc' ? 1 : -1;
                     return 0;
                 } else {
-                    if (a[sortField] < b[sortField]) return sortDirection === 'asc' ? -1 : 1;
-                    if (a[sortField] > b[sortField]) return sortDirection === 'asc' ? 1 : -1;
+                    if (a[sortField] === null || b[sortField] === null) {
+                        return 0
+                    }
+                    if (a[sortField]! < b[sortField]!) return sortDirection === 'asc' ? -1 : 1;
+                    if (a[sortField]! > b[sortField]!) return sortDirection === 'asc' ? 1 : -1;
+
                     return 0;
                 }
             });
@@ -186,7 +190,7 @@ const TokenOverview: FC = () => {
                     <div style={{width: '30px', overflow: 'hidden'}}>
                         <Link to={`/tokens/${token.tick}`} className="token-ticker">
                             <SmallThumbnail
-                                src={`${katscanStaticUrl}${token.logo}`}
+                                src={`${katscanStaticUrl}${token.logo.replace("krc20-logos", 'krc20-thumbnails')}`}
                                 alt={token.tick}
                                 loading="lazy"
                             />

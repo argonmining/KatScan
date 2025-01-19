@@ -1,5 +1,5 @@
 import React, {FC} from "react";
-import {TokenSearchResult} from "../../interfaces/TokenData";
+import {TokenData} from "../../interfaces/TokenData";
 import {OpTransactionData} from "../../interfaces/OpTransactionData";
 import {LinkWithTooltip} from "nacho-component-library";
 import {formatDateTime, formatNumber, parseRawNumber, shortenString} from "../../services/Helper";
@@ -7,7 +7,7 @@ import 'styles/components/MobileTable.css'
 
 type MobileOperationsTable = {
     data: OpTransactionData[]
-    tokenData: TokenSearchResult
+    tokenData: TokenData
 }
 export const MobileOperationsTable: FC<MobileOperationsTable> = (
     {
