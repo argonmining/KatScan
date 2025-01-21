@@ -105,11 +105,15 @@ const TokenOverview: FC = () => {
                     if (aPercentage > bPercentage) return sortDirection === 'asc' ? 1 : -1;
                     return 0;
                 } else {
-                    if (a[sortField] === null || b[sortField] === null) {
+                    if (!a[sortField] || !b[sortField]) {
                         return 0
                     }
-                    if (a[sortField]! < b[sortField]!) return sortDirection === 'asc' ? -1 : 1;
-                    if (a[sortField]! > b[sortField]!) return sortDirection === 'asc' ? 1 : -1;
+                    if ((a[sortField] as number) < (b[sortField] as number)) {
+                        return sortDirection === 'asc' ? -1 : 1
+                    }
+                    if ((a[sortField] as number) > (b[sortField] as number)) {
+                        return sortDirection === 'asc' ? 1 : -1
+                    }
 
                     return 0;
                 }
