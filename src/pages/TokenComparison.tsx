@@ -18,7 +18,7 @@ import 'styles/TokenComparison.css';
 import {FaChartBar, FaChartPie, FaUsers} from 'react-icons/fa'; // Import icons
 import {censorTicker} from '../utils/censorTicker';
 import {JsonLd, LoadingSpinner, Page, SEO} from "nacho-component-library";
-import {TokenData, TokenSearchResult} from "../interfaces/TokenData";
+import {TokenData, TokenHolder} from "../interfaces/TokenData";
 import {addAlert} from "../components/alerts/Alerts";
 import {CustomSelect, Selection} from "../components/select/CustomSelect";
 import {useFetch} from "../hooks/useFetch";
@@ -33,7 +33,7 @@ ChartJS.register(
     Legend,
     LogarithmicScale
 );
-type TokenInternal = TokenSearchResult & {
+type TokenInternal = TokenHolder & {
     top10HoldersPercentage: number
     top50HoldersPercentage: number
     totalHolders: number
@@ -71,7 +71,7 @@ const TokenComparison: FC = () => {
         return parseFloat(value.toString()) / Math.pow(10, parseInt(decimals.toString()));
     }, []);
 
-    const calculateHolderPercentages = useCallback((token: TokenSearchResult) => {
+    const calculateHolderPercentages = useCallback((token: TokenHolder) => {
         if (!token.holder || !Array.isArray(token.holder) || token.holder.length === 0) {
             console.warn(`No holder data for token: ${token.tick}`);
             return {

@@ -1,8 +1,8 @@
 export type TokenData = {
     tick: string
     max: number
-    lim: string
-    pre: string
+    lim: number
+    pre: number
     to: string
     dec: number
     minted: number
@@ -10,23 +10,22 @@ export type TokenData = {
     opScoreMod: string
     state: string
     hashRev: string
-    mtsAdd: string
+    mtsAdd: number
     logo: string
+    holderTotal: number
+    transferTotal: number
+    mintTotal: number
+    socials?: string
 }
 
-export type TokenSearchResult = TokenData & {
-    holderTotal: string
-    transferTotal: string
-    mintTotal: string
-    holder: Holder[]
-}
 
-type Holder = {
+export type TokenHolder = {
     address: string
-    amount: number
+    balance: number
 }
 
 export type TopHolder = {
     address: string
-    balances: { tick: string, balance: string }[]
+    balances: { tick: string, amount: number }[]
+    tokenCount: number
 }

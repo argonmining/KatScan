@@ -4,12 +4,12 @@ import {formatDateTime, formatNumber, parseRawNumber} from "../../../services/He
 import {Table} from "react-bootstrap";
 import {LinkWithTooltip, useMobile} from "nacho-component-library";
 import {OpTransactionData} from "../../../interfaces/OpTransactionData";
-import {TokenSearchResult} from "../../../interfaces/TokenData";
+import {TokenData} from "../../../interfaces/TokenData";
 import {getTokenOperations} from "../../../services/dataService";
 import {addAlert} from "../../alerts/Alerts";
 
 type Props = {
-    tokenData: TokenSearchResult
+    tokenData: TokenData
     tokenId: string | undefined
     operations: OpTransactionData[]
     setOperations: Dispatch<SetStateAction<OpTransactionData[]>>

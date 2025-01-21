@@ -13,7 +13,7 @@ import {
     useMobile
 } from "nacho-component-library";
 import {Link} from "react-router-dom";
-import {katscanApiUrl} from "../utils/StaticVariables";
+import {katscanStaticUrl} from "../utils/StaticVariables";
 import {TokenActions} from "../components/TokenActions";
 import {censorTicker} from "../utils/censorTicker";
 import {formatNumber} from "../services/Helper";
@@ -31,8 +31,6 @@ type HeaderType = (keyof TokenData | 'image' | 'action' | 'mintState' | 'mintPro
 
 const header: HeaderType[] = ['image', 'action', 'tick', 'mintState', 'state', 'max', 'pre', 'minted', 'mintProgress', 'mtsAdd']
 
-const params = {limit: 4000}
-
 const TokenOverview: FC = () => {
     const {isMobile} = useMobile()
     const [sortField, setSortField] = useState<keyof TokenData | ''>('');
@@ -42,8 +40,7 @@ const TokenOverview: FC = () => {
     const [statusFilter, setStatusFilter] = useState('');
 
     const {data, loading} = useFetch<TokenData[]>({
-        url: '/token/tokenlist',
-        params
+        url: '/token/tokenlist'
     })
 
     const handleSort = (field: keyof TokenData): void => {
@@ -87,7 +84,7 @@ const TokenOverview: FC = () => {
         // Filter by launch type
         if (launchTypeFilter) {
             result = result.filter(token =>
-                (token.pre === '0' ? 'Fair Mint' : 'Pre-Mint') === launchTypeFilter
+                (token.pre === 0 ? 'Fair Mint' : 'Pre-Mint') === launchTypeFilter
             );
         }
 
@@ -108,8 +105,16 @@ const TokenOverview: FC = () => {
                     if (aPercentage > bPercentage) return sortDirection === 'asc' ? 1 : -1;
                     return 0;
                 } else {
-                    if (a[sortField] < b[sortField]) return sortDirection === 'asc' ? -1 : 1;
-                    if (a[sortField] > b[sortField]) return sortDirection === 'asc' ? 1 : -1;
+                    if (!a[sortField] || !b[sortField]) {
+                        return 0
+                    }
+                    if ((a[sortField] as number) < (b[sortField] as number)) {
+                        return sortDirection === 'asc' ? -1 : 1
+                    }
+                    if ((a[sortField] as number) > (b[sortField] as number)) {
+                        return sortDirection === 'asc' ? 1 : -1
+                    }
+
                     return 0;
                 }
             });
@@ -143,12 +148,12 @@ const TokenOverview: FC = () => {
         return `(${formattedPercentage}%)`
     };
 
-    const getBadgeClass = (preMint: string): string => {
-        return preMint === '0' ? 'badge badge-fair-mint' : 'badge badge-pre-mint';
+    const getBadgeClass = (preMint: number): string => {
+        return preMint === 0 ? 'badge badge-fair-mint' : 'badge badge-pre-mint';
     };
 
-    const formatPreMinted = (preMinted: string, max: number, decimals: number): string => {
-        const value = calculateValue(parseInt(preMinted), decimals);
+    const formatPreMinted = (preMinted: number, max: number, decimals: number): string => {
+        const value = calculateValue(preMinted, decimals);
         if (value === 0) return "None";
         return `${formatNumber(value)} ${formatPercentage(value, calculateValue(max, decimals))}`;
     };
@@ -186,7 +191,7 @@ const TokenOverview: FC = () => {
                     <div style={{width: '30px', overflow: 'hidden'}}>
                         <Link to={`/tokens/${token.tick}`} className="token-ticker">
                             <SmallThumbnail
-                                src={`${katscanApiUrl}/logos/${token.tick.toUpperCase()}`}
+                                src={`${katscanStaticUrl}${token.logo.replace("krc20-logos", 'krc20-thumbnails')}`}
                                 alt={token.tick}
                                 loading="lazy"
                             />
@@ -204,7 +209,7 @@ const TokenOverview: FC = () => {
             case "mintState":
                 return (
                     <span className={getBadgeClass(token.pre)}>
-                        {token.pre === '0' ? 'Fair Mint' : 'Pre-Mint'}
+                        {token.pre === 0 ? 'Fair Mint' : 'Pre-Mint'}
                     </span>
                 );
             case "state":

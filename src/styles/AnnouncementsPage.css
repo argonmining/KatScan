@@ -1,0 +1,10 @@
+.announcements-page{
+    .list {
+        .list-item {
+            padding: 10px 0;
+            .list-column {
+                text-wrap: initial !important;
+            }
+        }
+    }
+}

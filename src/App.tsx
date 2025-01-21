@@ -6,6 +6,7 @@ import './styles/globals.css'
 import './styles/darkMode.css'
 import {LoadingSpinner, usePageResize} from 'nacho-component-library'
 import {Alerts} from "./components/alerts/Alerts";
+import {Announcements} from "./components/announcements/Announcements";
 
 /**
  * Lazy loading the pages to improve initial loading time in prod
@@ -20,6 +21,8 @@ const MintHeatmap = lazy(() => import('./pages/MintHeatmap'))
 const MarketCapCalculator = lazy(() =>import('./pages/MarketCapCalculator'))
 const TopKRC20Holders = lazy(() => import('./pages/TopKRC20Holders'))
 const StructuredData = lazy(() => import('./pages/StructuredData'))
+const AnnouncementsPage = lazy(() => import('./pages/AnnouncementsPage'))
+const WhitelistPage = lazy(() => import('./pages/WhitelistPage'))
 
 const App: FC = () => {
     const elementRef = useRef<HTMLDivElement | null>(null)
@@ -30,6 +33,7 @@ const App: FC = () => {
             <div className="App">
                 <div id={'portal-container'}/>
                 <Alerts/>
+                <Announcements/>
                 <Sidebar ref={elementRef} />
                 <div className="main-content" style={styling}>
                     <Suspense fallback={<LoadingSpinner/>}>
@@ -64,6 +68,14 @@ const App: FC = () => {
                             <Route
                                 path="/top-holders"
                                 element={<TopKRC20Holders/>}
+                            />
+                            <Route
+                                path="/announcements"
+                                element={<AnnouncementsPage/>}
+                            />
+                            <Route
+                                path="/whitelist"
+                                element={<WhitelistPage/>}
                             />
                             <Route
                                 path="*"

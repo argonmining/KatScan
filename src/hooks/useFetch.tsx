@@ -4,13 +4,16 @@ import {addAlert} from "../components/alerts/Alerts";
 import {emptyArray, katscanApiUrl} from "../utils/StaticVariables";
 import {generateUniqueID} from "web-vitals/dist/modules/lib/generateUniqueID";
 import {KatscanResponse} from "../interfaces/ApiResponseTypes";
+import {sortComparison} from "../services/Helper";
 
 type Props = {
     url: string
-    defaultValue?: never[] | Record<string, unknown>
+    defaultValue?: never[] | Record<string, unknown> | null
     errorMessage?: string
     successMessage?: string
     params?: Record<string, string | number>
+    avoidLoading?: boolean
+    sort?: [string, 'asc' | 'desc']
 }
 type GETFetch = Props & {
     method?: 'GET'
@@ -46,7 +49,9 @@ export function useFetch<T>(
         successMessage,
         method = 'GET',
         params,
-        body
+        body,
+        avoidLoading,
+        sort
     }: UseFetch
 ): Return<T> {
     const [data, setData] = useState<T>(defaultValue as T)
@@ -55,8 +60,22 @@ export function useFetch<T>(
     const [error, setError] = useState(false)
     const loadingRef = useRef<string>()
 
-    useEffect(() => {
+    const internalUrl = useMemo(() => {
         if (!url) {
+            return
+        }
+        if (url.includes('http') || !url.startsWith('/')) {
+            // url is not a subpath, we use the given url
+            return url
+        }
+        return `${katscanApiUrl}${url}`
+    }, [url])
+
+    useEffect(() => {
+        if (!internalUrl || avoidLoading) {
+            if (avoidLoading){
+                setLoading(false)
+            }
             return
         }
         const unique = loadingRef.current = generateUniqueID()
@@ -76,7 +95,7 @@ export function useFetch<T>(
 
         void sendRequest<KatscanResponse<T>>({
             method,
-            url: url.includes('http') ? url : `${katscanApiUrl}${url}`,
+            url: internalUrl,
             body,
             params: internalParams
         })
@@ -85,7 +104,15 @@ export function useFetch<T>(
                     //return, the response is not valid because a new request was made
                     return
                 }
-                setData(result.result)
+                if (sort && Array.isArray(result.result)) {
+                    if (typeof result.result[0] === 'object') {
+                        setData(result.result.sort((a: Record<string, string | number>, b: Record<string, string | number>) => sortComparison(a[sort[0]], b[sort[0]], sort[1])))
+                    } else {
+                        setData(result.result.sort((a, b) => sortComparison(a, b, sort[1])))
+                    }
+                } else {
+                    setData(result.result)
+                }
                 setCursor(result.cursor)
                 if (successMessage) {
                     addAlert('success', successMessage)
@@ -100,7 +127,7 @@ export function useFetch<T>(
                 }
                 setLoading(false)
             })
-    }, [body, errorMessage, method, params, successMessage, url])
+    }, [avoidLoading, body, errorMessage, internalUrl, method, params, sort, successMessage])
 
     return useMemo(() => ({
         data,

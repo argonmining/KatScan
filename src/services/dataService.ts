@@ -1,4 +1,4 @@
-import {TokenData, TokenSearchResult} from "../interfaces/TokenData";
+import {TokenData, TokenHolder} from "../interfaces/TokenData";
 import {sendRequest, simpleRequest} from "nacho-component-library";
 import {
     KatscanResponse,
@@ -7,14 +7,14 @@ import {
     TokenListResponse
 } from "../interfaces/ApiResponseTypes";
 import {OpTransactionData} from "../interfaces/OpTransactionData";
-import {katscanApiUrl, katscanBaseUrl} from "../utils/StaticVariables";
+import {katscanApiUrl} from "../utils/StaticVariables";
 
 const BASE_URL = 'https://api.kasplex.org/v1';
 
 // Simulating an API call to fetch token details
-export const getTokenDetails = async (tick: string): Promise<KatscanResponse<TokenSearchResult>> => {
+export const getTokenDetails = async (tick: string): Promise<KatscanResponse<TokenHolder>> => {
     try {
-        return await simpleRequest<KatscanResponse<TokenSearchResult>>(`${katscanBaseUrl}/api/token/${tick}`)
+        return await simpleRequest<KatscanResponse<TokenHolder>>(`${katscanApiUrl}/token/detail/${tick}`)
     } catch (error) {
         console.error('Error fetching token details:', error);
         throw error;
@@ -113,10 +113,10 @@ export const getMintOperations = async (tick: string, limit = 50, cursor = null)
 };
 
 // Add this new function to fetch detailed token information
-export const getDetailedTokenInfo = async (tick: string): Promise<TokenSearchResult> => {
+export const getDetailedTokenInfo = async (tick: string): Promise<TokenData> => {
     try {
-        const response = await simpleRequest<ResultResponse<TokenSearchResult[]>>(`${BASE_URL}/krc20/token/${tick}`);
-        return response.result[0];
+        const response = await simpleRequest<ResultResponse<TokenData>>(`${katscanApiUrl}/token/detail/${tick}`);
+        return response.result;
     } catch (error) {
         console.error('Error fetching detailed token information:', error);
         throw error;

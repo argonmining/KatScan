@@ -15,7 +15,7 @@ import {getDetailedTokenInfo} from '../services/dataService';
 import {CryptoSearch, getCryptoData, searchCryptos} from '../services/coingeckoService';
 import 'styles/MarketCapCalculator.css';
 import {censorTicker} from '../utils/censorTicker';
-import {TokenData, TokenSearchResult} from "../interfaces/TokenData";
+import {TokenData} from "../interfaces/TokenData";
 import {CoinbaseInfo} from "../interfaces/CoinbaseInfo";
 import {formatInteger, formatNumber} from "../services/Helper";
 import {JsonLd, LoadingSpinner, NormalCard, Page, SEO} from "nacho-component-library";
@@ -25,8 +25,8 @@ import {CustomSelect, Selection} from "../components/select/CustomSelect";
 
 type CalculationResult = {
     krc20Token: {
-        holderTotal: string
-    } & TokenSearchResult,
+        holderTotal: number
+    } & TokenData,
     crypto: {
         maxSupply: CoinbaseInfo['market_data']['max_supply'],
         marketCap: CoinbaseInfo['market_data']['market_cap']['usd'],
@@ -57,7 +57,7 @@ const MarketCapCalculator: FC = () => {
     const [selectedCrypto, setSelectedCrypto] = useState<CryptoSearch | null>(null);
     const [calculationResult, setCalculationResult] = useState<CalculationResult | null>(null);
     const [isLoading, setIsLoading] = useState(false);
-    const [detailedTokenInfo, setDetailedTokenInfo] = useState<TokenSearchResult | null>(null);
+    const [detailedTokenInfo, setDetailedTokenInfo] = useState<TokenData | null>(null);
     const {data} = useFetch<TokenData['tick'][]>({
         url: '/token/tickers'
     })
@@ -108,7 +108,7 @@ const MarketCapCalculator: FC = () => {
             const load = async () => {
                 try {
                     const cryptoData = await getCryptoData(selectedCrypto.value);
-                    const krc20Supply = parseFloat(String(detailedTokenInfo.max)) / Math.pow(10, parseInt(String(detailedTokenInfo.dec) || '0'));
+                    const krc20Supply = detailedTokenInfo.max / Math.pow(10, detailedTokenInfo.dec);
                     const cryptoMarketCap = cryptoData.market_data.market_cap.usd;
                     const calculatedPrice = cryptoMarketCap / krc20Supply;
 
