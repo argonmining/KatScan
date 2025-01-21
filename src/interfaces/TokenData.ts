@@ -15,7 +15,7 @@ export type TokenData = {
     holderTotal: number
     transferTotal: number
     mintTotal: number
-    socials: string | null
+    socials?: string
 }
 
 
