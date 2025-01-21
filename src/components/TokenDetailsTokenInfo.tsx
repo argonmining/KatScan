@@ -1,7 +1,7 @@
 import React, {FC} from "react";
 import {Card} from "react-bootstrap";
 import {SmallThumbnail, Thumbnail} from "nacho-component-library";
-import {iconBaseUrl, katscanStaticUrl} from "../utils/StaticVariables";
+import {katscanStaticUrl} from "../utils/StaticVariables";
 import {formatNumber, parseRawNumber} from "../services/Helper";
 import {Link} from "react-router-dom";
 import {TokenData} from "../interfaces/TokenData";
@@ -29,7 +29,7 @@ export const TokenDetailsTokenInfo: FC<Props> = (
                 return <SmallThumbnail src={`${katscanStaticUrl}/telegram.svg`} alt={'telegram'}/>
             default:
                 return <SmallThumbnail
-                    src={`${katscanStaticUrl}${tokenData.logo.replace("krc20-logos", 'krc20-thumbnails')}`}
+                    src={`${katscanStaticUrl}/thumbnails${tokenData.logo}`}
                     alt={'website'}/>
         }
     }
@@ -38,7 +38,9 @@ export const TokenDetailsTokenInfo: FC<Props> = (
         <Card.Body>
             <div className="token-info-grid">
                 <div className="token-info-item-image">
-                    <Thumbnail src={`${iconBaseUrl}${tokenData.tick}.jpg`} alt={`${tokenData.tick}.jpg`}/>
+                    {tokenData.logo &&
+                        <Thumbnail src={`${katscanStaticUrl}/logos${tokenData.logo}`} alt={`${tokenData.tick}.jpg`}/>
+                    }
                 </div>
                 <div className="token-info-item">
                     <span className="token-info-label">Max Supply</span>
