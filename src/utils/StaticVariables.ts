@@ -3,6 +3,6 @@ export const katscanBaseUrl = process.env.REACT_APP_BASE_URL ?? 'https://katapi.
 // for dev purpose:
 // export const katscanBaseUrl = process.env.REACT_APP_BASE_URL ?? 'https://devkatapi.nachowyborski.xyz'
 export const katscanApiUrl = `${katscanBaseUrl}/api`
-export const katscanStaticUrl = `152.53.38.82/static`
+export const katscanStaticUrl = `https://152.53.38.82/static`
 
 export const emptyArray = []
