@@ -1,11 +1,11 @@
-import React, { FC } from "react";
-import { Card } from "react-bootstrap";
-import { SmallThumbnail, Thumbnail } from "nacho-component-library";
-import { katscanStaticUrl } from "../utils/StaticVariables";
-import { formatNumber, parseRawNumber } from "../services/Helper";
-import { Link } from "react-router-dom";
-import { TokenData } from "../interfaces/TokenData";
-import { Socials } from "../pages/TokenDetail";
+import React, {FC} from "react";
+import {Card} from "react-bootstrap";
+import {SmallThumbnail, Thumbnail} from "nacho-component-library";
+import {katscanStaticUrl} from "../utils/StaticVariables";
+import {formatNumber, parseRawNumber} from "../services/Helper";
+import {Link} from "react-router-dom";
+import {TokenData} from "../interfaces/TokenData";
+import {Socials} from "../pages/TokenDetail";
 
 interface Props {
     tokenData: TokenData
@@ -22,15 +22,15 @@ export const TokenDetailsTokenInfo: FC<Props> = (
     const getIcon = (type: string) => {
         switch (type) {
             case 'twitter':
-                return <SmallThumbnail src={`${katscanStaticUrl}/twitter.svg`} alt={'twitter'} />
+                return <SmallThumbnail src={`${katscanStaticUrl}/twitter.svg`} alt={'twitter'}/>
             case 'discord':
-                return <SmallThumbnail src={`${katscanStaticUrl}/discord.svg`} alt={'discord'} />
+                return <SmallThumbnail src={`${katscanStaticUrl}/discord.svg`} alt={'discord'}/>
             case 'telegram':
-                return <SmallThumbnail src={`${katscanStaticUrl}/telegram.svg`} alt={'telegram'} />
+                return <SmallThumbnail src={`${katscanStaticUrl}/telegram.svg`} alt={'telegram'}/>
             default:
                 return <SmallThumbnail
                     src={`${katscanStaticUrl}/thumbnails${tokenData.logo}`}
-                    alt={'website'} />
+                    alt={'website'}/>
         }
     }
 
@@ -39,8 +39,7 @@ export const TokenDetailsTokenInfo: FC<Props> = (
             <div className="token-info-grid">
                 <div className="token-info-item-image">
                     {tokenData.logo &&
-                        <img src={`${katscanStaticUrl}/logos${tokenData.logo}`} alt={`${tokenData.tick}.jpg`} />
-                        //<Thumbnail src={`${katscanStaticUrl}/logos${tokenData.logo}`} alt={`${tokenData.tick}.jpg`}/>
+                        <Thumbnail src={`${katscanStaticUrl}/logos${tokenData.logo}`} alt={`${tokenData.tick}.jpg`}/>
                     }
                 </div>
                 <div className="token-info-item">
