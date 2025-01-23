@@ -33,10 +33,10 @@ type ListProps = {
 
 const Whitelist: FC<ListProps> = ({searchTerm}) => {
     const [selectedWhitelist, setSelectedWhitelist] = useState<WhitelistData | null>(null);
-    const [refreshKey, setRefreshKey] = useState(0);
+    const [shouldAvoidLoading, setShouldAvoidLoading] = useState(false);
     const {data, loading} = useFetch<WhitelistData[]>({
         url: '/whitelist',
-        avoidLoading: false,
+        avoidLoading: shouldAvoidLoading,
         sort: ['id', 'asc']
     });
 
@@ -78,7 +78,8 @@ const Whitelist: FC<ListProps> = ({searchTerm}) => {
                     onClose={() => setSelectedWhitelist(null)}
                     whitelistData={selectedWhitelist}
                     onSuccess={() => {
-                        setRefreshKey(prev => prev + 1);
+                        setShouldAvoidLoading(false);
+                        setSelectedWhitelist(null);
                     }}
                 />
             )}
