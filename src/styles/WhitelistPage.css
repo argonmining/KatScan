@@ -2,7 +2,7 @@
     padding: 20px;
     max-width: 1200px;
     margin: 0 auto;
-    height: calc(100vh - 120px); /* Account for header and padding */
+    height: 100%; /* Changed from calc(100vh - 120px) */
     display: flex;
     flex-direction: column;
 }
@@ -14,24 +14,23 @@
 }
 
 /* Table styling */
-.whitelists-page .list-container {
+.list-container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0; /* Critical for Firefox */
     background: var(--background-color, #ffffff);
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     overflow: hidden;
-    width: 100%;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    min-height: 0; /* Important for Firefox */
 }
 
-.whitelists-page .list-header {
+.list-header {
     display: grid;
     grid-template-columns: 60px 1fr 100px;
     gap: 1rem;
     background: var(--header-bg, #f8f9fa);
-    padding: 8px 24px;
+    padding: 12px 24px;
     font-weight: 600;
     text-transform: capitalize;
     border-bottom: 1px solid var(--border-color, #dee2e6);
@@ -40,90 +39,93 @@
     position: sticky;
     top: 0;
     z-index: 1;
+    flex-shrink: 0; /* Prevent header from shrinking */
     height: 44px;
     align-items: center;
 }
 
-.whitelists-page .list-body {
-    overflow-y: auto;
+.list-body {
     flex: 1;
-    min-height: 0; /* Important for Firefox */
+    overflow-y: auto;
+    min-height: 0; /* Critical for Firefox */
 }
 
-.whitelists-page .list-row {
+.list-row {
     display: grid;
     grid-template-columns: 60px 1fr 100px;
     gap: 1rem;
-    padding: 8px 24px;
-    transition: background-color 0.2s ease;
+    padding: 12px 24px;
+    transition: background-color 0.2s ease, transform 0.2s ease;
     border-bottom: 1px solid var(--border-color, #dee2e6);
     align-items: center;
     background-color: var(--background-color, #ffffff);
+    height: 44px; /* Ensure consistent height */
     min-height: 44px;
-    height: 44px;
 }
 
-.whitelists-page .list-row:hover {
+.list-row:hover {
     background-color: var(--hover-bg, #f8f9fa);
+    transform: translateY(-2px);
 }
 
-.whitelists-page .header-cell,
-.whitelists-page .list-cell {
+.header-cell,
+.list-cell {
     display: flex;
     align-items: center;
     font-size: 14px;
     height: 100%;
+    padding: 8px 12px;
 }
 
-.whitelists-page .header-cell.id,
-.whitelists-page .list-cell.id {
+.header-cell.id,
+.list-cell.id {
     color: var(--text-color, #212529);
     justify-content: center;
     align-items: center;
     padding-right: 8px;
 }
 
-.whitelists-page .header-cell.address,
-.whitelists-page .list-cell.address {
+.header-cell.address,
+.list-cell.address {
     color: var(--text-color, #212529);
     padding: 0 12px;
     align-items: center;
 }
 
-.whitelists-page .list-cell.address {
+.list-cell.address {
     font-family: monospace;
     font-size: 13px;
 }
 
-.whitelists-page .address-text {
+.address-text {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     line-height: 44px; /* Match row height */
 }
 
-.whitelists-page .header-cell.actions,
-.whitelists-page .list-cell.actions {
+.header-cell.actions,
+.list-cell.actions {
     justify-content: center;
     align-items: center;
 }
 
 /* Button styling */
-.whitelists-page .btn-outline-primary {
+.btn-outline-primary {
     border-radius: 4px;
-    padding: 4px 12px;
+    padding: 6px 16px;
     font-weight: 500;
     transition: all 0.2s ease;
     border-color: var(--primary-color, #0d6efd);
     color: var(--primary-color, #0d6efd);
     min-width: 60px;
-    font-size: 13px;
+    font-size: 14px;
     background-color: transparent;
     height: 28px;
     line-height: 20px;
 }
 
-.whitelists-page .btn-outline-primary:hover {
+.btn-outline-primary:hover {
     transform: translateY(-1px);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     background-color: var(--primary-color, #0d6efd);
@@ -160,14 +162,14 @@
 }
 
 /* Loading state */
-.whitelists-page .loading-state {
+.loading-state {
     padding: 2rem;
     text-align: center;
     color: var(--text-color, #6c757d);
 }
 
 /* Empty state */
-.whitelists-page .empty-state {
+.empty-state {
     padding: 3rem 1rem;
     text-align: center;
     color: var(--text-color, #6c757d);
