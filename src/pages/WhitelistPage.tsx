@@ -1,4 +1,4 @@
-import React, {FC, useMemo, useState} from "react";
+import React, {FC, useMemo, useState, useEffect} from "react";
 import {useFetch} from "../hooks/useFetch";
 import {Input, List, Page} from "nacho-component-library";
 import { WhitelistUpdateModal } from "../components/whitelist/WhitelistUpdateModal";
@@ -40,12 +40,19 @@ type ListProps = {
 
 const Whitelist: FC<ListProps> = ({searchTerm}) => {
     const [selectedWhitelist, setSelectedWhitelist] = useState<WhitelistData | null>(null);
+    const [initialLoadDone, setInitialLoadDone] = useState(false);
     
     const {data, loading} = useFetch<WhitelistData[]>({
         url: '/whitelist',
-        avoidLoading: false,
+        avoidLoading: initialLoadDone,
         sort: ['id', 'asc']
     });
+
+    useEffect(() => {
+        if (data && !initialLoadDone) {
+            setInitialLoadDone(true);
+        }
+    }, [data, initialLoadDone]);
 
     const internalData = useMemo(() => {
         if (!data) return [];
