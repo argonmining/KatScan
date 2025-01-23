@@ -1,0 +1,47 @@
+.whitelist-update-modal {
+    padding: 20px;
+    position: relative;
+    min-width: 400px;
+}
+
+.loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.info-section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.qr-section {
+    display: flex;
+    justify-content: center;
+    padding: 20px 0;
+}
+
+.button-section {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.instructions {
+    text-align: center;
+    margin: 20px 0;
+} 
