@@ -1,7 +1,53 @@
 .whitelist-update-modal {
     padding: 20px;
     position: relative;
-    min-width: 400px;
+}
+
+.whitelist-update-modal .modal-dialog {
+    max-width: 600px;
+    width: 100%;
+}
+
+.whitelist-update-modal .modal-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.info-section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.info-section p {
+    margin-bottom: 8px;
+    word-break: break-all;
+    overflow-wrap: break-word;
+}
+
+.qr-section {
+    display: flex;
+    justify-content: center;
+    padding: 20px 0;
+}
+
+.qr-code-image {
+    max-width: 200px;
+    height: auto;
+}
+
+.button-section {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.instructions {
+    text-align: center;
+    margin: 20px 0;
+    word-wrap: break-word;
 }
 
 .loading-overlay {
@@ -17,31 +63,7 @@
     z-index: 1000;
 }
 
-.modal-content {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.info-section {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.qr-section {
-    display: flex;
-    justify-content: center;
-    padding: 20px 0;
-}
-
-.button-section {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-}
-
-.instructions {
-    text-align: center;
-    margin: 20px 0;
+.whitelist-update-modal .form-control {
+    word-break: break-all;
+    overflow-wrap: break-word;
 } 

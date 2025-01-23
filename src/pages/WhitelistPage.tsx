@@ -1,4 +1,4 @@
-import React, {FC, useMemo, useState} from "react";
+import React, {FC, useMemo, useState, useEffect} from "react";
 import {useFetch} from "../hooks/useFetch";
 import {Input, List, Page} from "nacho-component-library";
 import { WhitelistUpdateModal } from "../components/whitelist/WhitelistUpdateModal";
@@ -12,6 +12,7 @@ type WhitelistData = {
 
 const WhitelistPage: FC = () => {
     const [searchTerm, setSearchTerm] = useState('')
+    const [shouldRefetch, setShouldRefetch] = useState(false)
     return <Page header="Whitelist"
                  additionalHeaderComponent={
                      <Input customClass={'whitelist-search-form'}
@@ -20,7 +21,12 @@ const WhitelistPage: FC = () => {
                             onSubmit={setSearchTerm}/>
                  }>
         <div className={'whitelists-page'}>
-            <Whitelist searchTerm={searchTerm}/>
+            <Whitelist 
+                searchTerm={searchTerm} 
+                shouldRefetch={shouldRefetch} 
+                onRefetchComplete={() => setShouldRefetch(false)}
+                onUpdateSuccess={() => setShouldRefetch(true)}
+            />
         </div>
     </Page>
 }
@@ -29,16 +35,24 @@ const donHeaders = ['address', 'actions']
 
 type ListProps = {
     searchTerm: string
+    shouldRefetch: boolean
+    onRefetchComplete: () => void
+    onUpdateSuccess: () => void
 }
 
-const Whitelist: FC<ListProps> = ({searchTerm}) => {
+const Whitelist: FC<ListProps> = ({searchTerm, shouldRefetch, onRefetchComplete, onUpdateSuccess}) => {
     const [selectedWhitelist, setSelectedWhitelist] = useState<WhitelistData | null>(null);
-    const [shouldAvoidLoading, setShouldAvoidLoading] = useState(false);
     const {data, loading} = useFetch<WhitelistData[]>({
         url: '/whitelist',
-        avoidLoading: shouldAvoidLoading,
+        avoidLoading: false,
         sort: ['id', 'asc']
     });
+
+    useEffect(() => {
+        if (shouldRefetch) {
+            onRefetchComplete();
+        }
+    }, [shouldRefetch, onRefetchComplete]);
 
     const internalData = useMemo(() => {
         if (!data) return [];
@@ -67,9 +81,7 @@ const Whitelist: FC<ListProps> = ({searchTerm}) => {
                 headerElements={donHeaders}
                 items={internalData.map(renderItem)}
                 itemHeight={50}
-                noDataText={'No Data available'}
                 isLoading={loading}
-                showHeader={false}
             />
             
             {selectedWhitelist && (
@@ -78,7 +90,7 @@ const Whitelist: FC<ListProps> = ({searchTerm}) => {
                     onClose={() => setSelectedWhitelist(null)}
                     whitelistData={selectedWhitelist}
                     onSuccess={() => {
-                        setShouldAvoidLoading(false);
+                        onUpdateSuccess();
                         setSelectedWhitelist(null);
                     }}
                 />
