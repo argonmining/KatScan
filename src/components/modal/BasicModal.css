@@ -1,0 +1,23 @@
+.basic-modal {
+
+    .modal.header {
+        .close {
+            color: #fff;
+            opacity: 1;
+        }
+    }
+}
+
+.dark-mode .basic-modal {
+    background-color: #000000a3;
+
+    .modal-content {
+        box-shadow: 0 0 1px whitesmoke;
+
+        .modal-header {
+            .btn-close {
+                color: white !important;
+            }
+        }
+    }
+}

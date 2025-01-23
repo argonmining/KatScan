@@ -13,8 +13,10 @@ type Props = {
     successMessage?: string
     params?: Record<string, string | number>
     avoidLoading?: boolean
-    sort?: [string, 'asc' | 'desc']
+    sort?: SortFetchHook
 }
+
+export type SortFetchHook = [string, 'asc' | 'desc']
 type GETFetch = Props & {
     method?: 'GET'
     body?: never

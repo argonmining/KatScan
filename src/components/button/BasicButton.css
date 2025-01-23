@@ -1,0 +1,46 @@
+.basic-button {
+    padding: 3px 10px;
+    line-height: 20px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 15px;
+    /*todo checking*/
+    transition: all 0.2s ease;
+
+    min-height: 35px;
+
+    &.btn-outline-primary, &.btn-outline-secondary {
+        background-color: transparent;
+        border-color: var(--primary-color);
+        color: var(--primary-color);
+    }
+
+    &:hover {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+        color: #fff;
+    }
+}
+
+.dark-mode .basic-button {
+    &.btn-outline-primary {
+        border-color: var(--dark-primary-color);
+        color: var(--primary-color);
+
+        &:hover {
+            color: var(--dark-text-color);
+        }
+    }
+
+    &.btn-outline-secondary {
+        border-color: var(--dark-border-color);
+        color: var(--dark-text-color);
+    }
+}
+
+.mobile-view .basic-button {
+    &.btn-outline-primary {
+        padding: 0.25rem 0.75rem;
+        font-size: 13px;
+    }
+}

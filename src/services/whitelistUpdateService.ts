@@ -1,4 +1,5 @@
 import {wlUpdateApiUrl} from "../utils/StaticVariables";
+import {sendRequest, simpleRequest} from "nacho-component-library";
 
 interface GetFeeResponse {
     amount: string;
@@ -17,25 +18,21 @@ interface UpdateWhitelistRequest {
 
 export const whitelistUpdateService = {
     getFee: async (): Promise<GetFeeResponse> => {
-        const response = await fetch(`${wlUpdateApiUrl}/api/get-fee`);
-        if (!response.ok) {
+        const data = await simpleRequest<GetFeeResponse>(`${wlUpdateApiUrl}/api/get-fee`);
+        if (!data) {
             throw new Error('Failed to fetch fee information');
         }
-        const data = await response.json() as GetFeeResponse;
+        // const data = await response.json() as GetFeeResponse;
         return data;
     },
 
     updateWhitelist: async (data: UpdateWhitelistRequest): Promise<void> => {
-        const response = await fetch(`${wlUpdateApiUrl}/api/update-whitelist`, {
+        return await sendRequest<void>({
+            url: `http://localhost:7713/api/test`,
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        });
-        
-        if (!response.ok) {
-            throw new Error('Failed to update whitelist');
-        }
+            body: data as unknown as Record<string, unknown>,
+        }).catch(() => {
+            throw new Error('Failed to update whitelist')
+        })
     }
 }; 
