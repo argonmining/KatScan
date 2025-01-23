@@ -105,31 +105,31 @@
 
 /* Dark mode support */
 [data-bs-theme="dark"] .whitelists-page {
-    --background-color: var(--dark-background);
-    --text-color: var(--dark-text);
-    --border-color: var(--dark-border);
-    --header-bg: var(--dark-surface);
-    --hover-bg: var(--dark-surface-hover);
-    --primary-color: var(--dark-primary);
+    --background-color: var(--dark-bg-color);
+    --text-color: var(--dark-text-color);
+    --border-color: var(--dark-border-color);
+    --header-bg: var(--dark-header-bg);
+    --hover-bg: var(--dark-nav-hover-bg);
+    --primary-color: var(--dark-primary-color);
 }
 
 [data-bs-theme="dark"] .whitelists-page .list-container {
-    background-color: var(--dark-background);
+    background-color: var(--dark-bg-color);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 [data-bs-theme="dark"] .whitelists-page .list-header {
-    background-color: var(--dark-surface);
-    border-color: var(--dark-border);
+    background-color: var(--dark-header-bg);
+    border-color: var(--dark-border-color);
 }
 
 [data-bs-theme="dark"] .whitelists-page .list-row {
-    border-color: var(--dark-border);
-    background-color: var(--dark-background);
+    border-color: var(--dark-border-color);
+    background-color: var(--dark-bg-color);
 }
 
 [data-bs-theme="dark"] .whitelists-page .list-row:hover {
-    background-color: var(--dark-surface-hover);
+    background-color: var(--dark-nav-hover-bg);
 }
 
 /* Loading state */
