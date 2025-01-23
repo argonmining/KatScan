@@ -23,12 +23,13 @@
     display: grid;
     grid-template-columns: 80px 1fr 120px;
     gap: 1rem;
-    background: var(--dark-header-bg, #f8f9fa);
+    background: var(--header-bg, #f8f9fa);
     padding: 12px 20px;
     font-weight: 600;
     text-transform: capitalize;
-    border-bottom: 2px solid var(--dark-border-color, #dee2e6);
+    border-bottom: 1px solid var(--border-color, #dee2e6);
     font-family: var(--sub-header-font);
+    color: var(--text-color, #212529);
 }
 
 .whitelists-page .list-body {
@@ -41,12 +42,13 @@
     gap: 1rem;
     padding: 10px 20px;
     transition: background-color 0.2s ease;
-    border-bottom: 1px solid var(--dark-border-color, #dee2e6);
+    border-bottom: 1px solid var(--border-color, #dee2e6);
     align-items: center;
+    background-color: var(--background-color, #ffffff);
 }
 
 .whitelists-page .list-row:hover {
-    background-color: var(--dark-nav-hover-bg, #f8f9fa);
+    background-color: var(--hover-bg, #f8f9fa);
 }
 
 .whitelists-page .header-cell,
@@ -58,12 +60,12 @@
 
 .whitelists-page .header-cell.id,
 .whitelists-page .list-cell.id {
-    color: var(--dark-text-color, #212529);
+    color: var(--text-color, #212529);
 }
 
 .whitelists-page .header-cell.address,
 .whitelists-page .list-cell.address {
-    color: var(--dark-text-color, #212529);
+    color: var(--text-color, #212529);
 }
 
 .whitelists-page .list-cell.address {
@@ -87,58 +89,61 @@
     padding: 0.375rem 1rem;
     font-weight: 500;
     transition: all 0.2s ease;
-    border-color: var(--dark-primary-color, #0d6efd);
-    color: var(--dark-primary-color, #0d6efd);
+    border-color: var(--primary-color, #0d6efd);
+    color: var(--primary-color, #0d6efd);
     min-width: 70px;
     font-size: 14px;
+    background-color: transparent;
 }
 
 .whitelists-page .btn-outline-primary:hover {
     transform: translateY(-1px);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    background-color: var(--dark-primary-color, #0d6efd);
+    background-color: var(--primary-color, #0d6efd);
     color: #fff;
 }
 
 /* Dark mode support */
 [data-bs-theme="dark"] .whitelists-page {
-    --background-color: var(--dark-card-bg);
+    --background-color: var(--dark-background);
+    --text-color: var(--dark-text);
+    --border-color: var(--dark-border);
+    --header-bg: var(--dark-surface);
+    --hover-bg: var(--dark-surface-hover);
+    --primary-color: var(--dark-primary);
 }
 
 [data-bs-theme="dark"] .whitelists-page .list-container {
-    background-color: var(--dark-card-bg);
+    background-color: var(--dark-background);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 [data-bs-theme="dark"] .whitelists-page .list-header {
-    background-color: var(--dark-header-bg);
-    border-color: var(--dark-border-color);
+    background-color: var(--dark-surface);
+    border-color: var(--dark-border);
 }
 
 [data-bs-theme="dark"] .whitelists-page .list-row {
-    border-color: var(--dark-border-color);
+    border-color: var(--dark-border);
+    background-color: var(--dark-background);
 }
 
 [data-bs-theme="dark"] .whitelists-page .list-row:hover {
-    background-color: var(--dark-nav-hover-bg);
-}
-
-[data-bs-theme="dark"] .whitelists-page .list-cell {
-    color: var(--dark-text-color);
+    background-color: var(--dark-surface-hover);
 }
 
 /* Loading state */
 .whitelists-page .loading-state {
     padding: 2rem;
     text-align: center;
-    color: var(--dark-text-color, #6c757d);
+    color: var(--text-color, #6c757d);
 }
 
 /* Empty state */
 .whitelists-page .empty-state {
     padding: 3rem 1rem;
     text-align: center;
-    color: var(--dark-text-color, #6c757d);
+    color: var(--text-color, #6c757d);
     background: var(--background-color, #ffffff);
     border-radius: 8px;
 }
