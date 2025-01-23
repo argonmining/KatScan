@@ -4,8 +4,8 @@ import { whitelistUpdateService } from '../../services/whitelistUpdateService';
 import { addAlert } from '../alerts/Alerts';
 import { useDarkMode } from 'nacho-component-library';
 import { copyToClipboard } from '../../services/Helper';
-import 'styles/whitelist/WhitelistUpdateModal.css';
-import { katscanApiUrl } from "../../utils/StaticVariables";
+import { QRCodeSVG } from 'qrcode.react';
+import '../styles/whitelist/WhitelistUpdateModal.css';
 
 interface WhitelistUpdateModalProps {
     show: boolean;
@@ -91,19 +91,28 @@ export const WhitelistUpdateModal: React.FC<WhitelistUpdateModalProps> = ({
                         <p><strong>Update Fee Amount:</strong> {feeData?.amountInKAS} KAS</p>
                         <p><strong>Send to:</strong> {feeData?.feeWallet}</p>
                         
-                        <div className="qr-section">
-                            <img 
-                                src={`${String(katscanApiUrl)}/qr?data=${encodeURIComponent(feeData?.feeWallet || '')}`}
-                                alt="QR Code"
-                                className="qr-code-image"
-                            />
-                        </div>
+                        {feeData?.feeWallet && (
+                            <div className="qr-section">
+                                <QRCodeSVG
+                                    value={feeData.feeWallet}
+                                    size={200}
+                                    level="H"
+                                    className="qr-code-image"
+                                />
+                            </div>
+                        )}
                         
                         <div className="button-section">
-                            <Button onClick={() => void copyToClipboard(feeData?.feeWallet || '')}>
+                            <Button 
+                                onClick={() => void copyToClipboard(feeData?.feeWallet || '')}
+                                disabled={!feeData?.feeWallet}
+                            >
                                 Copy Address
                             </Button>
-                            <Button onClick={() => void copyToClipboard(feeData?.amountInKAS || '')}>
+                            <Button 
+                                onClick={() => void copyToClipboard(feeData?.amountInKAS || '')}
+                                disabled={!feeData?.amountInKAS}
+                            >
                                 Copy Amount
                             </Button>
                         </div>

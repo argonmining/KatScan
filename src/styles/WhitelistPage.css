@@ -46,6 +46,11 @@
     color: var(--text-color, #212529);
 }
 
+/* Right align the Actions column */
+.whitelists-page [data-column="Actions"] {
+    justify-content: flex-end;
+}
+
 /* Button styling */
 .whitelists-page .btn-outline-primary {
     border-radius: 4px;
