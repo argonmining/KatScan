@@ -28,10 +28,10 @@
 
 .whitelists-page .list-header {
     display: grid;
-    grid-template-columns: 80px 1fr 120px;
-    gap: 0.5rem;
+    grid-template-columns: 60px 1fr 100px;
+    gap: 1rem;
     background: var(--header-bg, #f8f9fa);
-    padding: 8px 16px;
+    padding: 8px 24px;
     font-weight: 600;
     text-transform: capitalize;
     border-bottom: 1px solid var(--border-color, #dee2e6);
@@ -52,9 +52,9 @@
 
 .whitelists-page .list-row {
     display: grid;
-    grid-template-columns: 80px 1fr 120px;
-    gap: 0.5rem;
-    padding: 8px 16px;
+    grid-template-columns: 60px 1fr 100px;
+    gap: 1rem;
+    padding: 8px 24px;
     transition: background-color 0.2s ease;
     border-bottom: 1px solid var(--border-color, #dee2e6);
     align-items: center;
@@ -72,31 +72,40 @@
     display: flex;
     align-items: center;
     font-size: 14px;
+    height: 100%;
 }
 
 .whitelists-page .header-cell.id,
 .whitelists-page .list-cell.id {
     color: var(--text-color, #212529);
+    justify-content: center;
+    align-items: center;
+    padding-right: 8px;
 }
 
 .whitelists-page .header-cell.address,
 .whitelists-page .list-cell.address {
     color: var(--text-color, #212529);
+    padding: 0 12px;
+    align-items: center;
 }
 
 .whitelists-page .list-cell.address {
     font-family: monospace;
+    font-size: 13px;
 }
 
 .whitelists-page .address-text {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    line-height: 44px; /* Match row height */
 }
 
 .whitelists-page .header-cell.actions,
 .whitelists-page .list-cell.actions {
-    justify-content: flex-end;
+    justify-content: center;
+    align-items: center;
 }
 
 /* Button styling */
@@ -107,8 +116,8 @@
     transition: all 0.2s ease;
     border-color: var(--primary-color, #0d6efd);
     color: var(--primary-color, #0d6efd);
-    min-width: 70px;
-    font-size: 14px;
+    min-width: 60px;
+    font-size: 13px;
     background-color: transparent;
     height: 28px;
     line-height: 20px;
