@@ -3,7 +3,7 @@ import {useFetch} from "../hooks/useFetch";
 import {Input, List, Page} from "nacho-component-library";
 import { WhitelistUpdateModal } from "../components/whitelist/WhitelistUpdateModal";
 import { Button } from 'react-bootstrap';
-import 'styles/WhitelistPage.css'
+import '../styles/WhitelistPage.css'
 
 type WhitelistData = {
     id: string
@@ -13,25 +13,31 @@ type WhitelistData = {
 const WhitelistPage: FC = () => {
     const [searchTerm, setSearchTerm] = useState('')
     const [shouldRefetch, setShouldRefetch] = useState(false)
-    return <Page header="Whitelist"
-                 additionalHeaderComponent={
-                     <Input customClass={'whitelist-search-form'}
-                            placeholder={'Search for Address...'}
-                            onChangeCallback={setSearchTerm}
-                            onSubmit={setSearchTerm}/>
-                 }>
-        <div className={'whitelists-page'}>
-            <Whitelist 
-                searchTerm={searchTerm} 
-                shouldRefetch={shouldRefetch} 
-                onRefetchComplete={() => setShouldRefetch(false)}
-                onUpdateSuccess={() => setShouldRefetch(true)}
-            />
-        </div>
-    </Page>
+    return (
+        <Page 
+            header="Whitelist Management"
+            additionalHeaderComponent={
+                <Input 
+                    customClass={'whitelist-search-form'}
+                    placeholder={'Search by wallet address...'}
+                    onChangeCallback={setSearchTerm}
+                    onSubmit={setSearchTerm}
+                />
+            }
+        >
+            <div className={'whitelists-page'}>
+                <Whitelist 
+                    searchTerm={searchTerm} 
+                    shouldRefetch={shouldRefetch} 
+                    onRefetchComplete={() => setShouldRefetch(false)}
+                    onUpdateSuccess={() => setShouldRefetch(true)}
+                />
+            </div>
+        </Page>
+    );
 }
 
-const donHeaders = ['address', 'actions']
+const donHeaders = ['Wallet Address', 'Actions']
 
 type ListProps = {
     searchTerm: string
@@ -59,30 +65,47 @@ const Whitelist: FC<ListProps> = ({searchTerm, shouldRefetch, onRefetchComplete,
         if (searchTerm === '') {
             return data;
         }
-        return data.filter(single => single.address.includes(searchTerm));
+        return data.filter(single => single.address.toLowerCase().includes(searchTerm.toLowerCase()));
     }, [data, searchTerm]);
 
     const renderItem = (item: WhitelistData): Record<string, unknown> & { id: string } => ({
         ...item,
-        actions: (
-            <Button 
-                size="sm"
-                variant="outline-primary"
-                onClick={() => setSelectedWhitelist(item)}
-            >
-                Edit
-            </Button>
+        'Wallet Address': (
+            <div className="list-cell address">
+                {item.address}
+            </div>
+        ),
+        'Actions': (
+            <div className="list-cell">
+                <Button 
+                    size="sm"
+                    variant="outline-primary"
+                    onClick={() => setSelectedWhitelist(item)}
+                >
+                    Edit
+                </Button>
+            </div>
         )
     });
 
+    if (loading) {
+        return <div className="loading-state">Loading whitelist data...</div>;
+    }
+
+    if (!loading && (!data || data.length === 0)) {
+        return <div className="empty-state">No whitelist entries found</div>;
+    }
+
     return (
         <>
-            <List 
-                headerElements={donHeaders}
-                items={internalData.map(renderItem)}
-                itemHeight={50}
-                isLoading={loading}
-            />
+            <div className="list-container">
+                <List 
+                    headerElements={donHeaders}
+                    items={internalData.map(renderItem)}
+                    itemHeight={50}
+                    isLoading={loading}
+                />
+            </div>
             
             {selectedWhitelist && (
                 <WhitelistUpdateModal
