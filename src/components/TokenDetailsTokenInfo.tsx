@@ -6,6 +6,7 @@ import {formatNumber, parseRawNumber} from "../services/Helper";
 import {Link} from "react-router-dom";
 import {TokenData} from "../interfaces/TokenData";
 import {Socials} from "../pages/TokenDetail";
+import {FaImages} from "react-icons/fa6";
 
 interface Props {
     tokenData: TokenData
@@ -28,6 +29,9 @@ export const TokenDetailsTokenInfo: FC<Props> = (
             case 'telegram':
                 return <SmallThumbnail src={`${katscanStaticUrl}/telegram.svg`} alt={'telegram'}/>
             default:
+                if (tokenData.logo === null) {
+                    return <FaImages className={'small-thumbnail-image'}/>
+                }
                 return <SmallThumbnail
                     src={`${katscanStaticUrl}/thumbnails${tokenData.logo}`}
                     alt={'website'}/>
@@ -38,8 +42,9 @@ export const TokenDetailsTokenInfo: FC<Props> = (
         <Card.Body>
             <div className="token-info-grid">
                 <div className="token-info-item-image">
-                    {tokenData.logo &&
+                    {tokenData.logo ?
                         <Thumbnail src={`${katscanStaticUrl}/logos${tokenData.logo}`} alt={`${tokenData.tick}.jpg`}/>
+                        : <FaImages className={'thumbnail-image'} style={{height:'fit-content', borderRadius: 'unset'}}/>
                     }
                 </div>
                 <div className="token-info-item">
@@ -73,7 +78,7 @@ export const TokenDetailsTokenInfo: FC<Props> = (
                     <span className="token-info-label">Socials</span>
                     <div className={'token-info-socials-wrapper'}>
                         {Object.entries(socials).map(([type, url]) =>
-                            <Link key={type} to={url}>
+                            <Link key={type} to={url} target={'_blank'} referrerPolicy={'no-referrer'} title={url}>
                                 {getIcon(type)}
                             </Link>
                         )}
