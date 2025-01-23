@@ -5,7 +5,7 @@ import { addAlert } from '../alerts/Alerts';
 import { useDarkMode } from 'nacho-component-library';
 import { copyToClipboard } from '../../services/Helper';
 import { QRCodeSVG } from 'qrcode.react';
-import '../styles/whitelist/WhitelistUpdateModal.css';
+import '../../styles/whitelist/WhitelistUpdateModal.css';
 
 interface WhitelistUpdateModalProps {
     show: boolean;
