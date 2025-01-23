@@ -2,12 +2,15 @@
     padding: 20px;
     max-width: 1200px;
     margin: 0 auto;
+    height: calc(100vh - 120px); /* Account for header and padding */
+    display: flex;
+    flex-direction: column;
 }
 
 .whitelist-search-form {
     width: 100%;
     max-width: 500px;
-    margin: 0 auto 2rem;
+    margin: 0 auto 1rem;
 }
 
 /* Table styling */
@@ -17,6 +20,10 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     width: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0; /* Important for Firefox */
 }
 
 .whitelists-page .list-header {
@@ -24,27 +31,33 @@
     grid-template-columns: 80px 1fr 120px;
     gap: 1rem;
     background: var(--header-bg, #f8f9fa);
-    padding: 12px 20px;
+    padding: 8px 20px;
     font-weight: 600;
     text-transform: capitalize;
     border-bottom: 1px solid var(--border-color, #dee2e6);
     font-family: var(--sub-header-font);
     color: var(--text-color, #212529);
+    position: sticky;
+    top: 0;
+    z-index: 1;
 }
 
 .whitelists-page .list-body {
     overflow-y: auto;
+    flex: 1;
+    min-height: 0; /* Important for Firefox */
 }
 
 .whitelists-page .list-row {
     display: grid;
     grid-template-columns: 80px 1fr 120px;
     gap: 1rem;
-    padding: 10px 20px;
+    padding: 6px 20px;
     transition: background-color 0.2s ease;
     border-bottom: 1px solid var(--border-color, #dee2e6);
     align-items: center;
     background-color: var(--background-color, #ffffff);
+    min-height: 40px;
 }
 
 .whitelists-page .list-row:hover {
