@@ -28,9 +28,9 @@ export const whitelistUpdateService = {
 
     updateWhitelist: async (data: UpdateWhitelistRequest): Promise<void> => {
         return await sendRequest<void>({
-            url: `http://localhost:7713/api/test`,
+            url: `${wlUpdateApiUrl}/api/update-whitelist`,
             method: 'POST',
-            body: data as unknown as Record<string, unknown>,
+            body: JSON.stringify(data),
         }).catch(() => {
             throw new Error('Failed to update whitelist')
         })
