@@ -1,4 +1,4 @@
-import React, {FC, useMemo, useState, useCallback} from "react";
+import React, {FC, useMemo, useState} from "react";
 import {useFetch} from "../hooks/useFetch";
 import {Input, List, Page} from "nacho-component-library";
 import { WhitelistUpdateModal } from "../components/whitelist/WhitelistUpdateModal";
@@ -12,12 +12,7 @@ type WhitelistData = {
 
 const WhitelistPage: FC = () => {
     const [searchTerm, setSearchTerm] = useState('')
-    const [fetchVersion, setFetchVersion] = useState(0)
     
-    const handleUpdateSuccess = useCallback(() => {
-        setFetchVersion(v => v + 1);
-    }, []);
-
     return (
         <Page 
             header="Whitelist Management"
@@ -31,11 +26,7 @@ const WhitelistPage: FC = () => {
             }
         >
             <div className={'whitelists-page'}>
-                <Whitelist 
-                    searchTerm={searchTerm}
-                    fetchVersion={fetchVersion}
-                    onUpdateSuccess={handleUpdateSuccess}
-                />
+                <Whitelist searchTerm={searchTerm} />
             </div>
         </Page>
     );
@@ -45,18 +36,15 @@ const donHeaders = ['Wallet Address', 'Actions']
 
 type ListProps = {
     searchTerm: string
-    fetchVersion: number
-    onUpdateSuccess: () => void
 }
 
-const Whitelist: FC<ListProps> = ({searchTerm, fetchVersion, onUpdateSuccess}) => {
+const Whitelist: FC<ListProps> = ({searchTerm}) => {
     const [selectedWhitelist, setSelectedWhitelist] = useState<WhitelistData | null>(null);
     
     const {data, loading} = useFetch<WhitelistData[]>({
         url: '/whitelist',
         avoidLoading: false,
-        sort: ['id', 'asc'],
-        params: { version: fetchVersion }
+        sort: ['id', 'asc']
     });
 
     const internalData = useMemo(() => {
@@ -112,7 +100,6 @@ const Whitelist: FC<ListProps> = ({searchTerm, fetchVersion, onUpdateSuccess}) =
                     onClose={() => setSelectedWhitelist(null)}
                     whitelistData={selectedWhitelist}
                     onSuccess={() => {
-                        onUpdateSuccess();
                         setSelectedWhitelist(null);
                     }}
                 />
