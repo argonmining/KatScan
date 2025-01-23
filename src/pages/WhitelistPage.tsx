@@ -1,6 +1,6 @@
 import React, {FC, useMemo, useState, useEffect} from "react";
 import {useFetch} from "../hooks/useFetch";
-import {Input, List, Page} from "nacho-component-library";
+import {Input, Page} from "nacho-component-library";
 import { WhitelistUpdateModal } from "../components/whitelist/WhitelistUpdateModal";
 import { Button } from 'react-bootstrap';
 import '../styles/WhitelistPage.css'
@@ -32,8 +32,6 @@ const WhitelistPage: FC = () => {
     );
 }
 
-const donHeaders = ['ID', 'Wallet Address', 'Actions']
-
 type ListProps = {
     searchTerm: string
 }
@@ -62,31 +60,6 @@ const Whitelist: FC<ListProps> = ({searchTerm}) => {
         return data.filter(single => single.address.toLowerCase().includes(searchTerm.toLowerCase()));
     }, [data, searchTerm]);
 
-    const renderItem = (item: WhitelistData): Record<string, unknown> & { id: string } => ({
-        ...item,
-        'ID': (
-            <div className="list-cell id">
-                {item.id}
-            </div>
-        ),
-        'Wallet Address': (
-            <div className="list-cell address">
-                {item.address}
-            </div>
-        ),
-        'Actions': (
-            <div className="list-cell actions">
-                <Button 
-                    size="sm"
-                    variant="outline-primary"
-                    onClick={() => setSelectedWhitelist(item)}
-                >
-                    Edit
-                </Button>
-            </div>
-        )
-    });
-
     if (loading) {
         return <div className="loading-state">Loading whitelist data...</div>;
     }
@@ -98,12 +71,30 @@ const Whitelist: FC<ListProps> = ({searchTerm}) => {
     return (
         <>
             <div className="list-container">
-                <List 
-                    headerElements={donHeaders}
-                    items={internalData.map(renderItem)}
-                    itemHeight={50}
-                    isLoading={loading}
-                />
+                <div className="list-header">
+                    <div className="header-cell id">ID</div>
+                    <div className="header-cell address">Wallet Address</div>
+                    <div className="header-cell actions">Actions</div>
+                </div>
+                <div className="list-body">
+                    {internalData.map((item) => (
+                        <div key={item.id} className="list-row">
+                            <div className="list-cell id">{item.id}</div>
+                            <div className="list-cell address">
+                                <span className="address-text">{item.address}</span>
+                            </div>
+                            <div className="list-cell actions">
+                                <Button 
+                                    size="sm"
+                                    variant="outline-primary"
+                                    onClick={() => setSelectedWhitelist(item)}
+                                >
+                                    Edit
+                                </Button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
             </div>
             
             {selectedWhitelist && (

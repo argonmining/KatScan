@@ -1,0 +1,141 @@
+.whitelist-update-modal .modal-content {
+    background-color: var(--dark-card-bg, #ffffff);
+    border: 1px solid var(--dark-border-color, #dee2e6);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.whitelist-update-modal .modal-header {
+    background-color: var(--dark-header-bg, #f8f9fa);
+    border-bottom: 1px solid var(--dark-border-color, #dee2e6);
+    padding: 1rem 1.5rem;
+}
+
+.whitelist-update-modal .modal-title {
+    color: var(--dark-text-color, #212529);
+    font-size: 1.25rem;
+    font-weight: 600;
+    font-family: var(--sub-header-font);
+    margin: 0;
+}
+
+.whitelist-update-modal .modal-body {
+    padding: 1.5rem;
+    color: var(--dark-text-color, #212529);
+}
+
+.whitelist-update-modal .fee-info {
+    background-color: var(--dark-nav-hover-bg, #f8f9fa);
+    border: 1px solid var(--dark-border-color, #dee2e6);
+    border-radius: 6px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.whitelist-update-modal .fee-info h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--dark-text-color, #212529);
+}
+
+.whitelist-update-modal .fee-wallet {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    font-family: monospace;
+    font-size: 0.875rem;
+}
+
+.whitelist-update-modal .fee-amount {
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.whitelist-update-modal .qr-section {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.whitelist-update-modal .qr-code {
+    padding: 1rem;
+    background-color: #ffffff;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.whitelist-update-modal .modal-footer {
+    background-color: var(--dark-header-bg, #f8f9fa);
+    border-top: 1px solid var(--dark-border-color, #dee2e6);
+    padding: 1rem 1.5rem;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+.whitelist-update-modal .btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.whitelist-update-modal .btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.whitelist-update-modal .btn-secondary {
+    background-color: var(--dark-nav-hover-bg, #f8f9fa);
+    border: 1px solid var(--dark-border-color, #dee2e6);
+    color: var(--dark-text-color, #212529);
+}
+
+.whitelist-update-modal .btn-primary {
+    background-color: var(--dark-primary-color, #0d6efd);
+    border-color: var(--dark-primary-color, #0d6efd);
+    color: #ffffff;
+}
+
+.whitelist-update-modal .loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+}
+
+/* Dark mode support */
+[data-bs-theme="dark"] .whitelist-update-modal .qr-code {
+    background-color: #ffffff;
+}
+
+[data-bs-theme="dark"] .whitelist-update-modal .btn-secondary:hover {
+    background-color: var(--dark-nav-hover-bg);
+    border-color: var(--dark-border-color);
+}
+
+/* Error state */
+.whitelist-update-modal .error-message {
+    color: var(--bs-danger);
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+}
+
+/* Copy button */
+.whitelist-update-modal .copy-button {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    background: none;
+    border: 1px solid var(--dark-border-color, #dee2e6);
+    color: var(--dark-text-color, #212529);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.whitelist-update-modal .copy-button:hover {
+    background-color: var(--dark-nav-hover-bg, #f8f9fa);
+} 
