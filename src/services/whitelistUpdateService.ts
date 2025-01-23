@@ -1,4 +1,3 @@
-import {KatscanResponse} from "../interfaces/ApiResponseTypes";
 import {wlUpdateApiUrl} from "../utils/StaticVariables";
 
 interface GetFeeResponse {
@@ -17,16 +16,16 @@ interface UpdateWhitelistRequest {
 }
 
 export const whitelistUpdateService = {
-    getFee: async (): Promise<KatscanResponse<GetFeeResponse>> => {
+    getFee: async (): Promise<GetFeeResponse> => {
         const response = await fetch(`${wlUpdateApiUrl}/api/get-fee`);
         if (!response.ok) {
             throw new Error('Failed to fetch fee information');
         }
-        const data = await response.json() as KatscanResponse<GetFeeResponse>;
+        const data = await response.json() as GetFeeResponse;
         return data;
     },
 
-    updateWhitelist: async (data: UpdateWhitelistRequest): Promise<KatscanResponse<unknown>> => {
+    updateWhitelist: async (data: UpdateWhitelistRequest): Promise<void> => {
         const response = await fetch(`${wlUpdateApiUrl}/api/update-whitelist`, {
             method: 'POST',
             headers: {
@@ -38,7 +37,5 @@ export const whitelistUpdateService = {
         if (!response.ok) {
             throw new Error('Failed to update whitelist');
         }
-        const responseData = await response.json() as KatscanResponse<unknown>;
-        return responseData;
     }
 }; 

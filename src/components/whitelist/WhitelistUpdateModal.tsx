@@ -42,9 +42,9 @@ export const WhitelistUpdateModal: React.FC<WhitelistUpdateModalProps> = ({
             void whitelistUpdateService.getFee()
                 .then(response => {
                     console.log('Fee API Response:', response);
-                    if (response && response.result) {
-                        setFeeData(response.result);
-                        console.log('Set Fee Data:', response.result);
+                    if (response && response.amount && response.amountInKAS && response.feeWallet) {
+                        setFeeData(response);
+                        console.log('Set Fee Data:', response);
                     } else {
                         console.error('Invalid API response structure:', response);
                         addAlert('error', 'Invalid fee information received');
