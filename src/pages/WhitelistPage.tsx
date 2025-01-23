@@ -1,6 +1,6 @@
-import React, {FC, useMemo, useState, useEffect} from "react";
+import React, {FC, useMemo, useState, useEffect, ReactElement} from "react";
 import {useFetch} from "../hooks/useFetch";
-import {Input, Page} from "nacho-component-library";
+import {Input, Page, List} from "nacho-component-library";
 import { WhitelistUpdateModal } from "../components/whitelist/WhitelistUpdateModal";
 import { Button } from 'react-bootstrap';
 import '../styles/WhitelistPage.css'
@@ -9,6 +9,8 @@ type WhitelistData = {
     id: string
     address: string
 }
+
+const header = ['id', 'address', 'actions']
 
 const WhitelistPage: FC = () => {
     const [searchTerm, setSearchTerm] = useState('')
@@ -60,6 +62,40 @@ const Whitelist: FC<ListProps> = ({searchTerm}) => {
         return data.filter(single => single.address.toLowerCase().includes(searchTerm.toLowerCase()));
     }, [data, searchTerm]);
 
+    const getElement = (header: string, item: WhitelistData): ReactElement => {
+        switch (header) {
+            case 'id':
+                return <div>{item.id}</div>;
+            case 'address':
+                return <div className="address-text">{item.address}</div>;
+            case 'actions':
+                return (
+                    <Button 
+                        size="sm"
+                        variant="outline-primary"
+                        onClick={() => setSelectedWhitelist(item)}
+                    >
+                        Edit
+                    </Button>
+                );
+            default:
+                return <div>{item[header as keyof WhitelistData]}</div>;
+        }
+    };
+
+    const getHeader = (value: string): ReactElement => {
+        switch (value) {
+            case 'id':
+                return <div>ID</div>;
+            case 'address':
+                return <div>Wallet Address</div>;
+            case 'actions':
+                return <div>Actions</div>;
+            default:
+                return <div>{value}</div>;
+        }
+    };
+
     if (loading) {
         return <div className="loading-state">Loading whitelist data...</div>;
     }
@@ -70,32 +106,15 @@ const Whitelist: FC<ListProps> = ({searchTerm}) => {
 
     return (
         <>
-            <div className="list-container">
-                <div className="list-header">
-                    <div className="header-cell id">ID</div>
-                    <div className="header-cell address">Wallet Address</div>
-                    <div className="header-cell actions">Actions</div>
-                </div>
-                <div className="list-body">
-                    {internalData.map((item) => (
-                        <div key={item.id} className="list-row">
-                            <div className="list-cell id">{item.id}</div>
-                            <div className="list-cell address">
-                                <span className="address-text">{item.address}</span>
-                            </div>
-                            <div className="list-cell actions">
-                                <Button 
-                                    size="sm"
-                                    variant="outline-primary"
-                                    onClick={() => setSelectedWhitelist(item)}
-                                >
-                                    Edit
-                                </Button>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </div>
+            <List 
+                headerElements={header}
+                items={internalData}
+                itemHeight={40}
+                getHeader={getHeader}
+                getElement={getElement}
+                isLoading={loading}
+                cssGrid={true}
+            />
             
             {selectedWhitelist && (
                 <WhitelistUpdateModal
