@@ -15,7 +15,7 @@ const WhitelistPage: FC = () => {
     
     return (
         <Page 
-            header="Whitelist Management"
+            header="Nacho Kats Whitelist"
             additionalHeaderComponent={
                 <Input 
                     customClass={'whitelist-search-form'}

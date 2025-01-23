@@ -125,7 +125,7 @@ const Sidebar = forwardRef<HTMLDivElement>((_, ref) => {
                                     className="nav-link"
                                     onClick={() => setExpanded(false)}
                                 >
-                                    <FaBullhorn/> Whitelist
+                                    <FaBullhorn/> Nacho Kats WL
                                 </NavLink>
 
                                 <span onClick={handleDonateClick} className={'donation-text'}>
@@ -241,7 +241,7 @@ const Sidebar = forwardRef<HTMLDivElement>((_, ref) => {
                                     to="/whitelist"
                                     className="nav-link"
                                 >
-                                    <FaFileLines/> {!collapsed && <span>Whitelist</span>}
+                                    <FaFileLines/> {!collapsed && <span>Nacho Kats WL</span>}
                                 </NavLink>
                             </ControlledExpandableDiv>
                             <div className="ad-container">

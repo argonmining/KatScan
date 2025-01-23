@@ -11,16 +11,18 @@
 .whitelist-update-modal .modal-content {
     padding: 1rem;
     background: var(--background-color, #ffffff);
-    color: var(--dark-text-color, #212529);
-    border-color: var(--dark-border-color, #dee2e6);
+    color: var(--text-color, #212529);
+    border-color: var(--border-color, #dee2e6);
 }
 
 .whitelist-update-modal .modal-header {
-    border-bottom-color: var(--dark-border-color, #dee2e6);
+    border-bottom-color: var(--border-color, #dee2e6);
+    padding: 1rem;
 }
 
 .whitelist-update-modal .modal-title {
-    color: var(--dark-text-color, #212529);
+    color: var(--text-color, #212529);
+    font-weight: 600;
 }
 
 .info-section {
@@ -34,27 +36,32 @@
     word-break: normal;
     overflow-wrap: break-word;
     hyphens: none;
-    color: var(--dark-text-color, #212529);
+    color: var(--text-color, #212529);
+}
+
+.info-section p strong {
+    font-weight: 600;
+    color: var(--text-color, #212529);
 }
 
 .fee-wallet {
     font-family: monospace;
-    background: var(--dark-card-bg, #f8f9fa);
-    padding: 0.5rem;
+    background: var(--secondary-background, #f8f9fa);
+    padding: 0.75rem;
     border-radius: 4px;
     display: inline-block;
     margin-top: 0.25rem;
     word-break: break-all;
-    color: var(--dark-text-color, #212529);
+    color: var(--text-color, #212529);
 }
 
 .qr-section {
     display: flex;
     justify-content: center;
     padding: 1.5rem;
-    background: var(--dark-card-bg, white);
+    background: var(--secondary-background, white);
     border-radius: 8px;
-    border: 1px solid var(--dark-border-color, #dee2e6);
+    border: 1px solid var(--border-color, #dee2e6);
 }
 
 .qr-code-image {
@@ -81,7 +88,7 @@
     word-break: normal;
     overflow-wrap: break-word;
     hyphens: none;
-    color: var(--dark-text-color, #212529);
+    color: var(--text-color, #212529);
 }
 
 .loading-overlay {
@@ -100,53 +107,63 @@
 
 /* Form controls */
 .whitelist-update-modal .form-control {
-    background: var(--dark-card-bg, #ffffff);
-    color: var(--dark-text-color, #212529);
-    border-color: var(--dark-border-color, #dee2e6);
+    background: var(--secondary-background, #ffffff);
+    color: var(--text-color, #212529);
+    border-color: var(--border-color, #dee2e6);
 }
 
 .whitelist-update-modal .form-control:focus {
-    background: var(--dark-card-bg, #ffffff);
-    color: var(--dark-text-color, #212529);
-    border-color: var(--dark-primary-color, #0d6efd);
+    background: var(--secondary-background, #ffffff);
+    color: var(--text-color, #212529);
+    border-color: var(--primary-color, #0d6efd);
     box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
 }
 
 .whitelist-update-modal .form-label {
-    color: var(--dark-text-color, #212529);
+    color: var(--text-color, #212529);
+    font-weight: 500;
 }
 
 /* Dark mode support */
 [data-bs-theme="dark"] .whitelist-update-modal {
     --background-color: var(--dark-bg-color);
+    --text-color: var(--dark-text-color);
+    --border-color: var(--dark-border-color);
+    --secondary-background: var(--dark-header-bg);
+    --primary-color: var(--dark-primary-color);
+    --overlay-background: rgba(0, 0, 0, 0.8);
 }
 
 [data-bs-theme="dark"] .whitelist-update-modal .modal-content {
-    background-color: var(--dark-card-bg);
-    border-color: var(--dark-border-color);
+    background-color: var(--dark-bg-color);
 }
 
-[data-bs-theme="dark"] .whitelist-update-modal .modal-header {
+[data-bs-theme="dark"] .whitelist-update-modal .modal-footer {
+    border-top-color: var(--dark-border-color);
+}
+
+[data-bs-theme="dark"] .whitelist-update-modal .btn-outline-primary {
+    border-color: var(--dark-primary-color);
+    color: var(--dark-primary-color);
+}
+
+[data-bs-theme="dark"] .whitelist-update-modal .btn-outline-primary:hover {
+    background-color: var(--dark-primary-color);
+    color: #fff;
+}
+
+[data-bs-theme="dark"] .whitelist-update-modal .btn-primary {
+    background-color: var(--dark-primary-color);
+    border-color: var(--dark-primary-color);
+    color: #fff;
+}
+
+[data-bs-theme="dark"] .whitelist-update-modal .btn-secondary {
+    background-color: var(--dark-header-bg);
     border-color: var(--dark-border-color);
+    color: var(--dark-text-color);
 }
 
 [data-bs-theme="dark"] .whitelist-update-modal .close {
     color: var(--dark-text-color);
-}
-
-[data-bs-theme="dark"] .whitelist-update-modal .modal-title {
-    color: var(--dark-text-color);
-}
-
-[data-bs-theme="dark"] .fee-wallet {
-    background-color: var(--dark-header-bg);
-}
-
-[data-bs-theme="dark"] .qr-section {
-    background-color: var(--dark-header-bg);
-    border-color: var(--dark-border-color);
-}
-
-[data-bs-theme="dark"] .loading-overlay {
-    background: var(--overlay-background, rgba(0, 0, 0, 0.8));
 } 
