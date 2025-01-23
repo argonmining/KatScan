@@ -4,12 +4,14 @@
 }
 
 .whitelist-update-modal .modal-dialog {
-    max-width: 600px;
+    max-width: 800px;
     width: 100%;
 }
 
 .whitelist-update-modal .modal-content {
     padding: 1rem;
+    background: var(--background-color, #ffffff);
+    color: var(--text-color, #212529);
 }
 
 .info-section {
@@ -20,29 +22,31 @@
 
 .info-section p {
     margin: 0;
-    word-break: break-all;
+    word-break: normal;
     overflow-wrap: break-word;
+    hyphens: none;
 }
 
 .fee-wallet {
     font-family: monospace;
-    background: var(--background-color, #f8f9fa);
+    background: var(--secondary-background, #f8f9fa);
     padding: 0.5rem;
     border-radius: 4px;
     display: inline-block;
     margin-top: 0.25rem;
+    word-break: break-all;
 }
 
 .qr-section {
     display: flex;
     justify-content: center;
     padding: 1.5rem 0;
-    background: white;
+    background: var(--qr-background, white);
     border-radius: 8px;
 }
 
 .qr-code-image {
-    border: 1px solid #dee2e6;
+    border: 1px solid var(--border-color, #dee2e6);
     padding: 1rem;
     border-radius: 8px;
     background: white;
@@ -59,6 +63,9 @@
     text-align: center;
     margin: 1rem 0;
     line-height: 1.5;
+    word-break: normal;
+    overflow-wrap: break-word;
+    hyphens: none;
 }
 
 .loading-overlay {
@@ -67,7 +74,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(255, 255, 255, 0.8);
+    background: var(--overlay-background, rgba(255, 255, 255, 0.8));
     display: flex;
     justify-content: center;
     align-items: center;
@@ -77,17 +84,24 @@
 /* Dark mode support */
 [data-bs-theme="dark"] .whitelist-update-modal {
     --background-color: #2b2b2b;
-}
-
-[data-bs-theme="dark"] .fee-wallet {
-    background: #3a3a3a;
-}
-
-[data-bs-theme="dark"] .qr-section {
-    background: #2b2b2b;
+    --text-color: #e0e0e0;
+    --secondary-background: #3a3a3a;
+    --border-color: #404040;
+    --qr-background: #2b2b2b;
+    --overlay-background: rgba(0, 0, 0, 0.8);
 }
 
 .whitelist-update-modal .form-control {
-    word-break: break-all;
+    word-break: normal;
     overflow-wrap: break-word;
+    background: var(--secondary-background, #ffffff);
+    color: var(--text-color, #212529);
+    border-color: var(--border-color, #dee2e6);
+}
+
+.whitelist-update-modal .form-control:focus {
+    background: var(--secondary-background, #ffffff);
+    color: var(--text-color, #212529);
+    border-color: var(--primary-color, #0d6efd);
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
 } 

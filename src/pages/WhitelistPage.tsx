@@ -32,7 +32,7 @@ const WhitelistPage: FC = () => {
     );
 }
 
-const donHeaders = ['Wallet Address', 'Actions']
+const donHeaders = ['ID', 'Wallet Address', 'Actions']
 
 type ListProps = {
     searchTerm: string
@@ -64,13 +64,18 @@ const Whitelist: FC<ListProps> = ({searchTerm}) => {
 
     const renderItem = (item: WhitelistData): Record<string, unknown> & { id: string } => ({
         ...item,
+        'ID': (
+            <div className="list-cell id">
+                {item.id}
+            </div>
+        ),
         'Wallet Address': (
             <div className="list-cell address">
                 {item.address}
             </div>
         ),
         'Actions': (
-            <div className="list-cell">
+            <div className="list-cell actions">
                 <Button 
                     size="sm"
                     variant="outline-primary"
