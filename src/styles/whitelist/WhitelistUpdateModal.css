@@ -9,45 +9,56 @@
 }
 
 .whitelist-update-modal .modal-content {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+    padding: 1rem;
 }
 
 .info-section {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 1rem;
 }
 
 .info-section p {
-    margin-bottom: 8px;
+    margin: 0;
     word-break: break-all;
     overflow-wrap: break-word;
+}
+
+.fee-wallet {
+    font-family: monospace;
+    background: var(--background-color, #f8f9fa);
+    padding: 0.5rem;
+    border-radius: 4px;
+    display: inline-block;
+    margin-top: 0.25rem;
 }
 
 .qr-section {
     display: flex;
     justify-content: center;
-    padding: 20px 0;
+    padding: 1.5rem 0;
+    background: white;
+    border-radius: 8px;
 }
 
 .qr-code-image {
-    max-width: 200px;
-    height: auto;
+    border: 1px solid #dee2e6;
+    padding: 1rem;
+    border-radius: 8px;
+    background: white;
 }
 
 .button-section {
     display: flex;
-    gap: 10px;
+    gap: 1rem;
     justify-content: center;
-    flex-wrap: wrap;
+    margin: 1rem 0;
 }
 
 .instructions {
     text-align: center;
-    margin: 20px 0;
-    word-wrap: break-word;
+    margin: 1rem 0;
+    line-height: 1.5;
 }
 
 .loading-overlay {
@@ -61,6 +72,19 @@
     justify-content: center;
     align-items: center;
     z-index: 1000;
+}
+
+/* Dark mode support */
+[data-bs-theme="dark"] .whitelist-update-modal {
+    --background-color: #2b2b2b;
+}
+
+[data-bs-theme="dark"] .fee-wallet {
+    background: #3a3a3a;
+}
+
+[data-bs-theme="dark"] .qr-section {
+    background: #2b2b2b;
 }
 
 .whitelist-update-modal .form-control {

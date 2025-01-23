@@ -40,11 +40,27 @@ export const WhitelistUpdateModal: React.FC<WhitelistUpdateModalProps> = ({
         if (show) {
             setLoading(true);
             void whitelistUpdateService.getFee()
-                .then(response => setFeeData(response.result))
-                .catch(() => addAlert('error', 'Failed to fetch fee information'))
+                .then(response => {
+                    console.log('Fee API Response:', response);
+                    if (response && response.result) {
+                        setFeeData(response.result);
+                        console.log('Set Fee Data:', response.result);
+                    } else {
+                        console.error('Invalid API response structure:', response);
+                        addAlert('error', 'Invalid fee information received');
+                    }
+                })
+                .catch((error) => {
+                    console.error('Fee API Error:', error);
+                    addAlert('error', 'Failed to fetch fee information');
+                })
                 .finally(() => setLoading(false));
         }
     }, [show]);
+
+    // Debug render
+    console.log('Current Fee Data:', feeData);
+    console.log('Loading State:', loading);
 
     const handleSubmit = async () => {
         if (!feeData) return;
@@ -75,6 +91,7 @@ export const WhitelistUpdateModal: React.FC<WhitelistUpdateModalProps> = ({
             onHide={onClose}
             centered
             className="whitelist-update-modal"
+            size="lg"
         >
             <Modal.Header closeButton data-bs-theme={isDarkMode ? 'dark' : 'light'}>
                 <Modal.Title>
@@ -88,28 +105,31 @@ export const WhitelistUpdateModal: React.FC<WhitelistUpdateModalProps> = ({
                     <div className="info-section">
                         <p><strong>Whitelist Spot ID:</strong> {whitelistData.id}</p>
                         <p><strong>Current WL Address:</strong> {whitelistData.address}</p>
-                        <p><strong>Update Fee Amount:</strong> {feeData?.amountInKAS} KAS</p>
-                        <p><strong>Send to:</strong> {feeData?.feeWallet}</p>
+                        <p><strong>Update Fee Amount:</strong> {feeData ? `${feeData.amountInKAS} KAS` : 'Loading...'}</p>
+                        <p><strong>Send to:</strong> <span className="fee-wallet">{feeData ? feeData.feeWallet : 'Loading...'}</span></p>
                         
-                        {feeData?.feeWallet && (
+                        {feeData && feeData.feeWallet && (
                             <div className="qr-section">
                                 <QRCodeSVG
                                     value={feeData.feeWallet}
                                     size={200}
                                     level="H"
                                     className="qr-code-image"
+                                    includeMargin={true}
                                 />
                             </div>
                         )}
                         
                         <div className="button-section">
                             <Button 
+                                variant="outline-primary"
                                 onClick={() => void copyToClipboard(feeData?.feeWallet || '')}
                                 disabled={!feeData?.feeWallet}
                             >
                                 Copy Address
                             </Button>
                             <Button 
+                                variant="outline-primary"
                                 onClick={() => void copyToClipboard(feeData?.amountInKAS || '')}
                                 disabled={!feeData?.amountInKAS}
                             >
@@ -118,8 +138,8 @@ export const WhitelistUpdateModal: React.FC<WhitelistUpdateModalProps> = ({
                         </div>
                         
                         <p className="instructions">
-                            We need to validate you own the wallet you are trying to update. 
-                            Send {feeData?.amountInKAS} KAS to the address above to verify and then click Next.
+                            We need to validate you own the wallet you are trying to update.<br/>
+                            Send <strong>{feeData ? `${feeData.amountInKAS} KAS` : 'Loading...'}</strong> to the address above to verify and then click Next.
                         </p>
                     </div>
                 ) : (
