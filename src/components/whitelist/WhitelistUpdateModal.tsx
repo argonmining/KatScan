@@ -140,7 +140,7 @@ export const WhitelistUpdateModal: React.FC<WhitelistUpdateModalProps> = (
                     <p className="instructions">
                         We need to validate you own the wallet you are trying to update.<br/>
                         Send <strong>{feeData ? `${feeData.amountInKAS} KAS` : 'Loading...'}</strong> to the address
-                        above to verify and then click Next. The transaction must come from the old address listed above.
+                        above to verify and then click Next. The transaction must come from the Current WL Address listed above.
                     </p>
                 </div>
             }
