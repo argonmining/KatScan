@@ -5,6 +5,7 @@ import devQR from "../../assets/devQr.png";
 import {CustomTabs, useDarkMode} from "nacho-component-library";
 import {copyToClipboard} from "../../services/Helper";
 import './DonationModal.css'
+import {BasicModal} from "../modal/BasicModal";
 
 type Props = {
     show: boolean
@@ -21,15 +22,7 @@ export const DonationModal: FC<Props> = (
     }
 ) => {
     const {isDarkMode} = useDarkMode()
-    return <Modal
-        show={show}
-        onHide={close}
-        centered
-        className={'donate-modal'}
-    >
-        <Modal.Header closeButton data-bs-theme={isDarkMode ? 'dark' : 'light'}>
-            <Modal.Title>Donate</Modal.Title>
-        </Modal.Header>
+    return <BasicModal show={show} close={close} title={'Donate'} customClass={'donate-modal'}>
         <CustomTabs titles={['Community', 'Dev Coffee tip']}>
             <Modal.Body className="text-center">
                 <p>
@@ -74,5 +67,5 @@ export const DonationModal: FC<Props> = (
                 </Button>
             </Modal.Body>
         </CustomTabs>
-    </Modal>
+    </BasicModal>
 }

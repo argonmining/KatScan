@@ -6,3 +6,5 @@ export const katscanApiUrl = `${katscanBaseUrl}/api`
 export const katscanStaticUrl = `${katscanBaseUrl}/static`
 
 export const emptyArray = []
+
+export const wlUpdateApiUrl = 'https://whitelist.nachowyborski.xyz'
