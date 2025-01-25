@@ -5,6 +5,7 @@ import App from './App';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {HelmetProvider} from "react-helmet-async";
 import {DarkModeProvider, MobileProvider} from 'nacho-component-library'
+import {SubscriptionProvider} from "./services/subscription/SubscriptionProvider";
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -13,7 +14,9 @@ root.render(
         <HelmetProvider>
             <DarkModeProvider>
                 <MobileProvider>
-                    <App/>
+                    <SubscriptionProvider>
+                        <App/>
+                    </SubscriptionProvider>
                 </MobileProvider>
             </DarkModeProvider>
         </HelmetProvider>

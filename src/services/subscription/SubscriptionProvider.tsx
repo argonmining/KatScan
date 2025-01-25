@@ -1,19 +1,17 @@
-import React, {createContext, FC, PropsWithChildren, useCallback, useContext, useEffect, useRef, useState} from "react";
+import React, {createContext, FC, PropsWithChildren, useCallback, useEffect, useRef, useState} from "react";
 import {Client, Message, StompSubscription} from "@stomp/stompjs";
 import {katscanBaseUrl} from "../../utils/StaticVariables";
 import SockJS from "sockjs-client";
-import {uniqueId} from "lodash";
 
-type Methods = 'update' | 'insert' | 'delete'
-type CallbackType = (message: Message) => void
+export type Methods = 'update' | 'insert' | 'delete'
+export type CallbackType = (message: Message) => void
 type ContextType = {
-    // stompClient: React.MutableRefObject<Client | null>
     error: boolean
     subscribe: (table: string, method: Methods, callback: CallbackType, uuid: string, id?: string) => void
     unsubscribe: (table: string, method: Methods, uuid: string, id?: string) => void
 }
 
-const SubscriptionsContext = createContext<ContextType>({
+export const SubscriptionsContext = createContext<ContextType>({
     error: false,
     subscribe: () => undefined,
     unsubscribe: () => undefined
@@ -39,6 +37,7 @@ type SubscriptionWrapper = {
 export const SubscriptionProvider: FC<PropsWithChildren> = ({children}) => {
     const [error, setError] = useState(false);
     const stompClient = useRef<Client | null>(null);
+    const [isConnected, setIsConnected] = useState(false)
     const registry = useRef<Registry>({
         insert: {},
         update: {},
@@ -59,6 +58,7 @@ export const SubscriptionProvider: FC<PropsWithChildren> = ({children}) => {
             heartbeatOutgoing: 10000,
             onConnect: () => {
                 console.log('Connected to WebSocket');
+                setIsConnected(true)
             },
             onStompError: (frame) => {
                 console.error('Broker reported error: ' + frame.headers['message'])
@@ -72,6 +72,7 @@ export const SubscriptionProvider: FC<PropsWithChildren> = ({children}) => {
             stompClient.current?.deactivate();
         };
     }, []);
+
 
     const insertSubscriptiption = useCallback((message: Message) => {
         const body = JSON.parse(message.body) as SubscriptionWrapper
@@ -88,15 +89,33 @@ export const SubscriptionProvider: FC<PropsWithChildren> = ({children}) => {
                 if (idReg) {
                     Object.values(idReg).forEach(single => single(message))
                 }
-                Object.entries(registry.current[body.method][body.table]).forEach(([key, value])=>{
-                    if (key !== (body.content['id'].toString())){
-
+                Object.entries(registry.current[body.method][body.table]).forEach(([key, value]) => {
+                    if (key !== body.content['id'] && typeof value === 'function') {
+                        value(message)
                     }
                 })
+                return
             }
-            Object.values(registry.current[body.method][body.table]).forEach(single => single(message))
+            Object.entries(registry.current[body.method][body.table]).forEach(([, value]) => {
+                if (typeof value === 'function') {
+                    value(message)
+                }
+            })
         }
     }, [])
+
+    useEffect(() => {
+        if (!isConnected) {
+            return
+        }
+        (['insert', 'update', 'delete'] as Methods[]).forEach(method => {
+            Object.keys(registry.current[method]).forEach((single: string) => {
+                if (!subRegistry.current[method][single]) {
+                    subRegistry.current[method][single] = stompClient.current?.subscribe(`/multicast/${single}/${method}`, method === 'insert' ? insertSubscriptiption : updateAndDeleteSubscriptiption)
+                }
+            })
+        })
+    }, [isConnected, updateAndDeleteSubscriptiption, insertSubscriptiption]);
 
     const subscribe = useCallback((table: string, method: Methods, callback: CallbackType, uuid: string, id?: string): void => {
         if (registry.current[method][table] === undefined) {
@@ -104,7 +123,9 @@ export const SubscriptionProvider: FC<PropsWithChildren> = ({children}) => {
         }
         if (method === 'insert') {
             if (Object.keys(registry.current[method][table]).length === 0) {
-                subRegistry.current[method][table] = stompClient.current?.subscribe(`/multicast/${table}/insert`, insertSubscriptiption)
+                if (isConnected) {
+                    subRegistry.current[method][table] = stompClient.current?.subscribe(`/multicast/${table}/insert`, insertSubscriptiption)
+                }
             }
             //on insert we dont have an id subscription
             registry.current[method][table][uuid] = callback
@@ -117,10 +138,12 @@ export const SubscriptionProvider: FC<PropsWithChildren> = ({children}) => {
             (registry.current[method][table][id] as Record<string, Callback>)[uuid] = callback
         }
         if (Object.keys(registry.current[method][table]).length === 0) {
-            subRegistry.current[method][table] = stompClient.current?.subscribe(`/multicast/${table}/${method}`, updateAndDeleteSubscriptiption)
+            if (isConnected) {
+                subRegistry.current[method][table] = stompClient.current?.subscribe(`/multicast/${table}/${method}`, updateAndDeleteSubscriptiption)
+            }
         }
         registry.current[method][table][uuid] = callback
-    }, [insertSubscriptiption, updateAndDeleteSubscriptiption])
+    }, [insertSubscriptiption, updateAndDeleteSubscriptiption, isConnected])
 
 
     const unsubscribe = useCallback((table: string, method: Methods, uuid: string, id?: string): void => {
@@ -142,20 +165,4 @@ export const SubscriptionProvider: FC<PropsWithChildren> = ({children}) => {
     return <SubscriptionsContext.Provider value={{error, subscribe, unsubscribe}}>
         {children}
     </SubscriptionsContext.Provider>
-}
-
-export const useSubscription = (table: string, method: Methods, callback: CallbackType, id?: string) => {
-    const {error, subscribe, unsubscribe} = useContext(SubscriptionsContext)
-    const uuid = useRef(uniqueId()).current
-
-    useEffect(() => {
-        if (error) {
-            console.log("cant connect to subscription, client is not working")
-            return
-        }
-        if (stompClient.current) {
-
-        }
-
-    }, [error, stompClient]);
 }
