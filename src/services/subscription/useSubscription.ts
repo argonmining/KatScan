@@ -14,6 +14,7 @@ export const useSubscription = (table: string, method: Methods, callback: Callba
             return
         }
         subscribe(table, method, callback, uuid, id)
+
         return () => {
             unsubscribe(table, method, uuid, id)
         }
