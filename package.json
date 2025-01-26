@@ -6,6 +6,9 @@
     "@fortawesome/fontawesome-svg-core": "^6.6.0",
     "@fortawesome/free-solid-svg-icons": "^6.6.0",
     "@fortawesome/react-fontawesome": "^0.2.2",
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
     "@stomp/stompjs": "^7.0.0",
     "@types/lodash": "^4.17.13",
     "@types/node": "^22.5.5",
@@ -19,11 +22,13 @@
     "lodash": "^4.17.21",
     "nacho-component-library": "github:argonmining/nacho-component-library",
     "prop-types": "^15.8.1",
+    "react": "^18.3.1",
     "qrcode.react": "^4.2.0",
     "react-apexcharts": "^1.6.0",
     "react-bootstrap": "^2.10.4",
     "react-calendar-heatmap": "^1.9.0",
     "react-chartjs-2": "^5.2.0",
+    "react-dom": "^18.3.1",
     "react-force-graph": "^1.44.4",
     "react-heatmap-grid": "^0.9.0",
     "react-helmet-async": "^2.0.5",
@@ -57,13 +62,7 @@
       "last 1 safari version"
     ]
   },
-  "peerDependencies": {
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
-  },
   "devDependencies": {
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
     "@craco/craco": "^7.1.0",
     "@typescript-eslint/eslint-plugin": "^4.15.1",
     "@typescript-eslint/parser": "^4.15.1",
