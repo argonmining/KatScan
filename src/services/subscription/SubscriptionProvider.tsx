@@ -85,12 +85,13 @@ export const SubscriptionProvider: FC<PropsWithChildren> = ({children}) => {
         const body = JSON.parse(message.body) as SubscriptionWrapper
         if (registry.current[body.method][body.table]) {
             if (body.content['id']) {
-                const idReg = registry.current[body.method][body.table][body.content['id'].toString()] as Record<string, Callback> | undefined
+                const id = body.content['id'].toString()
+                const idReg = registry.current[body.method][body.table][id] as Record<string, Callback> | undefined
                 if (idReg) {
                     Object.values(idReg).forEach(single => single(message))
                 }
                 Object.entries(registry.current[body.method][body.table]).forEach(([key, value]) => {
-                    if (key !== body.content['id'] && typeof value === 'function') {
+                    if (key !== id && typeof value === 'function') {
                         value(message)
                     }
                 })
@@ -131,18 +132,19 @@ export const SubscriptionProvider: FC<PropsWithChildren> = ({children}) => {
             registry.current[method][table][uuid] = callback
             return
         }
-        if (id) {
-            if (registry.current[method][table][id] === undefined) {
-                registry.current[method][table][id] = {}
-            }
-            (registry.current[method][table][id] as Record<string, Callback>)[uuid] = callback
-        }
         if (Object.keys(registry.current[method][table]).length === 0) {
             if (isConnected) {
                 subRegistry.current[method][table] = stompClient.current?.subscribe(`/multicast/${table}/${method}`, updateAndDeleteSubscriptiption)
             }
         }
-        registry.current[method][table][uuid] = callback
+        if (id) {
+            if (registry.current[method][table][id] === undefined) {
+                registry.current[method][table][id] = {}
+            }
+            (registry.current[method][table][id] as Record<string, Callback>)[uuid] = callback
+        } else {
+            registry.current[method][table][uuid] = callback
+        }
     }, [insertSubscriptiption, updateAndDeleteSubscriptiption, isConnected])
 
 

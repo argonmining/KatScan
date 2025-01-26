@@ -1,10 +1,9 @@
 import {useContext, useEffect, useRef} from "react";
-import {uniqueId} from "lodash";
 import {CallbackType, Methods, SubscriptionsContext} from "./SubscriptionProvider";
 
 export const useSubscription = (table: string, method: Methods, callback: CallbackType, id?: string): void => {
     const {error, subscribe, unsubscribe} = useContext(SubscriptionsContext)
-    const uuid = useRef(uniqueId()).current
+    const uuid = useRef(crypto.randomUUID()).current
 
     useEffect(() => {
         if (error) {
