@@ -1,8 +1,8 @@
 @import './globals.css';
 
 :root {
-    --sidebar-bg: rgba(248, 249, 250, 0.7);
-    --sidebar-hover-bg: rgba(233, 236, 239, 0.8);
+    --sidebar-bg: #f8f9fa; /* Light gray background */
+    --sidebar-hover-bg: #e9ecef; /* Slightly darker gray for hover background */
     --sidebar-blur: 12px;
     --sidebar-border: rgba(255, 255, 255, 0.1);
     --sidebar-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
@@ -15,7 +15,7 @@
         backdrop-filter: blur(var(--sidebar-blur));
         -webkit-backdrop-filter: blur(var(--sidebar-blur));
         color: var(--secondary-primary-color);
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         overflow-x: hidden;
         z-index: 1000;
         box-shadow: var(--sidebar-shadow);
@@ -92,38 +92,21 @@
         margin-right: 1rem;
         position: relative;
         overflow: hidden;
-    }
-
-    .nav-link::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 0;
-        height: 100%;
-        width: 3px;
-        background: var(--primary-color);
-        transform: scaleY(0);
-        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border-left: 3px solid transparent;
     }
 
     .nav-link:hover {
         color: var(--primary-color) !important;
         background-color: var(--sidebar-hover-bg);
         transform: translateX(4px);
-    }
-
-    .nav-link:hover::before {
-        transform: scaleY(1);
+        text-decoration: none;
     }
 
     .nav-link.active {
         color: var(--primary-color) !important;
-        font-weight: 600;
+        font-weight: bold;
         background-color: var(--sidebar-hover-bg);
-    }
-
-    .nav-link.active::before {
-        transform: scaleY(1);
+        border-left-color: var(--primary-color);
     }
 
     .nav-link svg {
@@ -135,6 +118,18 @@
 
     .nav-link:hover svg {
         transform: scale(1.1);
+    }
+
+    /* Original dark mode toggle styling */
+    .dark-mode-toggle {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        z-index: 1000;
+    }
+
+    .dark-mode-toggle .switch {
+        margin-left: 10px;
     }
 
     .expandable-div {
@@ -152,14 +147,16 @@
         transition: all 0.3s ease;
         border-radius: 8px;
         margin: 0 1rem;
+        background-color: var(--primary-color);
     }
 
     .expandable-div-header:hover {
-        background-color: var(--sidebar-hover-bg);
+        filter: brightness(1.1);
     }
 
     .expandable-div-header svg {
         transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        color: white;
     }
 
     .expandable-div-header.extended svg {
@@ -177,10 +174,18 @@
     }
 
     .ad-container {
-        margin: 1rem;
-        padding: 1rem;
+        flex-grow: 1;
+        max-height: 300px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         background: rgba(var(--primary-color-rgb), 0.03);
+        margin: 1rem;
         border-radius: 12px;
+        text-align: center;
+        color: var(--secondary-primary-color);
+        font-size: 0.9rem;
+        padding: 1rem;
         backdrop-filter: blur(8px);
         -webkit-backdrop-filter: blur(8px);
         border: 1px solid var(--sidebar-border);
@@ -193,8 +198,12 @@
     }
 
     .ad-image {
-        width: 100%;
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
         height: auto;
+        display: block;
+        margin: 0 auto;
         border-radius: 8px;
         transition: transform 0.3s ease;
     }
@@ -224,38 +233,7 @@
     }
 }
 
-/* Hide the sidebar on screens smaller than 992px (bootstrap lg) */
-@media (max-width: 991px) {
-    .sidebar {
-        display: none !important; /* This ensures the sidebar is completely hidden */
-    }
-
-    /* Navbar (hamburger menu) should show here */
-    .navbar {
-        display: block; /* Ensure the navbar (hamburger menu) is visible */
-    }
-
-    .main-content {
-        width: 100%; /* Ensure the main content takes the full width */
-    }
-
-    .navbar .logo-image {
-        width: 30px;
-        height: 30px;
-        margin-right: 10px;
-    }
-
-    .navbar .navbar-brand {
-        display: flex;
-        align-items: center;
-    }
-
-    .navbar .navbar-brand span {
-        font-size: 1.2rem;
-        color: var(--secondary-primary-color);
-    }
-}
-
+/* Dark mode styles */
 .dark-mode {
     --sidebar-bg: rgba(18, 18, 18, 0.7);
     --sidebar-hover-bg: rgba(30, 30, 30, 0.8);
@@ -295,155 +273,50 @@
     color: var(--dark-primary-color) !important;
 }
 
-.dark-mode-toggle {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.75rem 1.25rem;
-    margin: 0.5rem 1rem;
-    border-radius: 8px;
-    transition: background-color 0.3s ease;
-}
-
-.dark-mode-toggle:hover {
-    background-color: var(--sidebar-hover-bg);
-}
-
-.dark-mode-toggle .switch {
-    margin-left: 10px;
-}
-
-.sidebar-dark-mode-toggle {
-    padding: 0.75rem 1rem;
-    border-top: 1px solid var(--sidebar-border);
-}
-
-.dark-mode .sidebar-dark-mode-toggle {
-    border-top-color: var(--dark-border-color);
-}
-
-.mobile-dark-mode-toggle {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0.5rem 1rem;
-    margin-top: 1rem;
-}
-
-.dark-mode .mobile-dark-mode-toggle {
-    border-top-color: var(--dark-border-color);
-}
-
-.mobile-dark-mode-toggle .dark-mode-label {
-    margin-right: 1rem;
-}
-
-.sidebar-logo {
-    display: inline-block;
-    vertical-align: middle;
-}
-
-.navbar-brand .sidebar-logo {
-    width: 30px;
-    height: 30px;
-}
-
-/*todo move styling*/
-.dark-mode .modal-content {
-    background-color: var(--dark-bg-color);
-    color: var(--dark-text-color);
-}
-
-.dark-mode .modal-header {
-    border-bottom-color: var(--dark-border-color);
-}
-
-.dark-mode .modal-header .close {
-    color: var(--dark-text-color);
-}
-
-.dark-mode .modal-title {
-    color: var(--dark-primary-color);
-}
-
-.dark-mode .address-text {
-    color: var(--dark-text-color);
-}
-
-.dark-mode .btn-outline-light {
-    color: var(--dark-text-color);
-    border-color: var(--dark-text-color);
-}
-
-.dark-mode .btn-outline-light:hover {
-    color: var(--dark-bg-color);
-    background-color: var(--dark-text-color);
-}
-
-.dark-mode .navbar .navbar-brand span {
-    color: var(--dark-text-color);
-}
-
-.dark-mode .navbar-light .navbar-nav .nav-link {
-    color: var(--dark-text-color);
-}
-
-.dark-mode .navbar-light .navbar-nav .nav-link:hover,
-.dark-mode .navbar-light .navbar-nav .nav-link:focus {
-    color: var(--dark-primary-color);
-}
-
-.sidebar-footer {
-    text-align: center;
-    line-height: 1.2;
-    margin-bottom: 5px;
-    font-size: 0.8rem;
-    padding: 5px;
-}
-
-.sidebar-content {
-    .flex-column {
-        position: relative;
-        height: inherit;
-        min-height: 710px;
-        padding-top: 16px;
+/* Mobile styles */
+@media (max-width: 991px) {
+    .sidebar {
+        display: none !important;
     }
 
-    .expandable-div {
-        & span:first-child {
-            font-family: var(--sub-header-font);
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            opacity: 0.8;
-        }
-
-        .expandable-div-header {
-            border: none;
-            background-color: var(--primary-color);
-
-            & svg {
-                color: white
-            }
-        }
-
-        .expandable-div-body {
-            padding: unset !important;
-
-            &.extended {
-                padding: 10px 0 !important;
-                margin-bottom: 16px;
-            }
-        }
+    .navbar {
+        display: block;
     }
 
-    .ad-container {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
+    .main-content {
+        width: 100%;
+    }
+
+    .navbar .logo-image {
+        width: 30px;
+        height: 30px;
+        margin-right: 10px;
+    }
+
+    .navbar .navbar-brand {
+        display: flex;
+        align-items: center;
+    }
+
+    .navbar .navbar-brand span {
+        font-size: 1.2rem;
+        color: var(--secondary-primary-color);
+    }
+
+    .mobile-dark-mode-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.5rem 1rem;
+        margin-top: 1rem;
+    }
+
+    .mobile-dark-mode-toggle .dark-mode-label {
+        margin-right: 1rem;
     }
 }
 
+/* Rest of the mobile and dark mode styles */
 .mobile-view .navbar {
     .navbar-nav {
         background-color: rgba(var(--bs-light-rgb), var(--bs-bg-opacity));
@@ -463,10 +336,6 @@
             cursor: pointer;
             padding: 10px;
             text-align: center;
-
-            &:hover {
-
-            }
         }
     }
 }
