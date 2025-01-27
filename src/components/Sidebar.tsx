@@ -10,6 +10,7 @@ import {
     FaFireAlt,
     FaRobot,
     FaSearch,
+    FaPaintBrush,
     FaUsers,
     FaWallet,
     FaBullhorn
@@ -18,7 +19,7 @@ import logo from '../assets/logo.png'
 import yourAdHere from '../assets/nachoNFT.png'
 import 'styles/Sidebar.css'
 import {DonationModal} from "./donationModal/DonationModal";
-import {ControlledExpandableDiv, ThemeToggle, useDarkMode, useMobile} from "nacho-component-library";
+import {ControlledExpandableDiv, useDarkMode, useMobile} from "nacho-component-library";
 import {FaFileLines} from "react-icons/fa6";
 
 const Sidebar = forwardRef<HTMLDivElement>((_, ref) => {
@@ -27,7 +28,7 @@ const Sidebar = forwardRef<HTMLDivElement>((_, ref) => {
     const [expanded, setExpanded] = useState(false)
     const {isDarkMode} = useDarkMode()
     const {isMobile} = useMobile()
-    const [openCategory, setOpenCategory] = useState<string | undefined>('KRC-20-Explorer')
+    const [openCategory, setOpenCategory] = useState<string | undefined>('KRC-721-Explorer')
 
     const handleDonateClick = () => {
         setShowDonateModal(true)
@@ -55,7 +56,6 @@ const Sidebar = forwardRef<HTMLDivElement>((_, ref) => {
                             />
                             <span>KatScan</span>
                         </Navbar.Brand>
-                        <ThemeToggle/>
                         <Navbar.Toggle
                             aria-controls="basic-navbar-nav"
                             onClick={() => setExpanded(!expanded)}
@@ -69,14 +69,14 @@ const Sidebar = forwardRef<HTMLDivElement>((_, ref) => {
                                     className="nav-link"
                                     onClick={() => setExpanded(false)}
                                 >
-                                    <FaSearch/> Search Transactions
+                                    <FaSearch/> Transactions
                                 </NavLink>
                                 <NavLink
                                     to="/wallet"
                                     className="nav-link"
                                     onClick={() => setExpanded(false)}
                                 >
-                                    <FaWallet/> Search Addresses
+                                    <FaWallet/> Addresses
                                 </NavLink>
                                 <NavLink
                                     to="/top-holders"
@@ -159,6 +159,20 @@ const Sidebar = forwardRef<HTMLDivElement>((_, ref) => {
                             </Link>
                         </div>
                         <Nav className="flex-column">
+                        <ControlledExpandableDiv id={'KRC-721-Explorer'}
+                                                     title={'KRC-721 Explorer'}
+                                                     changeExtended={(id) => setOpenCategory(id)}
+                                                     isExtended={openCategory === 'KRC-721-Explorer'}>
+                                <NavLink
+                                    to="https://nft.katscan.xyz"
+                                    className="nav-link"
+                                >
+                                    <FaPaintBrush/>{' '}
+                                    {!collapsed && (
+                                        <span>Explore NFTs</span>
+                                    )}
+                                </NavLink>
+                            </ControlledExpandableDiv>
                             <ControlledExpandableDiv id={'KRC-20-Explorer'}
                                                      title={'KRC-20 Explorer'}
                                                      changeExtended={(id) => setOpenCategory(id)}
@@ -212,7 +226,7 @@ const Sidebar = forwardRef<HTMLDivElement>((_, ref) => {
                                 {/*</NavSection>*/}
                             </ControlledExpandableDiv>
                             <ControlledExpandableDiv id={'KRC-20-Tools'}
-                                                     title={'KRC-20 Tools'}
+                                                     title={'Tools'}
                                                      changeExtended={(id) => setOpenCategory(id)}
                                                      isExtended={openCategory === 'KRC-20-Tools'}>
                                 <NavLink
@@ -252,7 +266,6 @@ const Sidebar = forwardRef<HTMLDivElement>((_, ref) => {
                                 </a>
                             </div>
                         </Nav>
-                        <ThemeToggle/>
                         <div className="sidebar-footer">
                             {!collapsed && (
                                 <p onClick={handleDonateClick} style={{cursor: 'pointer'}}>

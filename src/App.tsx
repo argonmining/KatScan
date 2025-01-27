@@ -4,7 +4,7 @@ import Sidebar from './components/Sidebar'
 import './styles/App.css'
 import './styles/globals.css'
 import './styles/darkMode.css'
-import {LoadingSpinner, usePageResize} from 'nacho-component-library'
+import {LoadingSpinner, ThemeToggle, usePageResize} from 'nacho-component-library'
 import {Alerts} from "./components/alerts/Alerts";
 import {Announcements} from "./components/announcements/Announcements";
 
@@ -32,6 +32,7 @@ const App: FC = () => {
         <Router>
             <div className="App">
                 <div id={'portal-container'}/>
+                <ThemeToggle />
                 <Alerts/>
                 <Announcements/>
                 <Sidebar ref={elementRef} />
