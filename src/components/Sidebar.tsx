@@ -28,7 +28,7 @@ const Sidebar = forwardRef<HTMLDivElement>((_, ref) => {
     const [expanded, setExpanded] = useState(false)
     const {isDarkMode} = useDarkMode()
     const {isMobile} = useMobile()
-    const [openCategory, setOpenCategory] = useState<string | undefined>('KRC-20-Explorer')
+    const [openCategory, setOpenCategory] = useState<string | undefined>('KRC-721-Explorer')
 
     const handleDonateClick = () => {
         setShowDonateModal(true)
