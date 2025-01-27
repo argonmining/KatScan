@@ -245,9 +245,9 @@ const Sidebar = forwardRef<HTMLDivElement>((_, ref) => {
                                 </NavLink>
                             </ControlledExpandableDiv>
                             <div className="ad-container">
-                                <a href="https://www.kaspaw.io/" target="_blank" rel="noopener noreferrer">
+                                <a href="https://t.me/kspr_home_bot?start=nacho" target="_blank" rel="noopener noreferrer">
                                     <img src={yourAdHere as string}
-                                         alt="KPAW Advert"
+                                         alt="Nachk Kats NFTs Advert"
                                          className="ad-image"/>
                                 </a>
                             </div>
