@@ -15,7 +15,7 @@ import {
     FaBullhorn
 } from 'react-icons/fa'
 import logo from '../assets/logo.png'
-import yourAdHere from '../assets/kpawAd.png'
+import yourAdHere from '../assets/nachoNFT.png'
 import 'styles/Sidebar.css'
 import {DonationModal} from "./donationModal/DonationModal";
 import {ControlledExpandableDiv, ThemeToggle, useDarkMode, useMobile} from "nacho-component-library";
