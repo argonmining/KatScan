@@ -19,7 +19,7 @@ import logo from '../assets/logo.png'
 import yourAdHere from '../assets/nachoNFT.png'
 import 'styles/Sidebar.css'
 import {DonationModal} from "./donationModal/DonationModal";
-import {ControlledExpandableDiv, ThemeToggle, useDarkMode, useMobile} from "nacho-component-library";
+import {ControlledExpandableDiv, useDarkMode, useMobile} from "nacho-component-library";
 import {FaFileLines} from "react-icons/fa6";
 
 const Sidebar = forwardRef<HTMLDivElement>((_, ref) => {
@@ -56,7 +56,6 @@ const Sidebar = forwardRef<HTMLDivElement>((_, ref) => {
                             />
                             <span>KatScan</span>
                         </Navbar.Brand>
-                        <ThemeToggle/>
                         <Navbar.Toggle
                             aria-controls="basic-navbar-nav"
                             onClick={() => setExpanded(!expanded)}
@@ -267,7 +266,6 @@ const Sidebar = forwardRef<HTMLDivElement>((_, ref) => {
                                 </a>
                             </div>
                         </Nav>
-                        <ThemeToggle/>
                         <div className="sidebar-footer">
                             {!collapsed && (
                                 <p onClick={handleDonateClick} style={{cursor: 'pointer'}}>

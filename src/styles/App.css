@@ -29,6 +29,8 @@ body * {
 }
 
 .App {
+    position: relative;
+    min-height: 100vh;
     display: flex;
     height: 100vh;
     flex-direction: row;
@@ -79,6 +81,11 @@ body * {
     .sidebar {
         width: 100%;
     }
+
+    .dark-mode-toggle {
+        position: static;
+        padding: 0;
+    }
 }
 
 /* Dark mode styles */
@@ -110,4 +117,20 @@ body * {
 
 .dark-mode .navbar-light .navbar-toggler-icon {
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 0.5)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+/* Dark mode toggle - positioned relative to viewport */
+.dark-mode-toggle {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 1100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.dark-mode-toggle .switch {
+    margin-left: 10px;
 }
