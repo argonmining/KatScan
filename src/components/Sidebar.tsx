@@ -10,6 +10,7 @@ import {
     FaFireAlt,
     FaRobot,
     FaSearch,
+    FaPaintBrush,
     FaUsers,
     FaWallet,
     FaBullhorn
@@ -69,14 +70,14 @@ const Sidebar = forwardRef<HTMLDivElement>((_, ref) => {
                                     className="nav-link"
                                     onClick={() => setExpanded(false)}
                                 >
-                                    <FaSearch/> Search Transactions
+                                    <FaSearch/> Transactions
                                 </NavLink>
                                 <NavLink
                                     to="/wallet"
                                     className="nav-link"
                                     onClick={() => setExpanded(false)}
                                 >
-                                    <FaWallet/> Search Addresses
+                                    <FaWallet/> Addresses
                                 </NavLink>
                                 <NavLink
                                     to="/top-holders"
@@ -159,6 +160,20 @@ const Sidebar = forwardRef<HTMLDivElement>((_, ref) => {
                             </Link>
                         </div>
                         <Nav className="flex-column">
+                        <ControlledExpandableDiv id={'KRC-721-Explorer'}
+                                                     title={'KRC-721 Explorer'}
+                                                     changeExtended={(id) => setOpenCategory(id)}
+                                                     isExtended={openCategory === 'KRC-721-Explorer'}>
+                                <NavLink
+                                    to="https://nft.katscan.xyz"
+                                    className="nav-link"
+                                >
+                                    <FaPaintBrush/>{' '}
+                                    {!collapsed && (
+                                        <span>Explore NFTs</span>
+                                    )}
+                                </NavLink>
+                            </ControlledExpandableDiv>
                             <ControlledExpandableDiv id={'KRC-20-Explorer'}
                                                      title={'KRC-20 Explorer'}
                                                      changeExtended={(id) => setOpenCategory(id)}
