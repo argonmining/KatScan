@@ -8,6 +8,30 @@
     --sidebar-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 
+/* Dark mode toggle - positioned relative to viewport */
+.dark-mode-toggle {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 1100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.dark-mode-toggle .switch {
+    margin-left: 10px;
+}
+
+/* Mobile dark mode toggle adjustments */
+@media (max-width: 991px) {
+    .dark-mode-toggle {
+        position: static;
+        padding: 0;
+    }
+}
+
 /* Show the sidebar only on screens larger than 992px */
 @media (min-width: 992px) {
     .sidebar {
@@ -18,8 +42,8 @@
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         overflow-x: hidden;
         z-index: 1000;
-        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.15);
-        border-right: 1px solid #e0e0e0;
+        box-shadow: var(--sidebar-shadow);
+        border-right: 1px solid var(--sidebar-border);
         position: relative;
     }
 
@@ -191,7 +215,7 @@
         padding: 1rem;
         backdrop-filter: blur(8px);
         -webkit-backdrop-filter: blur(8px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid var(--sidebar-border);
         transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
@@ -412,21 +436,6 @@
     color: var(--dark-primary-color) !important;
 }
 
-.dark-mode-toggle {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 1rem;
-}
-
-.dark-mode-toggle .switch {
-    margin-left: 10px;
-}
-
-.dark-mode .dark-mode-toggle {
-    border-top-color: var(--dark-border-color);
-}
-
 .dark-mode .dark-mode-label {
     color: var(--dark-text-color);
 }
@@ -545,20 +554,10 @@
         .expandable-div-header {
             border: none;
             background-color: var(--primary-color);
-            color: white;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            border-radius: 8px;
-            margin: 0 1rem;
-        }
 
-        .expandable-div-header:hover {
-            filter: brightness(1.1);
-        }
-
-        .expandable-div-header svg {
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            color: white;
+            & svg {
+                color: white
+            }
         }
 
         .expandable-div-body {
