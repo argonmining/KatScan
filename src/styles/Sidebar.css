@@ -42,6 +42,70 @@
         flex-direction: column;
         height: 100%;
         padding: 1rem 0;
+
+        .flex-column {
+            position: relative;
+            height: inherit;
+            min-height: 710px;
+            padding-top: 16px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .expandable-div {
+            & span:first-child {
+                font-family: var(--sub-header-font);
+                font-size: 0.8rem;
+                text-transform: uppercase;
+                opacity: 0.8;
+            }
+
+            .expandable-div-header {
+                border: none;
+                background-color: var(--primary-color);
+
+                & svg {
+                    color: white
+                }
+            }
+
+            .expandable-div-body {
+                padding: unset !important;
+
+                &.extended {
+                    padding: 10px 0 !important;
+                    margin-bottom: 16px;
+                }
+            }
+        }
+
+        .ad-container {
+            margin-top: auto;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: rgba(var(--primary-color-rgb), 0.03);
+            border-radius: 12px;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid var(--sidebar-border);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .ad-container:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .ad-image {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        .ad-container:hover .ad-image {
+            transform: scale(1.02);
+        }
     }
 
     .sidebar-header {
@@ -118,118 +182,6 @@
 
     .nav-link:hover svg {
         transform: scale(1.1);
-    }
-
-    /* Original dark mode toggle styling */
-    .dark-mode-toggle {
-        position: absolute;
-        top: 1rem;
-        right: 1rem;
-        z-index: 1000;
-    }
-
-    .dark-mode-toggle .switch {
-        margin-left: 10px;
-    }
-
-    .expandable-div {
-        margin: 0.5rem 0;
-    }
-
-    .expandable-div-header {
-        padding: 0.75rem 1.25rem;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        cursor: pointer;
-        color: var(--secondary-primary-color);
-        font-weight: 600;
-        transition: all 0.3s ease;
-        border-radius: 8px;
-        margin: 0 1rem;
-        background-color: var(--primary-color);
-    }
-
-    .expandable-div-header:hover {
-        filter: brightness(1.1);
-    }
-
-    .expandable-div-header svg {
-        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        color: white;
-    }
-
-    .expandable-div-header.extended svg {
-        transform: rotate(180deg);
-    }
-
-    .expandable-div-body {
-        overflow: hidden;
-        max-height: 0;
-        transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .expandable-div-body.extended {
-        max-height: 500px;
-    }
-
-    .ad-container {
-        flex-grow: 1;
-        max-height: 300px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: rgba(var(--primary-color-rgb), 0.03);
-        margin: 1rem;
-        border-radius: 12px;
-        text-align: center;
-        color: var(--secondary-primary-color);
-        font-size: 0.9rem;
-        padding: 1rem;
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
-        border: 1px solid var(--sidebar-border);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .ad-container:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    }
-
-    .ad-image {
-        max-width: 100%;
-        max-height: 100%;
-        width: auto;
-        height: auto;
-        display: block;
-        margin: 0 auto;
-        border-radius: 8px;
-        transition: transform 0.3s ease;
-    }
-
-    .ad-container:hover .ad-image {
-        transform: scale(1.02);
-    }
-
-    .sidebar-footer {
-        margin-top: auto;
-        padding: 1.5rem 1rem;
-        text-align: center;
-        border-top: 1px solid var(--sidebar-border);
-        color: var(--secondary-primary-color);
-        font-size: 0.9rem;
-        background: rgba(var(--primary-color-rgb), 0.02);
-    }
-
-    .sidebar-footer p {
-        margin: 0;
-        cursor: pointer;
-        transition: color 0.3s ease;
-    }
-
-    .sidebar-footer p:hover {
-        color: var(--primary-color);
     }
 }
 
@@ -314,6 +266,12 @@
     .mobile-dark-mode-toggle .dark-mode-label {
         margin-right: 1rem;
     }
+
+    .dark-mode-toggle {
+        position: static; /* Reset position for mobile */
+        margin: 0;
+        padding: 0;
+    }
 }
 
 /* Rest of the mobile and dark mode styles */
@@ -362,5 +320,29 @@
             background-color: var(--dark-nav-hover-bg);
             color: var(--dark-primary-color);
         }
+    }
+}
+
+/* Dark mode toggle - positioned relative to viewport */
+.dark-mode-toggle {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 1100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dark-mode-toggle .switch {
+    margin-left: 10px;
+}
+
+/* Mobile dark mode toggle */
+@media (max-width: 991px) {
+    .dark-mode-toggle {
+        position: static;
+        margin: 0;
+        padding: 0;
     }
 }
