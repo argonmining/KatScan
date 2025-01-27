@@ -212,7 +212,7 @@ const Sidebar = forwardRef<HTMLDivElement>((_, ref) => {
                                 {/*</NavSection>*/}
                             </ControlledExpandableDiv>
                             <ControlledExpandableDiv id={'KRC-20-Tools'}
-                                                     title={'KRC-20 Tools'}
+                                                     title={'Tools'}
                                                      changeExtended={(id) => setOpenCategory(id)}
                                                      isExtended={openCategory === 'KRC-20-Tools'}>
                                 <NavLink
