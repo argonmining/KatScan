@@ -1,9 +1,13 @@
-import React, {FC, ReactElement, useMemo, useState} from "react";
-import {SortFetchHook, useFetch} from "../hooks/useFetch";
+import React, {FC, ReactElement, useCallback, useMemo, useRef, useState} from "react";
+import {FetchRef, SortFetchHook, useFetch} from "../hooks/useFetch";
 import {Input, List, Page} from "nacho-component-library";
 import {WhitelistUpdateModal} from "../components/whitelist/WhitelistUpdateModal";
 import '../styles/WhitelistPage.css'
 import {BasicButton} from "../components/button/BasicButton";
+import {useSubscription} from "../services/subscription/useSubscription";
+import {Message} from "@stomp/stompjs";
+import {getSubscriptionContent} from "../services/Helper";
+import {addAlert} from "../components/alerts/Alerts";
 
 type WhitelistData = {
     id: string
@@ -41,10 +45,39 @@ const headers = ['id', 'address', 'action']
 const Whitelist: FC<ListProps> = ({searchTerm}) => {
     const [selectedWhitelist, setSelectedWhitelist] = useState<WhitelistData | null>(null);
 
+    const ref = useRef<FetchRef<WhitelistData[]>>(null)
     const {data, loading} = useFetch<WhitelistData[]>({
         url: '/whitelist',
-        sort: sort
+        sort: sort,
+        ref
     });
+    const callback = useCallback((message: Message) => {
+        const body = getSubscriptionContent<WhitelistData>(message)
+        if (ref.current) {
+            ref.current.updateData(ref.current.getData().map(single => single.id === body.id ? body : single))
+            addAlert('warning', 'The list has been updated')
+        }
+    }, [])
+
+    const insertCallback = useCallback((message: Message) => {
+        const body = getSubscriptionContent<WhitelistData>(message)
+        if (ref.current) {
+            ref.current.updateData([...ref.current.getData(), body])
+            addAlert('warning', 'The list has been updated')
+        }
+    }, [])
+
+    const deleteCallback = useCallback((message: Message) => {
+        const body = getSubscriptionContent<WhitelistData>(message)
+        if (ref.current) {
+            ref.current.updateData(ref.current.getData().filter(single => single.id !== body.id))
+            addAlert('warning', 'The list has been updated')
+        }
+    }, [])
+
+    useSubscription('Whitelist', 'update', callback)
+    useSubscription('Whitelist', 'insert', insertCallback)
+    useSubscription('Whitelist', 'delete', deleteCallback)
 
     const internalData = useMemo(() => {
         if (!data) return [];
@@ -76,7 +109,7 @@ const Whitelist: FC<ListProps> = ({searchTerm}) => {
         }
     }
     const getHeader = (header: string): ReactElement | null => {
-        switch (header){
+        switch (header) {
             case 'action':
                 return null
             default:
@@ -86,9 +119,10 @@ const Whitelist: FC<ListProps> = ({searchTerm}) => {
     return (
         <>
             <List headerElements={headers}
+                  alternateIdKey={'id'}
                   items={internalData}
                   minItemHeight={50}
-                  gridTemplate={'min(45px) 5fr min(65px)'}
+                  gridTemplate={'min(55px) 5fr min(65px)'}
                   getElement={getElement}
                   getHeader={getHeader}
                   noDataText={'No whitelist entries found'}

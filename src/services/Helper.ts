@@ -1,4 +1,6 @@
 import {addAlert} from "../components/alerts/Alerts";
+import {Message} from "@stomp/stompjs";
+import {SubscriptionWrapper} from "../interfaces/SubscriptionWrapper";
 
 // Helper function for number formatting
 export const formatNumber = (number: number | string, maxDigits = 5): string => {
@@ -88,4 +90,8 @@ export const sortComparison = <T extends number | string>(a: T, b: T, sortDirect
         return String(b).localeCompare(String(a))
     }
     return String(a).localeCompare(String(b))
+}
+
+export function getSubscriptionContent<T>(message: Message): T {
+    return (JSON.parse(message.body) as SubscriptionWrapper<T>).content
 }

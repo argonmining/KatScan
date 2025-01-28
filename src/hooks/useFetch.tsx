@@ -1,4 +1,4 @@
-import {useEffect, useMemo, useRef, useState} from "react";
+import {RefObject, useEffect, useImperativeHandle, useMemo, useRef, useState} from "react";
 import {sendRequest} from "nacho-component-library";
 import {addAlert} from "../components/alerts/Alerts";
 import {emptyArray, katscanApiUrl} from "../utils/StaticVariables";
@@ -6,7 +6,11 @@ import {generateUniqueID} from "web-vitals/dist/modules/lib/generateUniqueID";
 import {KatscanResponse} from "../interfaces/ApiResponseTypes";
 import {sortComparison} from "../services/Helper";
 
-type Props = {
+export type FetchRef<T> = {
+    getData: () => T
+    updateData: (data: T) => void
+}
+type Props<T> = {
     url: string
     defaultValue?: never[] | Record<string, unknown> | null
     errorMessage?: string
@@ -14,15 +18,16 @@ type Props = {
     params?: Record<string, string | number>
     avoidLoading?: boolean
     sort?: SortFetchHook
+    ref?: RefObject<FetchRef<T>>
 }
 
 export type SortFetchHook = [string, 'asc' | 'desc']
-type GETFetch = Props & {
+type GETFetch<T> = Props<T> & {
     method?: 'GET'
     body?: never
 }
 
-type POSTFetch = Props & {
+type POSTFetch<T> = Props<T> & {
     method: 'POST' | 'PUT'
     body: Record<string, unknown> | string
 }
@@ -41,7 +46,7 @@ export type Params = {
     sortBy?: string
 }
 
-type UseFetch = POSTFetch | GETFetch
+type UseFetch<T> = POSTFetch<T> | GETFetch<T>
 
 export function useFetch<T>(
     {
@@ -53,8 +58,9 @@ export function useFetch<T>(
         params,
         body,
         avoidLoading,
-        sort
-    }: UseFetch
+        sort,
+        ref
+    }: UseFetch<T>
 ): Return<T> {
     const [data, setData] = useState<T>(defaultValue as T)
     const [cursor, setCursor] = useState<string>()
@@ -75,7 +81,7 @@ export function useFetch<T>(
 
     useEffect(() => {
         if (!internalUrl || avoidLoading) {
-            if (avoidLoading){
+            if (avoidLoading) {
                 setLoading(false)
             }
             return
@@ -130,6 +136,12 @@ export function useFetch<T>(
                 setLoading(false)
             })
     }, [avoidLoading, body, errorMessage, internalUrl, method, params, sort, successMessage])
+    useImperativeHandle(ref, () => {
+        return {
+            updateData: (newData: T) => setData(newData),
+            getData: () => data
+        }
+    }, [data])
 
     return useMemo(() => ({
         data,
