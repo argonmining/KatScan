@@ -53,20 +53,26 @@ const Whitelist: FC<ListProps> = ({searchTerm}) => {
     });
     const callback = useCallback((message: Message) => {
         const body = getSubscriptionContent<WhitelistData>(message)
-        ref.current?.updateData(ref.current?.getData().map(single => single.id === body.id ? body : single))
-        addAlert('warning', 'The list has been updated')
+        if (ref.current) {
+            ref.current.updateData(ref.current?.getData().map(single => single.id === body.id ? body : single))
+            addAlert('warning', 'The list has been updated')
+        }
     }, [])
 
     const insertCallback = useCallback((message: Message) => {
         const body = getSubscriptionContent<WhitelistData>(message)
-        ref.current?.updateData([...ref.current?.getData(), body])
-        addAlert('warning', 'The list has been updated')
+        if (ref.current) {
+            ref.current.updateData([...ref.current?.getData(), body])
+            addAlert('warning', 'The list has been updated')
+        }
     }, [])
 
     const deleteCallback = useCallback((message: Message) => {
         const body = getSubscriptionContent<WhitelistData>(message)
-        ref.current?.updateData(ref.current?.getData().filter(single => single.id !== body.id))
-        addAlert('warning', 'The list has been updated')
+        if (ref.current) {
+            ref.current.updateData(ref.current?.getData().filter(single => single.id !== body.id))
+            addAlert('warning', 'The list has been updated')
+        }
     }, [])
 
     useSubscription('Whitelist', 'update', callback)
