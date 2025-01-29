@@ -64,6 +64,13 @@ const Sidebar = forwardRef<HTMLDivElement>((_, ref) => {
                         </Navbar.Toggle>
                         <Navbar.Collapse id="basic-navbar-nav">
                             <Nav className="me-auto">
+                            <NavLink
+                                    to="https://nft.katscan.xyz"
+                                    className="nav-link"
+                                    onClick={() => setExpanded(false)}
+                                >
+                                    <FaPaintBrush/> NFT Collections
+                                </NavLink>
                                 <NavLink
                                     to="/transaction-lookup"
                                     className="nav-link"
@@ -169,7 +176,7 @@ const Sidebar = forwardRef<HTMLDivElement>((_, ref) => {
                                 >
                                     <FaPaintBrush/>{' '}
                                     {!collapsed && (
-                                        <span>Explore NFTs</span>
+                                        <span>NFT Collections</span>
                                     )}
                                 </NavLink>
                             </ControlledExpandableDiv>
