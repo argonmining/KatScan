@@ -160,7 +160,7 @@ const Sidebar = forwardRef<HTMLDivElement>((_, ref) => {
                         </div>
                         <Nav className="flex-column">
                         <ControlledExpandableDiv id={'KRC-721-Explorer'}
-                                                     title={'KRC-721 Explorer'}
+                                                     title={'Explore KRC-721'}
                                                      changeExtended={(id) => setOpenCategory(id)}
                                                      isExtended={openCategory === 'KRC-721-Explorer'}>
                                 <NavLink
@@ -174,7 +174,7 @@ const Sidebar = forwardRef<HTMLDivElement>((_, ref) => {
                                 </NavLink>
                             </ControlledExpandableDiv>
                             <ControlledExpandableDiv id={'KRC-20-Explorer'}
-                                                     title={'KRC-20 Explorer'}
+                                                     title={'Explore KRC-20'}
                                                      changeExtended={(id) => setOpenCategory(id)}
                                                      isExtended={openCategory === 'KRC-20-Explorer'}>
                                 <NavLink
@@ -198,7 +198,7 @@ const Sidebar = forwardRef<HTMLDivElement>((_, ref) => {
                                 </NavLink>
                             </ControlledExpandableDiv>
                             <ControlledExpandableDiv id={'KRC-20-Tokens'}
-                                                     title={'KRC-20 Tokens'}
+                                                     title={'Analyze KRC-20'}
                                                      changeExtended={(id) => setOpenCategory(id)}
                                                      isExtended={openCategory === 'KRC-20-Tokens'}>
                                 <NavLink to="/tokens" className="nav-link">
