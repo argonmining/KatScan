@@ -3,7 +3,6 @@ import {FetchRef, SortFetchHook, useFetch} from "../hooks/useFetch";
 import {Input, List, Page} from "nacho-component-library";
 import {WhitelistUpdateModal} from "../components/whitelist/WhitelistUpdateModal";
 import '../styles/WhitelistPage.css'
-import {BasicButton} from "../components/button/BasicButton";
 import {useSubscription} from "../services/subscription/useSubscription";
 import {Message} from "@stomp/stompjs";
 import {getSubscriptionContent} from "../services/Helper";
@@ -41,7 +40,7 @@ type ListProps = {
 }
 
 const sort: SortFetchHook = ['id', 'asc']
-const headers = ['id', 'address', 'action']
+const headers = ['id', 'address']
 const Whitelist: FC<ListProps> = ({searchTerm}) => {
     const [selectedWhitelist, setSelectedWhitelist] = useState<WhitelistData | null>(null);
 
@@ -88,33 +87,15 @@ const Whitelist: FC<ListProps> = ({searchTerm}) => {
     }, [data, searchTerm]);
 
     const getElement = (header: string, item: WhitelistData): ReactElement => {
-        switch (header) {
-            case 'action':
-                return <div className="list-cell actions">
-                    <BasicButton
-                        size="sm"
-                        variant={"outline-primary"}
-                        onClick={() => setSelectedWhitelist(item)}
-                    >
-                        Edit
-                    </BasicButton>
-                </div>
-            default:
-                return <div style={{
-                    overflowY: 'auto',
-                    height: '100%',
-                    display: "flex",
-                    alignItems: "center"
-                }}>{item[header as keyof WhitelistData]}</div>
-        }
+        return <div style={{
+            overflowY: 'auto',
+            height: '100%',
+            display: "flex",
+            alignItems: "center"
+        }}>{item[header as keyof WhitelistData]}</div>
     }
     const getHeader = (header: string): ReactElement | null => {
-        switch (header) {
-            case 'action':
-                return null
-            default:
-                return <span>{header.toUpperCase()}</span>
-        }
+        return <span>{header.toUpperCase()}</span>
     }
     return (
         <>
@@ -122,7 +103,7 @@ const Whitelist: FC<ListProps> = ({searchTerm}) => {
                   alternateIdKey={'id'}
                   items={internalData}
                   minItemHeight={50}
-                  gridTemplate={'min(55px) 5fr min(65px)'}
+                  gridTemplate={'min(55px) 5fr'}
                   getElement={getElement}
                   getHeader={getHeader}
                   noDataText={'No whitelist entries found'}
