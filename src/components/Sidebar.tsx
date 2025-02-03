@@ -20,7 +20,6 @@ import yourAdHere from '../assets/nachoNFT.png'
 import 'styles/Sidebar.css'
 import {DonationModal} from "./donationModal/DonationModal";
 import {ControlledExpandableDiv, useDarkMode, useMobile} from "nacho-component-library";
-import {FaFileLines} from "react-icons/fa6";
 
 const Sidebar = forwardRef<HTMLDivElement>((_, ref) => {
     const [collapsed] = useState(false)
