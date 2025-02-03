@@ -127,13 +127,6 @@ const Sidebar = forwardRef<HTMLDivElement>((_, ref) => {
                                 >
                                     <FaBullhorn/> Announcements
                                 </NavLink>
-                                <NavLink
-                                    to="/whitelist"
-                                    className="nav-link"
-                                    onClick={() => setExpanded(false)}
-                                >
-                                    <FaBullhorn/> Nacho Kats WL
-                                </NavLink>
 
                                 <span onClick={handleDonateClick} className={'donation-text'}>
                                     Made with ❤️ by the
@@ -257,12 +250,6 @@ const Sidebar = forwardRef<HTMLDivElement>((_, ref) => {
                                     className="nav-link"
                                 >
                                     <FaBullhorn/> {!collapsed && <span>Announcements</span>}
-                                </NavLink>
-                                <NavLink
-                                    to="/whitelist"
-                                    className="nav-link"
-                                >
-                                    <FaFileLines/> {!collapsed && <span>Nacho Kats WL</span>}
                                 </NavLink>
                             </ControlledExpandableDiv>
                             <div className="ad-container">
